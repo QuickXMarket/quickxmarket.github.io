@@ -55,7 +55,7 @@ function sett(n){
   price.innerHTML="₦"+value["price"]
   price.setAttribute('style', 'color:#FF9800')
   anchr.appendChild(price)
-  var body=document.getElementById("body")
+  var body=document.getElementById("items_body")
   body.append(anchr)
 }
 document.getElementById("div2").addEventListener('search', sear);
@@ -71,14 +71,14 @@ window.onload=function(){
  onopen()
  }
  function onopen(){
-    document.getElementById("menu").setAttribute("style", "display:none")
+    document.getElementById("main__menu").setAttribute("style", "display:none")
     document.getElementById("loader").setAttribute("style", "display:block")
   document.getElementById("title").innerHTML=window.location.host
   var i=0;
   const dbref=ref(db);
   get(child(dbref,"upload/")).then((snapshot)=>{
     if(snapshot.exists()){
-        document.getElementById("menu").setAttribute("style", "display:flex")
+        document.getElementById("main__menu").setAttribute("style", "display:flex")
         document.getElementById("loader").setAttribute("style", "display:none")
         arr = snapshot.val()
      lenth=Object.keys(arr).length

@@ -29,7 +29,8 @@ if(details!==null){
   document.getElementById("loginrequest").innerHTML=details["email"]
   document.getElementById("username").innerHTML=details["first"]
 }
-if(document.getElementById("login").innerHTML==="Login"){var anchr= document.createElement("a")
+if(document.getElementById("login").innerHTML==="Login"){
+  var anchr= document.createElement("a")
 anchr.href="signin.html"
 anchr.appendChild(document.getElementById("login"))
 document.getElementById("div3").appendChild(anchr)
@@ -47,6 +48,10 @@ else{
   document.getElementById("loginrequest").innerHTML="Please Login to your Account"
   document.getElementById("username").innerHTML=""
     localStorage.removeItem("details")
+    var anchr= document.createElement("a")
+    anchr.href="signin.html"
+anchr.appendChild(document.getElementById("login"))
+document.getElementById("div3").appendChild(anchr)
   }).catch((error) => {
     // An error happened.
     alert(error)

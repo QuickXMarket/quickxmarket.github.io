@@ -41,13 +41,19 @@ p{
     }
     #boxes{
         padding: 8px;
-        float: right;
         background-color: white;
-        margin:70px 8px;
         height: auto;
+        margin: 70px auto;
         width: 308px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         border-radius: 15px;
+    }
+    @media(min-width:600px){
+        #boxes{
+        float: right;
+        width:50%;
+        margin:70px 8px;
+        }
     }
 #submit{
     font-size: 18px; 

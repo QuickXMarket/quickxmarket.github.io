@@ -19,7 +19,7 @@ import{getDatabase, ref, set, get, child, update, remove}
   from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
 import { getAuth,signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js";
 const db= getDatabase();
-var first, last, hostel,code, email, password, gender, hostel, phone;
+var first, last, hostel,code, re_password, email, password, gender, hostel, phone;
 const paymentForm = document.getElementById('boxes');
 paymentForm.addEventListener("submit", submit, false); 
 
@@ -56,6 +56,10 @@ function get_data(){
       }
      sign_up()
       
+  }else{
+    code=100001
+  
+ sign_up()
   }
     })
     .catch((error)=>get_data())
@@ -93,16 +97,16 @@ function InsertData(user){
     email:email,
     hostel1: hostel,
     gender1: gender,
-    phone1:phone,
+    phone1:"+234"+phone,
     key: code,
     address_set1: "on",
     details: 1
   })
   .then(()=>{
-  cart_upload()
+ cart_upload()
   })
   .catch((error)=>{
-  InsertData()
+  console.log(error)
   }) 
 }
 
@@ -119,7 +123,7 @@ function set_info(){
     phone: phone,
     login: "yes"
   }
-  localStorage.setItem("detail", JSON.stringify(details))
+  localStorage.setItem("details", JSON.stringify(details))
   window.location="index.html"
 }
 
@@ -135,15 +139,16 @@ function cart_upload(){
       cart_details['cart_code_'+i]=cart_list[position]["code"]
       cart_details['cart_num_'+i]=cart_list[position]["number"]
     }
-    set(ref(db, 'user/'+code),cart_details)
+    update(ref(db, "user/"+code),cart_details)
     .then(()=>{
-    set_info()
+     set_info()
     })
-    .catch((error)=>{
+   .catch((error)=>{
     cart_upload()
-    }) 
+   });
+   
   }else{
-    set_info()
+  set_info()
   }
 }
 
@@ -159,4 +164,5 @@ if (x.type === "password") {
   x.type = "password";
   r.type = "password";
   toogle.src="images/ic_visibility_off_black.png"
-}}
+}
+}

@@ -11,12 +11,7 @@ p{
     font-size: 30px;
     padding: auto;
 }
-#option{
-    width: 30px;
-    height: 30px;
-    object-fit: scale-down;
-    margin: 10px 5px 10px 10px;
-}
+
 .notification {
     color: white;
     text-decoration: none;
@@ -63,6 +58,18 @@ header{
     border-radius: 5px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+.view{
+    margin: 8px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.option a{
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+}
+
 .nav{
     position:fixed;
     bottom: 0;

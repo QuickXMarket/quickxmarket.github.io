@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  
+  <nav style="background-color: #ff9800;" class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid" id="div1">
      <div class="notification">
       <button id="option" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,7 +26,7 @@
         <div class="navbar-nav">
           <a class="nav-link active" aria-current="page" href="#">Home</a>
           
-          <a class="nav-link" href="#"><div class="notification">
+          <a class="nav-link" href="cart.html"><div class="notification">
             Cart
             <span id="cart_num2" class="a_badge">0</span>
       </div></a>
@@ -33,7 +34,7 @@
           <a class="nav-link disabled">Disabled</a>
         </div>
       </div>
-      <form class="d-flex">
+      <form class="d-flex" id="form">
       <input class="form-control me-2" type="search" placeholder="search...." id="div2" list="history"/>
         <datalist id="history">
             
@@ -42,8 +43,8 @@
       </div>
   </nav>
 
-      <div class="container h-100" id="menu">
-        <div class="row" id="body">
+      <div class="container h-100" id="main__menu">
+        <div class="row" id="items_body">
         
             
         </div>
@@ -51,7 +52,7 @@
 
       <div id="loader"></div>
 
-      <nav class="nav navbar fixed-bottom ">
+      <nav class="nav navbar ">
         <a href="index.html" class="nav__link nav__link--active">
             <span class="nav__text">Home</span>
         </a>

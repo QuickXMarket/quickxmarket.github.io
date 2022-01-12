@@ -1,0 +1,107 @@
+body{
+    background-color: gainsboro;
+    padding-top: 0px;
+    margin-top: -1px;
+    margin-bottom: 55px;
+}
+p{
+    cursor: default;
+    padding: -1px;
+}
+.div2{
+    width:100%;
+    font-size: 25px;
+    padding: 0px;
+}
+#div1{
+    background-color: black;
+    width: 100%;
+    display: flex;
+    vertical-align: middle;
+    padding: 0px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+#option{
+    width: 40px;
+    height: 40px;
+    object-fit: scale-down;
+    margin: 10px 5px 10px 10px;
+}
+#loader{
+        border: 9px solid #f3f3f3;
+        border-top: 9px solid #FF9800;
+         border-radius:50% ;
+         width: 60px;
+         height:60px;
+         animation: spin 2s linear infinite alternate;
+     margin: auto;
+    margin-top: 30px;
+    display:block;
+    }
+@keyframes spin{
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(1080deg);
+    }
+}
+.flex{
+    display: flex;
+}
+.order_img{
+    height: 100px;
+    object-fit: scale-down;
+    width: 80px;
+}
+.order_txt{
+    margin: 8px 5px 8px 20px;
+}
+.order_no{
+    margin: 8px 0;
+}
+.order_status{
+width: 100%;
+text-align: right;
+font-size: 16px;
+padding: 8px;
+}
+.order_price{
+color: #FF9800;
+padding: 8px;
+font-size: 16px;
+}
+.order_date{
+    padding: 8px;
+    font-size: 14px;
+    width: 100%;
+    text-align: right;
+}
+.order_view{
+    width: 90%;
+    background-color: white;
+    margin: 8px auto;
+    border-radius: 15px;
+    align-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+#continue{
+    width: 100%;
+     background-color: #ff9800;
+      padding: 8px;
+       font-size: 16px;
+       border: none;
+       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.continue{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+#no_items{
+    width: 100%;
+    height: 220px;
+    margin: auto;
+    background-color: white;
+    display: none;
+}

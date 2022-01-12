@@ -53,7 +53,7 @@ function get_data(){
        email:value["email"],
        first:value["first1"],
        name:value["first1"]+" "+value["second1"],
-       hostel:value["hostel"],
+       hostel:value["hostel1"],
        gender:value["gender1"],
        phone:value["phone1"],
        login: "yes",
@@ -105,13 +105,13 @@ function cart_upload(cart_value){
     var cart_length=cart_list.length;
     var cart_details=new Object
     cart_details["cart_num"]=cart_length
-    for(let i=num;i<=cart_length; i++ ){
+    for(let i=cnum;i<=cart_length; i++ ){
       var position=i-1
       cart_details['cart_code_'+cnum]=cart_list[position]["code"]
       cart_details['cart_num_'+cnum]=cart_list[position]["number"]
     cnum++
     }
-    set(ref(db, 'user/'+code),cart_details)
+    update(ref(db, "user/"+value["key"]),cart_details)
     .then(()=>{
     cart_load(cart_value)
     })
