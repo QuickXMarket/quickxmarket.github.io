@@ -23,7 +23,7 @@ const db= getDatabase();
 
 window.onload=function(){
     if(details===null){
-        window.location="login.html"
+        window.location="signin.html"
 
     }else{
         get_orders()
