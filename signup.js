@@ -19,9 +19,11 @@ import{getDatabase, ref, set, get, child, update, remove}
   from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
 import { getAuth,signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js";
 const db= getDatabase();
-var first, last, hostel,code, re_password, email, password, gender, hostel, phone;
+var first, last, hostel,code,  re_password, email, password, gender, hostel, phone;
 const paymentForm = document.getElementById('boxes');
 paymentForm.addEventListener("submit", submit, false); 
+var datakey="-M"
+
 
 function submit(e){
   e.preventDefault();
@@ -47,10 +49,18 @@ function get_data(){
         var lenth=Object.keys(numb).length
        if(lenth>0){ 
           var x= lenth-1
-      var key= Object.keys(arr)[x]
+          var key= Object.keys(arr)[x]
+          var value=arr[key]
+          var codeup= value["code"]
+    for(let i=x-1; i>=0;i--){
+      var key= Object.keys(arr)[i]
       var value=arr[key]
-      var code1=value["code"]
-       code=parseInt(code1)+1
+      var codesearch= value["code"]
+      if(codesearch>codeup){
+        codeup=codesearch
+      }
+   }
+   code=parseInt(codeup)+1
       }else{
            code=100001
       }
@@ -90,7 +100,10 @@ function Ready(){
   hostel= document.getElementById("hostel").value;
 }
 function InsertData(user){
-  set(ref(db, 'user/'+code),{
+  for(let i=0; i<19; i++){
+    datakey=datakey+generateRandomLetter()
+  }
+  set(ref(db, 'user/'+datakey),{
     code:code,
     first1: first,
     second1: last,
@@ -98,7 +111,7 @@ function InsertData(user){
     hostel1: hostel,
     gender1: gender,
     phone1:"+234"+phone,
-    key: code,
+    key: datakey,
     address_set1: "on",
     details: 1
   })
@@ -165,4 +178,9 @@ if (x.type === "password") {
   r.type = "password";
   toogle.src="images/ic_visibility_off_black.png"
 }
+}
+function generateRandomLetter() {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
+
+  return alphabet[Math.floor(Math.random() * alphabet.length)]
 }
