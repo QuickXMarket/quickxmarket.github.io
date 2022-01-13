@@ -229,10 +229,20 @@ function getadmin_value(){
 
 }
 function uploadadmin_value(){
-    set(ref(db, 'adminorder/'+num),order_details)
+  var datakey="-M"
+  for(let i=0; i<19; i++){
+    datakey=datakey+generateRandomLetter()
+  }
+    set(ref(db, 'adminorder/'+datakey),order_details)
     .then(()=>{
      getuser_order()
     })
     .catch((error)=>console.log(error)) 
   }
 export {upload_orderadmin};
+
+function generateRandomLetter() {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
+
+  return alphabet[Math.floor(Math.random() * alphabet.length)]
+}
