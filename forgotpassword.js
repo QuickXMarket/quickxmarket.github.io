@@ -35,3 +35,6 @@ function send_email(){
         console.log(errorMessage)
       });
 }
+window.onload=function(){
+  alert(window.innerWidth+","+window.innerHeight)
+}
