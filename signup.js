@@ -127,7 +127,7 @@ function set_info(){
   var details= new Object
   details={
     user: code,
-    userkey: code,
+    userkey: datakey,
     email: email,
     first: first,
     name: first+" "+ last,
@@ -152,7 +152,7 @@ function cart_upload(){
       cart_details['cart_code_'+i]=cart_list[position]["code"]
       cart_details['cart_num_'+i]=cart_list[position]["number"]
     }
-    update(ref(db, "user/"+code),cart_details)
+    update(ref(db, "user/"+datakey),cart_details)
     .then(()=>{
      set_info()
     })
