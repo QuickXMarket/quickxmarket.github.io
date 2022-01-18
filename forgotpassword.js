@@ -18,21 +18,28 @@ const analytics = getAnalytics(app);
 import { getAuth, sendPasswordResetEmail  } 
 from "https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js";
 
-document.getElementById("send").addEventListener("click", send_email)
-var email="mudiaosazuwa@gmail.com"
+var email;
 
+const paymentForm = document.getElementById('boxes');
+paymentForm.addEventListener("submit", submit, false); 
+
+function submit(e){
+  e.preventDefault();
+  email= document.getElementById("email").value
+    send_email()
+    document.getElementById("loader").setAttribute("style", "display:block")
+}
 
 function send_email(){
-    console.log("starteed")
     const auth = getAuth();
     sendPasswordResetEmail(auth, email)
       .then(() => {
-       alert("working")
+      alert("Email Sent")
+      window.history.back()
       })
       .catch((error) => {
         const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage)
+       alert(errorMessage)
       });
 }
 window.onload=function(){

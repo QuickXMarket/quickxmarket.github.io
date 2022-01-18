@@ -77,22 +77,22 @@ body{
 }
 @media(max-width:359px) {
     .items_view{
-        width: 107px;
+        width: 118px;
     }
 }
 @media(min-width:360px){
     .items_view{
-        width: 127px;
+        width: 138px;
     }
 }
 @media (min-width:392px){
     .items_view{
-        width: 147px;
+        width: 154px;
     }
 }
 @media (min-width:480px){
     .items_view{
-        width: 107px;
+        width: 126px;
     }
 }
 @media (min-width:640px){

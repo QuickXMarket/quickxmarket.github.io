@@ -27,6 +27,11 @@ window.onload=function() {
 function get_category(category, view){
     var n=0
     var x=0
+    document.getElementById("category_select"+1).style.backgroundColor="#ff9800"
+    document.getElementById("category_select"+2).style.backgroundColor="#ff9800"
+    document.getElementById("category_select"+3).style.backgroundColor="#ff9800"
+    document.getElementById("category_select"+4).style.backgroundColor="#ff9800"
+    document.getElementById("category_select"+5).style.backgroundColor="#ff9800"
     document.getElementById("category_select"+view).style.backgroundColor="white"
     
     var body=document.getElementById("category_body")
