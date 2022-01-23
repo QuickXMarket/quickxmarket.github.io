@@ -127,7 +127,7 @@ function set_info(){
   var details= new Object
   details={
     user: code,
-    userkey: datakey,
+    key: datakey,
     email: email,
     first: first,
     name: first+" "+ last,

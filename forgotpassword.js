@@ -39,7 +39,10 @@ function send_email(){
       })
       .catch((error) => {
         const errorCode = error.code;
+        const errorMessage=error.message;
+        document.getElementById("loader").setAttribute("style", "display:none")
        alert(errorMessage)
+  
       });
 }
 window.onload=function(){
