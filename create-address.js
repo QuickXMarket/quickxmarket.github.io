@@ -58,7 +58,8 @@ function create_address(){
             ["hostel"+details_no]: hostel,
             ["phone"+details_no]: "+234"+phone,
             ["gender"+details_no]: gender,
-            ["details"]:details_no
+            ["details"]:details_no,
+            ["address_set"+details_no]:"off"
           })
           .then(()=>{
             document.getElementById("loader").setAttribute("style", "display:none")

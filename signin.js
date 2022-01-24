@@ -47,19 +47,22 @@ function get_data(){
         value=arr[key]
        var searchvalue=value["email"]
        if(email===searchvalue){
-    
+    for(let i=value["details"]; i>0; i--){
+      if(value["address_set"+i]==="on"){
      info={
        user: value["code"],
        email:value["email"],
-       first:value["first1"],
-       name:value["first1"]+" "+value["second1"],
-       hostel:value["hostel1"],
-       gender:value["gender1"],
-       phone:value["phone1"],
+       first:value["first"+i],
+       name:value["first"+i]+" "+value["second"+i],
+       hostel:value["hostel"+i],
+       gender:value["gender"+i],
+       phone:value["phone"+i],
        login: "yes",
        key: value["key"]
      }
      cart_upload(value)
+    }
+    }
    }
    x--
    }while(x>=0)
@@ -67,7 +70,14 @@ function get_data(){
    
    }
  
-}).catch((error)=>console.log(error))
+}).catch((error)=>{
+  if(error!=="Error: Error: Client is offline."){
+    console.log(error)
+  }else{
+    alert("Please Check Your Network Connection")
+    document.getElementById("loader").setAttribute("style", "display:none")
+  }
+})
 }
 
 function Ready(){

@@ -32,16 +32,17 @@ p{
     padding: 0px;
 
 }
-
 #paystack_payment{
     width: 80%;
+    margin:30px 10%;
     background-color: #ff9800;
      padding: 8px;
       font-size: 16px;
       border: none;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-   margin:auto;
+ 
     }
+
 .view{
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
