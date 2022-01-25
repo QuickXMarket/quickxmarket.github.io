@@ -32,11 +32,9 @@ window.onload=function(){
 
 function  get_orders(){
     const dbref=ref(db);
-    console.log(dbref)
   get(child(dbref,"user/")).then((snapshot)=>{
    if(snapshot.exists()){
      var arr = snapshot.val()
-      console.log(arr)
        var numb=  snapshot.val()
       var lenth=Object.keys(numb).length
      var x= lenth-1

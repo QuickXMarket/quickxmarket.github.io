@@ -27,11 +27,11 @@ window.onload=function() {
 function get_category(category, view){
     var n=0
     var x=0
-    document.getElementById("category_select"+1).style.backgroundColor="#ff9800"
-    document.getElementById("category_select"+2).style.backgroundColor="#ff9800"
-    document.getElementById("category_select"+3).style.backgroundColor="#ff9800"
-    document.getElementById("category_select"+4).style.backgroundColor="#ff9800"
-    document.getElementById("category_select"+5).style.backgroundColor="#ff9800"
+    document.getElementById("category_select"+1).style.backgroundColor="#000137"
+    document.getElementById("category_select"+2).style.backgroundColor="#000137"
+    document.getElementById("category_select"+3).style.backgroundColor="#000137"
+    document.getElementById("category_select"+4).style.backgroundColor="#000137"
+    document.getElementById("category_select"+5).style.backgroundColor="#000137"
     document.getElementById("category_select"+view).style.backgroundColor="white"
     
     var body=document.getElementById("category_body")
@@ -60,7 +60,7 @@ function get_category(category, view){
   var price=document.createElement("p")
   price.classList.add("item_price")
   price.innerHTML="₦"+value["price"]
-  price.setAttribute('style', 'color:#FF9800')
+  price.setAttribute('style', 'color:#000137')
   anchr.appendChild(price)
   body.append(anchr)
     }

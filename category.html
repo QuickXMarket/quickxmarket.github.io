@@ -3,13 +3,14 @@
     <head>
     <link rel="icon" href="images/cart.png" sizes="16×16">
     <link rel="stylesheet" href="css/bootstrap.css">
-        <link rel="stylesheet" href="category.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+         <link rel="stylesheet" href="category.css">
         <script type="module" src="category.js"></script>  
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
 <div id="body" >
-    <div style="height: 100vh">
+    <div style="height: calc(100vh - 55px);    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
         <div class="category_select" id="category_select1">
             <div class="category_view" id="category_view1">
                 <img class="category_image" src="/images/IMG-20210925-WA0014.jpg"/>
@@ -45,17 +46,17 @@
 </div>
 </div>
 
-        <nav class="nav">
-            <a href="index.html" class="nav__link">
-                <span class="nav__text">Home</span>
-            </a>
-            <a href="category.html" class="nav__link nav__link--active">
-                <span class="nav__text">Category</span>
-            </a>
-            <a href="setting.html" class="nav__link">
-                <span class="nav__text">Setting</span>
-            </a>
-        </nav>
+<nav class="nav">
+    <a href="index.html" class="nav__link">
+        <span class="nav__text material-icons">home</span>
+    </a>
+    <a href="category.html" class="nav__link nav__link--active">
+        <span class="nav__text material-icons">apps</span>
+    </a>
+    <a href="setting.html" class="nav__link">
+        <span class="nav__text material-icons">settings</span>
+    </a>
+</nav>
 
         <script src="js/bootstrap.bundle.js"></script>
     </body>

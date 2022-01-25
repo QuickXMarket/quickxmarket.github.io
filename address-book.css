@@ -15,7 +15,7 @@ p{
     padding: 0px;
 }
 #div1{
-    background-color: black;
+    background-color: #000137;
     width: 100%;
     display: flex;
     vertical-align: middle;
@@ -30,7 +30,7 @@ p{
 }
 #loader{
     border: 9px solid #f3f3f3;
-    border-top: 9px solid #FF9800;
+    border-top: 9px solid #000137;
      border-radius:50% ;
      width: 60px;
      height:60px;
@@ -83,7 +83,7 @@ p{
     padding: 8px;
 }
 .edit-link{
-    color: #FF9800;
+    color: #000137;
     text-decoration: none;
     width: 100%;
     text-align: right;

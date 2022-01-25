@@ -53,7 +53,7 @@ function sett(n){
   var price=document.createElement("p")
   price.classList.add("item_price")
   price.innerHTML="₦"+value["price"]
-  price.setAttribute('style', 'color:#FF9800')
+  price.setAttribute('style', 'color:#000137')
   anchr.appendChild(price)
   var body=document.getElementById("items_body")
   body.append(anchr)

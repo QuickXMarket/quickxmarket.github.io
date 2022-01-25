@@ -9,7 +9,7 @@
 font-size: 16px;
 }
 #div1{
-    background-color: #FF9800;
+    background-color: #000137;
     width: 100%;
     display: flex;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -53,7 +53,7 @@ font-size: 16px;
   }
   #loader{
     border: 9px solid #f3f3f3;
-    border-top: 9px solid #FF9800;
+    border-top: 9px solid #000137;
      border-radius:50% ;
      width: 60px;
      height:60px;
@@ -115,7 +115,7 @@ font-size: 16px;
     padding: 8px;
     }
     .item_price{
-    color: #FF9800;
+    color: #000137;
     font-size: 14px;
     padding: 8px;
     }

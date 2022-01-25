@@ -175,7 +175,7 @@ minus.onclick=function(){
     add.style.display="none"
   minus.style.display="none"
   avail="no"
-  cart.style.backgroundColor="#FF9800"
+  cart.style.backgroundColor="#000137"
   cart.innerHTML="Add to cart"
   newcart_item.splice(cn, 1)
   localStorage.setItem("cart", JSON.stringify(newcart_item)) 
@@ -222,7 +222,7 @@ function sett(n){
     var price=document.createElement("p")
     price.classList.add("item_price")
     price.innerHTML="₦"+value["price"]
-    price.setAttribute('style', 'color:#FF9800')
+    price.setAttribute('style', 'color:#000137')
     anchr.appendChild(price)
     var body=document.getElementById("recom")
     body.append(anchr)

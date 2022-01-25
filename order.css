@@ -25,7 +25,7 @@ p{
     padding: 0px;
 }
 #div1{
-    background-color: black;
+    background-color: #000137;
     width: 100%;
     display: flex;
     vertical-align: middle;
@@ -35,12 +35,12 @@ p{
 #paystack_payment{
     width: 80%;
     margin:30px 10%;
-    background-color: #ff9800;
+    background-color: #000137;
      padding: 8px;
       font-size: 16px;
       border: none;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
- 
+ color: white;
     }
 
 .view{
@@ -49,7 +49,7 @@ p{
 }
 #loader{
     border: 9px solid #f3f3f3;
-    border-top: 9px solid #FF9800;
+    border-top: 9px solid #000137;
      border-radius:50% ;
      width: 60px;
      height:60px;
