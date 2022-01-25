@@ -24,7 +24,9 @@ var add=document.getElementById("plus-box")
 var minus=document.getElementById("minus-box")
 var cart =document.getElementById("add-box")
 var avail="no"
+var new_list=new Array
 var newcart_item=new Array;
+var recent_list=new Array
 var cn, lenth, item_code, key, cart_num, value, arr;
 window.onload=function(){
   var cart_listnum=JSON.parse(localStorage.getItem("cart"))
@@ -41,8 +43,10 @@ if(cart_listnum!==null&&cart_listnum.length!==0){
 function onopen(){
   var params=new URLSearchParams(window.location.search)
   var searchitem=params.get("product")
- 
-   const dbref=ref(db);
+ if(searchitem===null) {
+  window.location="index.html"
+  }else{
+    const dbref=ref(db);
   get(child(dbref,"upload/")).then((snapshot)=>{
     if(snapshot.exists()){
       document.getElementById("loader").setAttribute("style", "display:none")
@@ -50,6 +54,8 @@ function onopen(){
        arr = snapshot.val()
       var numb=  snapshot.val()
     lenth=Object.keys(numb).length
+    show_recent()
+    save_recent(searchitem)
      var x= lenth-1
    
     do{
@@ -105,6 +111,7 @@ function onopen(){
    
   })
 }
+}
 
 var pos;
 
@@ -124,6 +131,7 @@ var pos;
       cart.innerHTML=cart_item[cartn]["number"]
       cart.setAttribute("style", "box-shadow:none")
       cart.style.backgroundColor="white"
+      cart.style.color="black"
       add.style.display="flex"
   minus.style.display="flex"
   cart_num=cart_item[cartn].number
@@ -140,6 +148,7 @@ if(avail==="no"){
   minus.style.display="flex"
   avail="yes"
   cart.style.backgroundColor="white"
+  cart.style.color="black"
   cart.style.boxShadow="none"
   newcart_item.push({
     code:item_code,
@@ -176,6 +185,7 @@ minus.onclick=function(){
   minus.style.display="none"
   avail="no"
   cart.style.backgroundColor="#000137"
+  cart.style.color="white"
   cart.innerHTML="Add to cart"
   newcart_item.splice(cn, 1)
   localStorage.setItem("cart", JSON.stringify(newcart_item)) 
@@ -218,6 +228,7 @@ function sett(n){
     var name=document.createElement("p")
     name.classList.add("item_name")
     name.innerHTML=value["name"]
+  name.setAttribute('style', 'color:#000000')
     anchr.appendChild(name)
     var price=document.createElement("p")
     price.classList.add("item_price")
@@ -226,4 +237,77 @@ function sett(n){
     anchr.appendChild(price)
     var body=document.getElementById("recom")
     body.append(anchr)
+}
+
+function save_recent(code){
+  recent_list=JSON.parse( localStorage.getItem("recent"))
+  if(recent_list===null){
+    new_list.push({
+     ["code"]:code,
+   })
+      localStorage.setItem("recent", JSON.stringify(new_list)) 
+  }else{
+    var recent_length=recent_list.length
+    new_list=recent_list
+    for(let i=0; i<recent_length; i++){
+      if(code===recent_list[i]["code"]){
+        previous(i, code)
+        return
+      }
+    }
+    if(recent_length!==10){
+      new_list.push({
+        ["code"]:code,
+      })
+         localStorage.setItem("recent", JSON.stringify(new_list)) 
+    }else{
+      for(let i=0; i<10; i++){
+        recent_list[i]=recent_list[i+1]
+      }
+      new_list.push({
+        ["code"]:code,
+      })
+         localStorage.setItem("recent", JSON.stringify(new_list)) 
+    }
+  }
+}
+
+function show_recent(){
+  recent_list=JSON.parse(localStorage.getItem("recent"))
+
+ if(recent_list!==null){
+   var recent_length=recent_list.length
+  for(let i=0; i<recent_length; i++){
+    var x= Math.floor(Math.random()*lenth)+0
+    var key= Object.keys(arr)[x]
+     value=arr[key]
+    const myURL= new URL(window.location.protocol+"//"+window.location.host+"/product.html")
+     myURL.searchParams.append("product",value["code"])
+     var anchr=document.createElement("a")
+     anchr.href=myURL
+     anchr.classList.add("rec_view" )
+     var image=document.createElement("img")
+     image.classList.add("rec_image")
+     image.src=value["url0"]
+     anchr.appendChild(image)
+    var price=document.createElement("p")
+    price.classList.add("rec_price")
+    price.innerHTML="₦"+value["price"]
+    price.setAttribute('style', 'color:#000137')
+    anchr.appendChild(price)
+    var body=document.getElementById("recent")
+    body.append(anchr)
+  }
+}
+}
+
+function previous(n, code){
+  var recent_length=recent_list.length
+  for(let i=n; i<recent_length; i++){
+    recent_list[i]=recent_list[i+1]
+  }
+  new_list.push({
+    ["code"]:code,
+  })
+     localStorage.setItem("recent", JSON.stringify(new_list))
 }

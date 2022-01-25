@@ -1,8 +1,6 @@
 body{
     background-color: #ECEFF1;
-    height: 100%;
-    margin-left: -1px;
-    margin-right: -1px;
+    margin-bottom: 55px;
 }
 #display{
     overflow:auto
@@ -42,19 +40,22 @@ body{
     color: white;
 }
 .category_image{
-    width: 50px;
-    height: 55px;
+    width: 55px;
+    height: 100%;
     object-fit: scale-down; 
     padding: 8px;
 }
 .category_select{
     height: 20%;
+    background-color: #000137;
+}
+#category_select1{
+    background-color: white;
 }
 .category_view{
  background-color: #000137;
  margin-right: 3px;
     height: 100%;
-    display: flex;
     align-items:center;
     justify-content:center;
 }
@@ -79,7 +80,7 @@ body{
 }
 @media(min-width:360px){
     .items_view{
-        width: 138px;
+        width: 133px;
     }
 }
 @media (min-width:392px){
@@ -132,4 +133,7 @@ section{
     100%{
         transform: rotate(1080deg);
     }
+}
+.item_name{
+    color: black;
 }

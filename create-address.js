@@ -63,7 +63,6 @@ function create_address(){
           })
           .then(()=>{
             document.getElementById("loader").setAttribute("style", "display:none")
-            alert("Updated")
           })
          .catch((error)=>{
           document.getElementById("loader").setAttribute("style", "display:none")

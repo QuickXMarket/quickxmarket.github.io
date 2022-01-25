@@ -13,7 +13,7 @@
         <div class="container-fluid">
           <div class="notification">
             <button id="option" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
+              <img style=" width: 40px;height: 40px;  object-fit: scale-down;" src="images/ic_dehaze_white.png" alt="">
             </button>
             <span id="cart_num" class="badge">0</span>
           </div>
@@ -35,6 +35,7 @@
       </nav>
 
           <div id="body">
+            <div id="top">
             <div id="carouselExampleControlsNoTouching" class="carousel slide"data-bs-interval="false">
                 <div class="carousel-inner" id="slidercontainer">
                   <div class="carousel-item active">
@@ -59,26 +60,33 @@
         </div>
         <div id="des">
             
-            <div class="div2"><p style="font-size:16px; color:#000137; font-weight:bold">Item Description</p></div>
+            <div class="div2"><div style="font-size:16px; color:#000137; font-weight:bold">Item Description</div></div>
             <img src="/images/PngItem_741629.png"/>
         </div>
         <div id="desc">
             <p id="item_description">Description</p>
         </div>
         <div style="width: 100%; margin: 0; margin-top: 10px;">
-            <div style="width: 100%; background-color: white; padding: 8px;"> <p style= "color: #000137;font-size: 14px; padding: 8px;">Recommended for you</p></div>
+            <div style="width: 100%; background-color: white; padding: 8px;"> <div style= "color: #000137;font-size: 14px; padding: 8px;">Recommended for you</div></div>
             <div class="container h-100" id="menu">
                 <div class="row" id="recom">
                     
                 </div>
               </div>
         </div>
-        <div class="cart_nav">
-            <div id="minus-box" class="nav_box">-</div>
-            <div id="add-box" class="nav_box">Add to cart</div>
-            <div id="plus-box" class="nav_box">+</div>
-
+        <div>
+          <div style="width: 100%; background-color: white; padding: 8px;"> <div style= "color: #000137;font-size: 14px; padding: 8px;">Recently Viewed items</div></div>
+     <div id="recent" style=" display:flex; flex-direction: row; flex-wrap: nowrap;overflow-x: auto;">
+  
+    </div>
         </div>
+      </div>
+      <nav class="cart_nav">
+        <div id="minus-box" class="nav_box">-</div>
+        <div id="add-box" class="nav_box">Add to cart</div>
+        <div id="plus-box" class="nav_box">+</div>
+
+      </nav>
     </div>
     <div id="loader"></div>
           <script src="js/bootstrap.bundle.js"></script>

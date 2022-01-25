@@ -1,7 +1,5 @@
 html,body{
-    padding: 0;
-    margin: 0;
-    height:100%;
+    margin-bottom: 55px;
     background-color: gainsboro;
 }
 #body{
@@ -178,7 +176,7 @@ display: flex;
     margin: 0px 5px 0px 5px;
   font-size: 18px;
   font-weight: bold;
-  color: black;
+  color: white;
   display: flex;
 }
 .items_view{
@@ -225,3 +223,24 @@ display: flex;
     object-fit: scale-down;
     width: 100%;
 }
+.rec_price{
+    text-align: center;
+    color: #000137;
+}
+.rec_image{
+    height: 130px;
+    object-fit: scale-down;
+    width: 100%;
+}
+.rec_view{
+        background-color: white;
+    width: 140px;
+    flex: 0 0 140px;
+        padding: 5px;
+        flex-basis: 140px;
+        margin: 8px;
+        border-radius: 15px;
+        align-content: center;
+        text-decoration: none;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
