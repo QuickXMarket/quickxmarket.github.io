@@ -54,8 +54,8 @@ function onopen(){
        arr = snapshot.val()
       var numb=  snapshot.val()
     lenth=Object.keys(numb).length
-    show_recent()
     save_recent(searchitem)
+    show_recent()
      var x= lenth-1
    
     do{
@@ -277,10 +277,13 @@ function show_recent(){
 
  if(recent_list!==null){
    var recent_length=recent_list.length
-  for(let i=0; i<recent_length; i++){
-    var x= Math.floor(Math.random()*lenth)+0
-    var key= Object.keys(arr)[x]
+  for(let i=recent_length-1; i>=0; i--){
+    for(let x=0; x<lenth; x++){
+     var key= Object.keys(arr)[x]
      value=arr[key]
+     var code=recent_list[i]["code"]
+     var searchvalue=value["code"]
+     if(searchvalue===code){
     const myURL= new URL(window.location.protocol+"//"+window.location.host+"/product.html")
      myURL.searchParams.append("product",value["code"])
      var anchr=document.createElement("a")
@@ -298,16 +301,21 @@ function show_recent(){
     var body=document.getElementById("recent")
     body.append(anchr)
   }
+  }
+  }
+}else{
+  document.getElementById("rec").setAttribute("style","display:none")
 }
 }
 
 function previous(n, code){
-  var recent_length=recent_list.length
+  var recent_length=recent_list.length-1
   for(let i=n; i<recent_length; i++){
     recent_list[i]=recent_list[i+1]
   }
-  new_list.push({
+  var prev={
     ["code"]:code,
-  })
+  }
+  new_list[recent_length]=prev
      localStorage.setItem("recent", JSON.stringify(new_list))
 }

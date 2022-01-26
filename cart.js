@@ -23,7 +23,9 @@ const db= getDatabase();
 var newcart_item=new Array;
 var cart_list=new Array
 
-var length, item_name,item_price,item_image,item_num, cn, item_code, key, cart_number;
+var new_list=new Array
+var recent_list=new Array
+var length, item_name,item_price,item_image,item_num, cn, item_code, key, cart_number, arr, lenth, value;
 var price=0
 
 window.onload=function(){
@@ -48,14 +50,14 @@ function get_values(){
          document.getElementById("cart").textContent=""
           newcart_item=JSON.parse(localStorage.getItem("cart"))
         do{
-          var arr = snapshot.val()
+          arr = snapshot.val()
           var numb=  snapshot.val()
-        var lenth=Object.keys(numb).length
+         lenth=Object.keys(numb).length
         var x= 0
         do{
           var cartcode= cart_list[length]["code"]
           var key= Object.keys(arr)[x]
-          var value=arr[key]
+       value=arr[key]
           var searchvalue=value["code"]
           if(cartcode===searchvalue){
               item_num=cart_list[length]["number"]
@@ -74,6 +76,7 @@ function get_values(){
         length--
       }while(length>=0)
         }
+     show_recent()
         document.getElementById("total").innerHTML="₦"+price
       })
      .catch((error)=>get_values())
@@ -194,3 +197,42 @@ function load(view, code){
     window.location=myURL;
   }
 }
+
+
+
+function show_recent(){
+  recent_list=JSON.parse(localStorage.getItem("recent"))
+
+ if(recent_list!==null){
+   var recent_length=recent_list.length
+  for(let i=recent_length-1; i>=0; i--){
+    for(let x=0; x<lenth; x++){
+     var key= Object.keys(arr)[x]
+     value=arr[key]
+     var code=recent_list[i]["code"]
+     var searchvalue=value["code"]
+     if(searchvalue===code){
+    const myURL= new URL(window.location.protocol+"//"+window.location.host+"/product.html")
+     myURL.searchParams.append("product",value["code"])
+     var anchr=document.createElement("a")
+     anchr.href=myURL
+     anchr.classList.add("rec_view" )
+     var image=document.createElement("img")
+     image.classList.add("rec_image")
+     image.src=value["url0"]
+     anchr.appendChild(image)
+    var price=document.createElement("p")
+    price.classList.add("rec_price")
+    price.innerHTML="₦"+value["price"]
+    price.setAttribute('style', 'color:#000137')
+    anchr.appendChild(price)
+    var body=document.getElementById("recent")
+    body.append(anchr)
+  }
+  }
+  }
+}else{
+  document.getElementById("rec").setAttribute("style","display:none")
+}
+}
+
