@@ -80,7 +80,6 @@ font-size: 16px;
     background-color: white;
     padding: 5px;
     margin: 8px 0;
-    
     border-radius: 15px;
     align-content: center;
     text-decoration: none;
@@ -91,6 +90,7 @@ font-size: 16px;
     .items_view{
         width: 144px;
         margin: 8px;
+        height: auto;
     }
     .item_price{
         text-align: right;

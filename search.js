@@ -58,13 +58,11 @@ window.onload=function(){
             image.src=value["url0"]
             anchr.appendChild(image)
             var detail=document.createElement("div")
-            var text=document.createElement("span")
+            var text=document.createElement("div")
             text.classList.add("item_name")
             text.innerHTML=value["name"]
             detail.appendChild(text)
-            var break_line=document.createElement("br")
-            detail.appendChild(break_line)
-            var price=document.createElement("span")
+            var price=document.createElement("div")
             price.classList.add("item_price")
             price.innerHTML="₦"+value["price"]
             detail.appendChild(price)

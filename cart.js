@@ -66,7 +66,7 @@ function get_values(){
               item_image=value["url0"]
              var item_code=value["code"]
              price+=parseInt(item_price)*parseInt(item_num)
-              createlist(evet, item_code)
+              createlist(evet, item_code, length)
               evet++
               cn=length
               
@@ -89,7 +89,7 @@ function get_values(){
 }
 }
 
-function createlist(num, code){
+function createlist(num, code, len){
     var cart=document.getElementById("cart")
     var image=document.createElement("img")
     var view= document.createElement("div")
@@ -153,39 +153,39 @@ function createlist(num, code){
     view.appendChild(controls)
     
     cart.appendChild(view)
-    add_cart("add"+num, "cartnum"+num, code)
-    minus_cart("minus"+num, "cartnum"+num, code)
-    remove_cart("remove"+num,code)
+    add_cart("add"+num, "cartnum"+num, code, len)
+    minus_cart("minus"+num, "cartnum"+num, code, len)
+    remove_cart("remove"+num,code, len)
     load("cart-view"+num, code)
 }
 
-function add_cart(view, cartn, code){
+function add_cart(view, cartn, code, len){
   document.getElementById(view).onclick=function(){
   cart_number=parseInt(document.getElementById(cartn).innerHTML)+1
   document.getElementById(cartn).innerHTML=cart_number
- newcart_item[cn].number=cart_number
+ newcart_item[len].number=cart_number
   localStorage.setItem("cart", JSON.stringify(newcart_item))
 }
 }
 
-function minus_cart(view, cartn, code){
+function minus_cart(view, cartn, code, len){
   document.getElementById(view).onclick=function(){
     cart_number=parseInt(document.getElementById(cartn).innerHTML)-1
     document.getElementById(cartn).innerHTML=cart_number
     if(cart_number==0){
-      newcart_item.splice(cn, 1)
+      newcart_item.splice(len, 1)
       localStorage.setItem("cart", JSON.stringify(newcart_item))
       get_values()
     }else{
-      newcart_item[cn].number=cart_number
+      newcart_item[len].number=cart_number
       localStorage.setItem("cart", JSON.stringify(newcart_item))
     }
   }
 }
 
-function remove_cart(view, code){
+function remove_cart(view, code, len){
   document.getElementById(view).onclick=function(){
-  newcart_item.splice(cn, 1)
+  newcart_item.splice(len, 1)
   localStorage.setItem("cart", JSON.stringify(newcart_item))
   get_values()
   }

@@ -40,7 +40,6 @@ function get_category(category, view){
         var key= Object.keys(arr)[x]
   var value=arr[key]
   var searchitem= value["category"]
-  console.log(searchitem)
         if(searchitem.toLowerCase().includes(category.toLowerCase())){
         n++
       
