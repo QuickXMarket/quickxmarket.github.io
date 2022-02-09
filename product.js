@@ -49,8 +49,6 @@ function onopen(){
     const dbref=ref(db);
   get(child(dbref,"upload/")).then((snapshot)=>{
     if(snapshot.exists()){
-      document.getElementById("loader").setAttribute("style", "display:none")
-      document.getElementById("body").setAttribute("style", "display:block")
        arr = snapshot.val()
       var numb=  snapshot.val()
     lenth=Object.keys(numb).length
@@ -67,6 +65,9 @@ function onopen(){
           document.getElementById("item_name").innerHTML=value["name"]
           document.getElementById("item_price").innerHTML="₦"+value["price"]
           document.getElementById("item_description").innerHTML=value["description"]
+          const myURL= new URL(window.location.protocol+"//"+window.location.host+"/Description.html")
+          myURL.searchParams.append("product",searchitem)
+          document.getElementById("des_img").href=myURL
           document.getElementById("1").src=value["url0"]
           var urln=1
           var urlx=value["num"]
@@ -91,11 +92,17 @@ function onopen(){
     }
       x--
     }while(x>=0)
-  }
+    if(  document.getElementById("item_name").innerHTML!=="Item Name"){
+    document.getElementById("loader").setAttribute("style", "display:none")
+    document.getElementById("body").setAttribute("style", "display:block")
+ }else{
+  document.getElementById("loader").setAttribute("style", "display:none")
+  document.getElementById("no_items").setAttribute("style", "display:block")
+ }
+ }
   var i=0;
   
-      document.getElementById("loader").setAttribute("style", "display:none")
-       arr = snapshot.val()
+      arr = snapshot.val()
      lenth=Object.keys(arr).length
     lenth--
     
@@ -158,7 +165,9 @@ if(avail==="no"){
     cart_num=1 
     localStorage.setItem("cart", JSON.stringify(newcart_item)) 
     cn=newcart_item.length-1
-    var cart_listnum=JSON.parse(localStorage.getItem("cart"))
+  
+  }
+  var cart_listnum=JSON.parse(localStorage.getItem("cart"))
  
 if(cart_listnum!==null&&cart_listnum.length!==0){
     document.getElementById("cart_num").innerHTML=cart_listnum.length
@@ -167,7 +176,6 @@ if(cart_listnum!==null&&cart_listnum.length!==0){
     document.getElementById("cart_num").innerHTML=0
     document.getElementById("cart_num2").innerHTML=0
 }
-  }
 };
 
 add.onclick=function(){
@@ -178,9 +186,9 @@ add.onclick=function(){
 };
 minus.onclick=function(){
   cart_num--
-  if(cart_num===0){
+  if(cart_num<1){
     cart.setAttribute("style", "  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);    ")
-    cart_item.splice(cn, 1)
+    
     add.style.display="none"
   minus.style.display="none"
   avail="no"
@@ -205,13 +213,7 @@ if(cart_listnum!==null&&cart_listnum.length!==0){
   }
 };
 
- function load(view, code){
-  document.getElementById(view).onclick=function() {
-    const myURL= new URL(window.location.protocol+"//"+window.location.host+"/product.html")
-    myURL.searchParams.append("product",code)
-    window.location=myURL;
-  }
-}
+
 function sett(n){
    var x= Math.floor(Math.random()*lenth)+0
     var key= Object.keys(arr)[x]

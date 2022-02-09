@@ -25,6 +25,7 @@ window.onload=function() {
     get_database()
 }
 function get_category(category, view){
+   if(arr!==null){
     var n=0
     var x=0
     document.getElementById("category_select"+1).style.backgroundColor="#000137"
@@ -66,6 +67,7 @@ function get_category(category, view){
     x++
       }while(x<=lenth) 
    
+   }
 }
 
 function get_database(){
