@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head><title id="title">Description</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="theme-color" content="#000137">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="images/cart.png" sizes="16×16">
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="description.css">
+    </head>
+    <body>
+      <nav  id="div1" class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+          <div class="notification">
+            <button id="option" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <img style=" width: 40px;height: 40px;  object-fit: scale-down;" src="images/ic_dehaze_white.png" alt="">
+            </button>
+            <span id="cart_num" class="badge">0</span>
+          </div>
+
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                
+                <a class="nav-link" href="cart.html"><div class="notification">
+                  Cart
+                  <span id="cart_num2" class="a_badge">0</span>
+            </div></a>
+              <a class="nav-link" href="#">Pricing</a>
+              <a class="nav-link disabled">Disabled</a>
+            </div>
+        </div>
+          </div>
+      </nav>
+      <div id="body" style="padding: 8px; display: none;">
+          <div id="desc">
+            <div id="description"></div>
+          </div>
+      </div>
+      <div id="loader"></div>
+      <div id="no_items" >
+        <div style="width: 236px;height:220px;margin: auto;">
+       <p style="font-size:18px">item is not Available</p>
+       <img src="./images/PngItem_212128 (2).png" style="height: 120px; width: 150px; filter: invert(6%) sepia(63%) saturate(3693%) hue-rotate(232deg) brightness(91%) contrast(117%); margin-bottom:8px ; object-fit: scale-down; margin-left:43px;"/>
+   <a href="index.html" class="continue"><button id="continue">Continue Shopping</button></a>
+   </div>
+  </div>
+      <script src="js/bootstrap.bundle.js"></script>
+      <script type="module" src="description.js"></script>
+    </body>
+</html>

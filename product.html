@@ -3,7 +3,9 @@
     <head><title id="title">product</title>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="theme-color" content="#000137">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
         <link rel="icon" href="images/cart.png" sizes="16×16">
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="product.css">
@@ -59,12 +61,11 @@
             <p id="item_name">Item Name</p>
         </div>
         <div id="des">
-            
             <div class="div2"><div style="font-size:16px; color:#000137; font-weight:bold">Item Description</div></div>
-            <img src="/images/PngItem_741629.png"/>
+           <a href="Description.html" id="des_img"> <i class='bx bx-chevron-right'></i></a>
         </div>
         <div id="desc">
-            <p id="item_description">Description</p>
+            <p id="item_description" style=" overflow: hidden;">Description</p>
         </div>
         <div style="width: 100%; margin: 0; margin-top: 10px;">
             <div style="width: 100%; background-color: white; padding: 8px;"> <div style= "color: #000137;font-size: 14px; padding: 8px;">Recommended for you</div></div>
@@ -88,6 +89,13 @@
       </nav>
     </div>
     <div id="loader"></div>
+    <div id="no_items" >
+      <div style="width: 236px;height:220px;margin: auto;">
+     <p style="font-size:18px">item is not Available</p>
+     <img src="./images/PngItem_212128 (2).png" style="height: 120px; width: 150px; filter: invert(6%) sepia(63%) saturate(3693%) hue-rotate(232deg) brightness(91%) contrast(117%); margin-bottom:8px ; object-fit: scale-down; margin-left:43px;"/>
+ <a href="index.html" class="continue"><button id="continue">Continue Shopping</button></a>
+ </div>
+</div>
           <script src="js/bootstrap.bundle.js"></script>
           <script type="module" src="product.js"></script>
         </body>
