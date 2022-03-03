@@ -43,7 +43,7 @@ body{
     width: 55px;
     margin: auto;
     text-align: center;
-}
+ }
 .category_select{
     height: 20%;
     background-color: #000137;
@@ -57,6 +57,9 @@ body{
     height: 100%;
     font-size: 32px;
     color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 .category_view:hover{
     background-color: #282f5f;
