@@ -95,7 +95,7 @@ function get_database(){
     get_category("clothing", 2)
   }
   document.getElementById("category_view3").onclick=function() {
-    get_category("perfume & oil", 3)
+    get_category("perfumes & oil", 3)
   }
   document.getElementById("category_view4").onclick=function() {
     get_category("shoes", 4)

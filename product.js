@@ -28,6 +28,7 @@ var avail="no"
 var new_list=new Array
 var newcart_item=new Array;
 var recent_list=new Array
+var check_item=new Array
 var cn, lenth, item_code, key, cart_num, value, arr;
 window.onload=function(){
   var cart_listnum=JSON.parse(localStorage.getItem("cart"))
@@ -216,9 +217,10 @@ if(cart_listnum!==null&&cart_listnum.length!==0){
 
 
 function sett(n){
-   var x= Math.floor(Math.random()*lenth)+0
-    var key= Object.keys(arr)[x]
-     value=arr[key]
+  var x= Math.floor(Math.random()*lenth)+0
+  var key= Object.keys(arr)[x]
+   value=arr[key]
+  if(check_code(value['code'])){
     const myURL= new URL(window.location.protocol+"//"+window.location.host+"/product.html")
      myURL.searchParams.append("product",value["code"])
      var anchr=document.createElement("a")
@@ -231,7 +233,7 @@ function sett(n){
     var name=document.createElement("p")
     name.classList.add("item_name")
     name.innerHTML=value["name"]
-  name.setAttribute('style', 'color:#000000')
+    name.setAttribute('style', 'color:#000000')
     anchr.appendChild(name)
     var price=document.createElement("p")
     price.classList.add("item_price")
@@ -240,6 +242,10 @@ function sett(n){
     anchr.appendChild(price)
     var body=document.getElementById("recom")
     body.append(anchr)
+    check_item.push(value['code'])
+  }else{
+    sett(n)
+  }
 }
 
 function save_recent(code){
@@ -321,4 +327,13 @@ function previous(n, code){
   }
   new_list[recent_length]=prev
      localStorage.setItem("recent", JSON.stringify(new_list))
+}
+
+function check_code(code){
+  for(let i=0; i<check_item.length; i++){
+    if(check_item[i]===code){
+      return false
+    }
+  }
+  return true
 }

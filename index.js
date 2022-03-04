@@ -21,6 +21,8 @@ from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
 
 const db= getDatabase();
 
+var item_code= new Array
+
 function item(){
     window.location="product.html"
 }
@@ -37,6 +39,7 @@ function sett(n){
   x= Math.floor(Math.random()*lenth)+0
   var key= Object.keys(arr)[x]
    value=arr[key]
+   if(check_code(value['code'])){
   const myURL= new URL(window.location.protocol+"//"+window.location.host+"/product.html")
    myURL.searchParams.append("product",value["code"])
    var anchr=document.createElement("a")
@@ -57,6 +60,10 @@ function sett(n){
   anchr.appendChild(price)
   var body=document.getElementById("items_body")
   body.append(anchr)
+  item_code.push(value['code'])
+}else{
+  sett(n)
+}
 }
 document.getElementById("div2").addEventListener('search', sear);
 window.onload=function(){
@@ -138,3 +145,12 @@ function get_history(){
   }
 }
 document.getElementById("div2")-addEventListener("input", input_search)
+
+function check_code(code){
+  for(let i=0; i<item_code.length; i++){
+    if(item_code[i]===code){
+      return false
+    }
+  }
+  return true
+}
