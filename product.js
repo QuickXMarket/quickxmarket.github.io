@@ -29,6 +29,8 @@ var new_list=new Array
 var newcart_item=new Array;
 var recent_list=new Array
 var check_item=new Array
+var save_image=document.getElementById("save")
+var saved_item=new Array
 var cn, lenth, item_code, key, cart_num, value, arr;
 window.onload=function(){
   var cart_listnum=JSON.parse(localStorage.getItem("cart"))
@@ -42,6 +44,7 @@ if(cart_listnum!==null&&cart_listnum.length!==0){
 }
   onopen()
  }
+
 function onopen(){
   var params=new URLSearchParams(window.location.search)
   var searchitem=params.get("product")
@@ -54,8 +57,7 @@ function onopen(){
        arr = snapshot.val()
       var numb=  snapshot.val()
     lenth=Object.keys(numb).length
-    save_recent(searchitem)
-    show_recent()
+   
      var x= lenth-1
    
     do{
@@ -76,7 +78,13 @@ function onopen(){
           item_code=value["code"]
           var retrieve=localStorage.getItem("cart")
           cart_item=JSON.parse(retrieve)
-         get_cart(searchitem)
+          get_saveitems(searchitem) 
+          save_recent(searchitem)
+          show_recent()
+          get_cart(searchitem)
+          save_image.addEventListener('click', function(){
+            save_item(searchitem)
+          })
           do{
             var cont= document.createElement("div")
             cont.classList.add("img_container")
@@ -100,7 +108,8 @@ function onopen(){
  }else{
   document.getElementById("loader").setAttribute("style", "display:none")
   document.getElementById("no_items").setAttribute("style", "display:block")
- }
+
+}
  }
   var i=0;
   
@@ -248,6 +257,8 @@ function sett(n){
   }
 }
 
+
+
 function save_recent(code){
   recent_list=JSON.parse( localStorage.getItem("recent"))
   if(recent_list===null){
@@ -336,4 +347,53 @@ function check_code(code){
     }
   }
   return true
+}
+
+function get_saveitems(searchitem, length) {
+  saved_item=JSON.parse(localStorage.getItem("saved_items"))
+  if(saved_item!==null){
+    length=saved_item.length
+    for(let i=0; i<length;){
+      if(saved_item[i]["code"]===searchitem){
+        save_image.src="images/heart-solid-24.png"
+      }
+    }
+  }
+}
+
+function save_item(searchitem,length,avialable){
+  saved_item=JSON.parse(localStorage.getItem("saved_items"))
+  var new_items= new Array
+  avialable=0
+  if(saved_item!==null){
+    length=saved_item.length
+    for(let i=0; i<length;){
+      if(saved_item[i]["code"]===searchitem){
+        save_image.src="images/heart-regular-24.png"
+       saved_item.splice(i, 1)
+        localStorage.setItem("saved_items", JSON.stringify(saved_item)) 
+        avialable=1
+        saved_item=JSON.parse(localStorage.getItem("saved_items"))
+        length=saved_item.length
+        if(length===0){
+          saved_item=null
+          localStorage.setItem("saved_items", saved_item) 
+        }
+      }
+    }
+    if(avialable===0){
+      save_image.src="images/heart-solid-24.png"
+      saved_item.push({
+        code:searchitem
+     })
+        localStorage.setItem("saved_items", JSON.stringify(saved_item)) 
+    }
+  }else{
+    save_image.src="images/heart-solid-24.png"
+    new_items.push({
+      ['code']:searchitem
+   })
+      localStorage.setItem("saved_items", JSON.stringify(new_items))
+
+  }
 }

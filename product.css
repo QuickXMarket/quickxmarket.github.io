@@ -268,3 +268,6 @@ display: flex;
     .continue{
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
+    #save{
+        filter: invert(100%) sepia(0%) saturate(7492%) hue-rotate(233deg) brightness(99%) contrast(102%);
+    }
