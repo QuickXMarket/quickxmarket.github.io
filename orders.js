@@ -67,12 +67,12 @@ function  get_orders(){
                 status.classList.add("order_status")
                 price.classList.add("order_price")
 
-                text.innerHTML="Order"
-               order_no.innerHTML=value[ord+"order"]
+                text.textContent="Order"
+               order_no.textContent=value[ord+"order"]
                img.src="cart.png"
-               date.innerHTML=value[ord+"date"]
-               status.innerHTML=value[ord+"status"]
-               price.innerHTML="₦"+value[ord+"total"]
+               date.textContent=value[ord+"date"]
+               status.textContent=value[ord+"status"]
+               price.textContent="₦"+value[ord+"total"]
 
                 var flex= document.createElement("div")
                 flex.classList.add("flex")

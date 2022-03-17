@@ -36,11 +36,11 @@ window.onload=function(){
   var cart_listnum=JSON.parse(localStorage.getItem("cart"))
  
 if(cart_listnum!==null&&cart_listnum.length!==0){
-    document.getElementById("cart_num").innerHTML=cart_listnum.length
-    document.getElementById("cart_num2").innerHTML=cart_listnum.length
+    document.getElementById("cart_num").textContent=cart_listnum.length
+    document.getElementById("cart_num2").textContent=cart_listnum.length
   }else{
-    document.getElementById("cart_num").innerHTML=0
-    document.getElementById("cart_num2").innerHTML=0
+    document.getElementById("cart_num").textContent=0
+    document.getElementById("cart_num2").textContent=0
 }
   onopen()
  }
@@ -65,10 +65,10 @@ function onopen(){
       value=arr[key]
       var searchvalue=value["code"]
       if(searchvalue===searchitem){
-        document.getElementById("title").innerHTML=value["name"]
-          document.getElementById("item_name").innerHTML=value["name"]
-          document.getElementById("item_price").innerHTML="₦"+value["price"]
-          document.getElementById("item_description").innerHTML=value["description"]
+        document.getElementById("title").textContent=value["name"]
+          document.getElementById("item_name").textContent=value["name"]
+          document.getElementById("item_price").textContent="₦"+value["price"]
+          document.getElementById("item_description").textContent=value["description"]
           const myURL= new URL(window.location.protocol+"//"+window.location.host+"/Description.html")
           myURL.searchParams.append("product",searchitem)
           document.getElementById("des_img").href=myURL
@@ -102,9 +102,9 @@ function onopen(){
     }
       x--
     }while(x>=0)
-    if(  document.getElementById("item_name").innerHTML!=="Item Name"){
+    if(  document.getElementById("item_name").textContent!=="Item Name"){
     document.getElementById("loader").setAttribute("style", "display:none")
-    document.getElementById("body").setAttribute("style", "display:block")
+    document.getElementById("top").setAttribute("style", "display:block")
  }else{
   document.getElementById("loader").setAttribute("style", "display:none")
   document.getElementById("no_items").setAttribute("style", "display:block")
@@ -146,7 +146,7 @@ var pos;
   do{
     if(code==cart_item[cartn]["code"]){
       avail="yes"
-      cart.innerHTML=cart_item[cartn]["number"]
+      cart.textContent=cart_item[cartn]["number"]
       cart.setAttribute("style", "box-shadow:none")
       cart.style.backgroundColor="white"
       cart.style.color="black"
@@ -172,7 +172,7 @@ if(avail==="no"){
     code:item_code,
     number:1
  })
-    cart.innerHTML=1
+    cart.textContent=1
     cart_num=1 
     localStorage.setItem("cart", JSON.stringify(newcart_item)) 
     cn=newcart_item.length-1
@@ -181,17 +181,17 @@ if(avail==="no"){
   var cart_listnum=JSON.parse(localStorage.getItem("cart"))
  
 if(cart_listnum!==null&&cart_listnum.length!==0){
-    document.getElementById("cart_num").innerHTML=cart_listnum.length
-    document.getElementById("cart_num2").innerHTML=cart_listnum.length
+    document.getElementById("cart_num").textContent=cart_listnum.length
+    document.getElementById("cart_num2").textContent=cart_listnum.length
   }else{
-    document.getElementById("cart_num").innerHTML=0
-    document.getElementById("cart_num2").innerHTML=0
+    document.getElementById("cart_num").textContent=0
+    document.getElementById("cart_num2").textContent=0
 }
 };
 
 add.onclick=function(){
   cart_num++
-  cart.innerHTML=cart_num
+  cart.textContent=cart_num
  newcart_item[cn].number=cart_num
   localStorage.setItem("cart", JSON.stringify(newcart_item)) 
 };
@@ -205,20 +205,20 @@ minus.onclick=function(){
   avail="no"
   cart.style.backgroundColor="#000137"
   cart.style.color="white"
-  cart.innerHTML="Add to cart"
+  cart.textContent="Add to cart"
   newcart_item.splice(cn, 1)
   localStorage.setItem("cart", JSON.stringify(newcart_item)) 
   var cart_listnum=JSON.parse(localStorage.getItem("cart"))
  
 if(cart_listnum!==null&&cart_listnum.length!==0){
-    document.getElementById("cart_num").innerHTML=cart_listnum.length
-    document.getElementById("cart_num2").innerHTML=cart_listnum.length
+    document.getElementById("cart_num").textContent=cart_listnum.length
+    document.getElementById("cart_num2").textContent=cart_listnum.length
   }else{
-    document.getElementById("cart_num").innerHTML=0
-    document.getElementById("cart_num2").innerHTML=0
+    document.getElementById("cart_num").textContent=0
+    document.getElementById("cart_num2").textContent=0
 }
 }else{
-    cart.innerHTML=cart_num
+    cart.textContent=cart_num
     newcart_item[cn].number=cart_num
    localStorage.setItem("cart", JSON.stringify(newcart_item)) 
   }
@@ -241,12 +241,12 @@ function sett(n){
      anchr.appendChild(image)
     var name=document.createElement("p")
     name.classList.add("item_name")
-    name.innerHTML=value["name"]
+    name.textContent=value["name"]
     name.setAttribute('style', 'color:#000000')
     anchr.appendChild(name)
     var price=document.createElement("p")
     price.classList.add("item_price")
-    price.innerHTML="₦"+value["price"]
+    price.textContent="₦"+value["price"]
     price.setAttribute('style', 'color:#000137')
     anchr.appendChild(price)
     var body=document.getElementById("recom")
@@ -315,7 +315,7 @@ function show_recent(){
      anchr.appendChild(image)
     var price=document.createElement("p")
     price.classList.add("rec_price")
-    price.innerHTML="₦"+value["price"]
+    price.textContent="₦"+value["price"]
     price.setAttribute('style', 'color:#000137')
     anchr.appendChild(price)
     var body=document.getElementById("recent")
@@ -350,24 +350,24 @@ function check_code(code){
 }
 
 function get_saveitems(searchitem, length) {
-  saved_item=JSON.parse(localStorage.getItem("saved_items"))
-  if(saved_item!==null){
-    length=saved_item.length
-    for(let i=0; i<length;){
+  var saved_item=JSON.parse(localStorage.getItem("saved_items"))
+   if(saved_item!==null){
+     length=saved_item.length
+     for(let i=0; i<length;i++){
       if(saved_item[i]["code"]===searchitem){
-        save_image.src="images/heart-solid-24.png"
+       save_image.src="images/heart-solid-24.png"
       }
     }
-  }
-}
-
+   }
+ }
+ 
 function save_item(searchitem,length,avialable){
   saved_item=JSON.parse(localStorage.getItem("saved_items"))
   var new_items= new Array
   avialable=0
   if(saved_item!==null){
     length=saved_item.length
-    for(let i=0; i<length;){
+    for(let i=0; i<length;i++){
       if(saved_item[i]["code"]===searchitem){
         save_image.src="images/heart-regular-24.png"
        saved_item.splice(i, 1)

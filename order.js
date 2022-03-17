@@ -81,11 +81,11 @@ function get_values(){
   }while(length>=0)
     }
     amount=price+100
-    document.getElementById("subtotal").innerHTML="₦"+price
-    document.getElementById("name").innerHTML=details["name"]
-    document.getElementById("phone").innerHTML=details["phone"]
-    document.getElementById("hostel").innerHTML=details["hostel"]
-    document.getElementById("total").innerHTML="₦"+amount
+    document.getElementById("subtotal").textContent="₦"+price
+    document.getElementById("name").textContent=details["name"]
+    document.getElementById("phone").textContent=details["phone"]
+    document.getElementById("hostel").textContent=details["hostel"]
+    document.getElementById("total").textContent="₦"+amount
   sessionStorage.setItem("amount", amount)
   })
  .catch((error)=>get_values())

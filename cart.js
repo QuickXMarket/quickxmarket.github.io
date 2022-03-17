@@ -77,7 +77,7 @@ function get_values(){
       }while(length>=0)
         }
      show_recent()
-        document.getElementById("total").innerHTML="₦"+price
+        document.getElementById("total").textContent="₦"+price
       })
      .catch((error)=>get_values())
 }else{
@@ -119,14 +119,14 @@ function createlist(num, code, len){
     const myURL= new URL(window.location.protocol+"//"+window.location.host+"/product.html")
     myURL.searchParams.append("product",code)
     anchr.href=myURL
-    remove_text.innerHTML="Remove"
+    remove_text.textContent="Remove"
     remove_img.src="images/ic_delete_black.png"
     add.src="images/ic_add_circle_black.png"
     minus.src="images/ic_remove_circle_black.png"
     image.src=item_image
-    name.innerHTML=item_name
-    price.innerHTML="₦"+item_price
-    cart_num.innerHTML=item_num
+    name.textContent=item_name
+    price.textContent="₦"+item_price
+    cart_num.textContent=item_num
 
 
     var flex= document.createElement("div")
@@ -161,8 +161,8 @@ function createlist(num, code, len){
 
 function add_cart(view, cartn, code, len){
   document.getElementById(view).onclick=function(){
-  cart_number=parseInt(document.getElementById(cartn).innerHTML)+1
-  document.getElementById(cartn).innerHTML=cart_number
+  cart_number=parseInt(document.getElementById(cartn).textContent)+1
+  document.getElementById(cartn).textContent=cart_number
  newcart_item[len].number=cart_number
   localStorage.setItem("cart", JSON.stringify(newcart_item))
 }
@@ -170,8 +170,8 @@ function add_cart(view, cartn, code, len){
 
 function minus_cart(view, cartn, code, len){
   document.getElementById(view).onclick=function(){
-    cart_number=parseInt(document.getElementById(cartn).innerHTML)-1
-    document.getElementById(cartn).innerHTML=cart_number
+    cart_number=parseInt(document.getElementById(cartn).textContent)-1
+    document.getElementById(cartn).textContent=cart_number
     if(cart_number==0){
       newcart_item.splice(len, 1)
       localStorage.setItem("cart", JSON.stringify(newcart_item))
@@ -223,7 +223,7 @@ function show_recent(){
      anchr.appendChild(image)
     var price=document.createElement("p")
     price.classList.add("rec_price")
-    price.innerHTML="₦"+value["price"]
+    price.textContent="₦"+value["price"]
     price.setAttribute('style', 'color:#000137')
     anchr.appendChild(price)
     var body=document.getElementById("recent")

@@ -113,6 +113,8 @@ font-size: 16px;
     font-size: 18px;
     color: black;
     padding: 8px;
+    height: 80px;
+     overflow: hidden;
     }
     .item_price{
     color: #000137;

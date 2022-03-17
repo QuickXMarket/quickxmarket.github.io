@@ -24,13 +24,13 @@ const db= getDatabase();
 window.onload=function(){
     var cart_listnum=JSON.parse(localStorage.getItem("cart"))
     if(cart_listnum!==null&&cart_listnum.length!==0){
-        document.getElementById("cart_num").innerHTML=cart_listnum.length
-        document.getElementById("cart_num2").innerHTML=cart_listnum.length
+        document.getElementById("cart_num").textContent=cart_listnum.length
+        document.getElementById("cart_num2").textContent=cart_listnum.length
       }else{
-        document.getElementById("cart_num").innerHTML=0
-        document.getElementById("cart_num2").innerHTML=0
+        document.getElementById("cart_num").textContent=0
+        document.getElementById("cart_num2").textContent=0
     }
-  document.getElementById("title").innerHTML=window.location.host
+  document.getElementById("title").textContent=window.location.host
     var params=new URLSearchParams(window.location.search)
     var searchitem=params.get("search")
     document.getElementById("div2").value= searchitem
@@ -60,11 +60,11 @@ window.onload=function(){
             var detail=document.createElement("div")
             var text=document.createElement("div")
             text.classList.add("item_name")
-            text.innerHTML=value["name"]
+            text.textContent=value["name"]
             detail.appendChild(text)
             var price=document.createElement("div")
             price.classList.add("item_price")
-            price.innerHTML="₦"+value["price"]
+            price.textContent="₦"+value["price"]
             detail.appendChild(price)
             anchr.appendChild(detail)
         var listview=document.getElementById("list")

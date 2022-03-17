@@ -106,7 +106,8 @@ a{
 font-size: 18px;
 text-decoration: none;
 color:black;
-
+height: 65px;
+overflow: hidden;
 }
 .item-price{
 font-size: 14px;
@@ -126,7 +127,7 @@ color: #000137;
      width: 60px;
      height:60px;
      animation: spin 2s linear infinite alternate;
-    display: none;
+    display: block;
     position: fixed;
     bottom: 40%;
     left: 45%;

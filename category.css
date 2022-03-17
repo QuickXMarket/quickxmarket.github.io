@@ -141,4 +141,6 @@ section{
 }
 .item_name{
     color: black;
+    height: 65px;
+    overflow: hidden;
 }

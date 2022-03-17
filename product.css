@@ -1,15 +1,18 @@
 
 html,body{
-    margin-bottom: 55px;
+    margin-bottom: 18px;
     background-color: gainsboro;
 }
 #body{
     width: 100%;
-    display: none;
+    display: block;
 }
 .item_images{
     height: 300px;
     object-fit: scale-down;
+}
+#top{
+    display: none;
 }
 #loader{
     border: 9px solid #f3f3f3;

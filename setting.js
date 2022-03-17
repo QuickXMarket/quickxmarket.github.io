@@ -20,16 +20,16 @@ from "https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js";
 window.onload=function(){
   var cart_listnum=JSON.parse(localStorage.getItem("cart"))
   if(cart_listnum!==null&&cart_listnum.length!==0){
-    document.getElementById("cart_num").innerHTML=cart_listnum.length
+    document.getElementById("cart_num").textContent=cart_listnum.length
   }else{
-    document.getElementById("cart_num").innerHTML=0}
+    document.getElementById("cart_num").textContent=0}
 var details=JSON.parse( localStorage.getItem("details"))
 if(details!==null){
-  document.getElementById("login").innerHTML="Logout"
-  document.getElementById("loginrequest").innerHTML=details["email"]
-  document.getElementById("username").innerHTML=details["first"]
+  document.getElementById("login").textContent="Logout"
+  document.getElementById("loginrequest").textContent=details["email"]
+  document.getElementById("username").textContent=details["first"]
 }
-if(document.getElementById("login").innerHTML==="Login"){
+if(document.getElementById("login").textContent==="Login"){
   var anchr= document.createElement("a")
 anchr.href="signin.html"
 anchr.appendChild(document.getElementById("login"))
@@ -37,16 +37,16 @@ document.getElementById("div3").appendChild(anchr)
 }
 }
 document.getElementById("login").onclick=function(){
-  if(document.getElementById("login").innerHTML==="Login"){
+  if(document.getElementById("login").textContent==="Login"){
 
 }
 else{
   const auth = getAuth();
   signOut(auth).then(() => {
     // Sign-out successful.
-    document.getElementById("login").innerHTML="Login"
-  document.getElementById("loginrequest").innerHTML="Please Login to your Account"
-  document.getElementById("username").innerHTML=""
+    document.getElementById("login").textContent="Login"
+  document.getElementById("loginrequest").textContent="Please Login to your Account"
+  document.getElementById("username").textContent=""
     localStorage.removeItem("details")
     var anchr= document.createElement("a")
     anchr.href="signin.html"

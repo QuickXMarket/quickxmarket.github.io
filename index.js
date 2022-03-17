@@ -51,11 +51,11 @@ function sett(n){
    anchr.appendChild(image)
   var name=document.createElement("p")
   name.classList.add("item_name")
-  name.innerHTML=value["name"]
+  name.textContent=value["name"]
   anchr.appendChild(name)
   var price=document.createElement("p")
   price.classList.add("item_price")
-  price.innerHTML="₦"+value["price"]
+  price.textContent="₦"+value["price"]
   price.setAttribute('style', 'color:#000137')
   anchr.appendChild(price)
   var body=document.getElementById("items_body")
@@ -69,18 +69,18 @@ document.getElementById("div2").addEventListener('search', sear);
 window.onload=function(){
   var cart_listnum=JSON.parse(localStorage.getItem("cart"))
   if(cart_listnum!==null&&cart_listnum.length!==0){
-    document.getElementById("cart_num").innerHTML=cart_listnum.length
-    document.getElementById("cart_num2").innerHTML=cart_listnum.length
+    document.getElementById("cart_num").textContent=cart_listnum.length
+    document.getElementById("cart_num2").textContent=cart_listnum.length
   }else{
-    document.getElementById("cart_num").innerHTML=0
-    document.getElementById("cart_num2").innerHTML=0
+    document.getElementById("cart_num").textContent=0
+    document.getElementById("cart_num2").textContent=0
 }
  onopen()
  }
  function onopen(){
     document.getElementById("main__menu").setAttribute("style", "display:none")
     document.getElementById("loader").setAttribute("style", "display:block")
-  document.getElementById("title").innerHTML=window.location.host
+  document.getElementById("title").textContent=window.location.host
   var i=0;
   const dbref=ref(db);
   get(child(dbref,"upload/")).then((snapshot)=>{
@@ -115,7 +115,7 @@ function input_search(){
     var evnt=1
     var avail=0
     var datalist= document.getElementById("history")
-    datalist.innerHTML=""
+    datalist.textContent=""
     do{
      var key= Object.keys(arr)[x]
       var value=arr[key]
