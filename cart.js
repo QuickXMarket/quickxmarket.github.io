@@ -22,7 +22,7 @@ var cart_item=new Array;
 const db= getDatabase();
 var newcart_item=new Array;
 var cart_list=new Array
-
+var internationalNumberFormat = new Intl.NumberFormat('en-US')
 var new_list=new Array
 var recent_list=new Array
 var length, item_name,item_price,item_image,item_num, cn, item_code, key, cart_number, arr, lenth, value;
@@ -77,7 +77,7 @@ function get_values(){
       }while(length>=0)
         }
      show_recent()
-        document.getElementById("total").textContent="₦"+price
+        document.getElementById("total").textContent="₦"+internationalNumberFormat.format(price)
       })
      .catch((error)=>get_values())
 }else{
@@ -125,7 +125,7 @@ function createlist(num, code, len){
     minus.src="images/ic_remove_circle_black.png"
     image.src=item_image
     name.textContent=item_name
-    price.textContent="₦"+item_price
+    price.textContent="₦"+internationalNumberFormat.format(item_price)
     cart_num.textContent=item_num
 
 
@@ -223,7 +223,7 @@ function show_recent(){
      anchr.appendChild(image)
     var price=document.createElement("p")
     price.classList.add("rec_price")
-    price.textContent="₦"+value["price"]
+    price.textContent="₦"+internationalNumberFormat.format(value["price"])
     price.setAttribute('style', 'color:#000137')
     anchr.appendChild(price)
     var body=document.getElementById("recent")

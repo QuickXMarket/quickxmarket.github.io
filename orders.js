@@ -67,12 +67,13 @@ function  get_orders(){
                 status.classList.add("order_status")
                 price.classList.add("order_price")
 
+                var internationalNumberFormat = new Intl.NumberFormat('en-US')
                 text.textContent="Order"
                order_no.textContent=value[ord+"order"]
                img.src="cart.png"
                date.textContent=value[ord+"date"]
                status.textContent=value[ord+"status"]
-               price.textContent="₦"+value[ord+"total"]
+               price.textContent="₦"+internationalNumberFormat.format(value[ord+"total"])
 
                 var flex= document.createElement("div")
                 flex.classList.add("flex")

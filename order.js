@@ -69,6 +69,7 @@ function get_values(){
       var searchvalue=value["code"]
       if(cartcode===searchvalue){
           item_num=cart_list[length]["number"]
+          
           item_price=value["price"]
          price+=parseInt(item_price)*parseInt(item_num)
           
@@ -80,12 +81,13 @@ function get_values(){
     length--
   }while(length>=0)
     }
+    var internationalNumberFormat = new Intl.NumberFormat('en-US')
     amount=price+100
-    document.getElementById("subtotal").textContent="₦"+price
+    document.getElementById("subtotal").textContent="₦"+internationalNumberFormat.format(price)
     document.getElementById("name").textContent=details["name"]
     document.getElementById("phone").textContent=details["phone"]
     document.getElementById("hostel").textContent=details["hostel"]
-    document.getElementById("total").textContent="₦"+amount
+    document.getElementById("total").textContent="₦"+internationalNumberFormat.format(amount)
   sessionStorage.setItem("amount", amount)
   })
  .catch((error)=>get_values())

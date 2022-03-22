@@ -22,6 +22,7 @@ from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
 
 const db= getDatabase();
 var arr, sect,lenth
+var internationalNumberFormat = new Intl.NumberFormat('en-US')
 window.onload=function() {
     get_database()
 }
@@ -60,7 +61,7 @@ function get_category(category, view){
   anchr.appendChild(name)
   var price=document.createElement("p")
   price.classList.add("item_price")
-  price.innerHTML="₦"+value["price"]
+  price.innerHTML="₦"+internationalNumberFormat.format(value["price"])
   price.setAttribute('style', 'color:#000137')
   anchr.appendChild(price)
   body.append(anchr)

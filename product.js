@@ -21,6 +21,7 @@ import{getDatabase, ref, set, get, child, update, remove}
 from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
 var cart_item=new Array;
 const db= getDatabase();
+var internationalNumberFormat = new Intl.NumberFormat('en-US')
 var add=document.getElementById("plus-box")
 var minus=document.getElementById("minus-box")
 var cart =document.getElementById("add-box")
@@ -65,7 +66,7 @@ function onopen(){
       if(searchvalue===searchitem){
         document.getElementById("title").textContent=value["name"]
           document.getElementById("item_name").textContent=value["name"]
-          document.getElementById("item_price").textContent="₦"+value["price"]
+          document.getElementById("item_price").textContent="₦"+internationalNumberFormat.format(value["price"])
           document.getElementById("item_description").textContent=value["description"]
           const myURL= new URL(window.location.protocol+"//"+window.location.host+"/Description.html")
           myURL.searchParams.append("product",searchitem)
@@ -242,7 +243,7 @@ function sett(n){
     anchr.appendChild(name)
     var price=document.createElement("p")
     price.classList.add("item_price")
-    price.textContent="₦"+value["price"]
+    price.textContent="₦"+internationalNumberFormat.format(value["price"])
     price.setAttribute('style', 'color:#000137')
     anchr.appendChild(price)
     var body=document.getElementById("recom")
@@ -311,7 +312,7 @@ function show_recent(){
      anchr.appendChild(image)
     var price=document.createElement("p")
     price.classList.add("rec_price")
-    price.textContent="₦"+value["price"]
+    price.textContent="₦"+internationalNumberFormat.format(value["price"])
     price.setAttribute('style', 'color:#000137')
     anchr.appendChild(price)
     var body=document.getElementById("recent")
