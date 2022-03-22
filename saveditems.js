@@ -23,6 +23,7 @@ const db= getDatabase();
 
 let saved_items,item_image,item_name,item_price, arr, lenth, value;
 let cart_items=JSON.parse(localStorage.getItem("cart"));
+var internationalNumberFormat = new Intl.NumberFormat('en-US')
 
 window.onload=function(){
    Get_SavedItems()
@@ -63,7 +64,7 @@ function Create_Element(num, code,len){
     add.innerText="Add to Cart"
     image.src=item_image
     name.textContent=item_name
-    price.textContent="₦"+item_price
+    price.textContent="₦"+internationalNumberFormat.format(item_price)
 
 
     var flex= document.createElement("div")
@@ -206,7 +207,7 @@ function add_cart(view,code,len){
        anchr.appendChild(image)
       var price=document.createElement("p")
       price.classList.add("rec_price")
-      price.textContent="₦"+value["price"]
+      price.textContent="₦"+internationalNumberFormat.format(value["price"])
       price.setAttribute('style', 'color:#000137')
       anchr.appendChild(price)
       var body=document.getElementById("recent")
