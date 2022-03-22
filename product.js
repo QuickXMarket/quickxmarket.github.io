@@ -37,10 +37,8 @@ window.onload=function(){
  
 if(cart_listnum!==null&&cart_listnum.length!==0){
     document.getElementById("cart_num").textContent=cart_listnum.length
-    document.getElementById("cart_num2").textContent=cart_listnum.length
   }else{
     document.getElementById("cart_num").textContent=0
-    document.getElementById("cart_num2").textContent=0
 }
   onopen()
  }
@@ -73,19 +71,10 @@ function onopen(){
           myURL.searchParams.append("product",searchitem)
           document.getElementById("des_img").href=myURL
           document.getElementById("1").src=value["url0"]
-          var urln=1
+          
           var urlx=value["num"]
           item_code=value["code"]
-          var retrieve=localStorage.getItem("cart")
-          cart_item=JSON.parse(retrieve)
-          get_saveitems(searchitem) 
-          save_recent(searchitem)
-          show_recent()
-          get_cart(searchitem)
-          save_image.addEventListener('click', function(){
-            save_item(searchitem)
-          })
-          do{
+          for(let urln=1;urlx>urln; urln++){
             var cont= document.createElement("div")
             cont.classList.add("img_container")
             var slide=document.createElement("div")
@@ -97,8 +86,17 @@ function onopen(){
             cont.appendChild(image)
             slide.appendChild(cont)
             main.appendChild(slide)
-            urln++
-          }while(urln>urlx)
+          }
+          var retrieve=localStorage.getItem("cart")
+          cart_item=JSON.parse(retrieve)
+          get_saveitems(searchitem) 
+          save_recent(searchitem)
+          show_recent()
+          get_cart(searchitem)
+          save_image.addEventListener('click', function(){
+            save_item(searchitem)
+          })
+
     }
       x--
     }while(x>=0)
@@ -182,10 +180,8 @@ if(avail==="no"){
  
 if(cart_listnum!==null&&cart_listnum.length!==0){
     document.getElementById("cart_num").textContent=cart_listnum.length
-    document.getElementById("cart_num2").textContent=cart_listnum.length
   }else{
     document.getElementById("cart_num").textContent=0
-    document.getElementById("cart_num2").textContent=0
 }
 };
 
