@@ -21,8 +21,6 @@ from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
 
 const db= getDatabase();
 
-var internationalNumberFormat = new Intl.NumberFormat('en-US')
-
 window.onload=function(){
     var cart_listnum=JSON.parse(localStorage.getItem("cart"))
     if(cart_listnum!==null&&cart_listnum.length!==0){
@@ -66,7 +64,7 @@ window.onload=function(){
             detail.appendChild(text)
             var price=document.createElement("div")
             price.classList.add("item_price")
-            price.textContent="₦"+internationalNumberFormat.format(value["price"])
+            price.textContent="₦"+value["price"]
             detail.appendChild(price)
             anchr.appendChild(detail)
         var listview=document.getElementById("list")

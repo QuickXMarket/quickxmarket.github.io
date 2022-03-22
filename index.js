@@ -55,8 +55,7 @@ function sett(n){
   anchr.appendChild(name)
   var price=document.createElement("p")
   price.classList.add("item_price")
- var internationalNumberFormat = new Intl.NumberFormat('en-US')
-  price.textContent="₦"+internationalNumberFormat.format(value["price"])
+  price.textContent="₦"+value["price"]
   price.setAttribute('style', 'color:#000137')
   anchr.appendChild(price)
   var body=document.getElementById("items_body")
