@@ -109,6 +109,10 @@ p{
     padding: 8px;
     margin-top: 5px;
    }
+   .item_name{
+    height: 65px;
+    overflow: hidden;
+   }
 #item_name{
     font-size: 16px;
     color: black;
@@ -229,7 +233,10 @@ display: flex;
     text-align: right;
 }
 
-
+#recom{
+    align-items: center;
+    justify-content: center; 
+}
 .items_image{
     height: 130px;
     object-fit: scale-down;
