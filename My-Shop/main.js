@@ -259,6 +259,9 @@ function RegisterVendor() {
         AccountType: 'vendor',
       })
         .then(() => {
+          details['AccountType'] = 'vendor';
+          localStorage.setItem('details', JSON.stringify(details));
+          details = JSON.parse(localStorage.getItem('details'));
           document.getElementById('register').style.display = 'none';
           getShopData();
         })

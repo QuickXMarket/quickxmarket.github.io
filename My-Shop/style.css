@@ -209,6 +209,7 @@ textarea {
   border: 1px solid #ccc;
   display: flex;
   flex-direction: column;
+  color: white;
 }
 
 .close {
@@ -218,6 +219,7 @@ textarea {
   position: absolute;
   top: 0px;
   right: 10px;
+  color: red;
 }
 
 #register-form input {
