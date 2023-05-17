@@ -73,15 +73,20 @@ onload = () => {
 
 //Retrieve and Display Vendor's Details
 function getShopData() {
+  document.getElementById('loader').style.display = 'block';
+  document.getElementById('item_body').style.display = 'none';
   const dbref = dref(db);
   get(child(dbref, 'Vendor/' + details['key']))
     .then((snapshot) => {
-      console.log(snapshot);
-      document.getElementById('business-icon').src = snapshot['LogoUrl'];
+      var vendorDetails = snapshot.val();
+      document.getElementById('business-icon').src =
+        vendorDetails['LogoUrl'] !== ''
+          ? vendorDetails['LogoUrl']
+          : '../images/PngItem_248631.png';
       document.getElementById('vendor-name').innerText =
-        snapshot['BusinessName'];
-      vendorName = snapshot['BusinessName'];
-      for (let i = 1; i <= snapshot['RegisteredItems']; i++) {
+        vendorDetails['BusinessName'];
+      vendorName = vendorDetails['BusinessName'];
+      for (let i = 1; i <= vendorDetails['RegisteredItems']; i++) {
         get(child(dbref, 'ProductsDetails/'))
           .then((snapshot) => {
             if (snapshot.exists()) {
@@ -92,7 +97,7 @@ function getShopData() {
                 var key = Object.keys(arr)[x];
                 var value = arr[key];
                 var searchvalue = value['email'];
-                if (snapshot['Item' + i] === searchvalue) {
+                if (vendorDetails['Item' + i] === searchvalue) {
                   const myURL = new URL(
                     window.location.protocol +
                       '//' +
@@ -131,6 +136,9 @@ function getShopData() {
           })
           .catch((error) => console.log(error));
       }
+
+      document.getElementById('loader').style.display = 'none';
+      document.getElementById('item_body').style.display = 'block';
     })
     .catch((error) => console.log(error));
 }
