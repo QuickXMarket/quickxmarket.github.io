@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+    <link rel="stylesheet" href="../css/bootstrap.css" />
+    <link rel="stylesheet" href="style.css" />
+    <meta name="theme-color" content="#000137" />
+    <script type="module" src="main.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="../images/cart.png" sizes="16×16" />
+  </head>
+  <body>
+    <div id="div1">
+      <div id="option"></div>
+      <div class="div2" style="color: #000137; vertical-align: middle">
+        <span style="color: white; vertical-align: middle">Login</span>
+      </div>
+    </div>
+
+    <form id="boxes">
+      <!-- <label for="email">Email:</label>  -->
+      <input
+        required
+        class="boxes"
+        type="email"
+        placeholder="Email Address"
+        id="email"
+      />
+      <div style="display: flex; margin-top: 30px">
+        <!-- *    <label for="password">Password:</label> </br> -->
+        <input
+          required
+          class="boxes"
+          type="password"
+          placeholder="Password"
+          id="password"
+        />
+        <img id="toogle" src="../images/ic_visibility_off_black.png" alt="" />
+      </div>
+      <a href="../Forgot-Password/" style="text-decoration: none"
+        ><p
+          style="
+            color: #000137;
+            text-align: right;
+            text-decoration: none;
+            font-size: 16px;
+          "
+        >
+          Forgot Password?
+        </p></a
+      >
+      <a href="../Register/" style="text-decoration: none"
+        ><p style="color: #000137; font-size: 16px; text-decoration: none">
+          Sign up
+        </p></a
+      >
+      <button id="submit" type="submit">Done</button>
+      <div id="loader"></div>
+    </form>
+    <script src="../js/bootstrap.bundle.js"></script>
+  </body>
+</html>

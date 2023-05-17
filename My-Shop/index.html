@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Shop</title>
+    <link rel="icon" href="../images/cart.png" sizes="16×16" />
+    <link rel="stylesheet" href="../css/bootstrap.css" />
+    <meta name="theme-color" content="#000137" />
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" src="main.js"></script>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <style>
+      #floating-btn {
+        font-size: 30px;
+        text-decoration: none;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        background-color: #000137;
+        display: flex;
+        border-radius: 50%;
+        color: #ffffff;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+          0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="div1">
+      <div id="option"></div>
+      <div class="div2" style="color: #000137; vertical-align: middle">
+        <span style="color: white; vertical-align: middle">My Shop</span>
+      </div>
+    </div>
+    <div id="item_body">
+      <div class="vendor-info">
+        <img src="../images/PngItem_248631.png" id="business-icon" />
+        <div id="vendor-name">MudiaStore</div>
+      </div>
+      <div class="container">
+        <div class="row" id="items"></div>
+      </div>
+
+      <div id="no_items">
+        <div style="width: 236px; height: 220px; margin: auto">
+          <p style="font-size: 18px">You have no items in the cart</p>
+          <img src="../images/PngItem_212128 (2).png" />
+          <a href="../" class="continue"
+            ><button id="continue">Upload Items</button></a
+          >
+        </div>
+      </div>
+      <div>
+        <p class="material-icons" id="floating-btn">add</p>
+      </div>
+    </div>
+    <div id="upload-item" class="floating-body">
+      <form action="" id="upload-form" class="floating-form">
+        <div class="close">&#10006;</div>
+        <h4>Upload Product</h4>
+        <div class="drop-area">
+          <span class="drop-instruction"
+            >Drag and drop Product Images here or click to select</span
+          >
+          <input type="file" class="file-input" multiple />
+          <ul class="file-list"></ul>
+        </div>
+        <div style="display: flex; width: 100%; justify-content: end">
+          <span style="color: white">₦</span
+          ><input
+            required
+            class="boxes"
+            type="number"
+            placeholder="Product Price"
+            id="price"
+          />
+        </div>
+        <input
+          class="boxes"
+          type="number"
+          placeholder="Product Quantity Avaialble"
+          id="quantity"
+        />
+        <input
+          type="text"
+          name=""
+          id="name"
+          required
+          placeholder="Product Name"
+        />
+        <textarea
+          name=""
+          id="description"
+          cols="30"
+          rows="10"
+          required
+          placeholder="Product Description"
+        ></textarea>
+        <select required style="width: 100%; font-size: 16px" id="category">
+          <option value="Select Category" disabled selected>
+            Select Category
+          </option>
+          <option value="Shoes">Shoes</option>
+          <option value="Phone Accessories">Phone Accessories</option>
+          <option value="Clothing">Clothing</option>
+          <option value="Apartments">Apartments</option>
+          <option value="Perfume & Oil">Perfume & Oil</option>
+        </select>
+        <input type="submit" value="Upload Item" />
+      </form>
+    </div>
+
+    <div id="register" class="floating-body">
+      <form action="" id="register-form" class="floating-form">
+        <div class="close">&#10006;</div>
+        <h4>Register new Vendor</h4>
+        <div class="drop-area">
+          <span class="drop-instruction"
+            >Drag and drop Business Icon here or click to select(Optional)</span
+          >
+          <input type="file" class="file-input" multiple />
+          <ul class="file-list"></ul>
+        </div>
+
+        <input
+          type="text"
+          name=""
+          id="business-name"
+          placeholder="Business Name(Optional)"
+        />
+        <input
+          type="text"
+          name=""
+          id="phone"
+          placeholder="Additional Phone Number(Optional)"
+        />
+        <div style="color: white">Select Business Categories:</div>
+        <div class="categories">
+          <div class="category">Shoes</div>
+          <div class="category">Phone Accessories</div>
+          <div class="category">Clothing</div>
+          <div class="category">Apartments</div>
+          <div class="category">Perfume & Oil</div>
+        </div>
+        <input type="submit" value="Register" />
+      </form>
+    </div>
+    <div id="loader"></div>
+    <script src="../js/bootstrap.bundle.js"></script>
+  </body>
+</html>

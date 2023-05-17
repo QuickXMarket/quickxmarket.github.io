@@ -1,23 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta
-      name="google-site-verification"
-      content="tmBNvQn8Ro_nv_H4Dt9d5JM5DgXnapuLLN6fr2lUYAI"
-    />
-    <link rel="icon" href="images/cart.png" sizes="16×16" />
+    <title id="title">Product Search</title>
     <meta charset="UTF-8" />
     <meta name="theme-color" content="#000137" />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title id="title">Home</title>
-    <script type="module" src="index.js"></script>
-    <link rel="stylesheet" href="css/bootstrap.css" />
-    <link rel="stylesheet" href="index.css" />
+    <link rel="icon" href="../images/cart.png" sizes="16×16" />
+    <link rel="stylesheet" href="../Address-Book/" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <nav id="div1" class="navbar navbar-expand-lg navbar-light">
@@ -41,25 +32,24 @@
             <span id="cart_num" class="badge">0</span>
           </div>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-link" href="#" style="color: white">Home</a>
-            <a class="nav-link" href="./My-Cart/"
+            <a class="nav-link" href="../" style="color: white">Home</a>
+            <a class="nav-link" href="../My-Cart/"
               ><div class="notification">
                 Cart
                 <span id="cart_num2" class="a_badge">0</span>
               </div></a
             >
-            <a class="nav-link" href="./Saved-Items/" style="color: white"
+            <a class="nav-link" href="../Saved-Items/" style="color: white"
               >Liked Items</a
             >
-            <a class="nav-link" href="./My-Orders/" style="color: white"
+            <a class="nav-link" href="../My-Orders/" style="color: white"
               >Your Orders</a
             >
           </div>
         </div>
-        <form class="d-flex" id="form">
+        <form class="d-flex">
           <input
             class="form-control me-2"
             type="search"
@@ -72,23 +62,12 @@
       </div>
     </nav>
 
-    <div class="container" id="main__menu">
-      <div class="row" id="items_body"></div>
+    <div class="container" id="body">
+      <div id="list" class="row"></div>
     </div>
-
     <div id="loader"></div>
-    <nav class="nav">
-      <a href="./" class="nav__link nav__link--active">
-        <span class="nav__text material-icons">home</span>
-      </a>
-      <a href="./Category/" class="nav__link">
-        <span class="nav__text material-icons">apps</span>
-      </a>
-      <a href="./Settings/" class="nav__link">
-        <span class="nav__text material-icons">settings</span>
-      </a>
-    </nav>
 
-    <script src="js/bootstrap.bundle.js"></script>
+    <script src="../js/bootstrap.bundle.js"></script>
+    <script type="module" src="main.js"></script>
   </body>
 </html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Address Book</title>
+    <link rel="icon" href="../images/cart.png" sizes="16×16" />
+    <link rel="stylesheet" href="../css/bootstrap.css" />
+    <meta name="theme-color" content="#000137" />
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="main.js"></script>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Address Book</title>
+    <style>
+      #floating-btn {
+        font-size: 30px;
+        text-decoration: none;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        background-color: #000137;
+        display: flex;
+        border-radius: 50%;
+        color: #ffffff;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+          0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="div1">
+      <div id="option"></div>
+      <div class="div2" style="color: #000137; vertical-align: middle">
+        <span style="color: white; vertical-align: middle">Address Book</span>
+      </div>
+    </div>
+    <div id="body"></div>
+    <div id="loader" class="loader"></div>
+    <div>
+      <p href="../Create-Address/" class="material-icons" id="floating-btn">
+        add
+      </p>
+    </div>
+
+    <div class="floating-body" id="edit-body">
+      <form id="edit-form" class="floating-form">
+        <div id="close">&#10006;</div>
+        <h4>Register new Address</h4>
+        <div style="display: flex; margin-bottom: 30px">
+          <input
+            required
+            style="font-size: 16px; width: 100%"
+            type="text"
+            placeholder="First Name"
+            id="edit-first"
+          />
+          <input
+            required
+            style="width: 100%; font-size: 16px; margin-left: 15px"
+            type="text"
+            placeholder="Last Name"
+            id="edit-last"
+          />
+        </div>
+        <div style="display: flex">
+          <span>+234</span
+          ><input
+            required
+            class="boxes"
+            type="tel"
+            placeholder="Phone Number"
+            id="edit-phone"
+          />
+        </div>
+        <div style="display: flex">
+          <select
+            required
+            style="width: 100%; font-size: 16px"
+            id="edit-gender"
+          >
+            <option value="Gender" disabled selected>Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+          <select
+            required
+            style="width: 100%; font-size: 16px"
+            id="edit-hostel"
+          >
+            <option value="Hostel" disabled selected>Hostel</option>
+            <option value="Hall1">Hall1</option>
+            <option value="Hall2">Hall2</option>
+            <option value="Hall3">Hall3</option>
+            <option value="Hall4">Hall4</option>
+            <option value="Hall5">Hall5</option>
+            <option value="Hall6">Hall6</option>
+            <option value="Hall7">Hall7</option>
+            <option value="NDDC">NDDC</option>
+            <option value="KeyStone">KeyStone</option>
+          </select>
+        </div>
+        <button id="edit-submit" type="submit" style="margin-top: 30px">
+          Done
+        </button>
+        <div style="display: flex; justify-content: center; width: 100%">
+          <div id="edit-loader" class="loader"></div>
+        </div>
+      </form>
+    </div>
+
+    <script src="../js/bootstrap.bundle.js"></script>
+  </body>
+</html>
