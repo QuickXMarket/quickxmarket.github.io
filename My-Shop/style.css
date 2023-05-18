@@ -162,7 +162,7 @@ a {
   width: 280px;
   height: 200px;
   border: 2px dashed #ccc;
-  background-color: white;
+  background-color: #181a1b;
   text-align: center;
   padding: 25px;
   font-family: Arial, sans-serif;
@@ -239,6 +239,7 @@ textarea {
   padding: 0 3px;
   border-radius: 10px;
   color: white;
+  text-align: center;
 }
 
 .category:hover {
