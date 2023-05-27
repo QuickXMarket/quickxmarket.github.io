@@ -107,6 +107,7 @@ function onopen() {
               save_recent(searchitem);
               show_recent();
               get_cart(searchitem);
+              getVendorDetails();
               save_image.addEventListener('click', function () {
                 save_item(searchitem);
               });
@@ -377,18 +378,21 @@ function check_code(code) {
 }
 
 function getVendorDetails() {
+  const dbref = ref(db);
   get(child(dbref, 'Vendor/')).then((snapshot) => {
     if (snapshot.exists()) {
       var vendorList = snapshot.val();
       var listLength = Object.values(vendorList).length;
       for (let i = 0; i < listLength; i++) {
-        if (vendorList['BusinessName'] === vendorName) {
+        const vendorDetails = Object.values(vendorList)[i];
+        if (vendorDetails['BusinessName'] === vendorName) {
           document.getElementById('vendorName').innerText =
-            vendorList['BusinessName'];
+            vendorDetails['BusinessName'];
           document.getElementById('vendorIcon').src =
-            vendorList['LogoUrl'] !== ''
-              ? vendorList['LogoUrl']
+            vendorDetails['LogoUrl'] !== ''
+              ? vendorDetails['LogoUrl']
               : '../images/PngItem_248631.png';
+          getVendorItems();
         }
       }
     }
@@ -396,19 +400,21 @@ function getVendorDetails() {
 }
 
 function getVendorItems() {
-  for (let x = 0; x < lenth; x++) {
-    var key = Object.keys(arr)[x];
-    value = arr[key];
+  const productLength = Object.values(arr).length;
+  for (let x = 0; x < productLength; x++) {
+    var value = Object.values(arr)[x];
     var searchvalue = value['vendor'];
+    console.log(searchvalue, vendorName);
     if (searchvalue === vendorName) {
       const myURL = new URL(
         window.location.protocol + '//' + window.location.host + '/Product/'
       );
       myURL.searchParams.append('product', value['code']);
       document.getElementById('vendorItems').innerHTML += `  
-      <a href=${myURL} class="rec_view">
+      <a href=${myURL} class="items_view">
     <img class="rec_image" src=${value['url0']}>
-    <p class="rec_price" style="color:#000137">${
+        <p class="item_name" style="color:#000000">${value['name']}</p>
+    <p class="item_price" style="color:#000137">${
       '₦' + internationalNumberFormat.format(value['price'])
     }</p>
   </a>`;

@@ -76,6 +76,7 @@ onload = () => {
 function getShopData() {
   document.getElementById('loader').style.display = 'block';
   document.getElementById('item_body').style.display = 'none';
+  document.getElementById('no_items').style.display = 'none';
   const dbref = dref(db);
   get(child(dbref, 'Vendor/' + details['key']))
     .then((snapshot) => {
@@ -166,6 +167,7 @@ function uploadCheckdata(e) {
   price = price.replace(/,/g, '');
 
   if (category !== ' Select Category' && ItemImgs.length > 0) {
+    document.getElementById('uploadLoader').style.display = 'block';
     uploadFile(ItemImgs[0], 'ProductImage', 0);
   }
 }
@@ -208,6 +210,7 @@ function uploadProduct() {
           ItemImgs = [];
           ItemImgsUrl = [];
           document.getElementById('upload-item').style.display = 'none';
+          document.getElementById('uploadLoader').style.display = 'none';
           getShopData();
         })
         .catch((error) => {
@@ -246,6 +249,7 @@ function reg_Checkdata(e) {
   phone = document.getElementById('phone').value;
 
   if (SelecteIndexes.length > 0) {
+    document.getElementById('registerLoader').style.display = 'block';
     name = name === '' ? details['name'] : name;
     SelecteIndexes.forEach((index) =>
       SelectedCategories.push(categories[index])
@@ -273,6 +277,7 @@ function RegisterVendor() {
           localStorage.setItem('details', JSON.stringify(details));
           details = JSON.parse(localStorage.getItem('details'));
           document.getElementById('register').style.display = 'none';
+          document.getElementById('registerLoader').style.display = 'none';
           getShopData();
         })
         .catch((error) => {

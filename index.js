@@ -102,16 +102,13 @@ function onopen() {
   get(child(dbref, 'ProductsDetails/'))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        document
-          .getElementById('main__menu')
-          .setAttribute('style', 'display:flex');
-        document.getElementById('loader').setAttribute('style', 'display:none');
+        document.getElementById('main__menu').style.display = 'flex';
+        document.getElementById('loader').style.display = 'none';
         arr = snapshot.val();
         lenth = Object.keys(arr).length;
         lenth--;
 
         do {
-          var p = i;
           i++;
           sett(i);
         } while (i <= lenth + 1);

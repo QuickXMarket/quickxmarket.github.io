@@ -12,7 +12,7 @@ body {
   object-fit: scale-down;
 }
 #top {
-  display: block;
+  display: none;
 }
 #loader {
   border: 9px solid #f3f3f3;
@@ -20,7 +20,6 @@ body {
   border-radius: 50%;
   width: 60px;
   height: 60px;
-  display: none;
   animation: spin 2s linear infinite alternate;
   position: fixed;
   bottom: 40%;
@@ -110,7 +109,7 @@ p {
   margin-top: 5px;
 }
 .item_name {
-  height: 65px;
+  height: 25px;
   overflow: hidden;
 }
 #item_name {
