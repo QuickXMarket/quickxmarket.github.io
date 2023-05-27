@@ -118,6 +118,60 @@ a {
 .remove p {
   cursor: pointer;
 }
+
+.options {
+  display: flex;
+  background-color: #000137;
+  justify-content: center;
+  align-items: center;
+}
+
+.option_select {
+  height: 20%;
+  background-color: #000137;
+  flex-basis: calc(100% / 2);
+}
+#option_select1 {
+  background-color: white;
+}
+.option_view {
+  background-color: #000137;
+  margin-bottom: 5px;
+  height: 100%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  font-size: 18px;
+}
+.option_view:hover {
+  background-color: #282f5f;
+}
+
+.optionContainer {
+  width: 100%;
+  overflow: hidden;
+}
+
+.dataBody {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  transition: margin 0.5s;
+}
+
+.optionbody {
+  flex-basis: 0;
+  flex-grow: 1;
+  height: 100%;
+  transition: flex-basis 0.5s;
+  overflow: hidden;
+}
+
+.optionbody.visible {
+  flex-basis: 100%;
+}
+
 #loader {
   border: 9px solid #f3f3f3;
   border-top: 9px solid #000137;

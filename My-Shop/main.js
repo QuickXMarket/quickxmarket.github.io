@@ -60,7 +60,8 @@ var details = JSON.parse(localStorage.getItem('details')),
   ItemImgs = [],
   ItemImgsUrl = [],
   vendorName,
-  RegisteredItems;
+  RegisteredItems,
+  userDetails;
 
 onload = () => {
   const auth = getAuth();
@@ -82,7 +83,7 @@ function checkAccountType() {
         var userList = snapshot.val();
         var listLength = Object.values(userList).length;
         for (let i = 0; i < listLength; i++) {
-          const userDetails = Object.values(userList)[i];
+          userDetails = Object.values(userList)[i];
           if (userDetails['email'] === details['email']) {
             switch (userDetails['AccountType']) {
               case 'user':
@@ -98,6 +99,8 @@ function checkAccountType() {
     })
     .catch((error) => console.log(error));
 }
+
+export const vendorDetails = userDetails;
 
 //Retrieve and Display Vendor's Details
 function getShopData() {
