@@ -163,8 +163,9 @@ a {
   width: 280px;
   height: 200px;
   border: 2px dashed #ccc;
-  background-color: whitesmoke;
+  color: black;
   text-align: center;
+  background-color: white;
   padding: 25px;
   font-family: Arial, sans-serif;
   margin: 20px auto;
@@ -245,8 +246,8 @@ textarea {
 .categories {
   display: flex;
   flex-wrap: wrap;
-  background-color: whitesmoke;
   justify-content: space-between;
+  background-color: white;
 }
 .category {
   flex-basis: calc((100% / 2));
@@ -254,8 +255,11 @@ textarea {
   cursor: pointer;
   padding: 0 3px;
   border-radius: 10px;
-  color: white;
+  color: black;
   text-align: center;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
 }
 
 .category:hover {

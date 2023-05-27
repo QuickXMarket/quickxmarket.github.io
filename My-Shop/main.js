@@ -75,7 +75,7 @@ onload = () => {
 };
 
 function checkAccountType() {
-  const dbref = ref(db);
+  const dbref = dref(db);
   get(child(dbref, 'UsersDetails/'))
     .then((snapshot) => {
       if (snapshot.exists()) {
@@ -84,7 +84,6 @@ function checkAccountType() {
         for (let i = 0; i < listLength; i++) {
           const userDetails = Object.values(userList)[i];
           if (userDetails['email'] === details['email']) {
-            console.log(userDetails['AccountType']);
             switch (userDetails['AccountType']) {
               case 'user':
                 document.getElementById('register').style.display = 'flex';
@@ -452,8 +451,12 @@ function generateRandomLetter() {
 const closeBtn = document.getElementsByClassName('close');
 Object.values(closeBtn).forEach((btn, index) => {
   btn.addEventListener('click', () => {
-    document.getElementsByClassName('floating-body')[index].style.display =
-      'none';
+    if (index === 0) {
+      document.getElementsByClassName('floating-body')[index].style.display =
+        'none';
+    } else {
+      window.location.href = '../Settings';
+    }
   });
 });
 
