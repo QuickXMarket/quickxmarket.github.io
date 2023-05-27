@@ -17,14 +17,18 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 import {
+  getAuth,
+  onAuthStateChanged,
+} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js';
+
+import {
   getDatabase,
   ref,
-  set,
   get,
   child,
   update,
-  remove,
 } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js';
+
 var arr,
   value,
   numb,
@@ -36,15 +40,19 @@ var arr,
   detail_no,
   form,
   details = JSON.parse(localStorage.getItem('details'));
+
 const db = getDatabase();
 
-var list = document.createElement('form');
-window.onload = function () {
-  if (details === null) {
-    window.location.replace('../Login/');
-  } else {
-    get_address();
-  }
+onload = () => {
+  const auth = getAuth();
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      get_address();
+    } else {
+      window.location.replace('../Login');
+    }
+  });
 };
 
 function get_address() {

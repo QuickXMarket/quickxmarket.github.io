@@ -19,21 +19,28 @@ const analytics = getAnalytics(app);
 import {
   getDatabase,
   ref,
-  set,
   get,
   child,
-  update,
-  remove,
 } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js';
+
+import {
+  getAuth,
+  onAuthStateChanged,
+} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js';
+
 var details = JSON.parse(localStorage.getItem('details'));
 const db = getDatabase();
 
 window.onload = function () {
-  if (details === null) {
-    window.location.replace('../Login');
-  } else {
-    get_orders();
-  }
+  const auth = getAuth();
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      get_orders();
+    } else {
+      window.location.replace('../Login');
+    }
+  });
 };
 
 function get_orders() {

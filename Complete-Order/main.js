@@ -23,8 +23,13 @@ import {
   get,
   child,
   update,
-  remove,
 } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js';
+
+import {
+  getAuth,
+  onAuthStateChanged,
+} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js';
+
 var cart_item = new Array();
 const db = getDatabase();
 var newcart_item = new Array();
@@ -32,17 +37,7 @@ var cart_list = new Array();
 var order_details = new Object();
 var user_order = new Object();
 
-var length,
-  num,
-  amount,
-  item_name,
-  item_price,
-  item_image,
-  item_num,
-  cn,
-  item_code,
-  key,
-  cart_number;
+var length, num, amount, item_price, item_num, cn;
 var price = 0;
 
 var details = JSON.parse(localStorage.getItem('details'));
@@ -52,13 +47,18 @@ window.onload = function () {
   if (cart_list === null || cart_list.length === 0) {
     window.location = '../My-Cart/';
   } else {
-    if (details === null) {
-      window.location = '../Register/';
-    } else {
-      get_values();
-    }
+    const auth = getAuth();
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        get_values();
+      } else {
+        window.location.replace('../Login');
+      }
+    });
   }
 };
+
 function get_values() {
   document.getElementById('body').style.display = 'none';
   document.getElementById('loader').style.display = 'block';
