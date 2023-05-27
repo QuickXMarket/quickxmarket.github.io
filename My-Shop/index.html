@@ -51,11 +51,10 @@
 
       <div id="no_items">
         <div style="width: 236px; height: 220px; margin: auto">
-          <p style="font-size: 18px">You have no items in the cart</p>
-          <img src="../images/PngItem_212128 (2).png" />
-          <a href="../" class="continue"
-            ><button id="continue">Upload Items</button></a
-          >
+          <p style="font-size: 18px">You have no Items Registered</p>
+          <img src="../images/PngItem_212128 (2).png" /><button id="continue">
+            Upload Items
+          </button>
         </div>
       </div>
       <div>
@@ -78,7 +77,7 @@
           ><input
             required
             class="boxes"
-            type="number"
+            type="text"
             placeholder="Product Price"
             id="price"
           />
@@ -88,6 +87,7 @@
           type="number"
           placeholder="Product Quantity Avaialble"
           id="quantity"
+          min="1"
         />
         <input
           type="text"
@@ -114,6 +114,7 @@
           <option value="Apartments">Apartments</option>
           <option value="Perfume & Oil">Perfume & Oil</option>
         </select>
+        <div id="uploadLoader" class="formLoader"></div>
         <input type="submit" value="Upload Item" />
       </form>
     </div>
@@ -151,6 +152,7 @@
           <div class="category">Perfume & Oil</div>
         </div>
         <input type="submit" value="Register" />
+        <div id="registerLoader" class="formLoader"></div>
       </form>
     </div>
     <div id="loader"></div>

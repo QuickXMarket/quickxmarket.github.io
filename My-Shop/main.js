@@ -54,7 +54,8 @@ var details = JSON.parse(localStorage.getItem('details')),
   logoImgUrl = '',
   ItemImgs = [],
   ItemImgsUrl = [],
-  vendorName;
+  vendorName,
+  RegisteredItems;
 
 onload = () => {
   if (details === null) {
@@ -79,33 +80,39 @@ function getShopData() {
   get(child(dbref, 'Vendor/' + details['key']))
     .then((snapshot) => {
       var vendorDetails = snapshot.val();
+
       document.getElementById('business-icon').src =
         vendorDetails['LogoUrl'] !== ''
           ? vendorDetails['LogoUrl']
           : '../images/PngItem_248631.png';
+
       document.getElementById('vendor-name').innerText =
         vendorDetails['BusinessName'];
-      vendorName = vendorDetails['BusinessName'];
-      for (let i = 1; i <= vendorDetails['RegisteredItems']; i++) {
-        get(child(dbref, 'ProductsDetails/'))
-          .then((snapshot) => {
-            if (snapshot.exists()) {
-              arr = snapshot.val();
-              lenth = Object.keys(numb).length;
 
-              for (let x = lenth - 1; x >= 0; x--) {
-                var key = Object.keys(arr)[x];
-                var value = arr[key];
-                var searchvalue = value['email'];
-                if (vendorDetails['Item' + i] === searchvalue) {
-                  const myURL = new URL(
-                    window.location.protocol +
-                      '//' +
-                      window.location.host +
-                      '/Product'
-                  );
-                  myURL.searchParams.append('product', value['code']);
-                  document.getElementById('items').innerHTML += `
+      vendorName = vendorDetails['BusinessName'];
+      RegisteredItems = vendorDetails['RegisteredItems'];
+
+      if (RegisteredItems > 0) {
+        for (let i = 1; i <= RegisteredItems; i++) {
+          get(child(dbref, 'ProductsDetails/'))
+            .then((snapshot) => {
+              if (snapshot.exists()) {
+                arr = snapshot.val();
+                lenth = Object.keys(numb).length;
+
+                for (let x = lenth - 1; x >= 0; x--) {
+                  var key = Object.keys(arr)[x];
+                  var value = arr[key];
+                  var searchvalue = value['code'];
+                  if (vendorDetails['Item' + i] === searchvalue) {
+                    const myURL = new URL(
+                      window.location.protocol +
+                        '//' +
+                        window.location.host +
+                        '/Product'
+                    );
+                    myURL.searchParams.append('product', value['code']);
+                    document.getElementById('items').innerHTML += `
                    <div class="item-view">
             <a href=${myURL}
               ><div class="flex" id="item-view1">
@@ -130,13 +137,15 @@ function getShopData() {
               }</p>
             </div>
           </div>`;
+                  }
                 }
               }
-            }
-          })
-          .catch((error) => console.log(error));
+            })
+            .catch((error) => console.log(error));
+        }
+      } else {
+        document.getElementById('no_items').style.display = 'block';
       }
-
       document.getElementById('loader').style.display = 'none';
       document.getElementById('item_body').style.display = 'block';
     })
@@ -154,8 +163,10 @@ function uploadCheckdata(e) {
   quantity = document.getElementById('quantity').value;
   category = document.getElementById('category').value;
 
+  price = price.replace(/,/g, '');
+
   if (category !== ' Select Category' && ItemImgs.length > 0) {
-    ItemImgs.forEach((img, index) => uploadFile(img, 'ProductImage', index));
+    uploadFile(ItemImgs[0], 'ProductImage', 0);
   }
 }
 
@@ -164,49 +175,48 @@ function uploadProduct() {
   for (let i = 0; i < 19; i++) {
     key = key + generateRandomLetter();
   }
-  get(child(dbref, 'ProductsDetails/'))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        arr = snapshot.val();
-        lenth = Object.keys(numb).length;
-        if (length > 0) {
-          var key = Object.keys(arr)[length - 1];
-          var value = arr[key];
-          var lastKey = value['code'];
-          var code = lastKey + 1;
-        } else {
-          code = 100001;
-        }
+  var itemCode = generateRandomLetter();
+  for (let i = 0; i < 11; i++) {
+    itemCode += generateRandomLetter();
+  }
 
-        const productDetails = {
-          category,
-          code,
-          description,
-          key,
-          name,
-          num: ItemImgsUrl.length,
-          price,
-          quantity,
-          vendor: vendorName,
-        };
+  const productDetails = {
+    category,
+    code: itemCode,
+    description,
+    key,
+    name,
+    num: ItemImgsUrl.length,
+    price,
+    quantity,
+    vendor: vendorName,
+  };
 
-        ItemImgsUrl.forEach(
-          (url, index) => (productDetails['url' + index] = url)
-        );
+  ItemImgsUrl.forEach((url, index) => (productDetails['url' + index] = url));
 
-        set(dref(db, 'ProductsDetails/' + key), productDetails)
-          .then(() => {
-            ItemImgs = [];
-            ItemImgsUrl = [];
-            document.getElementById('upload-item').style.display = 'none';
-            getShopData();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+  set(dref(db, 'ProductsDetails/' + key), productDetails)
+    .then(() => {
+      ItemImgs = [];
+      ItemImgsUrl = [];
+      document.getElementById('upload-item').style.display = 'none';
+
+      update(dref(db, 'Vendor/' + details['key']), {
+        [item + RegisteredItems]: itemCode,
+        RegisteredItems: RegisteredItems + 1,
+      })
+        .then(() => {
+          ItemImgs = [];
+          ItemImgsUrl = [];
+          document.getElementById('upload-item').style.display = 'none';
+          getShopData();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 //Handle Registration Categories Selection
@@ -246,12 +256,12 @@ function reg_Checkdata(e) {
 }
 
 function RegisterVendor() {
-  console.log(details['key']);
   set(dref(db, 'Vendor/' + details['key']), {
     BusinessName: name,
     Phone: phone,
     LogoUrl: logoImgUrl,
     Categories: SelectedCategories,
+    RegisteredItems: 0,
   })
     .then(() => {
       // Update Account Type
@@ -279,8 +289,10 @@ const storage = getStorage(app);
 
 function uploadFile(file, folder, index) {
   // Create a storage reference
-  console.log(file);
-  const storageRef = ref(storage, folder + name);
+  const storageRef =
+    folder === 'VendorLogo'
+      ? ref(storage, `${folder}/ ${name}/ VendorLogo `)
+      : ref(storage, `${folder}/ ${name}/ ProductImage ${index} `);
 
   // Upload file
   uploadBytes(storageRef, file)
@@ -292,8 +304,12 @@ function uploadFile(file, folder, index) {
             RegisterVendor();
           } else {
             ItemImgsUrl.push(downloadURL);
+            const fileList = document.getElementsByClassName('file-list')[0];
+            fileList.removeChild(fileList.children[0]);
             if (index + 1 === ItemImgs.length) {
               uploadProduct();
+            } else {
+              uploadFile(ItemImgs[index + 1], 'ProductImage', index + 1);
             }
           }
         })
@@ -408,6 +424,20 @@ Object.values(closeBtn).forEach((btn, index) => {
   });
 });
 
-document.getElementById('floating-btn').addEventListener('click', () => {
-  document.getElementById('upload-item').style.display = 'flex';
+[
+  document.getElementById('floating-btn'),
+  document.getElementById('continue'),
+].forEach((element) =>
+  element.addEventListener('click', () => {
+    document.getElementById('upload-item').style.display = 'flex';
+  })
+);
+
+const itemPrice = document.getElementById('price');
+itemPrice.addEventListener('input', () => {
+  var value = itemPrice.value.replace(/,/g, '');
+  // Format the value with commas
+  var formattedValue = Number(value).toLocaleString('en');
+  // Set the formatted value back to the itemPrice field
+  itemPrice.value = formattedValue;
 });

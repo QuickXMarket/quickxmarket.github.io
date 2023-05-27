@@ -38,10 +38,9 @@ var recent_list = new Array();
 var check_item = new Array();
 var save_image = document.getElementById('save');
 var saved_item = new Array();
-var cn, lenth, item_code, key, cart_num, value, arr;
+var cn, lenth, item_code, key, cart_num, value, arr, vendorName;
 window.onload = function () {
   var cart_listnum = JSON.parse(localStorage.getItem('cart'));
-
   if (cart_listnum !== null && cart_listnum.length !== 0) {
     document.getElementById('cart_num').textContent = cart_listnum.length;
   } else {
@@ -111,6 +110,7 @@ function onopen() {
               save_image.addEventListener('click', function () {
                 save_item(searchitem);
               });
+              vendorName = value['vendor'];
             }
             x--;
           } while (x >= 0);
@@ -374,6 +374,46 @@ function check_code(code) {
     }
   }
   return true;
+}
+
+function getVendorDetails() {
+  get(child(dbref, 'Vendor/')).then((snapshot) => {
+    if (snapshot.exists()) {
+      var vendorList = snapshot.val();
+      var listLength = Object.values(vendorList).length;
+      for (let i = 0; i < listLength; i++) {
+        if (vendorList['BusinessName'] === vendorName) {
+          document.getElementById('vendorName').innerText =
+            vendorList['BusinessName'];
+          document.getElementById('vendorIcon').src =
+            vendorList['LogoUrl'] !== ''
+              ? vendorList['LogoUrl']
+              : '../images/PngItem_248631.png';
+        }
+      }
+    }
+  });
+}
+
+function getVendorItems() {
+  for (let x = 0; x < lenth; x++) {
+    var key = Object.keys(arr)[x];
+    value = arr[key];
+    var searchvalue = value['vendor'];
+    if (searchvalue === vendorName) {
+      const myURL = new URL(
+        window.location.protocol + '//' + window.location.host + '/Product/'
+      );
+      myURL.searchParams.append('product', value['code']);
+      document.getElementById('vendorItems').innerHTML += `  
+      <a href=${myURL} class="rec_view">
+    <img class="rec_image" src=${value['url0']}>
+    <p class="rec_price" style="color:#000137">${
+      '₦' + internationalNumberFormat.format(value['price'])
+    }</p>
+  </a>`;
+    }
+  }
 }
 
 function get_saveitems(searchitem, length) {
