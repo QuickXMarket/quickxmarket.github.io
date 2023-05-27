@@ -18,9 +18,9 @@ const analytics = getAnalytics(app);
 import {
   getAuth,
   signOut,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
+  onAuthStateChanged,
 } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js';
+
 window.onload = function () {
   var cart_listnum = JSON.parse(localStorage.getItem('cart'));
   if (cart_listnum !== null && cart_listnum.length !== 0) {
@@ -29,17 +29,20 @@ window.onload = function () {
     document.getElementById('cart_num').textContent = 0;
   }
   var details = JSON.parse(localStorage.getItem('details'));
-  if (details !== null) {
-    document.getElementById('login').textContent = 'Logout';
-    document.getElementById('loginrequest').textContent = details['email'];
-    document.getElementById('username').textContent = details['first'];
-  }
-  if (document.getElementById('login').textContent === 'Login') {
-    var anchr = document.createElement('a');
-    anchr.href = '../Login';
-    anchr.appendChild(document.getElementById('login'));
-    document.getElementById('div3').appendChild(anchr);
-  }
+  const auth = getAuth();
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById('login').textContent = 'Logout';
+      document.getElementById('loginrequest').textContent = details['email'];
+      document.getElementById('username').textContent = details['first'];
+    } else {
+      var anchr = document.createElement('a');
+      anchr.href = '../Login';
+      anchr.appendChild(document.getElementById('login'));
+      document.getElementById('div3').appendChild(anchr);
+    }
+  });
 };
 document.getElementById('login').onclick = function () {
   if (document.getElementById('login').textContent === 'Login') {

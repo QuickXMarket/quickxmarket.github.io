@@ -144,7 +144,7 @@ function cart_upload(cart_value) {
   }
 }
 
-function cart_load(cart_value) {
+function cart_load() {
   const dbref = ref(db);
   get(child(dbref, 'UsersDetails/'))
     .then((snapshot) => {

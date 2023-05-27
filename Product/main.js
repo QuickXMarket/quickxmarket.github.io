@@ -404,7 +404,6 @@ function getVendorItems() {
   for (let x = 0; x < productLength; x++) {
     var value = Object.values(arr)[x];
     var searchvalue = value['vendor'];
-    console.log(searchvalue, vendorName);
     if (searchvalue === vendorName) {
       const myURL = new URL(
         window.location.protocol + '//' + window.location.host + '/Product/'

@@ -32,6 +32,11 @@ import {
   ref as dref,
 } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js';
 
+import {
+  getAuth,
+  onAuthStateChanged,
+} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js';
+
 const db = getDatabase();
 
 var details = JSON.parse(localStorage.getItem('details')),
@@ -58,19 +63,42 @@ var details = JSON.parse(localStorage.getItem('details')),
   RegisteredItems;
 
 onload = () => {
-  if (details === null) {
-    window.location.replace('../Login');
-  } else {
-    switch (details['AccountType']) {
-      case 'user':
-        document.getElementById('register').style.display = 'flex';
-        break;
-      case 'vendor':
-        getShopData();
-        break;
+  const auth = getAuth();
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      checkAccountType();
+    } else {
+      window.location.replace('../Login');
     }
-  }
+  });
 };
+
+function checkAccountType() {
+  const dbref = ref(db);
+  get(child(dbref, 'UsersDetails/'))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        var userList = snapshot.val();
+        var listLength = Object.values(userList).length;
+        for (let i = 0; i < listLength; i++) {
+          const userDetails = Object.values(userList)[i];
+          if (userDetails['email'] === details['email']) {
+            console.log(userDetails['AccountType']);
+            switch (userDetails['AccountType']) {
+              case 'user':
+                document.getElementById('register').style.display = 'flex';
+                break;
+              case 'vendor':
+                getShopData();
+                break;
+            }
+          }
+        }
+      }
+    })
+    .catch((error) => console.log(error));
+}
 
 //Retrieve and Display Vendor's Details
 function getShopData() {

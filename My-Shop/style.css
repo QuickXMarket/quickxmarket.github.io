@@ -163,7 +163,7 @@ a {
   width: 280px;
   height: 200px;
   border: 2px dashed #ccc;
-  background-color: #181a1b;
+  background-color: whitesmoke;
   text-align: center;
   padding: 25px;
   font-family: Arial, sans-serif;
@@ -245,7 +245,7 @@ textarea {
 .categories {
   display: flex;
   flex-wrap: wrap;
-  background-color: #181a1b;
+  background-color: whitesmoke;
   justify-content: space-between;
 }
 .category {
