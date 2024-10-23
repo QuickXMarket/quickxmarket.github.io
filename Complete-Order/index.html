@@ -106,7 +106,7 @@
     <script src="https://js.paystack.co/v1/inline.js"></script>
 
     <script type="module">
-      import { upload_orderadmin } from './order.js';
+      import { uploadAdminOrder } from './main.js';
 
       var details = JSON.parse(localStorage.getItem('details'));
       const paymentForm = document.getElementById('paymentForm');
@@ -155,7 +155,7 @@
                     date.getMinutes();
                   document.getElementById('body').style.display = 'none';
                   document.getElementById('loader').style.display = 'block';
-                  upload_orderadmin();
+                  uploadAdminOrder();
                 }
               });
           },
@@ -163,6 +163,6 @@
         handler.openIframe();
       }
     </script>
-    <script src="js/bootstrap.bundle.js"></script>
+    <script src="../js/bootstrap.bundle.js"></script>
   </body>
 </html>

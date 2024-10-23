@@ -1,21 +1,3 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js';
-import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js';
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyA1eIsNv6jgME94d8ptQT45JxCk2HswuyY',
-  authDomain: 'project-109e2.firebaseapp.com',
-  databaseURL: 'https://project-109e2.firebaseio.com',
-  projectId: 'project-109e2',
-  storageBucket: 'project-109e2.appspot.com',
-  messagingSenderId: '994321863318',
-  appId: '1:994321863318:web:10d3b180f8ff995d9ba8b7',
-  measurementId: 'G-Y83PD3D9Q5',
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
 import {
   getDatabase,
   ref,
@@ -23,269 +5,205 @@ import {
   get,
   child,
   update,
-} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js';
-
-import {
   getAuth,
   onAuthStateChanged,
-} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js';
+} from "../firebase.js";
 
-var cart_item = new Array();
 const db = getDatabase();
-var newcart_item = new Array();
-var cart_list = new Array();
-var order_details = new Object();
-var user_order = new Object();
+let cartList = [];
+let userOrder = {};
+let vendorOrderDetails = {};
+let totalPrice = 0;
+let userId;
+const deliveryCharge = 100;
 
-var length, num, amount, item_price, item_num, cn;
-var price = 0;
-
-var details = JSON.parse(localStorage.getItem('details'));
-cart_list = JSON.parse(localStorage.getItem('cart'));
+const userDetails = JSON.parse(localStorage.getItem("details"));
+cartList = JSON.parse(localStorage.getItem("cart"));
 
 window.onload = function () {
-  if (cart_list === null || cart_list.length === 0) {
-    window.location = '../My-Cart/';
+  if (!cartList || cartList.length === 0) {
+    window.location = "../My-Cart/";
   } else {
     const auth = getAuth();
-
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        get_values();
+        userId = user.uid;
+        loadCartDetails();
       } else {
-        window.location.replace('../Login');
+        window.location.replace("../Login");
       }
     });
   }
 };
 
-function get_values() {
-  document.getElementById('body').style.display = 'none';
-  document.getElementById('loader').style.display = 'block';
-  const dbref = ref(db);
-  get(child(dbref, 'ProductsDetails/'))
+function loadCartDetails() {
+  document.getElementById("body").style.display = "none";
+  document.getElementById("loader").style.display = "block";
+
+  const dbRef = ref(db);
+  get(child(dbRef, "ProductsDetails/"))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        document.getElementById('loader').style.display = 'none';
-        document.getElementById('body').style.display = 'block';
-        length = cart_list.length - 1;
-        var evet = 1;
-        newcart_item = JSON.parse(localStorage.getItem('cart'));
-        do {
-          var arr = snapshot.val();
-          var numb = snapshot.val();
-          var lenth = Object.keys(numb).length;
-          var x = 0;
-          do {
-            var cartcode = cart_list[length]['code'];
-            var key = Object.keys(arr)[x];
-            var value = arr[key];
-            var searchvalue = value['code'];
-            if (cartcode === searchvalue) {
-              item_num = cart_list[length]['number'];
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("body").style.display = "block";
 
-              item_price = value['price'];
-              price += parseInt(item_price) * parseInt(item_num);
+        let productData = snapshot.val();
 
-              cn = length;
-            }
-            x++;
-          } while (x < lenth);
-          length--;
-        } while (length >= 0);
-      }
-      var internationalNumberFormat = new Intl.NumberFormat('en-US');
-      amount = price + 100;
-      document.getElementById('subtotal').textContent =
-        '₦' + internationalNumberFormat.format(price);
-      document.getElementById('name').textContent = details['name'];
-      document.getElementById('phone').textContent = details['phone'];
-      document.getElementById('hostel').textContent = details['hostel'];
-      document.getElementById('total').textContent =
-        '₦' + internationalNumberFormat.format(amount);
-      sessionStorage.setItem('amount', amount);
-    })
-    .catch((error) => get_values());
-}
-
-function upload_orderadmin() {
-  num = Math.floor(Math.random() * 3999999) + 1;
-  console.log(num);
-  getadmin_value();
-}
-
-function getuser_order() {
-  const dbref = ref(db);
-  get(child(dbref, 'user/'))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        var avail = 0;
-        var arr = snapshot.val();
-        var numb = snapshot.val();
-        var lenth = Object.keys(numb).length;
-        var x = 0;
-        do {
-          var key = Object.keys(arr)[x];
-          var value = arr[key];
-          var searchvalue = value['code'];
-          if (details['user'] === searchvalue) {
-            avail = x;
-            var order, orr;
-            if (value.hasOwnProperty('orders')) {
-              orr = parseInt(value['orders']) + 1;
-            } else {
-              orr = 1;
-            }
-            order = 'o' + orr;
-            var cart_length = cart_list.length;
-            var date = new Date();
-            var month = parseInt(date.getMonth()) + 1;
-            var date_time =
-              date.getHours() +
-              ':' +
-              date.getMinutes() +
-              ', ' +
-              date.getDate() +
-              '/' +
-              month +
-              '/' +
-              date.getFullYear();
-            user_order = {
-              [order + 'order']: num,
-              [order + 'status']: 'Confirming Payment',
-              [order + 'total']: amount,
-              [order + 'num']: cart_length,
-              [order + 'date']: date_time,
-              ['orders']: orr,
-            };
-            for (let i = 1; i <= cart_length; i++) {
-              var position = i - 1;
-              user_order[order + 'code' + i] = cart_list[position]['code'];
-              user_order[order + 'num' + i] = cart_list[position]['number'];
-            }
-            upload_userorder();
+        cartList.forEach((item) => {
+          const productKey = Object.keys(productData).find(
+            (key) => productData[key]["code"] === item["code"]
+          );
+          if (productKey) {
+            const product = productData[productKey];
+            const itemPrice = product["price"];
+            const itemQuantity = item["amount"];
+            totalPrice += itemPrice * itemQuantity;
           }
-          x++;
-        } while (x < lenth);
+        });
+
+        displayOrderSummary();
       }
     })
-    .catch((error) => console.log(error));
+    .catch((error) => console.error("Error loading cart details:", error));
 }
 
-function upload_userorder() {
-  update(ref(db, 'user/' + details['key']), user_order)
+function displayOrderSummary() {
+  const intlFormatter = new Intl.NumberFormat("en-US");
+  const totalAmount = totalPrice + deliveryCharge;
+
+  document.getElementById("subtotal").textContent = `₦${intlFormatter.format(
+    totalPrice
+  )}`;
+  document.getElementById("name").textContent = userDetails["name"];
+  document.getElementById("phone").textContent = userDetails["phone"];
+  document.getElementById("hostel").textContent = userDetails["hostel"];
+  document.getElementById("total").textContent = `₦${intlFormatter.format(
+    totalAmount
+  )}`;
+  sessionStorage.setItem("amount", totalAmount);
+}
+
+// function uploadOrderAdmin() {
+//
+//   addUserOrder(orderId);
+// }
+
+function addUserOrder(orderId) {
+  const dbRef = ref(db);
+  get(child(dbRef, `UsersDetails/${userId}`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const user = snapshot.val();
+        const userOrders = user.orders || [];
+
+        const date = Date.now();
+        // const formattedDate = `${date.getHours()}:${date.getMinutes()}, ${date.getDate()}/${
+        //   date.getMonth() + 1
+        // }/${date.getFullYear()}`;
+
+        userOrder = [
+          ...userOrders,
+          {
+            orderId: orderId,
+            status: "Confirming Request",
+            date: date,
+            orders: cartList,
+            total: totalPrice - deliveryCharge,
+          },
+        ];
+
+        uploadUserOrder();
+      }
+    })
+    .catch((error) => console.error("Error fetching user details:", error));
+}
+
+function uploadUserOrder() {
+  update(ref(db, `UsersDetails/${userId}`), { orders: userOrder })
     .then(() => {
-      localStorage.removeItem('cart');
-      window.location = '../';
+      localStorage.removeItem("cart");
+      window.location = "../";
     })
-    .catch((error) => console.log(error));
+    .catch((error) => console.error("Error uploading user order:", error));
 }
 
-function getadmin_value() {
-  const dbref = ref(db);
-  get(child(dbref, 'adminorder/'))
+function uploadAdminOrder() {
+  const orderId = generateRandomId(7);
+  const date = Date.now();
+  // const formattedDate = `${date.getHours()}:${date.getMinutes()}, ${date.getDate()}/${
+  //   date.getMonth() + 1
+  // }/${date.getFullYear()}`;
+
+  const adminOrderDetails = {
+    name: userDetails["name"],
+    hostel: userDetails["hostel"],
+    userId: userId,
+    phone: userDetails["phone"],
+    orderId: orderId,
+    status: "Confirming Request",
+    date: date,
+    orders: cartList,
+    total: totalPrice - deliveryCharge,
+  };
+
+  const orderKey = generateRandomId(19);
+  set(ref(db, `UsersOrders/${orderKey}`), adminOrderDetails)
+    .then(() => uploadVendorOrder(orderId))
+    .catch((error) => console.error("Error uploading admin order:", error));
+}
+
+function uploadVendorOrder(orderId) {
+  const dbRef = ref(db);
+  get(child(dbRef, "VendorsDetails/"))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        var avail = 0;
-        console.log(snapshot);
-        var arr = snapshot.val();
-        var numb = snapshot.val();
-        var lenth = Object.keys(numb).length;
-        var x = 0;
-        do {
-          var key = Object.keys(arr)[x];
-          var value = arr[key];
-          var searchvalue = value['order'];
-          if (num === searchvalue) {
-            avail = 1;
+        const vendors = snapshot.val();
+        const vendorOrders = {};
+        cartList.forEach((item) => {
+          const vendorKey = Object.keys(vendors).find((vendor) =>
+            vendors[vendor].products.includes(item.code)
+          );
+          if (!vendorKey) return;
+          if (!vendorOrders[vendorKey]) {
+            vendorOrders[vendorKey] = [];
           }
-          x++;
-        } while (x < lenth);
-        if (avail === 0) {
-          var cart_length = cart_list.length;
-          var date = new Date();
-          var month = parseInt(date.getMonth()) + 1;
-          var date_time =
-            date.getHours() +
-            ':' +
-            date.getMinutes() +
-            ', ' +
-            date.getDate() +
-            '/' +
-            month +
-            '/' +
-            date.getFullYear();
-          order_details = {
-            name: details['name'],
-            hostel: details['hostel'],
-            user: details['user'],
-            phone: details['phone'],
-            order: num,
-            status: 'Confirming Payment',
-            total: amount,
-            num: cart_length,
-            date: date_time,
+          vendorOrders[vendorKey].push(item);
+        });
+
+        Object.keys(vendorOrders).forEach((vendorId) => {
+          const vendorOrder = vendorOrders[vendorId];
+          const previousOrders = vendors[vendorId].order || [];
+
+          vendorOrderDetails = {
+            orders: [
+              ...previousOrders,
+              {
+                date: Date.now(),
+                orderId: orderId,
+                orders: vendorOrder,
+                total: totalPrice - deliveryCharge,
+              },
+            ],
           };
-          for (let i = 1; i <= cart_length; i++) {
-            var position = i - 1;
-            order_details['code' + i] = cart_list[position]['code'];
-            order_details['num' + i] = cart_list[position]['number'];
-          }
-          uploadadmin_value();
-        } else {
-          upload_orderadmin();
-        }
-      } else {
-        var cart_length = cart_list.length;
-        var date = new Date();
-        var month = parseInt(date.getMonth()) + 1;
-        var date_time =
-          date.getHours() +
-          ':' +
-          date.getMinutes() +
-          ', ' +
-          date.getDate() +
-          '/' +
-          month +
-          '/' +
-          date.getFullYear();
-        order_details = {
-          name: details['name'],
-          hostel: details['hostel'],
-          user: details['user'],
-          phone: details['phone'],
-          order: num,
-          status: 'Confirming Payment',
-          total: amount,
-          num: cart_length,
-          date: date_time,
-        };
-        for (let i = 1; i <= cart_length; i++) {
-          var position = i - 1;
-          order_details['code' + i] = cart_list[position]['code'];
-          order_details['num' + i] = cart_list[position]['number'];
-        }
-        uploadadmin_value();
+
+          update(ref(db, `VendorsDetails/${vendorId}`), vendorOrderDetails)
+            .then(() => addUserOrder(orderId))
+            .catch((error) =>
+              console.error("Error updating vendor order:", error)
+            );
+        });
       }
     })
-    .catch((error) => console.log(error));
+    .catch((error) => console.error("Error fetching vendor details:", error));
 }
-function uploadadmin_value() {
-  var datakey = '-M';
-  for (let i = 0; i < 19; i++) {
-    datakey = datakey + generateRandomLetter();
-  }
-  set(ref(db, 'adminorder/' + datakey), order_details)
-    .then(() => {
-      getuser_order();
-    })
-    .catch((error) => console.log(error));
-}
-export { upload_orderadmin };
 
-function generateRandomLetter() {
-  const alphabet =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
-
-  return alphabet[Math.floor(Math.random() * alphabet.length)];
+function generateRandomId(length) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+  return Array.from(
+    { length },
+    () => characters[Math.floor(Math.random() * characters.length)]
+  ).join("");
 }
+
+export { uploadAdminOrder };

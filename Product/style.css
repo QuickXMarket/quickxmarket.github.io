@@ -231,9 +231,8 @@ p {
   text-align: right;
 }
 
-#recom {
+#recommended {
   align-items: center;
-  justify-content: center;
 }
 .items_image {
   height: 130px;

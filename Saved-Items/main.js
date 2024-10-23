@@ -1,229 +1,276 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js';
-import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js';
+import { getDatabase, ref, get, child } from "../firebase.js";
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyA1eIsNv6jgME94d8ptQT45JxCk2HswuyY',
-  authDomain: 'project-109e2.firebaseapp.com',
-  databaseURL: 'https://project-109e2.firebaseio.com',
-  projectId: 'project-109e2',
-  storageBucket: 'project-109e2.appspot.com',
-  messagingSenderId: '994321863318',
-  appId: '1:994321863318:web:10d3b180f8ff995d9ba8b7',
-  measurementId: 'G-Y83PD3D9Q5',
-};
+let savedItems,
+  productImages,
+  productName,
+  productPrice,
+  products,
+  totalProducts,
+  productValue;
+let cartItems = [];
+const numberFormatter = new Intl.NumberFormat("en-US");
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const createProductElement = (index, productCode, savedItemIndex) => {
+  const cartItem = cartItems.find((item) => item.code === productCode);
+  const cartIndex = cartItems.findIndex((item) => item.code === productCode);
+  
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("page_body").style.display = "block";
+  document.getElementById("item_list").style.display = "block";
 
-import {
-  getDatabase,
-  ref,
-  set,
-  get,
-  child,
-  update,
-  remove,
-} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js';
-var cart_item = new Array();
-const db = getDatabase();
+  const itemList = document.getElementById("item_list");
 
-let saved_items, item_image, item_name, item_price, arr, lenth, value;
-let cart_items = JSON.parse(localStorage.getItem('cart'));
-var internationalNumberFormat = new Intl.NumberFormat('en-US');
+  const productContainer = document.createElement("div");
+  productContainer.classList.add("item-view");
 
-window.onload = function () {
-  Get_SavedItems();
-};
-
-function Create_Element(num, code, len) {
-  document.getElementById('loader').style.display = 'none';
-  document.getElementById('page_body').style.display = 'block';
-  document.getElementById('item_list').style.display = 'block';
-
-  var cart = document.getElementById('item_list');
-  var image = document.createElement('img');
-  var view = document.createElement('div');
-  var name = document.createElement('p');
-  var price = document.createElement('p');
-  var add = document.createElement('button');
-  var remove_img = document.createElement('img');
-  var remove_text = document.createElement('p');
-  var remove = document.createElement('div');
-  var controls = document.createElement('div');
-  var anchr = document.createElement('a');
-
-  view.classList.add('item-view');
-  image.classList.add('item-image');
-  name.classList.add('item-name');
-  price.classList.add('item-price');
-  controls.classList.add('controls');
-  remove.setAttribute('id', 'remove' + num);
-  controls.classList.add('flex');
-  remove.classList.add('remove');
-  add.setAttribute('id', 'add' + num);
-
-  const myURL = new URL(
-    window.location.protocol + '//' + window.location.host + '/Product/'
+  const productImageElement = createImageElement(
+    "item-image",
+    productImages[0]
   );
-  myURL.searchParams.append('product', code);
-  anchr.href = myURL;
-  remove_text.textContent = 'Remove';
-  remove_img.src = '../images/ic_delete_black.png';
-  add.innerText = 'Add to Cart';
-  image.src = item_image;
-  name.textContent = item_name;
-  price.textContent = '₦' + internationalNumberFormat.format(item_price);
+  const productNameElement = createTextElement("item-name", productName);
+  const productPriceElement = createTextElement(
+    "item-price",
+    `₦${numberFormatter.format(productPrice)}`
+  );
 
-  var flex = document.createElement('div');
-  var div = document.createElement('div');
-  div.style.padding = '8px';
-  flex.classList.add('flex');
-  flex.setAttribute('id', 'item-view' + num);
-  div.appendChild(name);
-  div.appendChild(price);
-  flex.appendChild(image);
-  flex.appendChild(div);
-  anchr.appendChild(flex);
-  view.appendChild(anchr);
+  const productLink = createProductLink(productCode);
+  const productFlexContainer = createFlexContainer(
+    productImageElement,
+    productNameElement,
+    productPriceElement
+  );
 
-  var flex = document.createElement('div');
-  var div = document.createElement('div');
-  flex.classList.add('flex');
-  remove.appendChild(remove_img);
-  remove.appendChild(remove_text);
-  controls.appendChild(remove);
-  controls.appendChild(flex);
-  div.appendChild(add);
-  controls.appendChild(div);
-  view.appendChild(controls);
+  productLink.appendChild(productFlexContainer);
+  productContainer.appendChild(productLink);
 
-  cart.appendChild(view);
-  add_cart('add' + num, code);
-  remove_favorite('remove' + num, code, len);
-}
+  const controlsContainer = createControls(index, cartItem, cartIndex);
+  productContainer.appendChild(controlsContainer);
 
-function Get_SavedItems() {
-  document.getElementById('page_body').style.display = 'none';
-  document.getElementById('item_list').style.display = 'none';
-  document.getElementById('loader').style.display = 'block';
-  saved_items = JSON.parse(localStorage.getItem('saved_items'));
+  itemList.appendChild(productContainer);
+  if (!cartItem) attachAddToCartHandler(`add${index}`, productCode);
+  attachRemoveFavoriteHandler(`remove${index}`, savedItemIndex);
+};
 
-  if (saved_items !== null && saved_items.length !== 0) {
-    const dbref = ref(db);
-    get(child(dbref, 'ProductsDetails/'))
+const loadSavedItems = () => {
+  toggleLoader(true);
+
+  savedItems = JSON.parse(localStorage.getItem("saved_items")) || [];
+  cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+  const itemList = document.getElementById("item_list");
+  itemList.innerHTML = "";
+
+  if (savedItems && savedItems.length > 0) {
+    const db = getDatabase();
+    const dbRef = ref(db);
+
+    get(child(dbRef, "ProductsDetails/"))
       .then((snapshot) => {
         if (snapshot.exists()) {
-          var evet = 1;
-          document.getElementById('loader').style.display = 'none';
-          document.getElementById('page_body').style.display = 'block';
-          document.getElementById('item_list').style.display = 'block';
-          document.getElementById('item_list').textContent = '';
-          for (let l = saved_items.length - 1; l >= 0; l--) {
-            arr = snapshot.val();
-            var numb = snapshot.val();
-            lenth = Object.keys(numb).length;
+          products = snapshot.val();
+          totalProducts = Object.keys(products).length;
 
-            for (var x = 0; x < lenth; x++) {
-              var itemcode = saved_items[l]['code'];
-              var key = Object.keys(arr)[x];
-              value = arr[key];
-              var searchvalue = value['code'];
-              if (itemcode === searchvalue) {
-                item_price = value['price'];
-                item_name = value['name'];
-                item_image = value['url0'];
-                var item_code = value['code'];
-                Create_Element(evet, item_code, l);
-                evet++;
+          savedItems.forEach((item, index) => {
+            for (let i = 0; i < totalProducts; i++) {
+              const productCode = savedItems[index].code;
+              const key = Object.keys(products)[i];
+              productValue = products[key];
+
+              if (productValue.code === productCode) {
+                ({
+                  price: productPrice,
+                  name: productName,
+                  url: productImages,
+                } = productValue);
+                createProductElement(index + 1, productValue.code, index);
               }
             }
-          }
+          });
         }
-        show_recent();
+        displayRecentItems();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   } else {
-    document.getElementById('loader').style.display = 'none';
-    document.getElementById('page_body').style.display = 'block';
-    document.getElementById('no_items').style.display = 'block';
+    toggleLoader(false, "no_items");
   }
-}
+};
 
-function add_cart(view, code, len) {
-  document.getElementById(view).onclick = function () {
-    var newcart_item = new Array();
-    if (cart_items !== null) {
-      cart_items.push({
-        code: code,
-        number: 1,
-      });
-      localStorage.setItem('cart', JSON.stringify(cart_items));
-    } else {
-      newcart_item.push({
-        code: code,
-        number: 1,
-      });
-      localStorage.setItem('cart', JSON.stringify(newcart_item));
-    }
-    saved_items.splice(len, 1);
-    localStorage.setItem('saved_items', JSON.stringify(saved_items));
-    Get_SavedItems();
+const toggleLoader = (showLoader, elementToShow = null) => {
+  document.getElementById("loader").style.display = showLoader
+    ? "block"
+    : "none";
+  document.getElementById("page_body").style.display = showLoader
+    ? "none"
+    : "block";
+  if (elementToShow) {
+    document.getElementById(elementToShow).style.display = showLoader
+      ? "none"
+      : "block";
+  }
+};
+
+const attachAddToCartHandler = (buttonId, productCode) => {
+  document.getElementById(buttonId).onclick = () => {
+    const updatedCartItems = [...cartItems, { code: productCode, amount: 1 }];
+    localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+
+    loadSavedItems();
   };
-}
+};
 
-function remove_favorite(view, len) {
-  document.getElementById(view).onclick = function () {
-    saved_items.splice(len, 1);
-    localStorage.setItem('saved_items', JSON.stringify(saved_items));
-    Get_SavedItems();
+const attachRemoveFavoriteHandler = (buttonId, savedItemIndex) => {
+  document.getElementById(buttonId).onclick = () => {
+    savedItems.splice(savedItemIndex, 1);
+    localStorage.setItem("saved_items", JSON.stringify(savedItems));
+    loadSavedItems();
   };
-}
-function load(view, code) {
-  document.getElementById(view).onclick = function () {
-    const myURL = new URL(
-      window.location.protocol + '//' + window.location.host + '/Product/'
-    );
-    myURL.searchParams.append('product', code);
-    window.location = myURL;
-  };
-}
+};
 
-function show_recent() {
-  var recent_list = JSON.parse(localStorage.getItem('recent'));
+const displayRecentItems = () => {
+  const recentItems = JSON.parse(localStorage.getItem("recent"));
 
-  if (recent_list !== null) {
-    var recent_length = recent_list.length;
-    for (let i = recent_length - 1; i >= 0; i--) {
-      for (let x = 0; x < lenth; x++) {
-        var key = Object.keys(arr)[x];
-        value = arr[key];
-        var code = recent_list[i]['code'];
-        var searchvalue = value['code'];
-        if (searchvalue === code) {
-          const myURL = new URL(
-            window.location.protocol + '//' + window.location.host + '/Product/'
+  if (recentItems || recentItems.length > 0) {
+    const recentContainer = document.getElementById("recent");
+    recentContainer.innerHTML = "";
+
+    recentItems.forEach((recentItem) => {
+      Object.entries(products).forEach(([key, product]) => {
+        if (product.code === recentItem.code) {
+          const recentLink = createProductLink(product.code);
+          recentLink.classList.add("rec_view");
+          const recentImageElement = createImageElement(
+            "rec_image",
+            product.url[0]
           );
-          myURL.searchParams.append('product', value['code']);
-          var anchr = document.createElement('a');
-          anchr.href = myURL;
-          anchr.classList.add('rec_view');
-          var image = document.createElement('img');
-          image.classList.add('rec_image');
-          image.src = value['url0'];
-          anchr.appendChild(image);
-          var price = document.createElement('p');
-          price.classList.add('rec_price');
-          price.textContent =
-            '₦' + internationalNumberFormat.format(value['price']);
-          price.setAttribute('style', 'color:#000137');
-          anchr.appendChild(price);
-          var body = document.getElementById('recent');
-          body.append(anchr);
+          const recentPriceElement = createTextElement(
+            "rec_price",
+            `₦${numberFormatter.format(product.price)}`
+          );
+
+          recentLink.appendChild(recentImageElement);
+          recentLink.appendChild(recentPriceElement);
+          recentContainer.appendChild(recentLink);
         }
-      }
-    }
+      });
+    });
   } else {
-    document.getElementById('rec').setAttribute('style', 'display:none');
+    document.getElementById("rec").style.display = "none";
+  }
+};
+
+const createImageElement = (className, src) => {
+  const img = document.createElement("img");
+  img.classList.add(className);
+  img.src = src;
+  return img;
+};
+
+const createTextElement = (className, text) => {
+  const textElement = document.createElement("p");
+  textElement.classList.add(className);
+  textElement.textContent = text;
+  return textElement;
+};
+
+const createFlexContainer = (
+  productImageElement,
+  productNameElement,
+  productPriceElement
+) => {
+  const flexContainer = document.createElement("div");
+  flexContainer.classList.add("flex");
+  const detailsContainer = document.createElement("div");
+  detailsContainer.style.padding = "8px";
+
+  detailsContainer.appendChild(productNameElement);
+  detailsContainer.appendChild(productPriceElement);
+  flexContainer.appendChild(productImageElement);
+  flexContainer.appendChild(detailsContainer);
+  return flexContainer;
+};
+
+const createProductLink = (productCode) => {
+  const productLink = document.createElement("a");
+  const productURL = new URL(
+    `${window.location.protocol}//${window.location.host}/Product/`
+  );
+  productURL.searchParams.append("product", productCode);
+  productLink.href = productURL;
+  return productLink;
+};
+
+const createControls = (index, cartItem, cartIndex) => {
+  const controlsContainer = document.createElement("div");
+  controlsContainer.classList.add("controls", "flex");
+  const controlsFlex = document.createElement("div");
+  controlsFlex.classList.add("flex");
+
+  const removeButtonContainer = document.createElement("div");
+  removeButtonContainer.classList.add("remove");
+  removeButtonContainer.setAttribute("id", `remove${index}`);
+
+  const removeIcon = createImageElement(null, "../images/ic_delete_black.png");
+  const removeText = createTextElement(null, "Remove");
+
+  removeButtonContainer.appendChild(removeIcon);
+  removeButtonContainer.appendChild(removeText);
+
+  controlsContainer.appendChild(removeButtonContainer);
+  controlsContainer.appendChild(controlsFlex);
+  if (!cartItem) {
+    let addButtonContainer = document.createElement("div");
+    let addButton = document.createElement("button");
+    addButton.setAttribute("id", `add${index}`);
+    addButton.innerText = "Add to Cart";
+    addButtonContainer.appendChild(addButton);
+    controlsContainer.appendChild(addButtonContainer);
+  } else {
+    const cartNum = document.createElement("p");
+    cartNum.id = `cartnum${cartIndex}`;
+    cartNum.textContent = cartItem.amount;
+
+    const addBtn = createButton("add", `add${cartIndex}`, () =>
+      updateCartQuantity(cartIndex, 1)
+    );
+    const minusBtn = createButton("minus", `minus${cartIndex}`, () =>
+      updateCartQuantity(cartIndex, -1)
+    );
+    controlsContainer.appendChild(minusBtn);
+    controlsContainer.appendChild(cartNum);
+    controlsContainer.appendChild(addBtn);
+  }
+  return controlsContainer;
+};
+
+function updateCartQuantity(index, delta) {
+  const cartNumElem = document.getElementById(`cartnum${index}`);
+  let newQuantity = parseInt(cartNumElem.textContent) + delta;
+
+  if (newQuantity < 1) {
+    removeCartItem(index);
+  } else {
+    cartNumElem.textContent = newQuantity;
+    cartItems[index].amount = newQuantity;
+    localStorage.setItem("cart", JSON.stringify(cartItems));
   }
 }
+
+function removeCartItem(index) {
+  cartItems.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cartItems));
+  loadSavedItems();
+}
+
+function createButton(type, id, onClick) {
+  const button = document.createElement("img");
+  button.id = id;
+  button.src =
+    type === "remove"
+      ? `../images/ic_delete_black.png`
+      : type === "add"
+      ? "../images/ic_add_circle_black.png"
+      : "../images/ic_remove_circle_black.png";
+  button.onclick = onClick;
+  return button;
+}
+
+window.onload = loadSavedItems;

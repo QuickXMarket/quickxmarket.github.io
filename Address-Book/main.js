@@ -1,304 +1,187 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js';
-import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js';
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyA1eIsNv6jgME94d8ptQT45JxCk2HswuyY',
-  authDomain: 'project-109e2.firebaseapp.com',
-  databaseURL: 'https://project-109e2.firebaseio.com',
-  projectId: 'project-109e2',
-  storageBucket: 'project-109e2.appspot.com',
-  messagingSenderId: '994321863318',
-  appId: '1:994321863318:web:10d3b180f8ff995d9ba8b7',
-  measurementId: 'G-Y83PD3D9Q5',
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
 import {
   getAuth,
   onAuthStateChanged,
-} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js';
-
-import {
+  get,
   getDatabase,
   ref,
-  get,
   child,
   update,
-} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js';
-
-var arr,
-  value,
-  numb,
-  first,
-  last,
-  phone,
-  gender,
-  hostel,
-  detail_no,
-  form,
-  details = JSON.parse(localStorage.getItem('details'));
+} from "../firebase.js";
 
 const db = getDatabase();
+let details = JSON.parse(localStorage.getItem("details"));
+let addressData = {};
 
-onload = () => {
+window.onload = () => {
   const auth = getAuth();
-
   onAuthStateChanged(auth, (user) => {
-    if (user) {
-      get_address();
-    } else {
-      window.location.replace('../Login');
-    }
+    user ? getAddress() : window.location.replace("../Login");
   });
 };
 
-function get_address() {
-  const dbref = ref(db);
-  document.getElementById('loader').style.display = 'block';
-  get(child(dbref, 'UsersDetails/'))
+function getAddress() {
+  document.getElementById("loader").style.display = "block";
+  get(child(ref(db), "UsersDetails/"))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        document.getElementById('loader').setAttribute('style', 'display:none');
-        document.getElementById('body').innerHTML = '';
-        document.getElementById('body').style.display = 'block';
-        arr = snapshot.val();
-        numb = snapshot.val();
-        var lenth = Object.keys(numb).length;
-        for (var x = lenth - 1; x >= 0; x--) {
-          var key = Object.keys(arr)[x];
-          var uservalue = arr[key];
-          var searchvalue = uservalue['code'];
-          if (details['user'] === searchvalue) {
-            value = uservalue;
-            for (let i = value['details']; i > 0; i--) {
-              document.getElementById(
-                'body'
-              ).innerHTML += `<label class="labl"><input type="radio" ${
-                value['address_set' + i] === 'on' ? 'checked' : ''
-              }/>
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("body").innerHTML = "";
+        addressData = snapshot.val();
+        displayAddresses();
+      }
+    })
+    .catch((error) => console.error(error));
+}
+
+function displayAddresses() {
+  const user = addressData[details["key"]];
+  if (user) {
+    user["AddressBook"].forEach((address, i) => {
+      const isChecked = address["switch"] ? "checked" : "";
+      document.getElementById("body").innerHTML += `
+        <label class="labl" id=${i}>
+          <input type="radio" ${isChecked} />
           <div>
             <div class='link-body'>
               <p class="edit-link">Edit</p>
             </div>
-            <div id=${i}>
-              <div class="flex">
-                <div class="title">First Name:</div>
-                <div class="info">${value['first' + i]}</div>
-              </div>
-              <div class="flex">
-                <div class="title">Last Name:</div>
-                <div class="info">${value['second' + i]}</div>
-              </div>
-              <div class="flex">
-                <div class="title">Phone:</div>
-                <div class="info">${value['phone' + i]}</div>
-              </div>
-              <div class="flex">
-                <div class="title">Hostel:</div>
-                <div class="info">${value['hostel' + i]}</div>
-              </div>
-              <div class="flex">
-                <div class="title">Gender:</div>
-                <div class="info">${value['gender' + i]}</div>
-              </div>
+            <div >
+              ${formatAddress(address)}
             </div>
           </div>
         </label>`;
-              onclicked(i, value);
-            }
-          }
-        }
-        editClicked();
-      }
-    })
-    .catch((error) => console.log(error));
+      setupAddressClick(i, user);
+    });
+    setupEditClicks();
+  }
 }
 
-function onclicked(num, value) {
-  document.getElementById(num).onclick = function (e) {
+function formatAddress(address) {
+  return `
+    <div class="flex"><div class="title">First Name:</div><div class="info">${address.firstName}</div></div>
+    <div class="flex"><div class="title">Last Name:</div><div class="info">${address.lastName}</div></div>
+    <div class="flex"><div class="title">Phone:</div><div class="info">+234${address.phone}</div></div>
+    <div class="flex"><div class="title">Hostel:</div><div class="info">${address.hostel}</div></div>
+    <div class="flex"><div class="title">Gender:</div><div class="info">${address.gender}</div></div>
+  `;
+}
+
+function setupAddressClick(index, user) {
+  document.getElementById(index).onclick = (e) => {
     e.preventDefault();
-    if (value['details'] > 1 && value['address_set' + num] !== 'on') {
-      document.getElementById('loader').style.display = 'block';
-      document.getElementById('body').style.display = 'none';
-      var addres_set = new Map();
-      addres_set['address_set' + num] = 'on';
-      for (let i = 1; i <= value['details']; i++) {
-        if (i !== num) {
-          addres_set['address_set' + i] = 'off';
-        }
-      }
-      update(ref(db, 'UsersDetails/' + details['key']), addres_set)
-        .then(() => {
-          var new_details = new Object();
-          new_details = {
-            user: details['user'],
-            key: details['key'],
-            email: details['email'],
-            first: value['first' + num],
-            name: value['first' + num] + ' ' + value['second' + num],
-            hostel: value['hostel' + num],
-            gender: value['gender' + num],
-            phone: value['phone' + num],
-            login: 'yes',
-          };
-          localStorage.setItem('details', JSON.stringify(new_details));
-          get_address();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    if (user.AddressBook.length > 1 && user.AddressBook[index]["switch"]) {
+      toggleAddressSelection(index, user);
     }
   };
 }
 
-function editClicked() {
-  var EditBtns = document.getElementsByClassName('edit-link');
-  Object.values(EditBtns).forEach((btn, index) => {
-    btn.addEventListener('click', () => {
-      detail_no = value['details'] - index;
-      document.getElementById('edit-first').value = value['first' + detail_no];
-      document.getElementById('edit-last').value = value['second' + detail_no];
-      document.getElementById('edit-hostel').value =
-        value['hostel' + detail_no];
-      document.getElementById('edit-phone').value = value['phone' + detail_no];
-      document.getElementById('edit-gender').value =
-        value['gender' + detail_no];
-      document.getElementById('edit-body').style.display = 'flex';
-      document
-        .getElementById('edit-body')
-        .getElementsByTagName('h4')[0].innerText = 'Edit Address';
-      form = 'edit';
-      document.getElementById('edit-loader').style.display = 'none';
-    });
+function toggleAddressSelection(selectedIndex, user) {
+  console.log(selectedIndex);
+  const updatedAddressBook = user.AddressBook.map((address, index) => ({
+    ...address,
+    switch: index === selectedIndex,
+  }));
+  console.log(updatedAddressBook);
+
+  update(ref(db, `UsersDetails/${details["id"]}`), {
+    AddressBook: updatedAddressBook,
+  })
+    .then(() => {
+      localStorage.setItem(
+        "details",
+        JSON.stringify({
+          ...details,
+          ...user.AddressBook[selectedIndex],
+        })
+      );
+      getAddress();
+    })
+    .catch((error) => console.error(error));
+}
+
+function setupEditClicks() {
+  const editButtons = document.getElementsByClassName("edit-link");
+  Array.from(editButtons).forEach((btn, index) => {
+    btn.addEventListener("click", () => openEditForm(index));
   });
 }
 
-document.getElementById('close').addEventListener('click', () => {
-  document.getElementById('edit-body').style.display = 'none';
-  document.getElementById('edit-first').value = '';
-  document.getElementById('edit-last').value = '';
-  document.getElementById('edit-phone').value = '';
-  document.getElementById('edit-hostel').value = 'Hostel';
-  document.getElementById('edit-gender').value = 'Gender';
+function openEditForm(index) {
+  const address = addressData[details["key"]]["AddressBook"][index];
+  document.getElementById("edit-first").value = address.firstName;
+  document.getElementById("edit-last").value = address.lastName;
+  document.getElementById("edit-phone").value = address.phone;
+  document.getElementById("edit-hostel").value = address.hostel;
+  document.getElementById("edit-gender").value = address.gender;
+  document.getElementById("edit-body").style.display = "flex";
+  document.getElementById("edit-loader").style.display = "none";
+}
+
+document.getElementById("close").addEventListener("click", () => {
+  document.getElementById("edit-body").style.display = "none";
+  clearFormFields();
 });
 
-document.getElementById('floating-btn').addEventListener('click', () => {
-  document.getElementById('edit-body').getElementsByTagName('h4')[0].innerText =
-    'Register new Address';
-  form = 'register';
-  document.getElementById('edit-body').style.display = 'flex';
-  document.getElementById('edit-loader').style.display = 'none';
+document.getElementById("floating-btn").addEventListener("click", () => {
+  clearFormFields();
+  document.getElementById("edit-body").style.display = "flex";
+  document.getElementById("edit-loader").style.display = "none";
 });
 
-const editForm = document.getElementById('edit-form');
-editForm.addEventListener('submit', submit, false);
+function clearFormFields() {
+  [
+    "edit-first",
+    "edit-last",
+    "edit-phone",
+    "edit-hostel",
+    "edit-gender",
+  ].forEach((id) => {
+    document.getElementById(id).value = "";
+  });
+}
 
-function submit(e) {
+document.getElementById("edit-form").addEventListener("submit", handleSubmit);
+
+function handleSubmit(e) {
   e.preventDefault();
-  ready();
-  if (
-    first !== '' &&
-    last !== '' &&
-    phone !== '' &&
-    gender !== 'Gender' &&
-    hostel !== 'Hostel'
-  ) {
-    document.getElementById('edit-loader').style.display = 'block';
-    form === 'edit' ? edit_address() : create_address();
+  const formValues = getFormValues();
+  if (validateForm(formValues)) {
+    document.getElementById("edit-loader").style.display = "block";
+    updateAddress(formValues);
   } else {
-    alert('Fill all Fields');
+    alert("Fill all fields");
   }
 }
 
-function edit_address() {
-  const dbref = ref(db);
-  get(child(dbref, 'UsersDetails/'))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        arr = snapshot.val();
-        numb = snapshot.val();
-        var lenth = Object.keys(numb).length;
-        for (var x = lenth - 1; x >= 0; x--) {
-          var key = Object.keys(arr)[x];
-          var value = arr[key];
-          var searchvalue = value['code'];
-          if (details['user'] === searchvalue) {
-            var details_no = detail_no;
-            update(ref(db, 'UsersDetails/' + details['key']), {
-              ['first' + details_no]: first,
-              ['second' + details_no]: last,
-              ['hostel' + details_no]: hostel,
-              ['phone' + details_no]: phone,
-              ['gender' + details_no]: gender,
-            })
-              .then(() => {
-                document.getElementById('edit-loader').style.display = 'none';
-                document.getElementById('edit-body').style.display = 'none';
-                get_address();
-              })
-              .catch((error) => {
-                document.getElementById('edit-loader').style.display = 'none';
-                alert(error);
-              });
-          }
-        }
-      }
-    })
-
-    .catch((error) => {
-      console.log(error);
-    });
+function getFormValues() {
+  return {
+    firstName: document.getElementById("edit-first").value,
+    lastName: document.getElementById("edit-last").value,
+    phone: document.getElementById("edit-phone").value,
+    hostel: document.getElementById("edit-hostel").value,
+    gender: document.getElementById("edit-gender").value,
+  };
 }
 
-function create_address() {
-  const dbref = ref(db);
-  get(child(dbref, 'UsersDetails/'))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        arr = snapshot.val();
-        numb = snapshot.val();
-        var lenth = Object.keys(numb).length;
-        for (var x = lenth - 1; x >= 0; x--) {
-          var key = Object.keys(arr)[x];
-          var value = arr[key];
-          var searchvalue = value['code'];
-          if (details['user'] === searchvalue) {
-            var details_no = parseInt(value['details']) + 1;
-            update(ref(db, 'UsersDetails/' + details['key']), {
-              ['first' + details_no]: first,
-              ['second' + details_no]: last,
-              ['hostel' + details_no]: hostel,
-              ['phone' + details_no]: '+234' + phone,
-              ['gender' + details_no]: gender,
-              ['details']: details_no,
-              ['address_set' + details_no]: 'off',
-            })
-              .then(() => {
-                document.getElementById('edit-loader').style.display = 'none';
-                document.getElementById('edit-body').style.display = 'none';
-                get_address();
-              })
-              .catch((error) => {
-                document.getElementById('edit-loader').style.display = 'none';
-                alert(error);
-              });
-          }
-        }
-      }
-    })
-
-    .catch((error) => {
-      console.log(error);
-    });
+function validateForm({ firstName, lastName, phone, hostel, gender }) {
+  return (
+    firstName && lastName && phone && hostel !== "Hostel" && gender !== "Gender"
+  );
 }
 
-function ready() {
-  first = document.getElementById('edit-first').value;
-  last = document.getElementById('edit-last').value;
-  phone = document.getElementById('edit-phone').value;
-  hostel = document.getElementById('edit-hostel').value;
-  gender = document.getElementById('edit-gender').value;
+function updateAddress(formValues) {
+  const user = addressData[details["key"]];
+  user.AddressBook.push({
+    ...formValues,
+    switch: false,
+  });
+
+  update(ref(db, `UsersDetails/${details["key"]}`), {
+    AddressBook: user.AddressBook,
+  })
+    .then(() => {
+      document.getElementById("edit-body").style.display = "none";
+      getAddress();
+    })
+    .catch((error) => console.error(error));
 }

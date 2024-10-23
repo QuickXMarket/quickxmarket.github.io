@@ -9,6 +9,7 @@
     <link rel="icon" href="../images/cart.png" sizes="16×16" />
     <link rel="stylesheet" href="../css/bootstrap.css" />
     <link rel="stylesheet" href="style.css" />
+    <script type="module" src="main.js"></script>
   </head>
   <body>
     <nav id="div1" class="navbar navbar-expand-lg navbar-light">
@@ -49,33 +50,57 @@
         </div>
       </div>
     </nav>
-    <div id="body" style="padding: 8px; display: none">
+    <div id="body" style="display: none">
       <div id="desc">
+        <h3 id="productName"></h3>
         <div id="description"></div>
+      </div>
+      <div id="no_items">
+        <div style="width: 236px; height: 220px; margin: auto">
+          <p style="font-size: 18px">item is not Available</p>
+          <img
+            src="../images/PngItem_212128 (2).png"
+            style="
+              height: 120px;
+              width: 150px;
+              filter: invert(6%) sepia(63%) saturate(3693%) hue-rotate(232deg)
+                brightness(91%) contrast(117%);
+              margin-bottom: 8px;
+              object-fit: scale-down;
+              margin-left: 43px;
+            "
+          />
+          <a href="../" class="continue"
+            ><button id="continue">Continue Shopping</button></a
+          >
+        </div>
+      </div>
+      <div id="rec">
+        <div
+          style="
+            margin-top: 8px;
+            width: 100%;
+            background-color: white;
+            padding: 8px;
+          "
+        >
+          <div style="color: #000137; font-size: 14px; padding: 8px">
+            Recently Viewed items
+          </div>
+        </div>
+        <div
+          id="recent"
+          style="
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+          "
+        ></div>
       </div>
     </div>
     <div id="loader"></div>
-    <div id="no_items">
-      <div style="width: 236px; height: 220px; margin: auto">
-        <p style="font-size: 18px">item is not Available</p>
-        <img
-          src="../images/PngItem_212128 (2).png"
-          style="
-            height: 120px;
-            width: 150px;
-            filter: invert(6%) sepia(63%) saturate(3693%) hue-rotate(232deg)
-              brightness(91%) contrast(117%);
-            margin-bottom: 8px;
-            object-fit: scale-down;
-            margin-left: 43px;
-          "
-        />
-        <a href="../" class="continue"
-          ><button id="continue">Continue Shopping</button></a
-        >
-      </div>
-    </div>
+
     <script src="../js/bootstrap.bundle.js"></script>
-    <script type="module" src="../description.js"></script>
   </body>
 </html>

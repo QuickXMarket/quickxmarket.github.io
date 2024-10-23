@@ -1,173 +1,124 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js';
-import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js';
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyA1eIsNv6jgME94d8ptQT45JxCk2HswuyY',
-  authDomain: 'project-109e2.firebaseapp.com',
-  databaseURL: 'https://project-109e2.firebaseio.com',
-  projectId: 'project-109e2',
-  storageBucket: 'project-109e2.appspot.com',
-  messagingSenderId: '994321863318',
-  appId: '1:994321863318:web:10d3b180f8ff995d9ba8b7',
-  measurementId: 'G-Y83PD3D9Q5',
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-import {
-  getDatabase,
-  ref,
-  set,
-  get,
-  child,
-  update,
-  remove,
-} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js';
+import { getDatabase, ref, get, child } from "./firebase.js";
 
 const db = getDatabase();
+const itemCodes = [];
+let products;
 
-var item_code = new Array();
-
-function sear() {
-  var searchitem = document.getElementById('div2').value;
+function searchItem() {
+  const searchItemValue = document.getElementById("div2").value;
   const myURL = new URL(
-    window.location.protocol + '//' + window.location.host + '/Search/'
+    `${window.location.protocol}//${window.location.host}/Search/`
   );
-  myURL.searchParams.append('search', searchitem);
+  myURL.searchParams.append("search", searchItemValue);
   window.location = myURL;
 }
 
-var x;
-var arr, value, lenth;
-function sett(n) {
-  x = Math.floor(Math.random() * lenth) + 0;
-  var key = Object.keys(arr)[x];
-  value = arr[key];
-  if (check_code(value['code'])) {
-    const myURL = new URL(
-      window.location.protocol + '//' + window.location.host + '/Product/'
-    );
-    myURL.searchParams.append('product', value['code']);
-    var anchr = document.createElement('a');
-    anchr.href = myURL;
-    anchr.classList.add(
-      'items_view',
-      'col-xs-6',
-      'col-sm-4',
-      'col-lg-3',
-      'col-md-4',
-      'col-xs-6'
-    );
-    var image = document.createElement('img');
-    image.classList.add('items_image');
-    image.src = value['url0'];
-    anchr.appendChild(image);
-    var name = document.createElement('p');
-    name.classList.add('item_name');
-    name.textContent = value['name'];
-    anchr.appendChild(name);
-    var price = document.createElement('p');
-    price.classList.add('item_price');
-    var internationalNumberFormat = new Intl.NumberFormat('en-US');
-    price.textContent = '₦' + internationalNumberFormat.format(value['price']);
-    price.setAttribute('style', 'color:#000137');
-    anchr.appendChild(price);
-    var body = document.getElementById('items_body');
-    body.append(anchr);
-    item_code.push(value['code']);
-  } else {
-    sett(n);
-  }
+function setItem(item) {
+  const myURL = new URL(
+    `${window.location.protocol}//${window.location.host}/Product/`
+  );
+  myURL.searchParams.append("product", item.code);
+
+  const productLink = document.createElement("a");
+  productLink.href = myURL;
+  productLink.classList.add(
+    "items_view",
+    "col-xs-6",
+    "col-sm-4",
+    "col-lg-3",
+    "col-md-4"
+  );
+
+  const image = document.createElement("img");
+  image.classList.add("items_image");
+  image.src = item.url[0];
+  productLink.appendChild(image);
+
+  const name = document.createElement("p");
+  name.classList.add("item_name");
+  name.textContent = item.name;
+  productLink.appendChild(name);
+
+  const price = document.createElement("p");
+  price.classList.add("item_price");
+  const formattedPrice = new Intl.NumberFormat("en-US").format(item.price);
+  price.textContent = `₦${formattedPrice}`;
+  price.style.color = "#000137";
+  productLink.appendChild(price);
+
+  document.getElementById("items_body").appendChild(productLink);
+  itemCodes.push(item.code);
 }
-document.getElementById('div2').addEventListener('search', sear);
-window.onload = function () {
-  var cart_listnum = JSON.parse(localStorage.getItem('cart'));
-  if (cart_listnum !== null && cart_listnum.length !== 0) {
-    document.getElementById('cart_num').textContent = cart_listnum.length;
-    document.getElementById('cart_num2').textContent = cart_listnum.length;
-  } else {
-    document.getElementById('cart_num').textContent = 0;
-    document.getElementById('cart_num2').textContent = 0;
-  }
-  onopen();
-};
-function onopen() {
-  document.getElementById('main__menu').setAttribute('style', 'display:none');
-  document.getElementById('loader').setAttribute('style', 'display:block');
-  document.getElementById('title').textContent = window.location.host;
-  var i = 0;
+
+function updateCartCount() {
+  const cartList = JSON.parse(localStorage.getItem("cart")) || [];
+  const cartCount = cartList.length || 0;
+  document.getElementById("cart_num").textContent = cartCount;
+  document.getElementById("cart_num2").textContent = cartCount;
+}
+
+function fetchProducts() {
+  document.getElementById("main__menu").style.display = "none";
+  document.getElementById("loader").style.display = "block";
+  document.getElementById("title").textContent = window.location.host;
+
   const dbref = ref(db);
-  get(child(dbref, 'ProductsDetails/'))
+  get(child(dbref, "ProductsDetails/"))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        document.getElementById('main__menu').style.display = 'flex';
-        document.getElementById('loader').style.display = 'none';
-        arr = snapshot.val();
-        lenth = Object.keys(arr).length;
-        lenth--;
+        document.getElementById("main__menu").style.display = "flex";
+        document.getElementById("loader").style.display = "none";
 
-        do {
-          i++;
-          sett(i);
-        } while (i <= lenth + 1);
+        products = Object.values(snapshot.val());
+        let filteredProducts = [...products];
+
+        while (filteredProducts.length) {
+          const randomIndex = Math.floor(
+            Math.random() * filteredProducts.length
+          );
+          const product = filteredProducts.splice(randomIndex, 1)[0];
+          setItem(product);
+        }
       }
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch(console.error);
 }
-function load(view, code) {
-  document.getElementById(view).onclick = function () {
-    const myURL = new URL(
-      window.location.protocol + '//' + window.location.host + '/Product/'
-    );
-    myURL.searchParams.append('product', code);
-    window.location = myURL;
-  };
-}
-function input_search() {
-  var searchitem = document.getElementById('div2').value;
-  var x = lenth;
-  var evnt = 1;
-  var avail = 0;
-  var datalist = document.getElementById('history');
-  datalist.textContent = '';
-  do {
-    var key = Object.keys(arr)[x];
-    var value = arr[key];
-    var searchvalue = value['name'];
-    if (searchvalue.toLowerCase().includes(searchitem.toLowerCase())) {
-      var option = document.createElement('option');
 
-      option.setAttribute('value', value['name']);
+function inputSearch() {
+  const searchItemValue = document.getElementById("div2").value.toLowerCase();
+  const datalist = document.getElementById("history");
+  datalist.textContent = "";
+
+  const matchingItems = Object.values(products).filter((item) =>
+    item.name.toLowerCase().includes(searchItemValue)
+  );
+
+  if (matchingItems.length > 0) {
+    matchingItems.forEach((item) => {
+      const option = document.createElement("option");
+      option.value = item.name;
       datalist.appendChild(option);
-      avail = 1;
-    }
-    x--;
-  } while (x >= 0);
-  if (avail == 0) {
-    get_history(searchitem);
+    });
+  } else {
+    getHistory(searchItemValue);
   }
 }
 
-function get_history() {
-  var history_array = JSON.parse(localStorage.getItem('history'));
-  for (var i = 0; i < history_array; i++) {
-    var option = document.createElement('option');
-    var datalist = document.getElementById('history');
-    option.setAttribute('value', value['name']);
+function getHistory() {
+  const historyArray = JSON.parse(localStorage.getItem("history")) || [];
+  const datalist = document.getElementById("history");
+
+  historyArray.forEach((item) => {
+    const option = document.createElement("option");
+    option.value = item.name;
     datalist.appendChild(option);
-  }
+  });
 }
-document.getElementById('div2') - addEventListener('input', input_search);
 
-function check_code(code) {
-  for (let i = 0; i < item_code.length; i++) {
-    if (item_code[i] === code) {
-      return false;
-    }
-  }
-  return true;
-}
+document.getElementById("div2").addEventListener("input", inputSearch);
+document.getElementById("div2").addEventListener("search", searchItem);
+
+window.onload = function () {
+  updateCartCount();
+  fetchProducts();
+};

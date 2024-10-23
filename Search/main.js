@@ -1,103 +1,110 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js';
-import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js';
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyA1eIsNv6jgME94d8ptQT45JxCk2HswuyY',
-  authDomain: 'project-109e2.firebaseapp.com',
-  databaseURL: 'https://project-109e2.firebaseio.com',
-  projectId: 'project-109e2',
-  storageBucket: 'project-109e2.appspot.com',
-  messagingSenderId: '994321863318',
-  appId: '1:994321863318:web:10d3b180f8ff995d9ba8b7',
-  measurementId: 'G-Y83PD3D9Q5',
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-import {
-  getDatabase,
-  ref,
-  set,
-  get,
-  child,
-  update,
-  remove,
-} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js';
+import { get, child, getDatabase, ref } from "../firebase.js";
 
 const db = getDatabase();
+const numberFormatter = new Intl.NumberFormat("en-US");
+const recentItems = JSON.parse(localStorage.getItem("recent")) || [];
 
-var internationalNumberFormat = new Intl.NumberFormat('en-US');
+window.onload = () => {
+  updateCartCount();
+  document.getElementById("title").textContent = window.location.host;
 
-window.onload = function () {
-  var cart_listnum = JSON.parse(localStorage.getItem('cart'));
-  if (cart_listnum !== null && cart_listnum.length !== 0) {
-    document.getElementById('cart_num').textContent = cart_listnum.length;
-    document.getElementById('cart_num2').textContent = cart_listnum.length;
-  } else {
-    document.getElementById('cart_num').textContent = 0;
-    document.getElementById('cart_num2').textContent = 0;
-  }
-  document.getElementById('title').textContent = window.location.host;
-  var params = new URLSearchParams(window.location.search);
-  var searchitem = params.get('search');
-  document.getElementById('div2').value = searchitem;
-  const dbref = ref(db);
-  get(child(dbref, 'ProductsDetails/')).then((snapshot) => {
-    if (snapshot.exists()) {
-      document.getElementById('loader').setAttribute('style', 'display:none');
-      var arr = snapshot.val();
-      var numb = snapshot.val();
-      var lenth = Object.keys(numb).length;
-      var x = lenth - 1;
-      var evnt = 1;
-      do {
-        var key = Object.keys(arr)[x];
-        var value = arr[key];
-        var searchvalue = value['name'];
-        if (searchvalue.toLowerCase().includes(searchitem.toLowerCase())) {
-          const myURL = new URL(
-            window.location.protocol + '//' + window.location.host + '/Product'
-          );
-          myURL.searchParams.append('product', value['code']);
-          var anchr = document.createElement('a');
-          anchr.href = myURL;
-          anchr.classList.add(
-            'col-sm-6',
-            'col-lg-4',
-            'items_view',
-            'd-sm-inline-flex'
-          );
-          var image = document.createElement('img');
-          image.classList.add('item_image');
-          image.src = value['url0'];
-          anchr.appendChild(image);
-          var detail = document.createElement('div');
-          var text = document.createElement('div');
-          text.classList.add('item_name');
-          text.textContent = value['name'];
-          detail.appendChild(text);
-          var price = document.createElement('div');
-          price.classList.add('item_price');
-          price.textContent =
-            '₦' + internationalNumberFormat.format(value['price']);
-          detail.appendChild(price);
-          anchr.appendChild(detail);
-          var listview = document.getElementById('list');
-          listview.appendChild(anchr);
-        }
-        x--;
-      } while (x >= 0);
-    }
-  });
+  const searchQuery = new URLSearchParams(window.location.search).get("search");
+  document.getElementById("div2").value = searchQuery;
+
+  fetchProductDetails(searchQuery);
 };
-function sear() {
-  var searchitem = document.getElementById('div2').value;
-  const myURL = new URL(
-    window.location.protocol + '//' + window.location.host + '/Search/'
+
+const updateCartCount = () => {
+  const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+  const cartCount = cartItems.length;
+
+  document.getElementById("cart_num").textContent = cartCount;
+  document.getElementById("cart_num2").textContent = cartCount;
+};
+
+const fetchProductDetails = (searchQuery) => {
+  const dbRef = ref(db);
+
+  get(child(dbRef, "ProductsDetails/"))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("body").style.display = "block";
+
+        const products = snapshot.val();
+        const productKeys = Object.keys(products);
+
+        productKeys.reverse().forEach((key) => {
+          const product = products[key];
+          const productName = product["name"].toLowerCase();
+
+          if (productName.includes(searchQuery.toLowerCase())) {
+            displayProduct(product);
+          }
+        });
+        displayRecentItems(products);
+      }
+    })
+    .catch((error) => console.error(error));
+};
+
+const displayProduct = (product) => {
+  const productURL = new URL(
+    `${window.location.protocol}//${window.location.host}/Product/`
   );
-  myURL.searchParams.append('search', searchitem);
-  window.location = myURL;
+  productURL.searchParams.append("product", product["code"]);
+
+  const productHTML = `
+    <a href="${productURL}" class="col-sm-6 col-lg-4 items_view d-sm-inline-flex">
+      <img class="item_image" src="${product["url"][0]}" >
+      <div>
+        <div class="item_name">${product["name"]}</div>
+        <div class="item_price">₦${numberFormatter.format(
+          product["price"]
+        )}</div>
+      </div>
+    </a>
+  `;
+
+  document.getElementById("list").innerHTML += productHTML;
+};
+
+const handleSearch = () => {
+  const searchQuery = document.getElementById("div2").value;
+  const searchURL = new URL(
+    `${window.location.protocol}//${window.location.host}/Search/`
+  );
+  searchURL.searchParams.append("search", searchQuery);
+  window.location = searchURL;
+};
+
+function displayRecentItems(products) {
+  if (Object.values(recentItems).length < 1) {
+    Object.values(recentItems)
+      .slice(0, 10)
+      .forEach((item) => {
+        const recentProduct = Object.values(products).find(
+          (product) => product.code === item.code
+        );
+        if (recentProduct) {
+          const myURL = new URL(
+            `${window.location.protocol}//${window.location.host}/Product/`
+          );
+          myURL.searchParams.append("product", recentProduct.code);
+
+          const recentHTML = `
+          <a href="${myURL}" class="rec_view">
+            <img class="rec_image" src="${recentProduct.url[0]}">
+            <p class="rec_price">₦${numberFormatter.format(
+              recentProduct.price
+            )}</p>
+          </a>
+        `;
+
+          document.getElementById("recent").innerHTML += recentHTML;
+        }
+      });
+  } else document.getElementById("rec").style.display = "none";
 }
-document.getElementById('div2').addEventListener('search', sear);
+
+document.getElementById("div2").addEventListener("search", handleSearch);

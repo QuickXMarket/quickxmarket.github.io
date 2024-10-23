@@ -1,124 +1,99 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js';
-import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js';
+import { getDatabase, ref, get, child } from "../firebase.js";
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyA1eIsNv6jgME94d8ptQT45JxCk2HswuyY',
-  authDomain: 'project-109e2.firebaseapp.com',
-  databaseURL: 'https://project-109e2.firebaseio.com',
-  projectId: 'project-109e2',
-  storageBucket: 'project-109e2.appspot.com',
-  messagingSenderId: '994321863318',
-  appId: '1:994321863318:web:10d3b180f8ff995d9ba8b7',
-  measurementId: 'G-Y83PD3D9Q5',
-};
+const database = getDatabase();
+let productData = null;
+let totalProducts = 0;
+const numberFormat = new Intl.NumberFormat("en-US");
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+window.onload = fetchProductData;
 
-import {
-  getDatabase,
-  ref,
-  get,
-  child,
-} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js';
+function fetchProductsByCategory(selectedCategory, viewIndex) {
+  if (productData) {
+    resetCategoryStyles();
 
-const db = getDatabase();
-var arr, sect, lenth;
-var internationalNumberFormat = new Intl.NumberFormat('en-US');
-window.onload = function () {
-  get_database();
-};
-function get_category(category, view) {
-  if (arr !== null) {
-    var n = 0;
-    var x = 0;
-    document.getElementById('category_select' + 1).style.backgroundColor =
-      '#000137';
-    document.getElementById('category_select' + 2).style.backgroundColor =
-      '#000137';
-    document.getElementById('category_select' + 3).style.backgroundColor =
-      '#000137';
-    document.getElementById('category_select' + 4).style.backgroundColor =
-      '#000137';
-    document.getElementById('category_select' + 5).style.backgroundColor =
-      '#000137';
-    document.getElementById('category_select' + view).style.backgroundColor =
-      'white';
+    document.getElementById(
+      `category_select${viewIndex}`
+    ).style.backgroundColor = "white";
 
-    var body = document.getElementById('category_body');
-    body.innerHTML = '';
-    do {
-      var key = Object.keys(arr)[x];
-      var value = arr[key];
-      var searchitem = value['category'];
-      if (searchitem.toLowerCase().includes(category.toLowerCase())) {
-        n++;
+    const categoryBody = document.getElementById("category_body");
+    categoryBody.innerHTML = "";
 
-        const myURL = new URL(
-          window.location.protocol + '//' + window.location.host + '/Product'
-        );
-        myURL.searchParams.append('product', value['code']);
-        var anchr = document.createElement('a');
-        anchr.href = myURL;
-        anchr.classList.add(
-          'items_view',
-          'col-xs-6',
-          'col-sm-4',
-          'col-lg-3',
-          'col-md-4',
-          'col-xs-6'
-        );
-        var image = document.createElement('img');
-        image.classList.add('items_image');
-        image.src = value['url0'];
-        anchr.appendChild(image);
-        var name = document.createElement('p');
-        name.classList.add('item_name');
-        name.innerHTML = value['name'];
-        anchr.appendChild(name);
-        var price = document.createElement('p');
-        price.classList.add('item_price');
-        price.innerHTML =
-          '₦' + internationalNumberFormat.format(value['price']);
-        price.setAttribute('style', 'color:#000137');
-        anchr.appendChild(price);
-        body.append(anchr);
+    Object.entries(productData).forEach(([key, product]) => {
+      if (
+        product.category.toLowerCase().includes(selectedCategory.toLowerCase())
+      ) {
+        const productElement = createProductElement(product);
+        categoryBody.append(productElement);
       }
-      x++;
-    } while (x <= lenth);
+    });
   }
 }
 
-function get_database() {
-  const dbref = ref(db);
-  get(child(dbref, 'ProductsDetails/'))
+function fetchProductData() {
+  const databaseRef = ref(database);
+  get(child(databaseRef, "ProductsDetails/"))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        document.getElementById('loader').setAttribute('style', 'display:none');
-        arr = snapshot.val();
-        lenth = Object.keys(arr).length;
-        lenth--;
-        get_category('phone accessories', 1);
+        document.getElementById("loader").style.display = "none";
+        productData = snapshot.val();
+        totalProducts = Object.keys(productData).length;
+        fetchProductsByCategory("phone accessories", 1);
       }
     })
-    .catch((error) => {
-      get_database();
-    });
+    .catch(fetchProductData);
 }
 
-document.getElementById('category_view1').onclick = function () {
-  get_category('phone accessories', 1);
-};
-document.getElementById('category_view2').onclick = function () {
-  get_category('clothing', 2);
-};
-document.getElementById('category_view3').onclick = function () {
-  get_category('perfumes & oil', 3);
-};
-document.getElementById('category_view4').onclick = function () {
-  get_category('shoes', 4);
-};
-document.getElementById('category_view5').onclick = function () {
-  get_category('apartments', 5);
-};
+function resetCategoryStyles() {
+  for (let i = 1; i <= 5; i++) {
+    document.getElementById(`category_select${i}`).style.backgroundColor =
+      "#000137";
+  }
+}
+
+function createProductElement(product) {
+  const productURL = new URL(
+    `${window.location.protocol}//${window.location.host}/Product`
+  );
+  productURL.searchParams.append("product", product.code);
+
+  const productLink = document.createElement("a");
+  productLink.href = productURL;
+  productLink.classList.add(
+    "items_view",
+    "col-xs-6",
+    "col-sm-4",
+    "col-lg-3",
+    "col-md-4"
+  );
+
+  const productImage = document.createElement("img");
+  productImage.classList.add("items_image");
+  productImage.src = product.url[0];
+  productLink.appendChild(productImage);
+
+  const productName = document.createElement("p");
+  productName.classList.add("item_name");
+  productName.textContent = product.name;
+  productLink.appendChild(productName);
+
+  const productPrice = document.createElement("p");
+  productPrice.classList.add("item_price");
+  productPrice.textContent = `₦${numberFormat.format(product.price)}`;
+  productPrice.style.color = "#000137";
+  productLink.appendChild(productPrice);
+
+  return productLink;
+}
+
+const categoryButtons = [
+  { id: "category_view1", category: "phone accessories", viewIndex: 1 },
+  { id: "category_view2", category: "clothing", viewIndex: 2 },
+  { id: "category_view3", category: "perfumes & oil", viewIndex: 3 },
+  { id: "category_view4", category: "shoes", viewIndex: 4 },
+  { id: "category_view5", category: "apartments", viewIndex: 5 },
+];
+
+categoryButtons.forEach(({ id, category, viewIndex }) => {
+  document.getElementById(id).onclick = () =>
+    fetchProductsByCategory(category, viewIndex);
+});

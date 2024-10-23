@@ -1,89 +1,88 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js';
-import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js';
+import { getDatabase, ref, get, child } from "../firebase.js";
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyA1eIsNv6jgME94d8ptQT45JxCk2HswuyY',
-  authDomain: 'project-109e2.firebaseapp.com',
-  databaseURL: 'https://project-109e2.firebaseio.com',
-  projectId: 'project-109e2',
-  storageBucket: 'project-109e2.appspot.com',
-  messagingSenderId: '994321863318',
-  appId: '1:994321863318:web:10d3b180f8ff995d9ba8b7',
-  measurementId: 'G-Y83PD3D9Q5',
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-import {
-  getDatabase,
-  ref,
-  set,
-  get,
-  child,
-  update,
-  remove,
-} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js';
-var cart_item = new Array();
 const db = getDatabase();
+let products;
+const recentItems = JSON.parse(localStorage.getItem("recent")) || [];
+const internationalNumberFormat = new Intl.NumberFormat("en-US");
 
-window.onload = function () {
-  var cart_listnum = JSON.parse(localStorage.getItem('cart'));
+window.onload = () => {
+  const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+  const cartCount = cartItems.length;
 
-  if (cart_listnum !== null && cart_listnum.length !== 0) {
-    document.getElementById('cart_num').innerHTML = cart_listnum.length;
-    document.getElementById('cart_num2').innerHTML = cart_listnum.length;
-  } else {
-    document.getElementById('cart_num').innerHTML = 0;
-    document.getElementById('cart_num2').innerHTML = 0;
-  }
-  onopen();
+  document.getElementById("cart_num").textContent = cartCount;
+  document.getElementById("cart_num2").textContent = cartCount;
+
+  initializePage();
 };
-function onopen() {
-  var params = new URLSearchParams(window.location.search);
-  var searchitem = params.get('product');
-  if (searchitem === null) {
-    window.location.replace('../');
-  } else {
-    const dbref = ref(db);
-    get(child(dbref, 'ProductsDetails/'))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          var arr = snapshot.val();
-          var numb = snapshot.val();
-          var lenth = Object.keys(numb).length;
-          var x = lenth - 1;
 
-          do {
-            var key = Object.keys(arr)[x];
-            var value = arr[key];
-            var searchvalue = value['code'];
-            if (searchvalue === searchitem) {
-              document.getElementById('description').innerHTML =
-                value['description'];
-            }
-            x--;
-          } while (x >= 0);
-        }
-        if (document.getElementById('description').innerHTML !== '') {
-          document
-            .getElementById('loader')
-            .setAttribute('style', 'display:none');
-          document
-            .getElementById('body')
-            .setAttribute('style', 'display:block');
-        } else {
-          document
-            .getElementById('loader')
-            .setAttribute('style', 'display:none');
-          document
-            .getElementById('no_items')
-            .setAttribute('style', 'display:block');
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+const initializePage = () => {
+  const productCode = new URLSearchParams(window.location.search).get(
+    "product"
+  );
+
+  if (!productCode) {
+    window.location.replace("../");
+    return;
   }
+
+  const dbRef = ref(db);
+
+  get(child(dbRef, "ProductsDetails/"))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        products = snapshot.val();
+        const product = Object.values(products).find(
+          (item) => item.code === productCode
+        );
+
+        if (product) {
+          document.getElementById("productName").innerHTML = `${product.name}:`;
+          document.getElementById("description").innerHTML =
+            product.description;
+          displayPage();
+        } else {
+          displayNoItems();
+        }
+        displayRecentItems();
+      } else {
+        displayNoItems();
+      }
+    })
+    .catch((error) => console.error(error));
+};
+
+function displayRecentItems() {
+  Object.values(recentItems)
+    .slice(0, 10)
+    .forEach((item) => {
+      const recentProduct = Object.values(products).find(
+        (product) => product.code === item.code
+      );
+      if (recentProduct) {
+        const myURL = new URL(
+          `${window.location.protocol}//${window.location.host}/Product/`
+        );
+        myURL.searchParams.append("product", recentProduct.code);
+
+        const recentHTML = `
+        <a href=${myURL} class="rec_view">
+          <img class="rec_image" src=${recentProduct.url[0]}>
+          <p class="rec_price">₦${internationalNumberFormat.format(
+            recentProduct.price
+          )}</p>
+        </a>`;
+
+        document.getElementById("recent").innerHTML += recentHTML;
+      }
+    });
 }
+
+const displayPage = () => {
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("body").style.display = "block";
+};
+
+const displayNoItems = () => {
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("no_items").style.display = "block";
+};

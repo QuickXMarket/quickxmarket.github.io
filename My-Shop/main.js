@@ -1,51 +1,27 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js';
-import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js';
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyA1eIsNv6jgME94d8ptQT45JxCk2HswuyY',
-  authDomain: 'project-109e2.firebaseapp.com',
-  databaseURL: 'https://project-109e2.firebaseio.com',
-  projectId: 'project-109e2',
-  storageBucket: 'project-109e2.appspot.com',
-  messagingSenderId: '994321863318',
-  appId: '1:994321863318:web:10d3b180f8ff995d9ba8b7',
-  measurementId: 'G-Y83PD3D9Q5',
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
 import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL,
-} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-storage.js';
-
-import {
-  getDatabase,
   get,
+  getAuth,
+  getDatabase,
   set,
   update,
   child,
-  ref as dref,
-} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js';
-
-import {
-  getAuth,
+  storageRef,
+  getDownloadURL,
+  storage,
+  ref,
+  uploadBytes,
   onAuthStateChanged,
-} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js';
+} from "../firebase.js";
 
 const db = getDatabase();
 
-var details = JSON.parse(localStorage.getItem('details')),
+var details = JSON.parse(localStorage.getItem("details")),
   categories = [
-    'Shoes',
-    'Phone Accessories',
-    'Clothing',
-    'Apartments',
-    'Perfume and Oil',
+    "Shoes",
+    "Phone Accessories",
+    "Clothing",
+    "Apartments",
+    "Perfume and Oil",
   ],
   SelecteIndexes = [],
   SelectedCategories = [],
@@ -55,104 +31,100 @@ var details = JSON.parse(localStorage.getItem('details')),
   description,
   quantity,
   category,
-  logoImg = '',
-  logoImgUrl = '',
+  logoImg = "",
+  logoImgUrl = "",
   ItemImgs = [],
   ItemImgsUrl = [],
   vendorName,
+  vendorId,
   RegisteredItems,
-  userDetails;
+  vendorDetails,
+  userID;
 
 onload = () => {
   const auth = getAuth();
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
+      userID = user.uid;
       checkAccountType();
     } else {
-      window.location.replace('../Login');
+      window.location.replace("../Login");
     }
   });
 };
 
 function checkAccountType() {
-  const dbref = dref(db);
-  get(child(dbref, 'UsersDetails/'))
+  const dbref = ref(db);
+  get(child(dbref, "UsersDetails/"))
     .then((snapshot) => {
       if (snapshot.exists()) {
         var userList = snapshot.val();
-        var listLength = Object.values(userList).length;
-        for (let i = 0; i < listLength; i++) {
-          userDetails = Object.values(userList)[i];
-          if (userDetails['email'] === details['email']) {
-            switch (userDetails['AccountType']) {
-              case 'user':
-                document.getElementById('register').style.display = 'flex';
-                break;
-              case 'vendor':
-                getShopData();
-                break;
-            }
-          }
+        const userDetails = Object.values(userList).find(
+          (user) => user.id === userID
+        );
+        const AccountType = userDetails["AccountType"];
+        switch (AccountType) {
+          case "user":
+            document.getElementById("register").style.display = "flex";
+            break;
+          case "vendor":
+            getShopData();
+            break;
         }
       }
     })
     .catch((error) => console.log(error));
 }
 
-export const vendorDetails = userDetails;
-
 //Retrieve and Display Vendor's Details
-function getShopData() {
-  document.getElementById('loader').style.display = 'block';
-  document.getElementById('item_body').style.display = 'none';
-  document.getElementById('no_items').style.display = 'none';
-  const dbref = dref(db);
-  get(child(dbref, 'Vendor/' + details['key']))
+export function getShopData() {
+  document.getElementById("loader").style.display = "block";
+  document.getElementById("item_body").style.display = "none";
+  document.getElementById("no_items").style.display = "none";
+  const dbref = ref(db);
+  get(child(dbref, "VendorsDetails/" + userID))
     .then((snapshot) => {
-      var vendorDetails = snapshot.val();
+      vendorDetails = snapshot.val();
 
-      document.getElementById('business-icon').src =
-        vendorDetails['LogoUrl'] !== ''
-          ? vendorDetails['LogoUrl']
-          : '../images/PngItem_248631.png';
+      document.getElementById("business-icon").src =
+        vendorDetails["vendorLogo"] !== ""
+          ? vendorDetails["vendorLogo"]
+          : "../images/PngItem_248631.png";
 
-      document.getElementById('vendor-name').innerText =
-        vendorDetails['BusinessName'];
+      document.getElementById("vendor-name").innerText =
+        vendorDetails["vendorName"];
 
-      vendorName = vendorDetails['BusinessName'];
-      RegisteredItems = vendorDetails['RegisteredItems'];
+      vendorName = vendorDetails["vendorName"];
+      vendorId = vendorDetails["vendorId"];
+      // RegisteredItems = vendorDetails["RegisteredItems"];
 
-      if (RegisteredItems > 0) {
-        for (let i = 1; i <= RegisteredItems; i++) {
-          get(child(dbref, 'ProductsDetails/'))
-            .then((snapshot) => {
-              if (snapshot.exists()) {
-                arr = snapshot.val();
-                lenth = Object.keys(numb).length;
+      get(child(dbref, "ProductsDetails/"))
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            const products = snapshot.val();
+            const vendorItems = Object.values(products).filter(
+              (product) => product.vendorID === vendorId
+            );
 
-                for (let x = lenth - 1; x >= 0; x--) {
-                  var key = Object.keys(arr)[x];
-                  var value = arr[key];
-                  var searchvalue = value['code'];
-                  if (vendorDetails['Item' + i] === searchvalue) {
-                    const myURL = new URL(
-                      window.location.protocol +
-                        '//' +
-                        window.location.host +
-                        '/Product'
-                    );
-                    myURL.searchParams.append('product', value['code']);
-                    document.getElementById('items').innerHTML += `
-                   <div class="item-view">
+            vendorItems.forEach((value) => {
+              const myURL = new URL(
+                window.location.protocol +
+                  "//" +
+                  window.location.host +
+                  "/Product"
+              );
+              myURL.searchParams.append("product", value["code"]);
+              document.getElementById("items").innerHTML += `
+                   <div class="item-view col" >
             <a href=${myURL}
               ><div class="flex" id="item-view1">
                 <img
                   class="item-image"
-                  src=${value['url0']}/>
+                  src=${value["url"][0]}/>
                 <div style="padding: 8px">
-                  <p class="item-name">${value['name']}</p>
-                  <p class="item-price">${value['price']}</p>
+                  <p class="item-name">${value["name"]}</p>
+                  <p class="item-price">${value["price"]}</p>
                 </div>
               </div></a
             >
@@ -162,51 +134,52 @@ function getShopData() {
                 <p>Remove</p>
               </div>
               <div class="flex"></div>
-              <p>Product Quantity Avaialble</p>
+              <p style =" margin-right: 3px">Avaialble: </p>
               <p id="itemnum1">${
-                value['quantity'] !== '' ? value['quantity'] : '?'
+                value["quantity"] !== "" ? value["quantity"] : "?"
               }</p>
             </div>
           </div>`;
-                  }
-                }
-              }
-            })
-            .catch((error) => console.log(error));
-        }
-      } else {
-        document.getElementById('no_items').style.display = 'block';
-      }
-      document.getElementById('loader').style.display = 'none';
-      document.getElementById('item_body').style.display = 'block';
+            });
+            document.getElementById("no_items").style.display =
+              vendorItems.length === 0 ? "block" : "none";
+          } else {
+            document.getElementById("no_items").style.display = "block";
+          }
+        })
+        .catch((error) => console.log(error));
+
+      document.getElementById("loader").style.display = "none";
+      document.getElementById("item_body").style.display = "block";
     })
     .catch((error) => console.log(error));
 }
 
-const uploadForm = document.getElementById('upload-item');
-uploadForm.addEventListener('submit', uploadCheckdata, false);
+const uploadForm = document.getElementById("upload-item");
+uploadForm.addEventListener("submit", uploadCheckdata, false);
 
 function uploadCheckdata(e) {
   e.preventDefault();
-  name = document.getElementById('name').value;
-  price = document.getElementById('price').value;
-  description = document.getElementById('description').value;
-  quantity = document.getElementById('quantity').value;
-  category = document.getElementById('category').value;
+  name = document.getElementById("name").value;
+  price = document.getElementById("price").value;
+  description = document.getElementById("description").value;
+  quantity = document.getElementById("quantity").value;
+  category = document.getElementById("category").value;
 
-  price = price.replace(/,/g, '');
+  price = price.replace(/,/g, "");
 
-  if (category !== ' Select Category' && ItemImgs.length > 0) {
-    document.getElementById('uploadLoader').style.display = 'block';
-    uploadFile(ItemImgs[0], 'ProductImage', 0);
+  if (category !== " Select Category" && ItemImgs.length > 0) {
+    document.getElementById("uploadLoader").style.display = "block";
+    uploadFile(ItemImgs[0], "ProductImage", 0);
   }
 }
 
 function uploadProduct() {
-  var key = '-';
+  var key = "-";
   for (let i = 0; i < 19; i++) {
     key = key + generateRandomLetter();
   }
+
   var itemCode = generateRandomLetter();
   for (let i = 0; i < 11; i++) {
     itemCode += generateRandomLetter();
@@ -221,31 +194,22 @@ function uploadProduct() {
     num: ItemImgsUrl.length,
     price,
     quantity,
-    vendor: vendorName,
+    vendorID: vendorId,
+    url: [],
   };
 
-  ItemImgsUrl.forEach((url, index) => (productDetails['url' + index] = url));
+  console.log(ItemImgsUrl);
+  ItemImgsUrl.forEach((url, index) => (productDetails["url"][index] = url));
 
-  set(dref(db, 'ProductsDetails/' + key), productDetails)
+  set(ref(db, "ProductsDetails/" + key), productDetails)
     .then(() => {
       ItemImgs = [];
       ItemImgsUrl = [];
-      document.getElementById('upload-item').style.display = 'none';
-
-      update(dref(db, 'Vendor/' + details['key']), {
-        [item + RegisteredItems]: itemCode,
-        RegisteredItems: RegisteredItems + 1,
-      })
-        .then(() => {
-          ItemImgs = [];
-          ItemImgsUrl = [];
-          document.getElementById('upload-item').style.display = 'none';
-          document.getElementById('uploadLoader').style.display = 'none';
-          getShopData();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      ItemImgs = [];
+      ItemImgsUrl = [];
+      document.getElementById("upload-item").style.display = "none";
+      document.getElementById("uploadLoader").style.display = "none";
+      getShopData();
     })
     .catch((error) => {
       console.log(error);
@@ -254,60 +218,64 @@ function uploadProduct() {
 
 //Handle Registration Categories Selection
 function regCategoriesSelect() {
-  const regCategories = document.getElementsByClassName('category');
+  const regCategories = document.getElementsByClassName("category");
   Object.values(regCategories).forEach((category, index) => {
-    category.addEventListener('click', () => {
+    category.addEventListener("click", () => {
       if (SelecteIndexes.includes(index)) {
         var categoryIndex = SelecteIndexes.indexOf(index);
         SelecteIndexes = SelecteIndexes.splice(categoryIndex, 1);
-        category.style.backgroundColor = 'transparent';
+        category.style.backgroundColor = "transparent";
       } else {
         SelecteIndexes.push(index);
-        category.style.backgroundColor = '#ccc';
+        category.style.backgroundColor = "#ccc";
       }
     });
   });
 }
 
-const registerform = document.getElementById('register-form');
-registerform.addEventListener('submit', reg_Checkdata, false);
+const registerform = document.getElementById("register-form");
+registerform.addEventListener("submit", reg_Checkdata, false);
 regCategoriesSelect();
 
 function reg_Checkdata(e) {
   e.preventDefault();
-  name = document.getElementById('business-name').value;
-  phone = document.getElementById('phone').value;
+  name = document.getElementById("business-name").value;
+  phone = document.getElementById("phone").value;
 
   if (SelecteIndexes.length > 0) {
-    document.getElementById('registerLoader').style.display = 'block';
-    name = name === '' ? details['name'] : name;
+    document.getElementById("registerLoader").style.display = "block";
+    name = name === "" ? details["name"] : name;
     SelecteIndexes.forEach((index) =>
       SelectedCategories.push(categories[index])
     );
-    logoImg !== '' ? uploadFile(logoImg, 'VendorLogo') : RegisterVendor();
+    logoImg !== "" ? uploadFile(logoImg, "VendorLogo") : RegisterVendor();
   } else {
   }
 }
 
 function RegisterVendor() {
-  set(dref(db, 'Vendor/' + details['key']), {
-    BusinessName: name,
-    Phone: phone,
-    LogoUrl: logoImgUrl,
-    Categories: SelectedCategories,
-    RegisteredItems: 0,
+  var id = generateRandomLetter();
+  for (let i = 0; i < 8; i++) {
+    id += generateRandomLetter();
+  }
+  set(ref(db, "VendorsDetails/" + userID), {
+    vendorName: name,
+    vendorId: id,
+    addPhoneNo: phone,
+    vendorLogo: logoImgUrl,
+    vendorCat: SelectedCategories,
   })
     .then(() => {
       // Update Account Type
-      update(dref(db, 'UsersDetails/' + details['key']), {
-        AccountType: 'vendor',
+      update(ref(db, "UsersDetails/" + userID), {
+        AccountType: "vendor",
       })
         .then(() => {
-          details['AccountType'] = 'vendor';
-          localStorage.setItem('details', JSON.stringify(details));
-          details = JSON.parse(localStorage.getItem('details'));
-          document.getElementById('register').style.display = 'none';
-          document.getElementById('registerLoader').style.display = 'none';
+          details["AccountType"] = "vendor";
+          localStorage.setItem("details", JSON.stringify(details));
+          details = JSON.parse(localStorage.getItem("details"));
+          document.getElementById("register").style.display = "none";
+          document.getElementById("registerLoader").style.display = "none";
           getShopData();
         })
         .catch((error) => {
@@ -320,48 +288,46 @@ function RegisterVendor() {
 }
 
 // Create a root reference
-const storage = getStorage(app);
 
 function uploadFile(file, folder, index) {
-  // Create a storage reference
-  const storageRef =
-    folder === 'VendorLogo'
-      ? ref(storage, `${folder}/ ${name}/ VendorLogo `)
-      : ref(storage, `${folder}/ ${name}/ ProductImage ${index} `);
+  const storagePath =
+    folder === "VendorLogo"
+      ? `${folder}/${vendorDetails["vendorName"]}/${file.name}`
+      : `${folder}/${vendorDetails["vendorName"]}/name/${file.name} `;
+  const storagePathRef = storageRef(storage, storagePath);
 
-  // Upload file
-  uploadBytes(storageRef, file)
+  uploadBytes(storagePathRef, file)
     .then((snapshot) => {
-      getDownloadURL(storageRef)
+      getDownloadURL(snapshot.ref)
         .then((downloadURL) => {
-          if (folder === 'VendorLogo') {
+          if (folder === "VendorLogo") {
             logoImgUrl = downloadURL;
             RegisterVendor();
           } else {
             ItemImgsUrl.push(downloadURL);
-            const fileList = document.getElementsByClassName('file-list')[0];
+            const fileList = document.getElementsByClassName("file-list")[0];
             fileList.removeChild(fileList.children[0]);
             if (index + 1 === ItemImgs.length) {
               uploadProduct();
             } else {
-              uploadFile(ItemImgs[index + 1], 'ProductImage', index + 1);
+              uploadFile(ItemImgs[index + 1], "ProductImage", index + 1);
             }
           }
         })
         .catch((error) => {
-          console.error('Failed to get download URL:', error);
+          console.error("Failed to get download URL:", error);
         });
     })
     .catch((error) => {
-      console.error('Upload error:', error);
+      console.error("Upload error:", error);
     });
 }
 
 // Get drop area element
-const dropArea = document.getElementsByClassName('drop-area');
+const dropArea = document.getElementsByClassName("drop-area");
 
 // Prevent default drag behaviors
-['dragenter', 'dragover', 'dragleave', 'drop'].forEach((eventName) => {
+["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
   Object.values(dropArea).forEach((element) =>
     element.addEventListener(eventName, preventDefaults, false)
   );
@@ -369,12 +335,12 @@ const dropArea = document.getElementsByClassName('drop-area');
 });
 
 // Highlight drop area when item is dragged over it
-['dragenter', 'dragover'].forEach((eventName) => {
+["dragenter", "dragover"].forEach((eventName) => {
   Object.values(dropArea).forEach((element, index) =>
     element.addEventListener(
       eventName,
       () => {
-        element.classList.add('highlight');
+        element.classList.add("highlight");
       },
       false
     )
@@ -382,12 +348,12 @@ const dropArea = document.getElementsByClassName('drop-area');
 });
 
 // Remove highlight when item is dragged out of the drop area
-['dragleave', 'drop'].forEach((eventName) => {
+["dragleave", "drop"].forEach((eventName) => {
   Object.values(dropArea).forEach((element, index) =>
     element.addEventListener(
       eventName,
       () => {
-        element.classList.remove('highlight');
+        element.classList.remove("highlight");
       },
       false
     )
@@ -397,7 +363,7 @@ const dropArea = document.getElementsByClassName('drop-area');
 // Handle dropped files
 Object.values(dropArea).forEach((element, index) =>
   element.addEventListener(
-    'drop',
+    "drop",
     (e) => {
       const files = e.dataTransfer.files;
       handleFiles(files, index);
@@ -416,16 +382,17 @@ function preventDefaults(e) {
 function handleFiles(files, index) {
   // Show selected files in the file list
   for (const file of files) {
-    if (file.type.includes('image')) {
-      const listItem = document.createElement('li');
+    if (file.type.includes("image")) {
+      const listItem = document.createElement("li");
       listItem.textContent = file.name;
       if (index === 0) {
         document
-          .getElementsByClassName('file-list')
+          .getElementsByClassName("file-list")
           [index].appendChild(listItem);
+
         ItemImgs.push(file);
       } else if (index === 1) {
-        document.getElementsByClassName('file-list')[index].innerHTML =
+        document.getElementsByClassName("file-list")[index].innerHTML =
           listItem;
         logoImg = file;
       }
@@ -436,9 +403,9 @@ function handleFiles(files, index) {
 }
 
 // Handle file input change
-const file_input = document.getElementsByClassName('file-input');
+const file_input = document.getElementsByClassName("file-input");
 Object.values(file_input).forEach((element, index) => {
-  element.addEventListener('change', function () {
+  element.addEventListener("change", function () {
     const files = this.files;
     handleFiles(files, index);
   });
@@ -446,37 +413,37 @@ Object.values(file_input).forEach((element, index) => {
 
 function generateRandomLetter() {
   const alphabet =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
   return alphabet[Math.floor(Math.random() * alphabet.length)];
 }
 
-const closeBtn = document.getElementsByClassName('close');
+const closeBtn = document.getElementsByClassName("close");
 Object.values(closeBtn).forEach((btn, index) => {
-  btn.addEventListener('click', () => {
+  btn.addEventListener("click", () => {
     if (index === 0) {
-      document.getElementsByClassName('floating-body')[index].style.display =
-        'none';
+      document.getElementsByClassName("floating-body")[index].style.display =
+        "none";
     } else {
-      window.location.href = '../Settings';
+      window.location.href = "../Settings";
     }
   });
 });
 
 [
-  document.getElementById('floating-btn'),
-  document.getElementById('continue'),
+  document.getElementById("floating-btn"),
+  document.getElementById("continue"),
 ].forEach((element) =>
-  element.addEventListener('click', () => {
-    document.getElementById('upload-item').style.display = 'flex';
+  element.addEventListener("click", () => {
+    document.getElementById("upload-item").style.display = "flex";
   })
 );
 
-const itemPrice = document.getElementById('price');
-itemPrice.addEventListener('input', () => {
-  var value = itemPrice.value.replace(/,/g, '');
+const itemPrice = document.getElementById("price");
+itemPrice.addEventListener("input", () => {
+  var value = itemPrice.value.replace(/,/g, "");
   // Format the value with commas
-  var formattedValue = Number(value).toLocaleString('en');
+  var formattedValue = Number(value).toLocaleString("en");
   // Set the formatted value back to the itemPrice field
   itemPrice.value = formattedValue;
 });
