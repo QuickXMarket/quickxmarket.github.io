@@ -54,6 +54,11 @@ function displayOrderDetails(userData, order) {
   const orderPrice = document.createElement("div");
   const orderImage = document.createElement("img");
   const orderDetailsWrapper = document.createElement("div");
+  const productsLink = document.createElement("a");
+  const productURL = new URL(
+    `${window.location.protocol}//${window.location.host}/My-Orders/Products/`
+  );
+  productURL.searchParams.append("order", order.orderId);
 
   orderView.classList.add("order_view");
   orderInfo.classList.add("order_txt");
@@ -70,12 +75,13 @@ function displayOrderDetails(userData, order) {
   orderDate.textContent = formatDate(order.date);
   orderStatus.textContent = order.status;
   orderPrice.textContent = `₦${formatter.format(order.total)}`;
+  productsLink.href = productURL;
 
   const infoWrapper = document.createElement("div");
   infoWrapper.classList.add("flex");
   infoWrapper.appendChild(orderInfo);
   infoWrapper.appendChild(orderNumber);
-  orderView.appendChild(infoWrapper);
+  productsLink.appendChild(infoWrapper);
 
   const priceWrapper = document.createElement("div");
   priceWrapper.classList.add("flex");
@@ -86,9 +92,9 @@ function displayOrderDetails(userData, order) {
   orderDetailsWrapper.appendChild(orderImage);
   priceWrapper.appendChild(orderDetailsWrapper);
   priceWrapper.appendChild(orderStatus);
-  orderView.appendChild(priceWrapper);
-
-  orderView.appendChild(viewFooter);
+  productsLink.appendChild(priceWrapper);
+  productsLink.appendChild(viewFooter);
+  orderView.appendChild(productsLink);
 
   const body = document.getElementById("body");
   body.appendChild(orderView);

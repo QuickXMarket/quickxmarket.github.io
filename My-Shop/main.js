@@ -11,7 +11,9 @@ import {
   ref,
   uploadBytes,
   onAuthStateChanged,
+  remove,
 } from "../firebase.js";
+import { getVendorOrders } from "./order.js";
 
 const db = getDatabase();
 
@@ -77,11 +79,11 @@ function checkAccountType() {
     .catch((error) => console.log(error));
 }
 
-//Retrieve and Display Vendor's Details
 export function getShopData() {
   document.getElementById("loader").style.display = "block";
   document.getElementById("item_body").style.display = "none";
   document.getElementById("no_items").style.display = "none";
+  document.getElementById("items").innerHTML = "";
   const dbref = ref(db);
   get(child(dbref, "VendorsDetails/" + userID))
     .then((snapshot) => {
@@ -97,7 +99,8 @@ export function getShopData() {
 
       vendorName = vendorDetails["vendorName"];
       vendorId = vendorDetails["vendorId"];
-      // RegisteredItems = vendorDetails["RegisteredItems"];
+      RegisteredItems = vendorDetails.products;
+      getVendorOrders(vendorDetails);
 
       get(child(dbref, "ProductsDetails/"))
         .then((snapshot) => {
@@ -107,39 +110,45 @@ export function getShopData() {
               (product) => product.vendorID === vendorId
             );
 
-            vendorItems.forEach((value) => {
+            RegisteredItems.forEach((item, index) => {
+              const product = Object.values(products).find(
+                (product) => product.code === item
+              );
+              if (!product) return;
               const myURL = new URL(
                 window.location.protocol +
                   "//" +
                   window.location.host +
                   "/Product"
               );
-              myURL.searchParams.append("product", value["code"]);
+              myURL.searchParams.append("product", product["code"]);
               document.getElementById("items").innerHTML += `
                    <div class="item-view col" >
             <a href=${myURL}
               ><div class="flex" id="item-view1">
                 <img
                   class="item-image"
-                  src=${value["url"][0]}/>
+                  src=${product["url"][0]}/>
                 <div style="padding: 8px">
-                  <p class="item-name">${value["name"]}</p>
-                  <p class="item-price">${value["price"]}</p>
+                  <p class="item-name">${product["name"]}</p>
+                  <p class="item-price">${product["price"]}</p>
                 </div>
               </div></a
             >
             <div class="controls flex">
-              <div id="remove1" class="remove">
+              <div id= 'remove${index}' class="remove">
                 <img src="../images/ic_delete_black.png" />
                 <p>Remove</p>
               </div>
               <div class="flex"></div>
               <p style =" margin-right: 3px">Avaialble: </p>
               <p id="itemnum1">${
-                value["quantity"] !== "" ? value["quantity"] : "?"
+                product["quantity"] !== "" ? product["quantity"] : "?"
               }</p>
             </div>
           </div>`;
+
+              handleProductRemove(index, product.key);
             });
             document.getElementById("no_items").style.display =
               vendorItems.length === 0 ? "block" : "none";
@@ -198,7 +207,6 @@ function uploadProduct() {
     url: [],
   };
 
-  console.log(ItemImgsUrl);
   ItemImgsUrl.forEach((url, index) => (productDetails["url"][index] = url));
 
   set(ref(db, "ProductsDetails/" + key), productDetails)
@@ -213,6 +221,28 @@ function uploadProduct() {
     })
     .catch((error) => {
       console.log(error);
+    });
+}
+
+function handleProductRemove(index, productKey) {
+  document.getElementById(`remove${index}`).addEventListener("click", () => {
+    const newRegisteredItems = RegisteredItems.splice(index, 1);
+    update(ref(db, `VendorsDetails/${userID}`), {
+      products: newRegisteredItems,
+    })
+      .then(() => deleteProduct(productKey))
+      .catch((error) => console.log(error));
+  });
+}
+
+function deleteProduct(productKey) {
+  const db = getDatabase();
+  const nodeRef = ref(db, `ProductsDetails/${productKey}`);
+
+  remove(nodeRef)
+    .then(() => getShopData())
+    .catch((error) => {
+      console.error("Error removing node:", error);
     });
 }
 
@@ -266,7 +296,6 @@ function RegisterVendor() {
     vendorCat: SelectedCategories,
   })
     .then(() => {
-      // Update Account Type
       update(ref(db, "UsersDetails/" + userID), {
         AccountType: "vendor",
       })
@@ -286,8 +315,6 @@ function RegisterVendor() {
       console.log(error);
     });
 }
-
-// Create a root reference
 
 function uploadFile(file, folder, index) {
   const storagePath =

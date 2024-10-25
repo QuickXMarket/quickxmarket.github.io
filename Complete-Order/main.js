@@ -182,6 +182,8 @@ function uploadVendorOrder(orderId) {
                 orderId: orderId,
                 orders: vendorOrder,
                 total: totalPrice - deliveryCharge,
+                status: "Confirming Request",
+                userId: userId,
               },
             ],
           };

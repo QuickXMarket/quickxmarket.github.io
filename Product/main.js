@@ -55,7 +55,7 @@ function loadProductDetails() {
         }
       }
     })
-    .catch(console.log);
+    .catch(console.error);
 }
 
 function displayProductDetails() {
@@ -192,7 +192,7 @@ function fetchVendorDetails() {
         }
       }
     })
-    .catch(console.log);
+    .catch(console.error);
 }
 
 function displayVendorItems(vendorId) {

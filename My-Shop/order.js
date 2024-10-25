@@ -1,198 +1,153 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js';
-import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js';
+import { getDatabase, get, update, child, ref } from "../firebase.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBYxeN5MYVPDLNO2rmAd4ac1Bm3CzJhcpM",
-  authDomain: "quickmarkert.firebaseapp.com",
-  databaseURL: "https://quickmarkert-default-rtdb.firebaseio.com",
-  projectId: "quickmarkert",
-  storageBucket: "quickmarkert.appspot.com",
-  messagingSenderId: "204278904584",
-  appId: "1:204278904584:web:9000c97e001e7104a4debd",
-  measurementId: "G-VKQ30K962R",
-};
+const formatCurrency = (num) =>
+  "₦" + new Intl.NumberFormat("en-US").format(num);
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+function toggleVisibility(element1Id, element2Id) {
+  const el1 = document.getElementById(element1Id);
+  const el2 = document.getElementById(element2Id);
+  if (!el1.classList.contains("visible")) {
+    el1.classList.toggle("visible");
+    el2.classList.toggle("visible");
+  }
+}
 
-import {
-  getDatabase,
-  get,
-  set,
-  update,
-  child,
-  ref as dref,
-} from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js';
-
-var internationalNumberFormat = new Intl.NumberFormat('en-US');
-
-Object.values(document.getElementsByClassName('option_view')).forEach(
+// Set up event listeners for options
+Object.values(document.getElementsByClassName("option_view")).forEach(
   (element, index) => {
-    element.addEventListener('click', () => {
-      Object.values(document.getElementsByClassName('option_select')).forEach(
-        (select) => (select.style.backgroundColor = '#000137')
+    element.addEventListener("click", () => {
+      Object.values(document.getElementsByClassName("option_select")).forEach(
+        (select) => (select.style.backgroundColor = "#000137")
       );
-      document.getElementsByClassName('option_select')[
+      document.getElementsByClassName("option_select")[
         index
-      ].style.backgroundColor = 'white';
+      ].style.backgroundColor = "white";
 
-      switch (index) {
-        case 0:
-          if (
-            !document.getElementById('itemList').classList.contains('visible')
-          ) {
-            document.getElementById('itemList').classList.toggle('visible');
-            document.getElementById('orderList').classList.toggle('visible');
-          }
-          break;
-        case 1:
-          if (
-            !document.getElementById('orderList').classList.contains('visible')
-          ) {
-            document.getElementById('itemList').classList.toggle('visible');
-            document.getElementById('orderList').classList.toggle('visible');
-          }
-          break;
-      }
+      if (index === 0) toggleVisibility("itemList", "orderList");
+      else if (index === 1) toggleVisibility("orderList", "itemList");
     });
   }
 );
 
 export function getVendorOrders(vendorDetails) {
-  if (vendorDetails['Orders'] === undefined) return;
-  const vendorOrders = Object.values(vendorDetails['Orders']);
+  const orderListEl = document.getElementById("orderList");
+  if (!vendorDetails.orders) return;
+
+  const vendorOrders = Object.values(vendorDetails.orders);
   if (vendorOrders.length > 0) {
     vendorOrders.forEach((order) => {
-      document.getElementById('orderList').innerHTML += `
-       <div class="order_view">
-              <div class="flex">
-                <div class="order_txt">Order</div>
-                <div class="order_no">${order['order']}</div>
-              </div>
+      const productURL = new URL(
+        `${window.location.protocol}//${window.location.host}/My-Shop/Products/`
+      );
+      productURL.searchParams.append("order", order.orderId);
 
-              <div class="flex">
-                <div>
-                  <img class="order_img" src="cart.png" />
-                </div>
-                <div class="orderInfo">
-                  <div class="orderName">${order['name']}</div>
-                  <div class="orderHostel">${order['hostel']}</div>
-                </div>
-              </div>
-              <div class="flex">
-                <div class="order_price">${
-                  '₦' + internationalNumberFormat.format(order['total'])
-                }</div>
-                <div class="order_status">
-                  <button class="statusBtn">${
-                    order['status'] === 'Confirming Request'
-                      ? 'Confirm Request'
-                      : 'Confirm Delivery'
-                  }</button>
-                </div>
-              </div>
-              <div class="order_date">${order['date']}</div>
-            </div>`;
+      orderListEl.innerHTML += `
+        <div class="order_view" >
+        <a href = ${productURL}>
+         
+          <div class="flex">
+            <div><img class="order_img" src="../images/PngItem_212128 (2).png" /></div>
+        <div class="flex">
+            <div class="order_txt">Order</div>
+            <div class="order_no">${order.orderId}</div>
+          </div>
+              <div class="order_status">
+             <!-- <button class="statusBtn">${
+               order.status === "Confirming Request"
+                 ? "Confirm Request"
+                 : "Confirm Delivery"
+             }</button>-->
+            </div>
+          </div>
+          <div class="flex">
+            <div class="order_price">Total: ${formatCurrency(order.total)}</div>
+          <div class="order_date">${formatDate(order.date)}</div>
+          </div>
+          </a>
+        </div>`;
     });
-    Object.values(document.getElementsByClassName('statusBtn')).forEach(
-      (element) => {
-        element.addEventListener('click', (e) => {
-          e.preventDefault();
-          const status = e.target.innerText;
-          switch (status) {
-            case 'Confirm Request':
-              alert('working');
-          }
-        });
-      }
-    );
+
+    document.querySelectorAll(".statusBtn").forEach((button) => {
+      button.addEventListener("click", handleStatusUpdate);
+    });
+  }
+}
+
+function handleStatusUpdate(e) {
+  e.preventDefault();
+  const status = e.target.innerText;
+  if (status === "Confirm Request") {
+    alert("Request confirmed");
   }
 }
 
 function changeUserOrderStatus(newStatus, orderDetails) {
-  get(child(dbref, 'UsersDetails/'))
+  get(child(ref(db), "UsersDetails/"))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        var userList = snapshot.val();
-        var listLength = Object.values(userList).length;
-        for (let i = 0; i < listLength; i++) {
-          const userDetails = Object.values(userList)[i];
-          if (userDetails['code'] === orderDetails['user']) {
-            const orders = userDetails['Orders'];
-
+        const userList = snapshot.val();
+        Object.values(userList).forEach((userDetails) => {
+          if (userDetails.code === orderDetails.user) {
+            const orders = userDetails.orders;
             Object.values(orders).forEach((order, index) => {
-              if (order['order'] === orderDetails['order']) {
-                var newOrderDetails = {
-                  Orders: {
-                    ['Order' + index + 1]: {
-                      status: newStatus,
-                    },
-                  },
+              if (order.order === orderDetails.order) {
+                const updatedOrder = {
+                  orders: { [`Order${index + 1}`]: { status: newStatus } },
                 };
-                update(
-                  ref(db, 'UsersDetails/' + userDetails['key']),
-                  newOrderDetails
-                )
-                  .then(() => {
-                    changeVendorOrderStatus();
-                  })
+                update(ref(db, `UsersDetails/${userDetails.key}`), updatedOrder)
+                  .then(() => changeVendorOrderStatus(newStatus, orderDetails))
                   .catch((error) => console.log(error));
               }
             });
           }
-        }
+        });
       }
     })
     .catch((error) => console.log(error));
 }
 
+// Change vendor order status
 function changeVendorOrderStatus(newStatus, orderDetails, vendorDetails) {
-  const orders = vendorDetails['Orders'];
-
+  const orders = vendorDetails.orders;
   Object.values(orders).forEach((order, index) => {
-    if (order['order'] === orderDetails['order']) {
-      var newOrderDetails = {
-        Orders: {
-          ['Order' + index + 1]: {
-            status: newStatus,
-          },
-        },
+    if (order.order === orderDetails.order) {
+      const updatedOrder = {
+        orders: { [`Order${index + 1}`]: { status: newStatus } },
       };
-      update(ref(db, 'Vendor/' + vendorDetails['key']), newOrderDetails)
-        .then(() => {
-          changeVendorOrderStatus();
-        })
+      update(ref(db, `Vendor/${vendorDetails.key}`), updatedOrder)
+        .then(() => console.log("Vendor order status updated"))
         .catch((error) => console.log(error));
     }
   });
 }
 
+// Change admin order status
 function changeAdminOrderStatus(newStatus, orderDetails) {
-  get(child(dbref, 'UsersOrders/'))
+  get(child(ref(db), "UsersOrders/"))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        var orderList = snapshot.val();
-        var listLength = Object.values(orderList).length;
-        for (let i = 0; i < listLength; i++) {
-          const userDetails = Object.values(orderList)[i];
-          if (userDetails['num'] === orderDetails['num']) {
-            var newOrderDetails = {
-              Orders: {
-                status: newStatus,
-              },
-            };
-            update(
-              ref(db, 'UsersOrders/' + userDetails['key']),
-              newOrderDetails
-            )
-              .then(() => {
-                changeVendorOrderStatus();
-              })
+        const orderList = snapshot.val();
+        Object.values(orderList).forEach((userDetails) => {
+          if (userDetails.num === orderDetails.num) {
+            const updatedOrder = { orders: { status: newStatus } };
+            update(ref(db, `UsersOrders/${userDetails.key}`), updatedOrder)
+              .then(() => changeVendorOrderStatus(newStatus, orderDetails))
               .catch((error) => console.log(error));
           }
-        }
+        });
       }
     })
     .catch((error) => console.log(error));
+}
+
+function formatDate(timestamp) {
+  const date = new Date(timestamp);
+
+  const padToTwoDigits = (num) => num.toString().padStart(2, "0");
+
+  const formattedDate = `${padToTwoDigits(date.getHours())}:${padToTwoDigits(
+    date.getMinutes()
+  )}, ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+
+  return formattedDate;
 }

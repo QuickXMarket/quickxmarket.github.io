@@ -74,7 +74,6 @@ function processUserData(data, userId) {
     login: "yes",
     key: user.id,
   };
-  console.log(userDetails);
   localStorage.setItem("details", JSON.stringify(userDetails));
   loadCartData(user);
 }
@@ -86,7 +85,7 @@ function uploadCartData(newCart, user) {
         localStorage.setItem("cart", JSON.stringify(newCart));
         window.location = "../";
       })
-      .catch(console.log);
+      .catch(console.error);
   } else {
     localStorage.setItem("cart", JSON.stringify(newCart));
     window.location = "../";
@@ -98,7 +97,7 @@ function loadCartData(user) {
   const userCart = user.cart || [];
 
   const filteredUserCart = userCart.filter(
-    (product) => !cartItems.some((item) => item.id === product.id)
+    (product) => !cartItems.some((item) => item.code === product.code)
   );
 
   const updatedCart = [...filteredUserCart, ...cartItems];

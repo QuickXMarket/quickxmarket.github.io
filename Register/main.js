@@ -8,143 +8,128 @@ import {
 
 const db = getDatabase();
 
-var first,
-  last,
-  hostel,
-  code,
-  re_password,
-  email,
-  password,
-  gender,
-  hostel,
-  phone;
+let userFormData = {
+  first: "",
+  last: "",
+  email: "",
+  password: "",
+  re_password: "",
+  phone: "",
+  gender: "",
+  hostel: "",
+};
 
 const paymentForm = document.getElementById("boxes");
-
 paymentForm.addEventListener("submit", submit, false);
-var datakey = "-M";
 
 function submit(e) {
   e.preventDefault();
-  Ready();
-  if (
-    first !== "" &&
-    last !== "" &&
-    email !== "" &&
-    password !== "" &&
-    phone !== "" &&
-    gender !== "Gender" &&
-    hostel !== "Hostel"
-  ) {
+  gatherFormData();
+
+  const { first, last, email, password, re_password, phone, gender, hostel } =
+    userFormData;
+
+  if (validateForm({ first, last, email, password, phone, gender, hostel })) {
     if (password === re_password) {
-      sign_up();
-      console.log("here");
-      document.getElementById("loader").setAttribute("style", "display:block");
+      signUpUser();
+      document.getElementById("loader").style.display = "block";
     } else {
-      alert("Password does not Match");
+      alert("Passwords do not match");
     }
   } else {
-    alert("Fill all Fields");
+    alert("Please fill in all fields");
   }
 }
 
-function sign_up() {
-  console.log("in");
+function gatherFormData() {
+  userFormData = {
+    first: document.getElementById("first").value,
+    last: document.getElementById("last").value,
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value,
+    re_password: document.getElementById("re-password").value,
+    phone: document.getElementById("phone").value,
+    gender: document.getElementById("gender").value,
+    hostel: document.getElementById("hostel").value,
+  };
+}
+
+function validateForm({ first, last, email, password, phone, gender, hostel }) {
+  return (
+    first &&
+    last &&
+    email &&
+    password &&
+    phone &&
+    gender !== "Gender" &&
+    hostel !== "Hostel"
+  );
+}
+
+function signUpUser() {
+  const { email, password } = userFormData;
   const auth = getAuth();
-  console.log("sign");
+
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      // Signed in
       const user = userCredential.user;
-      InsertData(user);
+      insertUserData(user);
     })
     .catch((error) => {
-      alert(error);
-      document.getElementById("loader").setAttribute("style", "display:none");
+      alert(error.message);
+      document.getElementById("loader").style.display = "none";
     });
 }
 
-function Ready() {
-  first = document.getElementById("first").value;
-  last = document.getElementById("last").value;
-  email = document.getElementById("email").value;
-  password = document.getElementById("password").value;
-  re_password = document.getElementById("re-password").value;
-  phone = document.getElementById("phone").value;
-  gender = document.getElementById("gender").value;
-  hostel = document.getElementById("hostel").value;
-}
+function insertUserData(user) {
+  const cartList = JSON.parse(localStorage.getItem("cart")) || [];
 
-function InsertData(user) {
-  var cart_list = JSON.parse(localStorage.getItem("cart"));
-
-  if (cart_list !== null && cart_list.length !== 0) {
-    var cart_length = cart_list.length;
-    var cart_details = new Object();
-    cart_details["cart_num"] = cart_length;
-
-    for (let i = 1; i <= cart_length; i++) {
-      var position = i - 1;
-      cart_details["cart_code"] = {
-        cart_code: cart_list[position]["code"],
-        cart_num: cart_list[position]["number"],
-      };
-    }
-  }
-  
-  set(ref(db, "UsersDetails/" + user.uid), {
+  set(ref(db, `UsersDetails/${user.uid}`), {
     AccountType: "user",
     AddressBook: [
       {
-        firstName: first,
-        lastName: last,
-        gender: gender,
-        phone: phone,
-        hostel: hostel,
+        firstName: userFormData.first,
+        lastName: userFormData.last,
+        gender: userFormData.gender,
+        phone: userFormData.phone,
+        hostel: userFormData.hostel,
         switch: true,
       },
     ],
-    cart: cart_details || [],
-    email: email,
+    cart: cartList,
+    email: userFormData.email,
     id: user.uid,
   })
-    .then(() => {
-      set_info();
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    .then(setUserInfo)
+    .catch(console.error);
 }
 
-function set_info() {
-  var details = new Object();
-  details = {
+function setUserInfo() {
+  const details = {
     AccountType: "user",
-    user: code,
-    key: datakey,
-    email: email,
-    first: first,
-    name: first + " " + last,
-    hostel: hostel,
-    gender: gender,
-    phone: phone,
+    email: userFormData.email,
+    first: userFormData.first,
+    name: `${userFormData.first} ${userFormData.last}`,
+    hostel: userFormData.hostel,
+    gender: userFormData.gender,
+    phone: userFormData.phone,
     login: "yes",
   };
+
   localStorage.setItem("details", JSON.stringify(details));
   window.location = "../";
 }
 
-var toogle = document.getElementById("toogle");
-toogle.onclick = function () {
-  var x = document.getElementById("password");
-  var r = document.getElementById("re-password");
-  if (x.type === "password") {
-    x.type = "text";
-    r.type = "text";
-    toogle.src = "../images/ic_visibility_black.png";
-  } else {
-    x.type = "password";
-    r.type = "password";
-    toogle.src = "../images/ic_visibility_off_black.png";
-  }
+document.getElementById("toogle").onclick = function () {
+  const passwordField = document.getElementById("password");
+  const rePasswordField = document.getElementById("re-password");
+  const toggleIcon = document.getElementById("toogle");
+
+  const isPasswordVisible = passwordField.type === "password";
+
+  passwordField.type = isPasswordVisible ? "text" : "password";
+  rePasswordField.type = isPasswordVisible ? "text" : "password";
+  toggleIcon.src = isPasswordVisible
+    ? "../images/ic_visibility_black.png"
+    : "../images/ic_visibility_off_black.png";
 };
