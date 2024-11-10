@@ -109,6 +109,7 @@ p {
 .item_name {
   height: 25px;
   overflow: hidden;
+  color: black;
 }
 #item_name {
   font-size: 16px;
@@ -227,6 +228,7 @@ p {
 }
 .item_price {
   text-align: right;
+  color: #000137;
 }
 
 #recommended {

@@ -100,7 +100,7 @@ p {
 }
 
 #orders {
-  min-height: 300px;
+  min-height: 200px;
 }
 
 @media (max-width: 575px) {

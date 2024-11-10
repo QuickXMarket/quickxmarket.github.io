@@ -58,13 +58,11 @@ onload = () => {
 
 function checkAccountType() {
   const dbref = ref(db);
-  get(child(dbref, "UsersDetails/"))
+  get(child(dbref, `UsersDetails/${userID}`))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        var userList = snapshot.val();
-        const userDetails = Object.values(userList).find(
-          (user) => user.id === userID
-        );
+        const userDetails = snapshot.val();
+
         const AccountType = userDetails["AccountType"];
         switch (AccountType) {
           case "user":

@@ -180,14 +180,14 @@ function removeCartItem() {
 
 function fetchVendorDetails() {
   const dbRef = ref(db);
-  get(child(dbRef, "Vendor/"))
+  get(child(dbRef, "VendorsDetails/"))
     .then((snapshot) => {
       if (snapshot.exists()) {
         const vendors = snapshot.val();
         const vendor = Object.values(vendors).find((v) => v.id === vendorId);
 
         if (vendor) {
-          document.getElementById("vendorName").innerText = vendor.BusinessName;
+          document.getElementById("vendorName").innerText = vendor.vendorName;
           document.getElementById("vendorIcon").src =
             vendor.LogoUrl || "../images/PngItem_248631.png";
           displayVendorItems(vendorId);

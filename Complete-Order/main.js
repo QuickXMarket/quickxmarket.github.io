@@ -16,6 +16,7 @@ let vendorOrderDetails = {};
 let totalPrice = 0;
 let totalAmount = 0;
 let userId;
+let products;
 const deliveryCharge = 100;
 
 const userDetails = JSON.parse(localStorage.getItem("details"));
@@ -48,14 +49,14 @@ function loadCartDetails() {
         document.getElementById("loader").style.display = "none";
         document.getElementById("body").style.display = "block";
 
-        let productData = snapshot.val();
+        products = snapshot.val();
 
         cartList.forEach((item) => {
-          const productKey = Object.keys(productData).find(
-            (key) => productData[key]["code"] === item["code"]
+          const productKey = Object.keys(products).find(
+            (key) => products[key]["code"] === item["code"]
           );
           if (productKey) {
-            const product = productData[productKey];
+            const product = products[productKey];
             const itemPrice = product["price"];
             const itemQuantity = item["amount"];
             totalPrice += itemPrice * itemQuantity;
@@ -97,6 +98,19 @@ function addUserOrder(orderId) {
         const user = snapshot.val();
         const userOrders = user.orders || [];
 
+        const orders = [];
+
+        cartList.forEach((item) => {
+          const productData = Object.values(products).find(
+            (product) => product.code === item.code
+          );
+          orders.push({
+            ...item,
+            vendor: productData.vendorID,
+            status: "Confirming Request",
+          });
+        });
+
         const date = Date.now();
         // const formattedDate = `${date.getHours()}:${date.getMinutes()}, ${date.getDate()}/${
         //   date.getMonth() + 1
@@ -108,7 +122,7 @@ function addUserOrder(orderId) {
             orderId: orderId,
             status: "Confirming Request",
             date: date,
-            orders: cartList,
+            orders,
             total: totalPrice,
           },
         ];
@@ -135,6 +149,19 @@ function uploadAdminOrder() {
   //   date.getMonth() + 1
   // }/${date.getFullYear()}`;
 
+  const orders = [];
+
+  cartList.forEach((item) => {
+    const productData = Object.values(products).find(
+      (product) => product.code === item.code
+    );
+    orders.push({
+      ...item,
+      vendor: productData.vendorID,
+      status: "Confirming Request",
+    });
+  });
+
   const adminOrderDetails = {
     name: userDetails["name"],
     hostel: userDetails["hostel"],
@@ -143,12 +170,12 @@ function uploadAdminOrder() {
     orderId: orderId,
     status: "Confirming Request",
     date: date,
-    orders: cartList,
+    orders,
     total: totalPrice,
   };
 
-  const orderKey = generateRandomId(19);
-  set(ref(db, `UsersOrders/${orderKey}`), adminOrderDetails)
+  // const orderKey = generateRandomId(19);
+  set(ref(db, `UsersOrders/${orderId}`), adminOrderDetails)
     .then(() => uploadVendorOrder(orderId))
     .catch((error) => console.error("Error uploading admin order:", error));
 }
@@ -175,6 +202,19 @@ function uploadVendorOrder(orderId) {
           Object.keys(vendorOrders).forEach((vendorId) => {
             const vendorOrder = vendorOrders[vendorId];
             const previousOrders = vendors[vendorId].orders || [];
+            let vendorTotalPrice = 0;
+
+            vendorOrder.forEach((item) => {
+              const productKey = Object.keys(products).find(
+                (key) => products[key]["code"] === item["code"]
+              );
+              if (productKey) {
+                const product = products[productKey];
+                const itemPrice = product["price"];
+                const itemQuantity = item["amount"];
+                vendorTotalPrice += itemPrice * itemQuantity;
+              }
+            });
 
             vendorOrderDetails = {
               orders: [
@@ -183,7 +223,7 @@ function uploadVendorOrder(orderId) {
                   date: Date.now(),
                   orderId: orderId,
                   orders: vendorOrder,
-                  total: totalPrice,
+                  total: vendorTotalPrice,
                   status: "Confirming Request",
                   userId: userId,
                 },

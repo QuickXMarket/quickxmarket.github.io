@@ -10,7 +10,7 @@ import {
 
 const db = getDatabase();
 let details = JSON.parse(localStorage.getItem("details"));
-let addressData = {};
+let userDetails = {};
 
 window.onload = () => {
   const auth = getAuth();
@@ -21,12 +21,12 @@ window.onload = () => {
 
 function getAddress() {
   document.getElementById("loader").style.display = "block";
-  get(child(ref(db), "UsersDetails/"))
+  get(child(ref(db), `UsersDetails/${details["key"]}`))
     .then((snapshot) => {
       if (snapshot.exists()) {
         document.getElementById("loader").style.display = "none";
         document.getElementById("body").innerHTML = "";
-        addressData = snapshot.val();
+        userDetails = snapshot.val();
         displayAddresses();
       }
     })
@@ -34,9 +34,8 @@ function getAddress() {
 }
 
 function displayAddresses() {
-  const user = addressData[details["key"]];
-  if (user) {
-    user["AddressBook"].forEach((address, i) => {
+  if (userDetails) {
+    userDetails["AddressBook"].forEach((address, i) => {
       const isChecked = address["switch"] ? "checked" : "";
       document.getElementById("body").innerHTML += `
         <label class="labl" id=${i}>
@@ -50,7 +49,7 @@ function displayAddresses() {
             </div>
           </div>
         </label>`;
-      setupAddressClick(i, user);
+      setupAddressClick(i, userDetails);
     });
     setupEditClicks();
   }
@@ -170,14 +169,13 @@ function validateForm({ firstName, lastName, phone, hostel, gender }) {
 }
 
 function updateAddress(formValues) {
-  const user = addressData[details["key"]];
-  user.AddressBook.push({
+  userDetails.AddressBook.push({
     ...formValues,
     switch: false,
   });
 
   update(ref(db, `UsersDetails/${details["key"]}`), {
-    AddressBook: user.AddressBook,
+    AddressBook: userDetails.AddressBook,
   })
     .then(() => {
       document.getElementById("edit-body").style.display = "none";

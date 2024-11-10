@@ -166,23 +166,34 @@ function handleStatusUpdate(e) {
 }
 
 function changeUserOrderStatus(newStatus) {
-  get(child(ref(db), "UsersDetails/"))
+  get(child(ref(db), `UsersDetails/${order.userId}/orders`))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        const users = snapshot.val();
-        const user = Object.values(users).find(
-          (userDetails) => userDetails.code === order.userId
-        );
+        const userOrders = snapshot.val();
 
-        const userOrders = user.orders;
         const orderIndex = userOrders.findIndex(
           (userOrder) => userOrder.orderId === order.orderId
         );
 
         if (orderIndex > -1) {
-          userOrders[orderIndex].status = newStatus;
-          update(ref(db, `UsersDetails/${user.id}`), { orders: userOrders })
-            .then(() => changeVendorOrderStatus(newStatus))
+          const products = userOrders[orderIndex].orders;
+          products.forEach((product, index) => {
+            if (product.vendor === vendorDetails.vendorId)
+              products[index].status = newStatus;
+          });
+          userOrders[orderIndex].orders = products;
+          if (products.every((product) => product.status === newStatus))
+            userOrders[orderIndex].status = newStatus;
+
+          update(ref(db, `UsersDetails/${order.userId}`), {
+            orders: userOrders,
+          })
+            .then(() =>
+              changeVendorOrderStatus(
+                newStatus,
+                products.every((product) => product.status === newStatus)
+              )
+            )
             .catch((error) => console.log(error));
         }
       }
@@ -190,33 +201,34 @@ function changeUserOrderStatus(newStatus) {
     .catch((error) => console.log(error));
 }
 
-function changeVendorOrderStatus(newStatus) {
+function changeVendorOrderStatus(newStatus, updateAdminOrder) {
   const vendorOrders = vendorDetails.orders;
   const orderIndex = vendorOrders.findIndex(
     (vendorOrder) => vendorOrder.orderId === order.orderId
   );
   vendorOrders[orderIndex].status = newStatus;
   update(ref(db, `VendorsDetails/${userID}`), { orders: vendorOrders })
-    .then(() => changeAdminOrderStatus(newStatus))
+    .then(() => {
+      if (updateAdminOrder) changeAdminOrderStatus(newStatus);
+      else fetchVendorOrders();
+    })
     .catch((error) => console.log(error));
 }
 
 function changeAdminOrderStatus(newStatus) {
-  get(child(ref(db), "UsersOrders/"))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        const usersOrders = snapshot.val();
-        const userOrder = Object.keys(usersOrders).find(
-          (userOrder) => usersOrders[userOrder].orderId === order.orderId
-        );
-        if (userOrder) {
-          update(ref(db, `UsersOrders/${userOrder}`), {
-            status: newStatus,
-          })
-            .then(() => fetchVendorOrders())
-            .catch((error) => console.log(error));
-        }
-      }
-    })
+  update(ref(db, `UsersOrders/${order.orderId}`), {
+    status: newStatus,
+  })
+    .then(() => fetchVendorOrders())
     .catch((error) => console.log(error));
+  // get(child(ref(db), `UsersOrders/${order.orderId}/orders`))
+  //   .then((snapshot) => {
+  //     if (snapshot.exists()) {
+  //       const usersOrders = snapshot.val();
+
+  //       if (userOrder) {
+  //       }
+  //     }
+  //   })
+  //   .catch((error) => console.log(error));
 }

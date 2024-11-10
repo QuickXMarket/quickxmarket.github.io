@@ -52,7 +52,15 @@ body {
 
 #products {
   padding: 0 8px 8px 8px;
+  min-height: 200px;
 }
+
+@media (max-width: 575px) {
+  #products {
+    min-height: auto;
+  }
+}
+
 #option {
   width: 40px;
   height: 40px;
