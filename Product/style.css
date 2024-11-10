@@ -5,15 +5,13 @@ body {
 }
 #body {
   width: 100%;
-  display: block;
+  display: none;
 }
 .item_images {
   height: 300px;
   object-fit: scale-down;
 }
-#top {
-  display: none;
-}
+
 #loader {
   border: 9px solid #f3f3f3;
   border-top: 9px solid #000137;
@@ -145,7 +143,7 @@ p {
   width: 100%;
 }
 
-.cart_nav {
+#cart_nav {
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -266,6 +264,7 @@ p {
   margin: auto;
   background-color: white;
   display: none;
+  margin-bottom: 8px;
 }
 #continue {
   width: 100%;

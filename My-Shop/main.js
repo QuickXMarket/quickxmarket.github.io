@@ -109,12 +109,7 @@ export function getShopData() {
             const vendorItems = Object.values(products).filter(
               (product) => product.vendorID === vendorId
             );
-
-            RegisteredItems.forEach((item, index) => {
-              const product = Object.values(products).find(
-                (product) => product.code === item
-              );
-              if (!product) return;
+            vendorItems.forEach((product, index) => {
               const myURL = new URL(
                 window.location.protocol +
                   "//" +
@@ -217,7 +212,13 @@ function uploadProduct() {
       ItemImgsUrl = [];
       document.getElementById("upload-item").style.display = "none";
       document.getElementById("uploadLoader").style.display = "none";
-      getShopData();
+      update(ref(db, `VendorsDetails/${userID}`), {
+        products: [...RegisteredItems, itemCode],
+      })
+        .then(() => getShopData())
+        .catch((error) =>
+          console.error("Error updating vendor products:", error)
+        );
     })
     .catch((error) => {
       console.log(error);

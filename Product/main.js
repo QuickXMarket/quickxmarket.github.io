@@ -53,6 +53,7 @@ function loadProductDetails() {
         } else {
           showNoProductFound();
         }
+        displayRecentItems();
       }
     })
     .catch(console.error);
@@ -86,12 +87,12 @@ function displayProductDetails() {
     slidercontainer.innerHTML += slideHTML;
   });
 
-  showContent("top");
+  showContent("body");
+  showContent("rec");
 }
 
 function setupEventListeners(productId) {
   getCartItem(productId);
-  displayRecentItems();
   updateSaveButton(productId);
 
   saveButton.addEventListener("click", () => toggleSaveItem(productId));
@@ -102,6 +103,7 @@ function setupEventListeners(productId) {
 
 function showNoProductFound() {
   showContent("no_items");
+  showContent("rec");
 }
 
 function showContent(elementId) {
@@ -254,14 +256,14 @@ function displayRecommendedProducts() {
       product.category === currentProduct.category &&
       product.code !== currentProduct.code
   );
+  if (categoryProducts.length > 0) {
+    categoryProducts.slice(0, 5).forEach((product) => {
+      const myURL = new URL(
+        `${window.location.protocol}//${window.location.host}/Product/`
+      );
+      myURL.searchParams.append("product", product.code);
 
-  categoryProducts.slice(0, 5).forEach((product) => {
-    const myURL = new URL(
-      `${window.location.protocol}//${window.location.host}/Product/`
-    );
-    myURL.searchParams.append("product", product.code);
-
-    const recommendedHTML = `
+      const recommendedHTML = `
       <a href="${myURL}" class="rec_view">
         <img class="rec_image" src="${product.url[0]}">
         <p class="rec_price">₦${internationalNumberFormat.format(
@@ -270,8 +272,9 @@ function displayRecommendedProducts() {
       </a>
     `;
 
-    document.getElementById("recommended").innerHTML += recommendedHTML;
-  });
+      document.getElementById("recommended").innerHTML += recommendedHTML;
+    });
+  } else document.getElementById("recommendedBody").style.display = "none";
 }
 
 function addToRecentItems() {

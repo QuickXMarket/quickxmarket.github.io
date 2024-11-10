@@ -77,10 +77,10 @@ function renderProducts() {
       (item) => item.code === product.code
     );
     if (productDetails) {
-      const { name, price, url } = productDetails;
+      const { name, price, url, code } = productDetails;
       const { amount } = product;
       totalPrice += price * amount;
-      createCartItemView(productContainer, name, price, url[0], amount, index);
+      createCartItemView(productContainer, name, price, url[0], amount, code);
     }
   });
 
@@ -92,12 +92,17 @@ function renderProducts() {
   else toggleEmptyCartView(false);
 }
 
-function createCartItemView(container, name, price, imageUrl, quantity) {
+function createCartItemView(container, name, price, imageUrl, quantity, code) {
   const view = document.createElement("div");
   view.classList.add("item-view");
 
+  const productURl = new URL(
+    `${window.location.protocol}//${window.location.host}/Product/`
+  );
+  productURl.searchParams.append("product", code);
+
   const productLink = document.createElement("a");
-  productLink.href = imageUrl;
+  productLink.href = productURl;
 
   const detailsFlexContainer = document.createElement("div");
   detailsFlexContainer.classList.add("flex");
@@ -157,13 +162,13 @@ function displayRecentItems(products) {
           (product) => product.code === item.code
         );
         if (recentProduct) {
-          const myURL = new URL(
+          const productURl = new URL(
             `${window.location.protocol}//${window.location.host}/Product/`
           );
-          myURL.searchParams.append("product", recentProduct.code);
+          productURl.searchParams.append("product", recentProduct.code);
 
           const recentHTML = `
-          <a href="${myURL}" class="rec_view">
+          <a href="${productURl}" class="rec_view">
             <img class="rec_image" src="${recentProduct.url[0]}">
             <p class="rec_price">₦${formatter.format(recentProduct.price)}</p>
           </a>

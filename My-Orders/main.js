@@ -31,19 +31,34 @@ function fetchUserOrders(userId) {
         const userOrders = userData.orders;
 
         if (userOrders || userOrders.length > 0) {
-          document.getElementById("loader").style.display = "none";
-          document.getElementById("body").style.display = "block";
-
           userOrders.forEach((order) => {
             displayOrderDetails(userData, order);
           });
         } else {
           displayEmptyOrders();
         }
+        fetchProductDetails();
       }
     })
     .catch((error) => console.error("Error fetching orders:", error));
 }
+
+const fetchProductDetails = () => {
+  const dbRef = ref(db);
+
+  get(child(dbRef, "ProductsDetails/"))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("body").style.display = "block";
+
+        const products = snapshot.val();
+
+        displayRecentItems(products);
+      }
+    })
+    .catch((error) => console.error(error));
+};
 
 function displayOrderDetails(userData, order) {
   const orderView = document.createElement("div");
@@ -96,7 +111,7 @@ function displayOrderDetails(userData, order) {
   productsLink.appendChild(viewFooter);
   orderView.appendChild(productsLink);
 
-  const body = document.getElementById("body");
+  const body = document.getElementById("orders");
   body.appendChild(orderView);
 }
 
@@ -104,6 +119,36 @@ function displayEmptyOrders() {
   document.getElementById("body").style.display = "block";
   document.getElementById("no_items").style.display = "block";
   document.getElementById("loader").style.display = "none";
+}
+
+function displayRecentItems(products) {
+  const recentItems = JSON.parse(localStorage.getItem("recent")) || [];
+  const numberFormatter = new Intl.NumberFormat("en-US");
+  if (Object.values(recentItems).length > 0) {
+    Object.values(recentItems)
+      .slice(0, 10)
+      .forEach((item) => {
+        const recentProduct = Object.values(products).find(
+          (product) => product.code === item.code
+        );
+        if (recentProduct) {
+          const myURL = new URL(
+            `${window.location.protocol}//${window.location.host}/Product/`
+          );
+          myURL.searchParams.append("product", recentProduct.code);
+
+          const recentHTML = `
+          <a href="${myURL}" class="rec_view">
+            <img class="rec_image" src="${recentProduct.url[0]}">
+            <p class="rec_price">₦${numberFormatter.format(
+              recentProduct.price
+            )}</p>
+          </a>
+        `;
+          document.getElementById("recent").innerHTML += recentHTML;
+        }
+      });
+  } else document.getElementById("rec").style.display = "none";
 }
 
 function formatDate(timestamp) {

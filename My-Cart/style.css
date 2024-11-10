@@ -64,7 +64,15 @@ p {
 }
 #cart {
   padding: 0 8px 8px 8px;
+  min-height: 300px;
 }
+
+@media (max-width: 575px) {
+  #cart {
+    min-height: auto;
+  }
+}
+
 #option {
   width: 40px;
   height: 40px;

@@ -174,3 +174,21 @@ body {
   text-decoration: none;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
+#no_items {
+  width: 100%;
+  height: 250px;
+  margin: auto;
+  background-color: white;
+  display: none;
+}
+
+#continue {
+  width: 100%;
+  background-color: #000137;
+  padding: 8px;
+  font-size: 16px;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}

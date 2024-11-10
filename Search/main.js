@@ -38,8 +38,15 @@ const fetchProductDetails = (searchQuery) => {
           const product = products[key];
           const productName = product["name"].toLowerCase();
 
-          if (productName.includes(searchQuery.toLowerCase())) {
+          if (
+            searchQuery !== "" &&
+            productName.includes(searchQuery.toLowerCase())
+          ) {
             displayProduct(product);
+          }
+          if (document.getElementById("list").innerHTML === "") {
+            document.getElementById("no_items").style.display = "block";
+            document.getElementById("listBody").style.display = "none";
           }
         });
         displayRecentItems(products);
@@ -79,7 +86,7 @@ const handleSearch = () => {
 };
 
 function displayRecentItems(products) {
-  if (Object.values(recentItems).length < 1) {
+  if (Object.values(recentItems).length > 0) {
     Object.values(recentItems)
       .slice(0, 10)
       .forEach((item) => {
@@ -100,7 +107,6 @@ function displayRecentItems(products) {
             )}</p>
           </a>
         `;
-
           document.getElementById("recent").innerHTML += recentHTML;
         }
       });

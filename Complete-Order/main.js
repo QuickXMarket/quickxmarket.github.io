@@ -14,6 +14,7 @@ let cartList = [];
 let userOrder = {};
 let vendorOrderDetails = {};
 let totalPrice = 0;
+let totalAmount = 0;
 let userId;
 const deliveryCharge = 100;
 
@@ -69,7 +70,7 @@ function loadCartDetails() {
 
 function displayOrderSummary() {
   const intlFormatter = new Intl.NumberFormat("en-US");
-  const totalAmount = totalPrice + deliveryCharge;
+  totalAmount = totalPrice + deliveryCharge;
 
   document.getElementById("subtotal").textContent = `₦${intlFormatter.format(
     totalPrice
@@ -80,7 +81,7 @@ function displayOrderSummary() {
   document.getElementById("total").textContent = `₦${intlFormatter.format(
     totalAmount
   )}`;
-  sessionStorage.setItem("amount", totalAmount);
+  // sessionStorage.setItem("amount", totalAmount);
 }
 
 // function uploadOrderAdmin() {
@@ -108,7 +109,7 @@ function addUserOrder(orderId) {
             status: "Confirming Request",
             date: date,
             orders: cartList,
-            total: totalPrice - deliveryCharge,
+            total: totalPrice,
           },
         ];
 
@@ -143,7 +144,7 @@ function uploadAdminOrder() {
     status: "Confirming Request",
     date: date,
     orders: cartList,
-    total: totalPrice - deliveryCharge,
+    total: totalPrice,
   };
 
   const orderKey = generateRandomId(19);
@@ -170,30 +171,32 @@ function uploadVendorOrder(orderId) {
           vendorOrders[vendorKey].push(item);
         });
 
-        Object.keys(vendorOrders).forEach((vendorId) => {
-          const vendorOrder = vendorOrders[vendorId];
-          const previousOrders = vendors[vendorId].order || [];
+        if (Object.keys(vendorOrders).length > 0) {
+          Object.keys(vendorOrders).forEach((vendorId) => {
+            const vendorOrder = vendorOrders[vendorId];
+            const previousOrders = vendors[vendorId].orders || [];
 
-          vendorOrderDetails = {
-            orders: [
-              ...previousOrders,
-              {
-                date: Date.now(),
-                orderId: orderId,
-                orders: vendorOrder,
-                total: totalPrice - deliveryCharge,
-                status: "Confirming Request",
-                userId: userId,
-              },
-            ],
-          };
+            vendorOrderDetails = {
+              orders: [
+                ...previousOrders,
+                {
+                  date: Date.now(),
+                  orderId: orderId,
+                  orders: vendorOrder,
+                  total: totalPrice,
+                  status: "Confirming Request",
+                  userId: userId,
+                },
+              ],
+            };
 
-          update(ref(db, `VendorsDetails/${vendorId}`), vendorOrderDetails)
-            .then(() => addUserOrder(orderId))
-            .catch((error) =>
-              console.error("Error updating vendor order:", error)
-            );
-        });
+            update(ref(db, `VendorsDetails/${vendorId}`), vendorOrderDetails)
+              .then(() => addUserOrder(orderId))
+              .catch((error) =>
+                console.error("Error updating vendor order:", error)
+              );
+          });
+        }
       }
     })
     .catch((error) => console.error("Error fetching vendor details:", error));
@@ -208,4 +211,65 @@ function generateRandomId(length) {
   ).join("");
 }
 
-export { uploadAdminOrder };
+function payWithPaystack(e) {
+  e.preventDefault();
+  const userDetails = JSON.parse(localStorage.getItem("details"));
+
+  var handler = PaystackPop.setup({
+    key: "pk_test_3ad69a99a3675265dacd246fee09d0ec0a4b3a1b",
+    email: userDetails["email"],
+    amount: totalAmount * 100,
+
+    callback: function (response) {
+      let message = "Payment complete! Reference: " + response.reference;
+
+      fetch(
+        "https://api.paystack.co/transaction/verify/" + response.reference,
+        {
+          headers: {
+            Authorization:
+              "Bearer sk_test_ec1097e6f76e60434bf2d1ce622377a544621b21",
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          var status = data["data"]["status"];
+          if (status === "success") {
+            var s_email = data["data"]["customer"]["email"];
+            var reference = data["data"]["reference"];
+            var date = new Date();
+            var date_time =
+              date.getMonth() +
+              1 +
+              "/" +
+              date.getDate() +
+              "/" +
+              date.getFullYear() +
+              " " +
+              date.getHours() +
+              ":" +
+              date.getMinutes();
+
+            // Update UI and trigger upload
+            document.getElementById("body").style.display = "none";
+            document.getElementById("loader").style.display = "block";
+            uploadAdminOrder();
+          } else {
+            console.log("Payment verification failed:", response);
+          }
+        })
+        .catch((error) => {
+          console.error("Error verifying payment:", error);
+        });
+    },
+
+    onClose: function () {
+      alert("Transaction cancelled");
+    },
+  });
+  handler.openIframe();
+}
+
+const paymentForm = document.getElementById("paymentForm");
+paymentForm.addEventListener("submit", payWithPaystack, false);

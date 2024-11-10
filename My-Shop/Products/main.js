@@ -76,10 +76,10 @@ function renderProducts() {
       (item) => item.code === product.code
     );
     if (productDetails) {
-      const { name, price, url } = productDetails;
+      const { name, price, url, code } = productDetails;
       const { amount } = product;
       totalPrice += price * amount;
-      createCartItemView(productContainer, name, price, url[0], amount, index);
+      createCartItemView(productContainer, name, price, url[0], amount, code);
     }
   });
 
@@ -99,12 +99,17 @@ function renderProducts() {
   toggleEmptyCartView(false);
 }
 
-function createCartItemView(container, name, price, imageUrl, quantity) {
+function createCartItemView(container, name, price, imageUrl, quantity, code) {
   const view = document.createElement("div");
   view.classList.add("item-view");
 
+  const productURl = new URL(
+    `${window.location.protocol}//${window.location.host}/Product/`
+  );
+  productURl.searchParams.append("product", code);
+
   const productLink = document.createElement("a");
-  productLink.href = imageUrl;
+  productLink.href = productURl;
 
   const detailsFlexContainer = document.createElement("div");
   detailsFlexContainer.classList.add("flex");

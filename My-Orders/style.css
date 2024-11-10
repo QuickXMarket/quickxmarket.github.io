@@ -8,6 +8,11 @@ p {
   cursor: default;
   padding: -1px;
 }
+
+#body {
+  display: none;
+}
+
 .div2 {
   width: 100%;
   font-size: 25px;
@@ -94,6 +99,16 @@ p {
   text-decoration: none;
 }
 
+#orders {
+  min-height: 300px;
+}
+
+@media (max-width: 575px) {
+  #orders {
+    min-height: auto;
+  }
+}
+
 #continue {
   width: 100%;
   background-color: #000137;
@@ -112,4 +127,26 @@ p {
   margin: auto;
   background-color: white;
   display: none;
+}
+
+.rec_price {
+  text-align: center;
+  color: #000137;
+}
+.rec_image {
+  height: 130px;
+  object-fit: scale-down;
+  width: 100%;
+}
+.rec_view {
+  background-color: white;
+  width: 140px;
+  flex: 0 0 140px;
+  padding: 5px;
+  flex-basis: 140px;
+  margin: 8px;
+  border-radius: 15px;
+  align-content: center;
+  text-decoration: none;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
