@@ -30,6 +30,7 @@
         position: fixed;
         right: 20px;
         bottom: 20px;
+        cursor: pointer;
       }
     </style>
   </head>
@@ -40,7 +41,7 @@
         <span style="color: white; vertical-align: middle">Address Book</span>
       </div>
     </div>
-    <div id="body"></div>
+    <div id="body" class="container"></div>
     <div id="loader" class="loader"></div>
     <div>
       <p href="../Create-Address/" class="material-icons" id="floating-btn">
@@ -51,26 +52,19 @@
     <div class="floating-body" id="edit-body">
       <form id="edit-form" class="floating-form">
         <div id="close">&#10006;</div>
-        <h4>Register new Address</h4>
-        <div style="display: flex; margin-bottom: 30px">
+        <h2 id="formTitle">Register New Address</h2>
+        <div class="input-group">
           <input
             required
-            style="font-size: 16px; width: 100%"
             type="text"
             placeholder="First Name"
             id="edit-first"
           />
-          <input
-            required
-            style="width: 100%; font-size: 16px; margin-left: 15px"
-            type="text"
-            placeholder="Last Name"
-            id="edit-last"
-          />
+          <input required type="text" placeholder="Last Name" id="edit-last" />
         </div>
-        <div style="display: flex">
-          <span>+234</span
-          ><input
+        <div class="input-group">
+          <span class="phone-prefix">+234</span>
+          <input
             required
             class="boxes"
             type="tel"
@@ -78,22 +72,14 @@
             id="edit-phone"
           />
         </div>
-        <div style="display: flex">
-          <select
-            required
-            style="width: 100%; font-size: 16px"
-            id="edit-gender"
-          >
-            <option value="Gender" disabled selected>Gender</option>
+        <div class="input-group">
+          <select required id="edit-gender">
+            <option value="" disabled selected>Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
-          <select
-            required
-            style="width: 100%; font-size: 16px"
-            id="edit-hostel"
-          >
-            <option value="Hostel" disabled selected>Hostel</option>
+          <select required id="edit-hostel">
+            <option value="" disabled selected>Hostel</option>
             <option value="Hall1">Hall1</option>
             <option value="Hall2">Hall2</option>
             <option value="Hall3">Hall3</option>
@@ -105,10 +91,8 @@
             <option value="KeyStone">KeyStone</option>
           </select>
         </div>
-        <button id="edit-submit" type="submit" style="margin-top: 30px">
-          Done
-        </button>
-        <div style="display: flex; justify-content: center; width: 100%">
+        <button id="edit-submit" type="submit">Done</button>
+        <div class="loader-container">
           <div id="edit-loader" class="loader"></div>
         </div>
       </form>

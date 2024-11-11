@@ -61,84 +61,99 @@ p {
   display: flex;
   width: 100%;
 }
-.labl > input {
-  /* HIDE RADIO */
-  visibility: hidden; /* Makes input not-clickable */
-  position: absolute; /* Remove input from document flow */
-}
-.labl > input + div {
-  /* DIV STYLES */
-  cursor: pointer;
-  border: 2px solid transparent;
-  width: 100%;
-  margin: 8px;
-  border-radius: 15px;
-  background-color: white;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-.labl > input:checked + div {
-  /* (RADIO CHECKED) DIV STYLES */
-  background-color: #ffd6bb;
-  border: 1px solid #ff6600;
-}
-.link-body {
-  position: relative;
-  height: 24px;
-}
-.title {
-  font-weight: bold;
-  font-size: 14px;
-  width: 50%;
-  padding: 8px;
-}
-.flex {
-  display: flex;
-}
-.info {
-  width: 50%;
-  text-align: right;
-  padding: 8px;
-}
-.edit-link {
-  color: #000137;
-  cursor: pointer;
-  text-align: right;
+/* Hide radio input */
+/* Hide radio input */
+input[type="radio"] {
+  visibility: hidden;
   position: absolute;
-  top: 0px;
-  right: 10px;
-  padding: 8px 8px 0 8px;
-}
-.boxes {
-  display: block;
-  width: 100%;
-  font-size: 16px;
-  margin-bottom: 30px;
-}
-#text {
-  font-size: 40px;
-  padding: 8px;
-}
-#toogle {
-  width: 25px;
-  height: 25px;
-}
-#boxes {
-  padding: 8px;
-  background-color: white;
-  height: auto;
-  margin: 70px auto;
-  width: 308px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  border-radius: 15px;
 }
 
-#edit-submit {
+/* Card container styling */
+.card-container {
   width: 100%;
-  padding: 8px;
-  background-color: #000137;
-  color: white;
-  border: #000137;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Card content styling */
+.card-content {
+  width: 100%;
+  padding: 20px;
+  margin: 16px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #ffffff, #e6e6e6);
+  box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.2),
+    -8px -8px 16px rgba(255, 255, 255, 0.7);
+  border: 2px solid transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+input[type="radio"]:checked + .card-content {
+  background: linear-gradient(145deg, #ffe6d8, #ffcbaf);
+  border-color: #ff6600;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.15),
+    -4px -4px 8px rgba(255, 255, 255, 0.6);
+}
+
+/* Header with edit link */
+.header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.edit-link {
+  color: #000137;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 8px 12px;
+  background: rgba(255, 102, 0, 0.1);
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.edit-link:hover {
+  background: rgba(255, 102, 0, 0.2);
+}
+
+/* Card details */
+.card-details {
+  margin-top: 12px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.title {
+  font-weight: bold;
+  color: #333;
+  font-size: 15px;
+}
+
+.info {
+  color: #555;
+  font-size: 15px;
+}
+
+/* Responsive design */
+@media (max-width: 500px) {
+  .card-content {
+    padding: 16px;
+  }
+
+  .edit-link {
+    font-size: 14px;
+  }
+
+  .title,
+  .info {
+    font-size: 14px;
+  }
 }
 
 .floating-body {
@@ -150,29 +165,91 @@ p {
   display: none;
   justify-content: center;
   align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
   z-index: 9999;
 }
-/* #edit-body {
-  display: none;
-} */
 
 .floating-form {
-  width: 300px;
-  position: relative;
-  padding: 10px;
-  background-color: #181a1b;
-  border: 1px solid #ccc;
+  width: 350px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  color: white;
   display: flex;
   flex-direction: column;
-  color: white;
+  gap: 16px;
+  position: relative;
 }
 
 #close {
   cursor: pointer;
-  width: fit-content;
-  font-size: 20px;
+  font-size: 24px;
   position: absolute;
-  top: 0px;
-  right: 10px;
+  top: 10px;
+  right: 15px;
   color: red;
+}
+
+h2 {
+  font-size: 20px;
+  margin: 0;
+  text-align: center;
+  color: #000137;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  outline: none;
+  border-color: #000137;
+}
+
+.phone-prefix {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 16px;
+  background-color: #f1f1f1;
+  border-radius: 8px 0 0 8px;
+  border: 1px solid #ccc;
+  border-right: none;
+}
+
+#edit-submit {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #000137;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#edit-submit:hover {
+  background-color: #3c2a5f;
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }

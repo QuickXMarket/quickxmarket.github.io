@@ -38,51 +38,53 @@ function displayAddresses() {
     userDetails["AddressBook"].forEach((address, i) => {
       const isChecked = address["switch"] ? "checked" : "";
       document.getElementById("body").innerHTML += `
-        <label class="labl" id=${i}>
-          <input type="radio" ${isChecked} />
-          <div>
-            <div class='link-body'>
+        <div class="card-container" id="${i}">
+          <input type="radio" name="selection" ${isChecked} hidden />
+          <div class="card-content">
+            <div class="header">
               <p class="edit-link">Edit</p>
             </div>
-            <div >
+            <div class="card-details">
               ${formatAddress(address)}
             </div>
           </div>
-        </label>`;
-      setupAddressClick(i, userDetails);
+        </div>`;
     });
+
+    setupAddressClick(userDetails);
     setupEditClicks();
   }
 }
 
 function formatAddress(address) {
   return `
-    <div class="flex"><div class="title">First Name:</div><div class="info">${address.firstName}</div></div>
-    <div class="flex"><div class="title">Last Name:</div><div class="info">${address.lastName}</div></div>
-    <div class="flex"><div class="title">Phone:</div><div class="info">+234${address.phone}</div></div>
-    <div class="flex"><div class="title">Hostel:</div><div class="info">${address.hostel}</div></div>
-    <div class="flex"><div class="title">Gender:</div><div class="info">${address.gender}</div></div>
+    <div class="info-item"><span class="title">First Name:</span><span class="info">${address.firstName}</span></div>
+    <div class="info-item"><span class="title">Last Name:</span><span class="info">${address.lastName}</span></div>
+    <div class="info-item"><span class="title">Phone:</span><span class="info">+234${address.phone}</span></div>
+    <div class="info-item"><span class="title">Hostel:</span><span class="info">${address.hostel}</span></div>
+    <div class="info-item"><span class="title">Gender:</span><span class="info">${address.gender}</span></div>
   `;
 }
 
-function setupAddressClick(index, user) {
-  document.getElementById(index).onclick = (e) => {
-    e.preventDefault();
-    if (user.AddressBook.length > 1 && user.AddressBook[index]["switch"]) {
-      toggleAddressSelection(index, user);
-    }
-  };
+function setupAddressClick(user) {
+  const cardContainers = document.getElementsByClassName("card-container");
+  Array.from(cardContainers).forEach((container, index) => {
+    container.onclick = (e) => {
+      e.preventDefault();
+      if (user.AddressBook.length > 1 && !user.AddressBook[index]["switch"]) {
+        toggleAddressSelection(index, user);
+      }
+    };
+  });
 }
 
 function toggleAddressSelection(selectedIndex, user) {
-  console.log(selectedIndex);
   const updatedAddressBook = user.AddressBook.map((address, index) => ({
     ...address,
     switch: index === selectedIndex,
   }));
-  console.log(updatedAddressBook);
 
-  update(ref(db, `UsersDetails/${details["id"]}`), {
+  update(ref(db, `UsersDetails/${details["key"]}`), {
     AddressBook: updatedAddressBook,
   })
     .then(() => {
@@ -106,7 +108,7 @@ function setupEditClicks() {
 }
 
 function openEditForm(index) {
-  const address = addressData[details["key"]]["AddressBook"][index];
+  const address = userDetails["AddressBook"][index];
   document.getElementById("edit-first").value = address.firstName;
   document.getElementById("edit-last").value = address.lastName;
   document.getElementById("edit-phone").value = address.phone;
@@ -114,6 +116,7 @@ function openEditForm(index) {
   document.getElementById("edit-gender").value = address.gender;
   document.getElementById("edit-body").style.display = "flex";
   document.getElementById("edit-loader").style.display = "none";
+  document.getElementById("formTitle").innerText = "Edit Address";
 }
 
 document.getElementById("close").addEventListener("click", () => {
@@ -123,6 +126,7 @@ document.getElementById("close").addEventListener("click", () => {
 
 document.getElementById("floating-btn").addEventListener("click", () => {
   clearFormFields();
+  document.getElementById("formTitle").innerText = "Register New Address";
   document.getElementById("edit-body").style.display = "flex";
   document.getElementById("edit-loader").style.display = "none";
 });
