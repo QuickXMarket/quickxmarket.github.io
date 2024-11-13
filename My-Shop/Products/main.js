@@ -28,6 +28,7 @@ onload = () => {
       if (user) {
         userID = user.uid;
         fetchVendorOrders();
+        document.getElementById("title").textContent = `Order: ${orderId}`;
       } else {
         window.location.replace("../Login");
       }

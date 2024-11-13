@@ -11,6 +11,7 @@ import {
 const db = getDatabase();
 let details = JSON.parse(localStorage.getItem("details"));
 let userDetails = {};
+let editFormIndex = null;
 
 window.onload = () => {
   const auth = getAuth();
@@ -88,11 +89,14 @@ function toggleAddressSelection(selectedIndex, user) {
     AddressBook: updatedAddressBook,
   })
     .then(() => {
+      const firstName = user.AddressBook[selectedIndex].firstName;
+      const lastName = user.AddressBook[selectedIndex].lastName;
       localStorage.setItem(
         "details",
         JSON.stringify({
           ...details,
           ...user.AddressBook[selectedIndex],
+          name: `${firstName} ${lastName}`,
         })
       );
       getAddress();
@@ -109,6 +113,7 @@ function setupEditClicks() {
 
 function openEditForm(index) {
   const address = userDetails["AddressBook"][index];
+  editFormIndex = index;
   document.getElementById("edit-first").value = address.firstName;
   document.getElementById("edit-last").value = address.lastName;
   document.getElementById("edit-phone").value = address.phone;
@@ -173,16 +178,23 @@ function validateForm({ firstName, lastName, phone, hostel, gender }) {
 }
 
 function updateAddress(formValues) {
-  userDetails.AddressBook.push({
-    ...formValues,
-    switch: false,
-  });
+  if (!editFormIndex)
+    userDetails.AddressBook.push({
+      ...formValues,
+      switch: false,
+    });
+  else
+    userDetails.AddressBook[editFormIndex] = {
+      ...formValues,
+      switch: userDetails.AddressBook[editFormIndex].switch,
+    };
 
   update(ref(db, `UsersDetails/${details["key"]}`), {
     AddressBook: userDetails.AddressBook,
   })
     .then(() => {
       document.getElementById("edit-body").style.display = "none";
+      editFormIndex = null;
       getAddress();
     })
     .catch((error) => console.error(error));

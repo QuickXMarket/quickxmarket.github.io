@@ -6,10 +6,10 @@ const recentItems = JSON.parse(localStorage.getItem("recent")) || [];
 
 window.onload = () => {
   updateCartCount();
-  document.getElementById("title").textContent = window.location.host;
 
   const searchQuery = new URLSearchParams(window.location.search).get("search");
   document.getElementById("div2").value = searchQuery;
+  document.getElementById("title").textContent = searchQuery;
 
   fetchProductDetails(searchQuery);
 };

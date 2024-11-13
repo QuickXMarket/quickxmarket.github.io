@@ -20,7 +20,6 @@ function handleSubmit(event) {
   event.preventDefault();
   getCredentials();
   signInUser();
-  showLoader(true);
 }
 
 function getCredentials() {
@@ -38,26 +37,24 @@ function signInUser() {
         fetchUserData(userCredential.user.uid);
       })
       .catch((error) => {
-        alert(error);
         showLoader(false);
+        alert(error);
       });
   }
 }
 
 function fetchUserData(userId) {
   const dbRef = ref(db);
-  get(child(dbRef, "UsersDetails/"))
+  get(child(dbRef, `UsersDetails/${userId}`))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        processUserData(snapshot.val(), userId);
+        processUserData(snapshot.val());
       }
     })
     .catch(handleError);
 }
 
-function processUserData(data, userId) {
-  const userEntries = Object.values(data);
-  const user = userEntries.find((user) => user.id === userId);
+function processUserData(user) {
   const currentAddressBook = user.AddressBook.find(
     (AddressBook) => AddressBook.switch
   );
@@ -108,17 +105,24 @@ function loadCartData(user) {
 function handleError(error) {
   if (error.message.includes("Client is offline")) {
     alert("Please Check Your Network Connection");
-    showLoader(false);
   } else {
     console.error(error);
   }
+  showLoader(false);
 }
 
 function showLoader(show) {
   document.getElementById("loader").style.display = show ? "block" : "none";
-  document.getElementById("email").setAttribute("disabled", show);
-  document.getElementById("password").setAttribute("disabled", show);
-  document.getElementById("submit").setAttribute("disabled", show);
+  console.log(show);
+  if (show) {
+    document.getElementById("email").setAttribute("disabled");
+    document.getElementById("password").setAttribute("disabled");
+    document.getElementById("submit").setAttribute("disabled");
+  } else {
+    document.getElementById("email").removeAttribute("disabled");
+    document.getElementById("password").removeAttribute("disabled");
+    document.getElementById("submit").removeAttribute("disabled");
+  }
 }
 
 document.getElementById("toggle").onclick = () => {
