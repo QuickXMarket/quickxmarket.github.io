@@ -20,10 +20,10 @@ let userFormData = {
 };
 
 const paymentForm = document.getElementById("boxes");
-paymentForm.addEventListener("submit", submit, false);
+paymentForm.addEventListener("submit", handleSubmit, false);
 
-function submit(e) {
-  e.preventDefault();
+function handleSubmit(event) {
+  event.preventDefault();
   gatherFormData();
 
   const { first, last, email, password, re_password, phone, gender, hostel } =
@@ -31,8 +31,8 @@ function submit(e) {
 
   if (validateForm({ first, last, email, password, phone, gender, hostel })) {
     if (password === re_password) {
+      showLoader(true);
       signUpUser();
-      document.getElementById("loader").style.display = "block";
     } else {
       alert("Passwords do not match");
     }
@@ -77,7 +77,7 @@ function signUpUser() {
     })
     .catch((error) => {
       alert(error.message);
-      document.getElementById("loader").style.display = "none";
+      showLoader(false);
     });
 }
 
@@ -101,7 +101,10 @@ function insertUserData(user) {
     id: user.uid,
   })
     .then(setUserInfo)
-    .catch(console.error);
+    .catch((error) => {
+      console.error(error);
+      showLoader(false);
+    });
 }
 
 function setUserInfo() {
@@ -121,6 +124,10 @@ function setUserInfo() {
 }
 
 document.getElementById("toogle").onclick = function () {
+  togglePasswordVisibility();
+};
+
+function togglePasswordVisibility() {
   const passwordField = document.getElementById("password");
   const rePasswordField = document.getElementById("re-password");
   const toggleIcon = document.getElementById("toogle");
@@ -132,4 +139,29 @@ document.getElementById("toogle").onclick = function () {
   toggleIcon.src = isPasswordVisible
     ? "../images/ic_visibility_black.png"
     : "../images/ic_visibility_off_black.png";
-};
+}
+
+function showLoader(show) {
+  const loader = document.getElementById("loader");
+  loader.style.display = show ? "block" : "none";
+
+  const fields = [
+    "first",
+    "last",
+    "email",
+    "password",
+    "re-password",
+    "phone",
+    "gender",
+    "hostel",
+    "submit",
+  ];
+  fields.forEach((field) => {
+    const element = document.getElementById(field);
+    if (show) {
+      element.setAttribute("disabled", true);
+    } else {
+      element.removeAttribute("disabled");
+    }
+  });
+}

@@ -52,11 +52,7 @@ export function getVendorOrders(vendorDetails) {
             <div class="order_no">${order.orderId}</div>
           </div>
               <div class="order_status">
-             <!-- <button class="statusBtn">${
-               order.status === "Confirming Request"
-                 ? "Confirm Request"
-                 : "Confirm Delivery"
-             }</button>-->
+       
             </div>
           </div>
           <div class="flex">
@@ -66,79 +62,10 @@ export function getVendorOrders(vendorDetails) {
           </a>
         </div>`;
     });
-
-    document.querySelectorAll(".statusBtn").forEach((button) => {
-      button.addEventListener("click", handleStatusUpdate);
-    });
   }
 }
 
-function handleStatusUpdate(e) {
-  e.preventDefault();
-  const status = e.target.innerText;
-  if (status === "Confirm Request") {
-    alert("Request confirmed");
-  }
-}
 
-function changeUserOrderStatus(newStatus, orderDetails) {
-  get(child(ref(db), "UsersDetails/"))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        const userList = snapshot.val();
-        Object.values(userList).forEach((userDetails) => {
-          if (userDetails.code === orderDetails.user) {
-            const orders = userDetails.orders;
-            Object.values(orders).forEach((order, index) => {
-              if (order.order === orderDetails.order) {
-                const updatedOrder = {
-                  orders: { [`Order${index + 1}`]: { status: newStatus } },
-                };
-                update(ref(db, `UsersDetails/${userDetails.key}`), updatedOrder)
-                  .then(() => changeVendorOrderStatus(newStatus, orderDetails))
-                  .catch((error) => console.log(error));
-              }
-            });
-          }
-        });
-      }
-    })
-    .catch((error) => console.log(error));
-}
-
-// Change vendor order status
-function changeVendorOrderStatus(newStatus, orderDetails, vendorDetails) {
-  const orders = vendorDetails.orders;
-  Object.values(orders).forEach((order, index) => {
-    if (order.order === orderDetails.order) {
-      const updatedOrder = {
-        orders: { [`Order${index + 1}`]: { status: newStatus } },
-      };
-      update(ref(db, `Vendor/${vendorDetails.key}`), updatedOrder)
-        .then(() => console.log("Vendor order status updated"))
-        .catch((error) => console.log(error));
-    }
-  });
-}
-
-// Change admin order status
-function changeAdminOrderStatus(newStatus, orderDetails) {
-  get(child(ref(db), "UsersOrders/"))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        const orderList = snapshot.val();
-        Object.values(orderList).forEach((userDetails) => {
-          if (userDetails.num === orderDetails.num) {
-            const updatedOrder = { orders: { status: newStatus } };
-            update(ref(db, `UsersOrders/${userDetails.key}`), updatedOrder)
-              .then(() => changeVendorOrderStatus(newStatus, orderDetails))
-              .catch((error) => console.log(error));
-          }
-        });
-      }
-    })
-    .catch((error) => console.log(error));
-}
 
 function formatDate(timestamp) {
   const date = new Date(timestamp);

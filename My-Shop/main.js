@@ -295,7 +295,7 @@ function RegisterVendor() {
     vendorCat: SelectedCategories,
   })
     .then(() => {
-      update(ref(db, "UsersDetails/" + userID), {
+      update(ref(db, `UsersDetails/${userID}`), {
         AccountType: "vendor",
       })
         .then(() => {

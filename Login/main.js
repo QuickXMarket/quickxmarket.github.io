@@ -113,15 +113,11 @@ function handleError(error) {
 
 function showLoader(show) {
   document.getElementById("loader").style.display = show ? "block" : "none";
-  console.log(show);
+  const element = document.getElementById(field);
   if (show) {
-    document.getElementById("email").setAttribute("disabled");
-    document.getElementById("password").setAttribute("disabled");
-    document.getElementById("submit").setAttribute("disabled");
+    element.setAttribute("disabled", true);
   } else {
-    document.getElementById("email").removeAttribute("disabled");
-    document.getElementById("password").removeAttribute("disabled");
-    document.getElementById("submit").removeAttribute("disabled");
+    element.removeAttribute("disabled");
   }
 }
 
