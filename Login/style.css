@@ -28,7 +28,7 @@ p {
   object-fit: scale-down;
   margin: 10px 5px 10px 10px;
 }
-.boxes {
+/* .boxes {
   display: block;
   width: 100%;
   font-size: 16px;
@@ -61,7 +61,13 @@ p {
   background-color: #000137;
   border: #000137;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}*/
+
+.modal {
+  position: static;
+  display: block;
 }
+
 #loader {
   border: 5px solid #f3f3f3;
   border-top: 5px solid #000137;

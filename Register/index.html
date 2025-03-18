@@ -19,94 +19,66 @@
       </div>
     </div>
 
-    <div id="form">
-      <form id="boxes">
-        <div style="display: flex; margin-bottom: 30px">
-          <input
-            required
-            style="font-size: 16px; width: 100%"
-            type="text"
-            placeholder="First Name"
-            id="first"
-          />
-          <input
-            required
-            style="width: 100%; font-size: 16px; margin-left: 15px"
-            type="text"
-            placeholder="Last Name"
-            id="last"
-          />
-        </div>
-
-        <input
-          required
-          class="boxes"
-          type="email"
-          placeholder="Email Address"
-          id="email"
-        />
-        <div style="display: flex">
-          <input
-            required
-            class="boxes"
-            type="password"
-            placeholder="Password"
-            id="password"
-          />
-          <img id="toogle" src="../images/ic_visibility_off_black.png" alt="" />
-        </div>
-        <input
-          required
-          class="boxes"
-          type="password"
-          placeholder="Re-enter Password"
-          id="re-password"
-        />
-        <div style="display: flex">
-          <span>+234</span
-          ><input
-            required
-            class="boxes"
-            type="tel"
-            placeholder="Phone Number"
-            id="phone"
-          />
-        </div>
-        <div style="display: flex">
-          <select required style="width: 100%; font-size: 16px" id="gender">
-            <option value="Gender" disabled selected>Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-          <select required style="width: 100%; font-size: 16px" id="hostel">
-            <option value="Hostel" disabled selected>Hostel</option>
-            <option value="Hall1">Hall1</option>
-            <option value="Hall2">Hall2</option>
-            <option value="Hall3">Hall3</option>
-            <option value="Hall4">Hall4</option>
-            <option value="Hall5">Hall5</option>
-            <option value="Hall6">Hall6</option>
-            <option value="Hall7">Hall7</option>
-            <option value="NDDC">NDDC</option>
-            <option value="KeyStone">KeyStone</option>
-          </select>
-        </div>
-        <a href="../Login/" style="text-decoration: none"
-          ><p
-            style="
-              color: #000137;
-              text-align: right;
-              font-size: 16px;
-              text-decoration: none;
-            "
-          >
-            Login
-          </p></a
-        >
-        <button id="submit" type="submit">Done</button>
-        <div id="loader"></div>
-      </form>
+<div id="form" class="container shadow-lg rounded-3 bg-white pb-2" style="max-width: 400px; margin-top: 70px;">
+  <form id="boxes">
+    <div class="row g-2 mb-3">
+      <div class="col">
+        <input required type="text" class="form-control" placeholder="First Name" id="first" />
+      </div>
+      <div class="col">
+        <input required type="text" class="form-control" placeholder="Last Name" id="last" />
+      </div>
     </div>
+    
+    <input required type="email" class="form-control mb-3" placeholder="Email Address" id="email" />
+    
+    <div class="input-group mb-3">
+      <input required type="password" class="form-control" placeholder="Password" id="password" />
+      <button class="btn btn-outline-secondary" type="button" id="toggle">
+        <img src="../images/ic_visibility_off_black.png" id="toggleImg" alt="Toggle Visibility" style="width: 20px; height: 20px;" />
+      </button>
+    </div>
+    
+    <input required type="password" class="form-control mb-3" placeholder="Re-enter Password" id="re-password" />
+    
+    <div class="input-group mb-3">
+      <span class="input-group-text">+234</span>
+      <input required type="tel" class="form-control" placeholder="Phone Number" id="phone" />
+    </div>
+    
+    <div class="row g-2 mb-3">
+      <div class="col">
+        <select required class="form-select" id="gender">
+          <option value="Gender" disabled selected>Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div>
+      <div class="col">
+        <select required class="form-select" id="hostel">
+          <option value="Hostel" disabled selected>Hostel</option>
+          <option value="Hall1">Hall1</option>
+          <option value="Hall2">Hall2</option>
+          <option value="Hall3">Hall3</option>
+          <option value="Hall4">Hall4</option>
+          <option value="Hall5">Hall5</option>
+          <option value="Hall6">Hall6</option>
+          <option value="Hall7">Hall7</option>
+          <option value="NDDC">NDDC</option>
+          <option value="KeyStone">KeyStone</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="text-end">
+      <a href="../Login/" class="text-decoration-none text-primary">Login</a>
+    </div>
+    
+    <button id="submit" type="submit" class="btn btn-primary w-100 mt-3 shadow-sm" style="background-color: #000137; border: none;">Done</button>
+    
+    <div id="loader" class="spinner-border text-primary d-none mt-3" role="status" style="width: 28px; height: 28px; border-width: 5px;"></div>
+  </form>
+</div>
 
     <script src="../js/bootstrap.bundle.js"></script>
   </body>

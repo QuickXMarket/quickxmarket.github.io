@@ -45,7 +45,7 @@ function loadProductDetails() {
         if (currentProduct) {
           displayProductDetails();
           setupEventListeners(productId);
-          vendorId = currentProduct.vendor;
+          vendorId = currentProduct.vendorID;
           fetchVendorDetails();
           addToRecentItems();
           displayRecommendedProducts();
@@ -184,7 +184,9 @@ function fetchVendorDetails() {
     .then((snapshot) => {
       if (snapshot.exists()) {
         const vendors = snapshot.val();
-        const vendor = Object.values(vendors).find((v) => v.id === vendorId);
+        const vendor = Object.values(vendors).find(
+          (v) => v.vendorId === vendorId
+        );
 
         if (vendor) {
           document.getElementById("vendorName").innerText = vendor.vendorName;
@@ -199,7 +201,7 @@ function fetchVendorDetails() {
 
 function displayVendorItems(vendorId) {
   const vendorProducts = Object.values(products).filter(
-    (item) => item.vendor === vendorId
+    (item) => item.vendorID === vendorId && currentProduct.code !== item.code
   );
 
   vendorProducts.forEach((product) => {

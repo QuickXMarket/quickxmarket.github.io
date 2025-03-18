@@ -113,11 +113,14 @@ function handleError(error) {
 
 function showLoader(show) {
   document.getElementById("loader").style.display = show ? "block" : "none";
-  const element = document.getElementById(field);
+  const email = document.getElementById("email");
+  const password = document.getElementById("password");
   if (show) {
-    element.setAttribute("disabled", true);
+    email.setAttribute("disabled", true);
+    password.setAttribute("disabled", true);
   } else {
-    element.removeAttribute("disabled");
+    email.removeAttribute("disabled");
+    password.removeAttribute("disabled");
   }
 }
 

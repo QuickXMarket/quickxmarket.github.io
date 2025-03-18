@@ -25,7 +25,7 @@ var details = JSON.parse(localStorage.getItem("details")),
     "Apartments",
     "Perfume and Oil",
   ],
-  SelecteIndexes = [],
+  SelectedIndexes = [],
   SelectedCategories = [],
   name,
   phone,
@@ -250,13 +250,12 @@ function regCategoriesSelect() {
   const regCategories = document.getElementsByClassName("category");
   Object.values(regCategories).forEach((category, index) => {
     category.addEventListener("click", () => {
-      if (SelecteIndexes.includes(index)) {
-        var categoryIndex = SelecteIndexes.indexOf(index);
-        SelecteIndexes = SelecteIndexes.splice(categoryIndex, 1);
-        category.style.backgroundColor = "transparent";
+      if (SelectedIndexes.includes(index)) {
+        SelectedIndexes = SelectedIndexes.filter((i) => i !== index);
+        category.dataset.selected = "false";
       } else {
-        SelecteIndexes.push(index);
-        category.style.backgroundColor = "#ccc";
+        SelectedIndexes.push(index);
+        category.dataset.selected = "true";
       }
     });
   });
@@ -271,19 +270,21 @@ function reg_Checkdata(e) {
   name = document.getElementById("business-name").value;
   phone = document.getElementById("phone").value;
 
-  if (SelecteIndexes.length > 0) {
+  if (SelectedIndexes.length > 0) {
     document.getElementById("registerLoader").style.display = "block";
     name = name === "" ? details["name"] : name;
-    SelecteIndexes.forEach((index) =>
+    SelectedIndexes.forEach((index) =>
       SelectedCategories.push(categories[index])
     );
     logoImg !== "" ? uploadFile(logoImg, "VendorLogo") : RegisterVendor();
+    console.log(logoImg);
   } else {
   }
 }
 
 function RegisterVendor() {
   var id = generateRandomLetter();
+  console.log(id);
   for (let i = 0; i < 8; i++) {
     id += generateRandomLetter();
   }

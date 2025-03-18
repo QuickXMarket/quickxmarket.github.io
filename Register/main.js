@@ -123,14 +123,14 @@ function setUserInfo() {
   window.location = "../";
 }
 
-document.getElementById("toogle").onclick = function () {
+document.getElementById("toggle").onclick = function () {
   togglePasswordVisibility();
 };
 
 function togglePasswordVisibility() {
   const passwordField = document.getElementById("password");
   const rePasswordField = document.getElementById("re-password");
-  const toggleIcon = document.getElementById("toogle");
+  const toggleIcon = document.getElementById("toggleImg");
 
   const isPasswordVisible = passwordField.type === "password";
 

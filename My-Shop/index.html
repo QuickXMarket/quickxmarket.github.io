@@ -77,104 +77,159 @@
               </div>
             </div>
           </div>
-          <div id="orderList" class="optionbody">
-   
-          </div>
+          <div id="orderList" class="optionbody"></div>
         </div>
       </div>
     </div>
-    <div id="upload-item" class="floating-body">
-      <form action="" id="upload-form" class="floating-form">
-        <div class="close">&#10006;</div>
-        <h4>Upload Product</h4>
-        <div class="drop-area">
-          <span class="drop-instruction"
-            >Drag and drop Product Images here or click to select</span
-          >
-          <input type="file" class="file-input" multiple />
-          <ul class="file-list"></ul>
+    <div
+      id="upload-item"
+      class="floating-body justify-content-center align-items-center"
+    >
+      <form
+        id="upload-form"
+        class="floating-form p-4 shadow-lg bg-white rounded-3"
+      >
+        <button
+          type="button"
+          class="btn-close position-absolute top-0 end-0 m-3"
+          aria-label="Close"
+        ></button>
+        <h4 class="text-center mb-3">Upload Product</h4>
+
+        <div
+          class="drop-area border border-secondary text-center p-3 mb-3 rounded"
+        >
+          <span class="drop-instruction d-block mb-2">
+            Drag and drop Product Images here or click to select
+          </span>
+          <input type="file" class="file-input d-none" multiple />
+          <ul class="file-list list-unstyled"></ul>
         </div>
-        <div style="display: flex; width: 100%; justify-content: end">
-          <span style="color: white; margin-right: 3px">₦</span
-          ><input
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">₦</span>
+          <input
             required
-            class="boxes"
             type="text"
+            class="form-control"
             placeholder="Product Price"
             id="price"
           />
         </div>
+
         <input
-          class="boxes"
+          required
           type="number"
-          placeholder="Product Quantity Avaialble"
+          class="form-control mb-3"
+          placeholder="Product Quantity Available"
           id="quantity"
           min="1"
         />
         <input
+          required
           type="text"
-          name=""
-          id="name"
-          required
+          class="form-control mb-3"
           placeholder="Product Name"
+          id="name"
         />
+
         <textarea
-          name=""
-          id="description"
-          cols="30"
-          rows="10"
           required
+          class="form-control mb-3"
+          id="description"
           placeholder="Product Description"
+          rows="4"
         ></textarea>
-        <select required style="width: 100%; font-size: 16px" id="category">
-          <option value="Select Category" disabled selected>
-            Select Category
-          </option>
+
+        <select required class="form-select mb-3" id="category">
+          <option value="" disabled selected>Select Category</option>
           <option value="Shoes">Shoes</option>
           <option value="Phone Accessories">Phone Accessories</option>
           <option value="Clothing">Clothing</option>
           <option value="Apartments">Apartments</option>
           <option value="Perfume & Oil">Perfume & Oil</option>
         </select>
-        <div id="uploadLoader" class="formLoader"></div>
-        <input type="submit" value="Upload Item" />
+
+        <div
+          id="uploadLoader"
+          class="spinner-border text-primary d-none mx-auto"
+          role="status"
+        ></div>
+
+        <button
+          type="submit"
+          class="btn w-100 mt-3 shadow-sm text-light"
+          style="background-color: #000137"
+        >
+          Upload Item
+        </button>
       </form>
     </div>
 
-    <div id="register" class="floating-body">
-      <form action="" id="register-form" class="floating-form">
-        <div class="close">&#10006;</div>
-        <h4>Register new Vendor</h4>
-        <div class="drop-area">
-          <span class="drop-instruction"
-            >Drag and drop Business Icon here or click to select(Optional)</span
+    <div
+      id="register"
+      class="floating-body align-items-center justify-content-center"
+    >
+      <form
+        id="register-form"
+        class="floating-form p-4 shadow-lg rounded-3 bg-light"
+      >
+        <div class="text-end">
+          <button type="button" class="btn-close" aria-label="Close"></button>
+        </div>
+        <h4 class="text-center mb-3">Register New Vendor</h4>
+
+        <div
+          class="drop-area border border-secondary rounded p-4 text-center mb-3"
+        >
+          <span class="drop-instruction d-block mb-2"
+            >Drag and drop Business Icon here or click to select
+            (Optional)</span
           >
-          <input type="file" class="file-input" multiple />
-          <ul class="file-list"></ul>
+          <input type="file" class="file-input d-none" multiple />
+          <button type="button" class="btn btn-outline-light btn-sm">
+            Select File
+          </button>
+          <ul
+            class="file-list mt-2 list-unstyled overflow-auto"
+            style="max-height: 60px"
+          ></ul>
         </div>
 
         <input
           type="text"
-          name=""
           id="business-name"
-          placeholder="Business Name(Optional)"
+          class="form-control mb-3"
+          placeholder="Business Name (Optional)"
         />
         <input
           type="text"
-          name=""
           id="phone"
-          placeholder="Additional Phone Number(Optional)"
+          class="form-control mb-3"
+          placeholder="Additional Phone Number (Optional)"
         />
-        <div style="color: white">Select Business Categories:</div>
-        <div class="categories">
-          <div class="category">Shoes</div>
-          <div class="category">Phone Accessories</div>
-          <div class="category">Clothing</div>
-          <div class="category">Apartments</div>
-          <div class="category">Perfume & Oil</div>
+
+        <div class="mb-2">Select Business Categories:</div>
+        <div class="categories d-flex flex-wrap gap-2 mb-3">
+          <span class="badge p-2 category">Shoes</span>
+          <span class="badge p-2 category">Phone Accessories</span>
+          <span class="badge p-2 category">Clothing</span>
+          <span class="badge p-2 category">Apartments</span>
+          <span class="badge p-2 category">Perfume & Oil</span>
         </div>
-        <input type="submit" value="Register" />
-        <div id="registerLoader" class="formLoader"></div>
+
+        <button
+          type="submit"
+          class="btn w-100 text-light"
+          style="background-color: #000137"
+        >
+          Register
+        </button>
+        <div
+          id="registerLoader"
+          class="spinner-border text-light d-none mt-3"
+          role="status"
+        ></div>
       </form>
     </div>
     <div id="loader"></div>

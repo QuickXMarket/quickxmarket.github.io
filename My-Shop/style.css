@@ -279,7 +279,7 @@ a {
   color: white;
 }
 
-.drop-area {
+/* .drop-area {
   width: 280px;
   height: 200px;
   border: 2px dashed #ccc;
@@ -341,49 +341,39 @@ textarea {
 .floating-body textarea {
   width: 100%;
   background-color: white;
+} */
+
+.floating-body {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+  z-index: 1050;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.drop-area {
+  background-color: white;
+  text-align: center;
+  color: black;
 }
 
 #price {
   width: auto;
 }
-.drop-area input {
-  background-color: transparent;
+
+.category[data-selected="true"] {
+  background-color: #000137;
 }
 
-.close {
-  cursor: pointer;
-  width: fit-content;
-  font-size: 20px;
-  position: absolute;
-  top: 0px;
-  right: 10px;
-  color: red;
-}
-
-#register-form input {
-  margin-bottom: 20px;
-}
-
-.categories {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  background-color: white;
-}
 .category {
-  flex-basis: calc((100% / 2));
-  margin-bottom: 10px;
   cursor: pointer;
-  padding: 0 3px;
-  border-radius: 10px;
-  color: black;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  font-size: 16px;
-}
-
-.category:hover {
+  transition: background-color 0.3s ease;
   background-color: #ccc;
 }
 
