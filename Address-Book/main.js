@@ -22,6 +22,7 @@ window.onload = () => {
 
 function getAddress() {
   document.getElementById("loader").style.display = "block";
+  console.log(details["key"]);
   get(child(ref(db), `UsersDetails/${details["key"]}`))
     .then((snapshot) => {
       if (snapshot.exists()) {

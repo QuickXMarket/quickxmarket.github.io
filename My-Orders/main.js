@@ -29,8 +29,7 @@ function fetchUserOrders(userId) {
       if (snapshot.exists()) {
         const userData = snapshot.val();
         const userOrders = userData.orders;
-
-        if (userOrders || userOrders.length > 0) {
+        if (userOrders && userOrders.length > 0) {
           userOrders.forEach((order) => {
             displayOrderDetails(userData, order);
           });

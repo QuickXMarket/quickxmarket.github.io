@@ -51,9 +51,14 @@
 
     <div class="floating-body" id="edit-body">
       <form id="edit-form" class="floating-form">
-        <div id="close">&#10006;</div>
+        <button
+          id="close"
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+        ></button>
         <h2 id="formTitle">Register New Address</h2>
-        <div class="input-group">
+        <div class="input-group flex-nowrap">
           <input
             required
             type="text"
@@ -62,7 +67,7 @@
           />
           <input required type="text" placeholder="Last Name" id="edit-last" />
         </div>
-        <div class="input-group">
+        <div class="input-group flex-nowrap gap-0">
           <span class="phone-prefix">+234</span>
           <input
             required
@@ -72,7 +77,7 @@
             id="edit-phone"
           />
         </div>
-        <div class="input-group">
+        <div class="input-group flex-nowrap">
           <select required id="edit-gender">
             <option value="" disabled selected>Gender</option>
             <option value="Male">Male</option>

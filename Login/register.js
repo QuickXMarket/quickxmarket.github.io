@@ -19,7 +19,7 @@ let userFormData = {
   hostel: "",
 };
 
-const paymentForm = document.getElementById("boxes");
+const paymentForm = document.getElementById("registerBoxes");
 paymentForm.addEventListener("submit", handleSubmit, false);
 
 function handleSubmit(event) {
@@ -43,14 +43,14 @@ function handleSubmit(event) {
 
 function gatherFormData() {
   userFormData = {
-    first: document.getElementById("first").value,
-    last: document.getElementById("last").value,
-    email: document.getElementById("email").value,
-    password: document.getElementById("password").value,
-    re_password: document.getElementById("re-password").value,
-    phone: document.getElementById("phone").value,
-    gender: document.getElementById("gender").value,
-    hostel: document.getElementById("hostel").value,
+    first: document.getElementById("registerFirstName").value,
+    last: document.getElementById("registerLastName").value,
+    email: document.getElementById("registerEmail").value,
+    password: document.getElementById("registerPassword").value,
+    re_password: document.getElementById("registerConfirmPass").value,
+    phone: document.getElementById("registerPhone").value,
+    gender: document.getElementById("registerGender").value,
+    hostel: document.getElementById("registerHostel").value,
   };
 }
 
@@ -100,14 +100,16 @@ function insertUserData(user) {
     email: userFormData.email,
     id: user.uid,
   })
-    .then(setUserInfo)
+    .then(() => {
+      setUserInfo(user.uid);
+    })
     .catch((error) => {
       console.error(error);
       showLoader(false);
     });
 }
 
-function setUserInfo() {
+function setUserInfo(userId) {
   const details = {
     AccountType: "user",
     email: userFormData.email,
@@ -115,6 +117,7 @@ function setUserInfo() {
     name: `${userFormData.first} ${userFormData.last}`,
     hostel: userFormData.hostel,
     gender: userFormData.gender,
+    key: userId,
     phone: userFormData.phone,
     login: "yes",
   };
@@ -123,14 +126,14 @@ function setUserInfo() {
   window.location = "../";
 }
 
-document.getElementById("toggle").onclick = function () {
+document.getElementById("registerToggle").onclick = function () {
   togglePasswordVisibility();
 };
 
 function togglePasswordVisibility() {
-  const passwordField = document.getElementById("password");
-  const rePasswordField = document.getElementById("re-password");
-  const toggleIcon = document.getElementById("toggleImg");
+  const passwordField = document.getElementById("registerPassword");
+  const rePasswordField = document.getElementById("registerConfiirmPass");
+  const toggleIcon = document.getElementById("registerToggleImg");
 
   const isPasswordVisible = passwordField.type === "password";
 
@@ -146,15 +149,15 @@ function showLoader(show) {
   loader.style.display = show ? "block" : "none";
 
   const fields = [
-    "first",
-    "last",
-    "email",
-    "password",
-    "re-password",
-    "phone",
-    "gender",
-    "hostel",
-    "submit",
+    "registerFirstName",
+    "registerLastName",
+    "registerEmail",
+    "registerPassword",
+    "registerConfirmPass",
+    "registerPhone",
+    "registerGender",
+    "registerHostel",
+    "registerSubmit",
   ];
   fields.forEach((field) => {
     const element = document.getElementById(field);

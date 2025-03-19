@@ -12,7 +12,7 @@ const db = getDatabase();
 let email,
   password,
   userDetails = {};
-const paymentForm = document.getElementById("boxes");
+const paymentForm = document.getElementById("loginBoxes");
 
 paymentForm.addEventListener("submit", handleSubmit);
 
@@ -23,8 +23,8 @@ function handleSubmit(event) {
 }
 
 function getCredentials() {
-  email = document.getElementById("email").value;
-  password = document.getElementById("password").value;
+  email = document.getElementById("loginEmail").value;
+  password = document.getElementById("loginPassword").value;
 }
 
 function signInUser() {
@@ -113,8 +113,8 @@ function handleError(error) {
 
 function showLoader(show) {
   document.getElementById("loader").style.display = show ? "block" : "none";
-  const email = document.getElementById("email");
-  const password = document.getElementById("password");
+  const email = document.getElementById("loginEmail");
+  const password = document.getElementById("loginPassword");
   if (show) {
     email.setAttribute("disabled", true);
     password.setAttribute("disabled", true);
@@ -124,9 +124,9 @@ function showLoader(show) {
   }
 }
 
-document.getElementById("toggle").onclick = () => {
-  const passwordInput = document.getElementById("password");
-  const toggleIcon = document.getElementById("toggle");
+document.getElementById("loginToggle").onclick = () => {
+  const passwordInput = document.getElementById("loginPassword");
+  const toggleIcon = document.getElementById("loginToggleImg");
 
   if (passwordInput.type === "password") {
     passwordInput.type = "text";

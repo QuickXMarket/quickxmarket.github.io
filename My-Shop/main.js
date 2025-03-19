@@ -320,7 +320,7 @@ function uploadFile(file, folder, index) {
   const storagePath =
     folder === "VendorLogo"
       ? `${folder}/${vendorDetails["vendorName"]}/${file.name}`
-      : `${folder}/${vendorDetails["vendorName"]}/name/${file.name} `;
+      : `${folder}/${vendorDetails["vendorName"]}/${name}/${file.name} `;
   const storagePathRef = storageRef(storage, storagePath);
 
   uploadBytes(storagePathRef, file)
@@ -352,6 +352,7 @@ function uploadFile(file, folder, index) {
 
 // Get drop area element
 const dropArea = document.getElementsByClassName("drop-area");
+const fileButton = document.getElementsByClassName("fileButton");
 
 // Prevent default drag behaviors
 ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
@@ -385,6 +386,13 @@ const dropArea = document.getElementsByClassName("drop-area");
       false
     )
   );
+});
+
+Object.values(fileButton).forEach((element, index) => {
+  element.addEventListener("click", () => {
+    const fileInput = document.getElementsByClassName("file-input")[index];
+    fileInput.click();
+  });
 });
 
 // Handle dropped files
@@ -445,7 +453,7 @@ function generateRandomLetter() {
   return alphabet[Math.floor(Math.random() * alphabet.length)];
 }
 
-const closeBtn = document.getElementsByClassName("close");
+const closeBtn = document.getElementsByClassName("btn-close");
 Object.values(closeBtn).forEach((btn, index) => {
   btn.addEventListener("click", () => {
     if (index === 0) {

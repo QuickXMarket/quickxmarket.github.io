@@ -89,11 +89,9 @@
         id="upload-form"
         class="floating-form p-4 shadow-lg bg-white rounded-3"
       >
-        <button
-          type="button"
-          class="btn-close position-absolute top-0 end-0 m-3"
-          aria-label="Close"
-        ></button>
+        <div class="text-end">
+          <button type="button" class="btn-close" aria-label="Close"></button>
+        </div>
         <h4 class="text-center mb-3">Upload Product</h4>
 
         <div
@@ -103,6 +101,9 @@
             Drag and drop Product Images here or click to select
           </span>
           <input type="file" class="file-input d-none" multiple />
+          <button type="button" class="btn btn-sm fileButton">
+            Select File
+          </button>
           <ul class="file-list list-unstyled"></ul>
         </div>
 
@@ -187,7 +188,7 @@
             (Optional)</span
           >
           <input type="file" class="file-input d-none" multiple />
-          <button type="button" class="btn btn-outline-light btn-sm">
+          <button type="button" class="btn btn-sm fileButton">
             Select File
           </button>
           <ul

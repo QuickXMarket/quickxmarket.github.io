@@ -42,7 +42,15 @@ function renderCartItems() {
       const { name, price, url } = product;
       const { amount } = cartItem;
       totalPrice += price * amount;
-      createCartItemView(cartContainer, name, price, url[0], amount, index);
+      createCartItemView(
+        cartContainer,
+        name,
+        price,
+        url[0],
+        amount,
+        index,
+        cartItem.code
+      );
     }
   });
 
@@ -52,12 +60,20 @@ function renderCartItems() {
   toggleEmptyCartView(false);
 }
 
-function createCartItemView(container, name, price, imageUrl, quantity, index) {
+function createCartItemView(
+  container,
+  name,
+  price,
+  imageUrl,
+  quantity,
+  index,
+  code
+) {
   const view = document.createElement("div");
   view.classList.add("cart-view");
 
   const productLink = document.createElement("a");
-  productLink.href = imageUrl;
+  productLink.href = `/Product/?product=${code}`;
 
   const detailsFlexContainer = document.createElement("div");
   detailsFlexContainer.classList.add("flex");

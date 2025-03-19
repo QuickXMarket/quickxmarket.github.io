@@ -5,7 +5,8 @@
     <link rel="stylesheet" href="../css/bootstrap.css" />
     <link rel="stylesheet" href="style.css" />
     <meta name="theme-color" content="#000137" />
-    <script type="module" src="main.js"></script>
+    <script type="module" src="login.js"></script>
+    <script type="module" src="register.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="../images/cart.png" sizes="16×16" />
   </head>
@@ -16,193 +17,214 @@
         <span style="color: white; vertical-align: middle">Login/Register</span>
       </div>
     </div>
-
-    <div id="authModal" class="modal" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content shadow-lg">
-          <div class="modal-header d-flex justify-content-between">
-            <ul class="nav nav-tabs w-100" id="authTabs">
-              <li class="nav-item w-50">
-                <a
-                  class="nav-link active"
-                  id="login-tab"
-                  href="#"
-                  onclick="showLogin()"
-                  >Login</a
-                >
-              </li>
-              <li class="nav-item w-50">
-                <a
-                  class="nav-link"
-                  id="register-tab"
-                  href="#"
-                  onclick="showRegister()"
-                  >Register</a
-                >
-              </li>
-            </ul>
-          </div>
-          <div class="modal-body">
-            <div id="loginForm">
-              <form id="loginBoxes" class="container p-4 bg-white mx-0">
-                <input
-                  required
-                  type="email"
-                  class="form-control mb-3"
-                  placeholder="Email Address"
-                  id="loginEmail"
-                />
-
-                <div class="input-group mb-3">
-                  <input
-                    required
-                    type="password"
-                    class="form-control"
-                    placeholder="Password"
-                    id="loginPassword"
-                  />
-                  <button
-                    class="btn btn-outline-secondary"
-                    type="button"
-                    id="loginToggle"
-                  >
-                    <img
-                      src="../images/ic_visibility_off_black.png"
-                      alt="Toggle Visibility"
-                      style="width: 20px; height: 20px"
+    <div class="row mx-0">
+      <div
+        class="col-12 col-md d-flex align-items-center justify-content-center"
+      >
+        <h1 class="text-center">
+          Welcome to the Login/Register Page of QuickMarket
+        </h1>
+      </div>
+      <div class="col-12 col-md">
+        <div id="authModal" class="modal" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content shadow-lg">
+              <div class="modal-header d-flex justify-content-between">
+                <ul class="nav nav-tabs w-100" id="authTabs">
+                  <li class="nav-item w-50">
+                    <a
+                      class="nav-link active"
+                      id="login-tab"
+                      href="#"
+                      onclick="showLogin()"
+                      >Login</a
+                    >
+                  </li>
+                  <li class="nav-item w-50">
+                    <a
+                      class="nav-link"
+                      id="register-tab"
+                      href="#"
+                      onclick="showRegister()"
+                      >Register</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div class="modal-body">
+                <div id="loginForm">
+                  <form id="loginBoxes" class="container p-4 bg-white mx-0">
+                    <input
+                      required
+                      type="email"
+                      class="form-control mb-3"
+                      placeholder="Email Address"
+                      id="loginEmail"
                     />
-                  </button>
-                </div>
 
-                <div class="d-flex justify-content-between">
-                  <a
-                    href="../Forgot-Password/"
-                    class="text-decoration-none text-primary"
-                    >Forgot Password?</a
-                  >
-                  <!-- <a
+                    <div class="input-group mb-3">
+                      <input
+                        required
+                        type="password"
+                        class="form-control"
+                        placeholder="Password"
+                        id="loginPassword"
+                      />
+                      <button
+                        class="btn btn-outline-secondary"
+                        type="button"
+                        id="loginToggle"
+                      >
+                        <img
+                          src="../images/ic_visibility_off_black.png"
+                          alt="Toggle Visibility"
+                          id="loginToggleImg"
+                          style="width: 20px; height: 20px"
+                        />
+                      </button>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                      <a
+                        href="../Forgot-Password/"
+                        class="text-decoration-none text-primary"
+                        >Forgot Password?</a
+                      >
+                      <!-- <a
                     href="#"
                     class="text-decoration-none text-primary"
                     onclick="showRegister()"
                     >Sign up</a
                   > -->
+                    </div>
+
+                    <button
+                      id="loginSubmit"
+                      type="submit"
+                      class="btn btn-primary w-100 mt-3 shadow-sm"
+                      style="background-color: #000137; border: none"
+                    >
+                      Done
+                    </button>
+
+                    <div
+                      id="loader"
+                      class="spinner-border text-primary d-none mt-3"
+                      role="status"
+                      style="width: 28px; height: 28px; border-width: 5px"
+                    ></div>
+                  </form>
                 </div>
 
-                <button
-                  id="loginSubmit"
-                  type="submit"
-                  class="btn btn-primary w-100 mt-3 shadow-sm"
-                  style="background-color: #000137; border: none"
-                >
-                  Done
-                </button>
+                <div id="registerForm" style="display: none">
+                  <form id="registerBoxes">
+                    <div class="row g-2 mb-3">
+                      <div class="col">
+                        <input
+                          required
+                          type="text"
+                          class="form-control"
+                          placeholder="First Name"
+                          id="registerFirstName"
+                        />
+                      </div>
+                      <div class="col">
+                        <input
+                          required
+                          type="text"
+                          class="form-control"
+                          placeholder="Last Name"
+                          id="registerLastName"
+                        />
+                      </div>
+                    </div>
 
-                <div
-                  id="loader"
-                  class="spinner-border text-primary d-none mt-3"
-                  role="status"
-                  style="width: 28px; height: 28px; border-width: 5px"
-                ></div>
-              </form>
-            </div>
-
-            <div id="registerForm" style="display: none">
-              <form id="boxes">
-                <div class="row g-2 mb-3">
-                  <div class="col">
                     <input
                       required
-                      type="text"
-                      class="form-control"
-                      placeholder="First Name"
-                      id="first"
+                      type="email"
+                      class="form-control mb-3"
+                      placeholder="Email Address"
+                      id="registerEmail"
                     />
-                  </div>
-                  <div class="col">
+
+                    <div class="input-group mb-3">
+                      <input
+                        required
+                        type="password"
+                        class="form-control"
+                        placeholder="Password"
+                        id="registerPassword"
+                      />
+                      <button
+                        class="btn btn-outline-secondary"
+                        type="button"
+                        id="registerToggle"
+                      >
+                        <img
+                          src="../images/ic_visibility_off_black.png"
+                          id="registerToggleImg"
+                          alt="Toggle Visibility"
+                          style="width: 20px; height: 20px"
+                        />
+                      </button>
+                    </div>
+
                     <input
                       required
-                      type="text"
-                      class="form-control"
-                      placeholder="Last Name"
-                      id="last"
+                      type="password"
+                      class="form-control mb-3"
+                      placeholder="Re-enter Password"
+                      id="registerConfirmPass"
                     />
-                  </div>
-                </div>
 
-                <input
-                  required
-                  type="email"
-                  class="form-control mb-3"
-                  placeholder="Email Address"
-                  id="email"
-                />
+                    <div class="input-group mb-3">
+                      <span class="input-group-text">+234</span>
+                      <input
+                        required
+                        type="tel"
+                        class="form-control"
+                        placeholder="Phone Number"
+                        id="registerPhone"
+                      />
+                    </div>
 
-                <div class="input-group mb-3">
-                  <input
-                    required
-                    type="password"
-                    class="form-control"
-                    placeholder="Password"
-                    id="password"
-                  />
-                  <button
-                    class="btn btn-outline-secondary"
-                    type="button"
-                    id="toggle"
-                  >
-                    <img
-                      src="../images/ic_visibility_off_black.png"
-                      id="toggleImg"
-                      alt="Toggle Visibility"
-                      style="width: 20px; height: 20px"
-                    />
-                  </button>
-                </div>
+                    <div class="row g-2 mb-3">
+                      <div class="col">
+                        <select
+                          required
+                          class="form-select"
+                          id="registerGender"
+                        >
+                          <option value="Gender" disabled selected>
+                            Gender
+                          </option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                        </select>
+                      </div>
+                      <div class="col">
+                        <select
+                          required
+                          class="form-select"
+                          id="registerHostel"
+                        >
+                          <option value="Hostel" disabled selected>
+                            Hostel
+                          </option>
+                          <option value="Hall1">Hall1</option>
+                          <option value="Hall2">Hall2</option>
+                          <option value="Hall3">Hall3</option>
+                          <option value="Hall4">Hall4</option>
+                          <option value="Hall5">Hall5</option>
+                          <option value="Hall6">Hall6</option>
+                          <option value="Hall7">Hall7</option>
+                          <option value="NDDC">NDDC</option>
+                          <option value="KeyStone">KeyStone</option>
+                        </select>
+                      </div>
+                    </div>
 
-                <input
-                  required
-                  type="password"
-                  class="form-control mb-3"
-                  placeholder="Re-enter Password"
-                  id="re-password"
-                />
-
-                <div class="input-group mb-3">
-                  <span class="input-group-text">+234</span>
-                  <input
-                    required
-                    type="tel"
-                    class="form-control"
-                    placeholder="Phone Number"
-                    id="phone"
-                  />
-                </div>
-
-                <div class="row g-2 mb-3">
-                  <div class="col">
-                    <select required class="form-select" id="gender">
-                      <option value="Gender" disabled selected>Gender</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </select>
-                  </div>
-                  <div class="col">
-                    <select required class="form-select" id="hostel">
-                      <option value="Hostel" disabled selected>Hostel</option>
-                      <option value="Hall1">Hall1</option>
-                      <option value="Hall2">Hall2</option>
-                      <option value="Hall3">Hall3</option>
-                      <option value="Hall4">Hall4</option>
-                      <option value="Hall5">Hall5</option>
-                      <option value="Hall6">Hall6</option>
-                      <option value="Hall7">Hall7</option>
-                      <option value="NDDC">NDDC</option>
-                      <option value="KeyStone">KeyStone</option>
-                    </select>
-                  </div>
-                </div>
-
-                <!-- <div class="text-end">
+                    <!-- <div class="text-end">
                   <a
                     href="#"
                     class="text-decoration-none text-primary"
@@ -211,22 +233,24 @@
                   >
                 </div> -->
 
-                <button
-                  id="submit"
-                  type="submit"
-                  class="btn btn-primary w-100 mt-3 shadow-sm"
-                  style="background-color: #000137; border: none"
-                >
-                  Done
-                </button>
+                    <button
+                      id="registerSubmit"
+                      type="submit"
+                      class="btn btn-primary w-100 mt-3 shadow-sm"
+                      style="background-color: #000137; border: none"
+                    >
+                      Done
+                    </button>
 
-                <div
-                  id="loader"
-                  class="spinner-border text-primary d-none mt-3"
-                  role="status"
-                  style="width: 28px; height: 28px; border-width: 5px"
-                ></div>
-              </form>
+                    <div
+                      id="loader"
+                      class="spinner-border text-primary d-none mt-3"
+                      role="status"
+                      style="width: 28px; height: 28px; border-width: 5px"
+                    ></div>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
         </div>
