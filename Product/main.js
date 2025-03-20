@@ -192,6 +192,9 @@ function fetchVendorDetails() {
           document.getElementById("vendorName").innerText = vendor.vendorName;
           document.getElementById("vendorIcon").src =
             vendor.LogoUrl || "../images/PngItem_248631.png";
+          document.getElementById(
+            "vendorStoreImg"
+          ).href = `/Vendor-Shop/?vendor=${vendorId}`;
           displayVendorItems(vendorId);
         }
       }
@@ -203,6 +206,9 @@ function displayVendorItems(vendorId) {
   const vendorProducts = Object.values(products).filter(
     (item) => item.vendorID === vendorId && currentProduct.code !== item.code
   );
+
+  if (vendorProducts.length === 0)
+    document.getElementById("vendorProdHead").style.display = "none";
 
   vendorProducts.forEach((product) => {
     const myURL = new URL(

@@ -18,17 +18,26 @@
         <span style="color: white; vertical-align: middle">Reset Password</span>
       </div>
     </div>
-    <form id="boxes">
+    <form id="boxes" class="container p-4 shadow-lg rounded bg-white">
       <input
         required
-        class="boxes"
         type="email"
+        class="form-control mb-3 boxes"
         placeholder="Email Address"
         id="email"
       />
-      <button id="submit" type="submit">Send Reset Email</button>
-      <div id="loader"></div>
+
+      <button id="submit" type="submit" class="btn btn-primary w-100 shadow-sm">
+        Send Reset Email
+      </button>
+
+      <div
+        id="loader"
+        class="spinner-border text-primary d-none mt-3"
+        role="status"
+      ></div>
     </form>
+
     <script src="../js/bootstrap.bundle.js"></script>
   </body>
 </html>

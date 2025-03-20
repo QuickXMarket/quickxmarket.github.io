@@ -123,12 +123,14 @@ p {
   margin-top: 10px;
   display: flex;
 }
-#des_img {
+
+.rightArrowImg {
   color: black;
   font-size: 22px;
   width: 100%;
   text-align: right;
 }
+
 #desc {
   background-color: white;
   width: 100%;
