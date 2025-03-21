@@ -22,7 +22,7 @@ var details = JSON.parse(localStorage.getItem("details")),
     "Shoes",
     "Phone Accessories",
     "Clothing",
-    "Apartments",
+    "Food and Catering",
     "Perfume and Oil",
   ],
   SelectedIndexes = [],
@@ -284,7 +284,6 @@ function reg_Checkdata(e) {
 
 function RegisterVendor() {
   var id = generateRandomLetter();
-  console.log(id);
   for (let i = 0; i < 8; i++) {
     id += generateRandomLetter();
   }
@@ -319,7 +318,7 @@ function RegisterVendor() {
 function uploadFile(file, folder, index) {
   const storagePath =
     folder === "VendorLogo"
-      ? `${folder}/${vendorDetails["vendorName"]}/${file.name}`
+      ? `${folder}/${name}/${file.name}`
       : `${folder}/${vendorDetails["vendorName"]}/${name}/${file.name} `;
   const storagePathRef = storageRef(storage, storagePath);
 

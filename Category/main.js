@@ -90,7 +90,7 @@ const categoryButtons = [
   { id: "category_view2", category: "clothing", viewIndex: 2 },
   { id: "category_view3", category: "perfumes & oil", viewIndex: 3 },
   { id: "category_view4", category: "shoes", viewIndex: 4 },
-  { id: "category_view5", category: "apartments", viewIndex: 5 },
+  { id: "category_view5", category: "food & catering", viewIndex: 5 },
 ];
 
 categoryButtons.forEach(({ id, category, viewIndex }) => {
