@@ -164,6 +164,7 @@ p {
   justify-content: center;
   flex-grow: 1;
   min-width: 50px;
+  cursor: pointer;
   overflow: hidden;
   white-space: nowrap;
   font-family: sans-serif;
@@ -174,7 +175,6 @@ p {
   transition: background-color o.1s ease-in-out;
   background-color: #000137;
   height: 45px;
-  cursor: default;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 @media (min-width: 992px) {
@@ -285,6 +285,7 @@ p {
 #save {
   width: 30px;
   height: 30px;
+  cursor: pointer;
   margin: auto 0;
   filter: invert(6%) sepia(63%) saturate(3693%) hue-rotate(232deg)
     brightness(91%) contrast(117%);

@@ -1,19 +1,20 @@
 import { getDatabase, ref, get, child } from "../firebase.js";
 
-let savedItems,
-  productImages,
-  productName,
-  productPrice,
-  products,
-  totalProducts,
-  productValue;
+let savedItems, products, totalProducts, productValue;
 let cartItems = [];
 const numberFormatter = new Intl.NumberFormat("en-US");
 
-const createProductElement = (index, productCode, savedItemIndex) => {
+const createProductElement = (product, savedItemIndex) => {
+  const {
+    code: productCode,
+    price: productPrice,
+    name: productName,
+    url: productImages,
+  } = product;
+
   const cartItem = cartItems.find((item) => item.code === productCode);
   const cartIndex = cartItems.findIndex((item) => item.code === productCode);
-  
+
   document.getElementById("loader").style.display = "none";
   document.getElementById("page_body").style.display = "block";
   document.getElementById("item_list").style.display = "block";
@@ -43,12 +44,13 @@ const createProductElement = (index, productCode, savedItemIndex) => {
   productLink.appendChild(productFlexContainer);
   productContainer.appendChild(productLink);
 
-  const controlsContainer = createControls(index, cartItem, cartIndex);
+  const controlsContainer = createControls(cartItem, cartIndex, savedItemIndex);
   productContainer.appendChild(controlsContainer);
 
   itemList.appendChild(productContainer);
-  if (!cartItem) attachAddToCartHandler(`add${index}`, productCode);
-  attachRemoveFavoriteHandler(`remove${index}`, savedItemIndex);
+  if (!cartItem)
+    attachAddToCartHandler(`add${savedItemIndex}`, productCode, savedItemIndex);
+  attachRemoveFavoriteHandler(`remove${savedItemIndex}`, savedItemIndex);
 };
 
 const loadSavedItems = () => {
@@ -70,20 +72,11 @@ const loadSavedItems = () => {
           totalProducts = Object.keys(products).length;
 
           savedItems.forEach((item, index) => {
-            for (let i = 0; i < totalProducts; i++) {
-              const productCode = savedItems[index].code;
-              const key = Object.keys(products)[i];
-              productValue = products[key];
+            const productValue = Object.values(products).find(
+              (product) => product.code === item.code
+            );
 
-              if (productValue.code === productCode) {
-                ({
-                  price: productPrice,
-                  name: productName,
-                  url: productImages,
-                } = productValue);
-                createProductElement(index + 1, productValue.code, index);
-              }
-            }
+            if (productValue) createProductElement(productValue, index);
           });
         }
         displayRecentItems();
@@ -108,12 +101,13 @@ const toggleLoader = (showLoader, elementToShow = null) => {
   }
 };
 
-const attachAddToCartHandler = (buttonId, productCode) => {
+const attachAddToCartHandler = (buttonId, productCode, savedItemIndex) => {
   document.getElementById(buttonId).onclick = () => {
     const updatedCartItems = [...cartItems, { code: productCode, amount: 1 }];
     localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+    cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
-    loadSavedItems();
+    switchCartControls(savedItemIndex, "add");
   };
 };
 
@@ -198,9 +192,10 @@ const createProductLink = (productCode) => {
   return productLink;
 };
 
-const createControls = (index, cartItem, cartIndex) => {
+const createControls = (cartItem, cartIndex, index) => {
   const controlsContainer = document.createElement("div");
   controlsContainer.classList.add("controls", "flex");
+  controlsContainer.id = "controlsContainer";
   const controlsFlex = document.createElement("div");
   controlsFlex.classList.add("flex");
 
@@ -222,18 +217,19 @@ const createControls = (index, cartItem, cartIndex) => {
     addButton.setAttribute("id", `add${index}`);
     addButton.innerText = "Add to Cart";
     addButtonContainer.appendChild(addButton);
+    addButtonContainer.setAttribute("id", `addBtnContainer${index}`);
     controlsContainer.appendChild(addButtonContainer);
   } else {
     const cartNum = document.createElement("p");
-    cartNum.id = `cartnum${cartIndex}`;
+    cartNum.id = `cartnum${index}`;
     cartNum.textContent = cartItem.amount;
 
-    const addBtn = createButton("add", `add${cartIndex}`, () =>
-      updateCartQuantity(cartIndex, 1)
+    const addBtn = createButton("add", () => updateCartQuantity(cartIndex, 1));
+    addBtn.id = `addBtn${index}`;
+    const minusBtn = createButton("minus", () =>
+      updateCartQuantity(cartIndex, -1, index)
     );
-    const minusBtn = createButton("minus", `minus${cartIndex}`, () =>
-      updateCartQuantity(cartIndex, -1)
-    );
+    minusBtn.id = `minusBtn${index}`;
     controlsContainer.appendChild(minusBtn);
     controlsContainer.appendChild(cartNum);
     controlsContainer.appendChild(addBtn);
@@ -241,12 +237,47 @@ const createControls = (index, cartItem, cartIndex) => {
   return controlsContainer;
 };
 
-function updateCartQuantity(index, delta) {
+const switchCartControls = (savedItemIndex, currentCtrl, productCode) => {
+  const controlsContainer = document.getElementById("controlsContainer");
+  if (currentCtrl === "controls") {
+    document.getElementById(`cartnum${savedItemIndex}`).remove();
+    document.getElementById(`addBtn${savedItemIndex}`).remove();
+    document.getElementById(`minusBtn${savedItemIndex}`).remove();
+
+    let addButtonContainer = document.createElement("div");
+    let addButton = document.createElement("button");
+    addButton.setAttribute("id", `add${savedItemIndex}`);
+    addButton.innerText = "Add to Cart";
+    addButtonContainer.appendChild(addButton);
+    addButtonContainer.setAttribute("id", `addBtnContainer${savedItemIndex}`);
+    controlsContainer.appendChild(addButtonContainer);
+    attachAddToCartHandler(`add${savedItemIndex}`, productCode, savedItemIndex);
+  } else {
+    const cartIndex = cartItems.length - 1;
+    document.getElementById(`addBtnContainer${savedItemIndex}`).remove();
+
+    const cartNum = document.createElement("p");
+    cartNum.id = `cartnum${cartIndex}`;
+    cartNum.textContent = 1;
+
+    const addBtn = createButton("add", () => updateCartQuantity(cartIndex, 1));
+    addBtn.id = `addBtn${savedItemIndex}`;
+    const minusBtn = createButton("minus", () =>
+      updateCartQuantity(cartIndex, -1, savedItemIndex)
+    );
+    minusBtn.id = `minusBtn${savedItemIndex}`;
+    controlsContainer.appendChild(minusBtn);
+    controlsContainer.appendChild(cartNum);
+    controlsContainer.appendChild(addBtn);
+  }
+};
+
+function updateCartQuantity(index, delta, savedItemIndex) {
   const cartNumElem = document.getElementById(`cartnum${index}`);
   let newQuantity = parseInt(cartNumElem.textContent) + delta;
 
   if (newQuantity < 1) {
-    removeCartItem(index);
+    removeCartItem(index, savedItemIndex);
   } else {
     cartNumElem.textContent = newQuantity;
     cartItems[index].amount = newQuantity;
@@ -254,15 +285,16 @@ function updateCartQuantity(index, delta) {
   }
 }
 
-function removeCartItem(index) {
+function removeCartItem(index, savedItemIndex) {
+  const productCode = cartItems[index].code;
   cartItems.splice(index, 1);
   localStorage.setItem("cart", JSON.stringify(cartItems));
-  loadSavedItems();
+  cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+  switchCartControls(savedItemIndex, "controls", productCode);
 }
 
-function createButton(type, id, onClick) {
+function createButton(type, onClick) {
   const button = document.createElement("img");
-  button.id = id;
   button.src =
     type === "remove"
       ? `../images/ic_delete_black.png`

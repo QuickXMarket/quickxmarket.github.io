@@ -102,8 +102,17 @@ body {
   cursor: pointer;
 }
 .controls p {
-  font-size: 14px;
+  font-size: 16px;
   cursor: pointer;
+  margin: 0;
+}
+
+.controls button {
+  background-color: #000137;
+  color: white;
+  width: max-content;
+  border: none;
+  border-radius: 5px;
 }
 
 @media (max-width: 575px) {

@@ -47,6 +47,8 @@ const fetchProductDetails = (searchQuery) => {
           if (document.getElementById("list").innerHTML === "") {
             document.getElementById("no_items").style.display = "block";
             document.getElementById("listBody").style.display = "none";
+          } else {
+            addEventListeners();
           }
         });
         displayRecentItems(products);
@@ -60,20 +62,119 @@ const displayProduct = (product) => {
     `${window.location.protocol}//${window.location.host}/Product/`
   );
   productURL.searchParams.append("product", product["code"]);
+  const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+  const cartItem = cartItems.find((item) => item.code === product["code"]);
 
   const productHTML = `
-    <a href="${productURL}" class="col-sm-6 col-lg-4 items_view d-sm-inline-flex">
-      <img class="item_image" src="${product["url"][0]}" >
-      <div>
-        <div class="item_name">${product["name"]}</div>
-        <div class="item_price">₦${numberFormatter.format(
-          product["price"]
-        )}</div>
+    <div class="col-sm-6 col-lg-4 items_view d-sm-inline-flex" id="${
+      product["code"]
+    }">
+      <a href="${productURL}" class="d-sm-inline-flex text-decoration-none">
+        <img class="item_image" src="${product["url"][0]}">
+        <div>
+          <div class="item_name">${product["name"]}</div>
+          <div class="item_price">₦${numberFormatter.format(
+            product["price"]
+          )}</div>
+        </div>
+      </a>
+      <div id="ctrlContainer" class="controls d-flex ms-auto align-items-center align-self-end">
+        ${
+          !cartItem
+            ? `<button class="addBtn">Add to Cart</button>`
+            : `
+              <img id="minus0" class="minusBtn" src="../images/ic_remove_circle_black.png">
+              <p id="cartnum0" class="cartNum">${cartItem.amount}</p>
+              <img id="add0" class="plusBtn" src="../images/ic_add_circle_black.png">
+            `
+        }
       </div>
-    </a>
-  `;
+    </div>
+`;
 
   document.getElementById("list").innerHTML += productHTML;
+};
+
+const handleAddToCart = (index) => {
+  const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+  const product = document.getElementsByClassName("items_view")[index];
+  const productCode = product.id;
+
+  const productDetails = {
+    code: productCode,
+    amount: 1,
+  };
+
+  cartItems.push(productDetails);
+  localStorage.setItem("cart", JSON.stringify(cartItems));
+  updateCartCount();
+  switchCartCtrl(index, "addBtn");
+};
+
+const addEventListeners = () => {
+  Object.values(document.getElementsByClassName("addBtn")).forEach(
+    (button, index) => {
+      button.addEventListener("click", () => handleAddToCart(index));
+    }
+  );
+
+  Object.values(document.getElementsByClassName("minusBtn")).forEach(
+    (button, index) => {
+      button.addEventListener("click", () => updateCartQuantity(index, -1));
+    }
+  );
+  Object.values(document.getElementsByClassName("plusBtn")).forEach(
+    (button, index) => {
+      button.addEventListener("click", () => updateCartQuantity(index, 1));
+    }
+  );
+};
+
+const switchCartCtrl = (index, currentCtrl) => {
+  const ctrlContainer = document.getElementsByClassName("controls")[index];
+  ctrlContainer.innerHTML = "";
+  switch (currentCtrl) {
+    case "addBtn":
+      ctrlContainer.innerHTML = `  
+            <img id="minus0" class="minusBtn" src="../images/ic_remove_circle_black.png">
+              <p id="cartnum0" class="cartNum">1</p>
+              <img id="add0" class="plusBtn" src="../images/ic_add_circle_black.png">
+          `;
+      break;
+
+    case "cartCtrl":
+      ctrlContainer.innerHTML = `<button class="addBtn">Add to Cart</button>`;
+      break;
+  }
+  addEventListeners();
+};
+
+const updateCartQuantity = (index, delta) => {
+  console.log(index, delta);
+  const cartNumElem = document.getElementsByClassName("cartNum")[index];
+  const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+  const product = document.getElementsByClassName("items_view")[index];
+  const productCode = product.id;
+  const cartItemIndex = cartItems.findIndex(
+    (item) => item.code === productCode
+  );
+
+  let newQuantity = parseInt(cartNumElem.textContent) + delta;
+
+  if (newQuantity < 1) {
+    removeCartItem(index, cartItemIndex);
+  } else {
+    cartNumElem.textContent = newQuantity;
+    cartItems[cartItemIndex].amount = newQuantity;
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+  }
+};
+
+const removeCartItem = (index, cartItemIndex) => {
+  const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+  cartItems.splice(cartItemIndex, 1);
+  localStorage.setItem("cart", JSON.stringify(cartItems));
+  switchCartCtrl(index, "cartCtrl");
 };
 
 const handleSearch = () => {
