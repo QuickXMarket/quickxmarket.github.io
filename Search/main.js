@@ -15,7 +15,7 @@ window.onload = () => {
   document.getElementById("title").textContent = searchQuery;
   console.log(page, searchQuery);
   if (searchQuery) fetchProductDetails(searchQuery);
-  // else window.location.href = "/";
+  else window.location.href = "/";
 };
 
 const updateCartCount = () => {
@@ -50,8 +50,7 @@ const fetchProductDetails = (searchQuery) => {
         const totalPages = Math.ceil(searchResultLength / 20);
 
         if (page > totalPages)
-          // window.location.href = `/Search?search=${searchQuery}`;
-          console.log(searchQuery, page, totalPages);
+          window.location.href = `/Search?search=${searchQuery}`;
 
         const itemsPerPage = 20;
         const startIdx = (page - 1) * itemsPerPage;
@@ -204,7 +203,7 @@ const handleSearch = () => {
     `${window.location.protocol}//${window.location.host}/Search/`
   );
   searchURL.searchParams.append("search", searchQuery);
-  // window.location = searchURL;
+  window.location = searchURL;
 };
 
 const setPaginationHref = (currentPage, searchResultLength, searchParams) => {
