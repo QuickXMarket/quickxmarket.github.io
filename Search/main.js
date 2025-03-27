@@ -3,15 +3,19 @@ import { get, child, getDatabase, ref } from "../firebase.js";
 const db = getDatabase();
 const numberFormatter = new Intl.NumberFormat("en-US");
 const recentItems = JSON.parse(localStorage.getItem("recent")) || [];
+let page;
 
 window.onload = () => {
   updateCartCount();
+  const params = new URLSearchParams(window.location.search);
+  const searchQuery = params.get("search");
+  page = Number(params.get("page")) || 1;
 
-  const searchQuery = new URLSearchParams(window.location.search).get("search");
   document.getElementById("div2").value = searchQuery;
   document.getElementById("title").textContent = searchQuery;
-
-  fetchProductDetails(searchQuery);
+  console.log(page, searchQuery);
+  if (searchQuery) fetchProductDetails(searchQuery);
+  // else window.location.href = "/";
 };
 
 const updateCartCount = () => {
@@ -32,25 +36,43 @@ const fetchProductDetails = (searchQuery) => {
         document.getElementById("body").style.display = "block";
 
         const products = snapshot.val();
-        const productKeys = Object.keys(products);
+        const productKeys = Object.keys(products).reverse();
 
-        productKeys.reverse().forEach((key) => {
-          const product = products[key];
-          const productName = product["name"].toLowerCase();
+        const filteredKeys = searchQuery
+          ? productKeys.filter((key) =>
+              products[key]["name"]
+                .toLowerCase()
+                .includes(searchQuery.toLowerCase())
+            )
+          : productKeys; // If no search query, use all products
 
-          if (
-            searchQuery !== "" &&
-            productName.includes(searchQuery.toLowerCase())
-          ) {
-            displayProduct(product);
-          }
-          if (document.getElementById("list").innerHTML === "") {
-            document.getElementById("no_items").style.display = "block";
-            document.getElementById("listBody").style.display = "none";
-          } else {
-            addEventListeners();
-          }
+        const searchResultLength = filteredKeys.length;
+        const totalPages = Math.ceil(searchResultLength / 20);
+
+        if (page > totalPages)
+          // window.location.href = `/Search?search=${searchQuery}`;
+          console.log(searchQuery, page, totalPages);
+
+        const itemsPerPage = 20;
+        const startIdx = (page - 1) * itemsPerPage;
+        const endIdx = startIdx + itemsPerPage;
+
+        // Get only the products for the current page
+        const paginatedKeys = filteredKeys.slice(startIdx, endIdx);
+
+        paginatedKeys.forEach((key) => {
+          displayProduct(products[key]);
         });
+
+        if (document.getElementById("list").innerHTML === "") {
+          document.getElementById("no_items").style.display = "block";
+          document.getElementById("listBody").style.display = "none";
+          document.getElementById("paginationBody").style.display = "none";
+        } else {
+          addEventListeners();
+          setPaginationHref(parseInt(page), searchResultLength, searchQuery);
+        }
+
         displayRecentItems(products);
       }
     })
@@ -150,7 +172,6 @@ const switchCartCtrl = (index, currentCtrl) => {
 };
 
 const updateCartQuantity = (index, delta) => {
-  console.log(index, delta);
   const cartNumElem = document.getElementsByClassName("cartNum")[index];
   const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
   const product = document.getElementsByClassName("items_view")[index];
@@ -183,7 +204,53 @@ const handleSearch = () => {
     `${window.location.protocol}//${window.location.host}/Search/`
   );
   searchURL.searchParams.append("search", searchQuery);
-  window.location = searchURL;
+  // window.location = searchURL;
+};
+
+const setPaginationHref = (currentPage, searchResultLength, searchParams) => {
+  const pageLinks = document.getElementsByClassName("page-link");
+  const totalPages = Math.ceil(searchResultLength / 20);
+
+  if (pageLinks.length < 5) return;
+
+  // First (Previous) and Last (Next) buttons
+  pageLinks[0].href =
+    currentPage > 1
+      ? `/Search?search=${searchParams}&page=${currentPage - 1}`
+      : "#";
+  pageLinks[0].parentElement.classList.toggle("disabled", currentPage === 1);
+
+  pageLinks[4].href =
+    currentPage < totalPages
+      ? `/Search?search=${searchParams}&page=${currentPage + 1}`
+      : "#";
+  pageLinks[4].parentElement.classList.toggle(
+    "disabled",
+    currentPage >= totalPages
+  );
+
+  // Middle 3 page numbers
+  const setPageLink = (element, page, isVisible = true) => {
+    element.href =
+      page > 0 ? `/Search?search=${searchParams}&page=${page}` : "#";
+    element.textContent = page > 0 ? page : "";
+    element.style.display = isVisible ? "block" : "none";
+    if (page === currentPage) element.parentElement.classList.add("active");
+  };
+
+  if (totalPages <= 3 || currentPage <= 2) {
+    setPageLink(pageLinks[1], 1);
+    setPageLink(pageLinks[2], totalPages >= 2 ? 2 : 0, totalPages >= 2);
+    setPageLink(pageLinks[3], totalPages >= 3 ? 3 : 0, totalPages >= 3);
+  } else if (currentPage >= totalPages - 1) {
+    setPageLink(pageLinks[1], totalPages - 2);
+    setPageLink(pageLinks[2], totalPages - 1);
+    setPageLink(pageLinks[3], totalPages);
+  } else {
+    setPageLink(pageLinks[1], currentPage - 1);
+    setPageLink(pageLinks[2], currentPage);
+    setPageLink(pageLinks[3], currentPage + 1);
+  }
 };
 
 function displayRecentItems(products) {
