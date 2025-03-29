@@ -13,7 +13,7 @@ function fetchProductsByCategory(selectedCategory, viewIndex) {
 
     document.getElementById(
       `category_select${viewIndex}`
-    ).style.backgroundColor = "white";
+    ).style.backgroundColor = "#000137";
 
     const categoryBody = document.getElementById("category_body");
     categoryBody.innerHTML = "";
@@ -46,7 +46,7 @@ function fetchProductData() {
 function resetCategoryStyles() {
   for (let i = 1; i <= 5; i++) {
     document.getElementById(`category_select${i}`).style.backgroundColor =
-      "#000137";
+      "white";
   }
 }
 

@@ -75,63 +75,6 @@
 
     <div id="loader"></div>
     <script src="https://js.paystack.co/v1/inline.js"></script>
-
-    <!-- <script type="module">
-      import { uploadAdminOrder } from "./main.js";
-
-      var details = JSON.parse(localStorage.getItem("details"));
-      function payWithPaystack(e) {
-        var email = details["email"];
-        var amount = sessionStorage.getItem("amount");
-        e.preventDefault();
-        let handler = PaystackPop.setup({
-          key: "pk_test_3ad69a99a3675265dacd246fee09d0ec0a4b3a1b", // Replace with your public key
-          email: email,
-          amount: amount * 100,
-          ref: "Mudia" + Math.floor(Math.random() * 1000000000 + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
-
-          onClose: function () {},
-          callback: function (response) {
-            let message = "Payment complete! Reference: " + response.reference;
-
-            fetch(
-              "https://api.paystack.co/transaction/verify/" +
-                response.reference,
-              {
-                headers: {
-                  Authorization:
-                    "Bearer sk_test_e3a39ba27e5d0722ddc6f1e89afaa4bd9c180225",
-                },
-              }
-            )
-              .then((res) => res.json())
-              .then((data) => {
-                var status = data["data"]["status"];
-                if (status === "success") {
-                  var s_email = data["data"]["customer"]["email"];
-                  var reference = data["data"]["reference"];
-                  var date = new Date();
-                  var date_time =
-                    date.getMonth() +
-                    1 +
-                    "/" +
-                    date.getDate() +
-                    "/" +
-                    date.getFullYear() +
-                    " " +
-                    date.getHours() +
-                    ":" +
-                    date.getMinutes();
-                  document.getElementById("body").style.display = "none";
-                  document.getElementById("loader").style.display = "block";
-                  uploadAdminOrder();
-                }
-              });
-          },
-        });
-        handler.openIframe();
-      }
-    </script> -->
     <script src="../js/bootstrap.bundle.js"></script>
   </body>
 </html>
