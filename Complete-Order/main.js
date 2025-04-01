@@ -28,9 +28,12 @@ window.onload = function () {
   } else {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
-      if (user) {
+      if (user && userDetails) {
         userId = user.uid;
-        loadCartDetails();
+        if (userDetails.hostel === "None") {
+          alert("Please select your hostel before proceeding.");
+          window.location = "../Address-Book/";
+        } else loadCartDetails();
       } else {
         window.location.replace("../Login");
       }
@@ -256,7 +259,7 @@ function payWithPaystack(e) {
   const userDetails = JSON.parse(localStorage.getItem("details"));
 
   var handler = PaystackPop.setup({
-    key: "pk_test_3ad69a99a3675265dacd246fee09d0ec0a4b3a1b",
+    key: "pk_live_8cd17500e1d21d97dbb4e7db77e58daa054d8b1d",
     email: userDetails["email"],
     amount: totalAmount * 100,
 
@@ -268,7 +271,7 @@ function payWithPaystack(e) {
         {
           headers: {
             Authorization:
-              "Bearer sk_test_ec1097e6f76e60434bf2d1ce622377a544621b21",
+              "Bearer sk_live_07ddc6fa4eb92cb9b7458f7405f93c9e0d588179",
           },
         }
       )

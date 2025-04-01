@@ -44,7 +44,12 @@
     <div id="item_body">
       <div class="vendor-info">
         <img src="" id="business-icon" />
-        <div id="vendor-name">MudiaStore</div>
+        <div class="d-flex flex-column">
+          <div id="vendor-name"></div>
+          <div id="vendor-address"></div>
+          <div id="vendor-phone"></div>
+          <div id="vendor-categories"></div>
+        </div>
       </div>
 
       <div class="options">
@@ -208,6 +213,12 @@
           id="phone"
           class="form-control mb-3"
           placeholder="Additional Phone Number (Optional)"
+        />
+        <input
+          type="text"
+          id="business-address"
+          class="form-control mb-3"
+          placeholder="Business Address (Optional)"
         />
 
         <div class="mb-2">Select Business Categories:</div>

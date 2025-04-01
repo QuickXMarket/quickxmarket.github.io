@@ -268,9 +268,10 @@ a {
 
 #business-icon {
   width: 120px;
-  height: 130px;
-  object-fit: contain;
+  height: 120px;
+  object-fit: scale-down;
   margin-left: 20px;
+  border-radius: 50%;
 }
 
 #vendor-name {
@@ -278,70 +279,13 @@ a {
   margin-left: 30px;
   color: white;
 }
-
-/* .drop-area {
-  width: 280px;
-  height: 200px;
-  border: 2px dashed #ccc;
-  color: black;
-  text-align: center;
-  background-color: white;
-  padding: 25px;
-  font-family: Arial, sans-serif;
-  margin: 20px auto;
-}
-
-.drop-instruction {
-  font-size: 18px;
-}
-
-.file-list {
-  list-style: none;
-  padding: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  text-overflow: ellipsis;
-  height: 40px;
-}
-
-.file-item {
-  margin-bottom: 10px;
-}
-
-.floating-body {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  overflow-y: auto;
-  z-index: 9999;
+#vendor-address,
+#vendor-phone,
+#vendor-categories {
+  font-size: 16px;
+  margin-left: 30px;
   color: white;
 }
-
-textarea {
-  height: 120px;
-}
-.floating-form {
-  width: 300px;
-  position: relative;
-  padding: 10px;
-  background-color: #000137;
-  border: 1px solid #ccc;
-  display: flex;
-  flex-direction: column;
-  color: white;
-  align-items: center;
-}
-
-.floating-form input,
-.floating-body textarea {
-  width: 100%;
-  background-color: white;
-} */
 
 .floating-body {
   position: fixed;

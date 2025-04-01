@@ -29,6 +29,7 @@ var details = JSON.parse(localStorage.getItem("details")),
   SelectedCategories = [],
   name,
   phone,
+  address,
   price,
   description,
   quantity,
@@ -86,6 +87,8 @@ export function getShopData() {
   get(child(dbref, "VendorsDetails/" + userID))
     .then((snapshot) => {
       vendorDetails = snapshot.val();
+      const vendorCat = vendorDetails["vendorCat"].join(", ");
+      console.log(vendorCat);
 
       document.getElementById("business-icon").src =
         vendorDetails["vendorLogo"] !== ""
@@ -94,6 +97,11 @@ export function getShopData() {
 
       document.getElementById("vendor-name").innerText =
         vendorDetails["vendorName"];
+      document.getElementById("vendor-phone").innerText =
+        vendorDetails["addPhoneNo"] || "";
+      document.getElementById("vendor-address").innerText =
+        vendorDetails["vendorAddress"] || "";
+      document.getElementById("vendor-categories").innerText = vendorCat || "";
 
       vendorName = vendorDetails["vendorName"];
       vendorId = vendorDetails["vendorId"];
@@ -268,6 +276,7 @@ regCategoriesSelect();
 function reg_Checkdata(e) {
   e.preventDefault();
   name = document.getElementById("business-name").value;
+  address = document.getElementById("business-address").value;
   phone = document.getElementById("phone").value;
 
   if (SelectedIndexes.length > 0) {
@@ -277,7 +286,6 @@ function reg_Checkdata(e) {
       SelectedCategories.push(categories[index])
     );
     logoImg !== "" ? uploadFile(logoImg, "VendorLogo") : RegisterVendor();
-    console.log(logoImg);
   } else {
   }
 }
@@ -291,6 +299,7 @@ function RegisterVendor() {
     vendorName: name,
     vendorId: id,
     addPhoneNo: phone,
+    vendorAddress: address,
     vendorLogo: logoImgUrl,
     vendorCat: SelectedCategories,
   })
