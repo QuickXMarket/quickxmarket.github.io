@@ -212,16 +212,18 @@ function uploadProduct() {
 
   set(ref(db, "ProductsDetails/" + key), productDetails)
     .then(() => {
-      ItemImgs = [];
-      ItemImgsUrl = [];
-      ItemImgs = [];
-      ItemImgsUrl = [];
-      document.getElementById("upload-item").style.display = "none";
-      document.getElementById("uploadLoader").style.display = "none";
       update(ref(db, `VendorsDetails/${userID}`), {
-        products: [...RegisteredItems, itemCode],
+        products: [...(RegisteredItems || []), itemCode],
       })
-        .then(() => getShopData())
+        .then(() => {
+          ItemImgs = [];
+          ItemImgsUrl = [];
+          ItemImgs = [];
+          ItemImgsUrl = [];
+          document.getElementById("upload-item").style.display = "none";
+          document.getElementById("uploadLoader").style.display = "none";
+          getShopData();
+        })
         .catch((error) =>
           console.error("Error updating vendor products:", error)
         );

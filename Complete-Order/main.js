@@ -191,9 +191,11 @@ function uploadVendorOrder(orderId) {
         const vendors = snapshot.val();
         const vendorOrders = {};
         cartList.forEach((item) => {
-          const vendorKey = Object.keys(vendors).find((vendor) =>
-            vendors[vendor].products.includes(item.code)
-          );
+          const vendorKey = Object.keys(vendors).find((vendor) => {
+            if (!vendors[vendor].products) return false;
+            return vendors[vendor].products.includes(item.code);
+          });
+
           if (!vendorKey) return;
           if (!vendorOrders[vendorKey]) {
             vendorOrders[vendorKey] = [];
