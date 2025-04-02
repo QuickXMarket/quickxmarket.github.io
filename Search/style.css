@@ -23,7 +23,7 @@ body {
   font-size: 16px;
 }
 #div1 {
-  background-color: #000137;
+  background-color: var(--main-color);
   width: 100%;
   display: flex;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -40,7 +40,7 @@ body {
   margin: 10px 5px 10px 10px;
 }
 .notification {
-  color: white;
+  color: var(--sub-color);
   text-decoration: none;
   position: relative;
   display: inline-block;
@@ -65,6 +65,11 @@ body {
   background: red;
   color: white;
 }
+
+.navbar-nav .nav-link {
+  color: var(--sub-color) !important;
+}
+
 #loader {
   border: 9px solid #f3f3f3;
   border-top: 9px solid #000137;
@@ -88,6 +93,7 @@ body {
 
 #listBody {
   min-height: 300px;
+  max-width: none;
 }
 
 #list {
@@ -98,15 +104,17 @@ body {
   width: 80px;
   height: 100px;
 }
-.items_view {
+
+.itemsInnerBody {
   background-color: white;
   padding: 5px;
-  margin: 8px 0;
+  margin: 8px;
   border-radius: 15px;
   align-content: center;
   text-decoration: none;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
 .controls img {
   height: 30px;
   cursor: pointer;
@@ -130,6 +138,9 @@ body {
     .items_view {
       width: 140px;
     }
+    .itemsInnerBody {
+      margin: 0px;
+    }
   }
   @media (min-width: 360px) {
     .items_view {
@@ -146,9 +157,7 @@ body {
       width: 140px;
     }
   }
-  #listBody {
-    min-height: auto;
-  }
+
   .items_view {
     margin: 8px;
     height: auto;
@@ -173,12 +182,20 @@ body {
     display: none;
   }
 }
+
+.page-item.active .page-link {
+  background-color: #000137 !important;
+  border-color: #000137 !important;
+  color: white !important;
+}
+
 .item_name {
   font-size: 18px;
   color: black;
-  padding: 8px;
+  padding: 0 8px;
   height: 30px;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 .item_price {
   color: #000137;

@@ -27,7 +27,7 @@ body {
 }
 
 .notification {
-  color: white;
+  color: var(--sub-color);
   text-decoration: none;
   position: relative;
   display: inline-block;

@@ -1,4 +1,5 @@
 import { getDatabase, ref, get, child } from "../firebase.js";
+import getThemeColor from "../Utilities/ColorTheme.js";
 
 const db = getDatabase();
 let cartItems = [];
@@ -6,7 +7,10 @@ let totalPrice = 0;
 let products = {};
 const formatter = new Intl.NumberFormat("en-US");
 
-window.onload = () => fetchProductDetails();
+window.onload = () => {
+  getThemeColor();
+  fetchProductDetails();
+};
 
 function fetchProductDetails() {
   document.getElementById("loader").style.display = "block";

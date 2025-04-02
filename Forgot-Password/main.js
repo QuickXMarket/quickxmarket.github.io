@@ -1,4 +1,5 @@
 import { getAuth, sendPasswordResetEmail } from "../firebase.js";
+import getThemeColor from "../Utilities/ColorTheme.js";
 
 var email;
 
@@ -11,6 +12,10 @@ function submit(e) {
   send_email();
   document.getElementById("loader").setAttribute("style", "display:block");
 }
+
+onload = () => {
+  getThemeColor();
+};
 
 function send_email() {
   const auth = getAuth();

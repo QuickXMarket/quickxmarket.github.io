@@ -29,10 +29,7 @@ body {
   display: flex;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-#items_body {
-  align-items: center;
-  justify-content: center;
-}
+
 #search {
   color: grey;
   width: 100%;
@@ -75,6 +72,17 @@ body {
   background: red;
   color: white;
 }
+@media (min-width: 768px) {
+  .vw-md-25 {
+    width: 25vw !important;
+  }
+}
+@media (max-width: 767px) {
+  .vw-md-25 {
+    width: 40vw !important;
+  }
+}
+
 #loader {
   border: 9px solid #f3f3f3;
   border-top: 9px solid #000137;

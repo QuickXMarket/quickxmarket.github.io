@@ -6,11 +6,13 @@ import {
   getAuth,
   onAuthStateChanged,
 } from "../firebase.js";
+import getThemeColor from "../Utilities/ColorTheme.js";
 
 const userDetails = JSON.parse(localStorage.getItem("details"));
 const db = getDatabase();
 
-window.onload = function () {
+window.onload = () => {
+  getThemeColor();
   const auth = getAuth();
 
   onAuthStateChanged(auth, (user) => {

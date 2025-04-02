@@ -1,3 +1,4 @@
+import getThemeColor from "../../Utilities/ColorTheme";
 import {
   getDatabase,
   ref,
@@ -17,6 +18,7 @@ let vendorDetails;
 const formatter = new Intl.NumberFormat("en-US");
 
 onload = () => {
+  getThemeColor();
   const searchParams = new URLSearchParams(window.location.search);
   orderId = searchParams.get("order");
   const auth = getAuth();

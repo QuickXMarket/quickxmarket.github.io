@@ -7,6 +7,7 @@ import {
   child,
   update,
 } from "../firebase.js";
+import getThemeColor from "../Utilities/ColorTheme.js";
 
 const db = getDatabase();
 let details = JSON.parse(localStorage.getItem("details"));
@@ -14,6 +15,7 @@ let userDetails = {};
 let editFormIndex = null;
 
 window.onload = () => {
+  getThemeColor();
   const auth = getAuth();
   onAuthStateChanged(auth, (user) => {
     user ? getAddress() : window.location.replace("../Login");

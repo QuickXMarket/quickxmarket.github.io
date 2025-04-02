@@ -6,10 +6,10 @@
 
 body {
   background-color: white;
-  padding-top: 0px;
+  /* padding-top: 0px;
   margin-top: -1px;
   margin-left: -1px;
-  margin-right: -1px;
+  margin-right: -1px; */
 }
 p {
   padding: -1px;
@@ -72,3 +72,8 @@ button.btn[type="submit"] {
   color: var(--sub-color);
   border: none;
 }
+
+.w-25vh {
+  width: 25vh !important;
+}
+

@@ -1,4 +1,5 @@
 import { get, child, getDatabase, ref } from "../firebase.js";
+import getThemeColor from "../Utilities/ColorTheme.js";
 
 let vendorId;
 const db = getDatabase();
@@ -6,6 +7,7 @@ const numberFormatter = new Intl.NumberFormat("en-US");
 const recentItems = JSON.parse(localStorage.getItem("recent")) || [];
 
 window.onload = () => {
+  getThemeColor();
   updateCartCount();
 
   vendorId = new URLSearchParams(window.location.search).get("vendor");

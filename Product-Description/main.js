@@ -1,4 +1,5 @@
 import { getDatabase, ref, get, child } from "../firebase.js";
+import getThemeColor from "../Utilities/ColorTheme.js";
 
 const db = getDatabase();
 let products;
@@ -6,6 +7,7 @@ const recentItems = JSON.parse(localStorage.getItem("recent")) || [];
 const internationalNumberFormat = new Intl.NumberFormat("en-US");
 
 window.onload = () => {
+  getThemeColor();
   const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
   const cartCount = cartItems.length;
 

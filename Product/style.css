@@ -42,7 +42,7 @@ body {
   }
 }
 .notification {
-  color: white;
+  color: var(--sub-color);
   text-decoration: none;
   position: relative;
   display: inline-block;
@@ -323,5 +323,5 @@ p {
   height: 40px;
   padding: 8px;
   border-radius: 50%;
-  object-fit: scale-down;
+  object-fit: cover;
 }

@@ -1,4 +1,7 @@
 import { getDatabase, get, update, child, ref } from "../firebase.js";
+import getThemeColor from "../Utilities/ColorTheme.js";
+
+let primaryColor, secondaryColor;
 
 const formatCurrency = (num) =>
   "₦" + new Intl.NumberFormat("en-US").format(num);
@@ -12,16 +15,20 @@ function toggleVisibility(element1Id, element2Id) {
   }
 }
 
+onload = () => {
+  ({ mainColor: primaryColor, subColor: secondaryColor } = getThemeColor());
+};
+
 // Set up event listeners for options
 Object.values(document.getElementsByClassName("option_view")).forEach(
   (element, index) => {
     element.addEventListener("click", () => {
       Object.values(document.getElementsByClassName("option_select")).forEach(
-        (select) => (select.style.backgroundColor = "#000137")
+        (select) => (select.style.backgroundColor = primaryColor)
       );
       document.getElementsByClassName("option_select")[
         index
-      ].style.backgroundColor = "white";
+      ].style.backgroundColor = secondaryColor;
 
       if (index === 0) toggleVisibility("itemList", "orderList");
       else if (index === 1) toggleVisibility("orderList", "itemList");
@@ -64,8 +71,6 @@ export function getVendorOrders(vendorDetails) {
     });
   }
 }
-
-
 
 function formatDate(timestamp) {
   const date = new Date(timestamp);

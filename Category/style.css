@@ -60,10 +60,10 @@ img.category_image {
 
 .category_select {
   height: 20%;
-  background-color: var(--sub-color);
+  background-color: var(--main-color);
 }
 #category_select1 {
-  background-color: var(--main-color);
+  background-color: var(--sub-color);
 }
 .category_view {
   background-color: var(--main-color);

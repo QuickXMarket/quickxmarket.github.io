@@ -1,4 +1,5 @@
 import { getDatabase, ref, get, child } from "../firebase.js";
+import getThemeColor from "../Utilities/ColorTheme.js";
 
 let savedItems, products, totalProducts, productValue;
 let cartItems = [];
@@ -305,4 +306,7 @@ function createButton(type, onClick) {
   return button;
 }
 
-window.onload = loadSavedItems;
+window.onload = () => {
+  getThemeColor();
+  loadSavedItems();
+};

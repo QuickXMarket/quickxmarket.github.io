@@ -11,12 +11,12 @@
     <link rel="icon" href="../images/cart.png" sizes="16×16" />
   </head>
   <body>
-    <div id="div1">
+    <!-- <div id="div1">
       <div id="option"></div>
       <div class="div2" style="color: #000137; vertical-align: middle">
         <span>Log in/Register</span>
       </div>
-    </div>
+    </div> -->
     <div class="row mx-0">
       <div
         class="col-12 col-md d-flex align-items-center justify-content-center"
@@ -26,7 +26,10 @@
         </h1>
       </div>
       <div class="col-12 col-md">
-        <div id="authModal" class="modal" tabindex="-1">
+        <div class="d-flex justify-content-center w-100">
+          <img src="../images/cart.png" id="logo" class="w-25vh" />
+        </div>
+        <div id="authModal" class="modal h-auto" tabindex="-1">
           <div class="modal-dialog">
             <div class="modal-content shadow-lg">
               <div class="modal-header d-flex justify-content-between">
@@ -53,7 +56,7 @@
               </div>
               <div class="modal-body">
                 <div id="loginForm">
-                  <form id="loginBoxes" class="container p-4 bg-white mx-0">
+                  <form id="loginBoxes" class="bg-white mx-0">
                     <input
                       required
                       type="email"
@@ -266,7 +269,7 @@
                     <button
                       id="registerSubmit"
                       type="submit"
-                      class="btn  w-100 mt-3 shadow-sm"
+                      class="btn w-100 mt-3 shadow-sm"
                     >
                       Done
                     </button>

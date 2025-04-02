@@ -21,37 +21,35 @@
   </head>
   <body>
     <nav id="div1" class="navbar navbar-expand-lg navbar-light">
-      <div class="container-fluid">
-        <button
-          id="option"
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <div class="notification">
-            <img src="images/ic_dehaze_black_24dp.png" alt="" />
-            <span id="cart_num" class="badge">0</span>
-          </div>
-        </button>
+      <div class="container-fluid flex-nowrap">
+        <div>
+          <div class="navbar-nav flex-row">
+            <a class="nav-link" href="#">
+              <span class="d-none d-lg-block">Home</span>
+              <img class="d-lg-none" src="images/home-icon.png" />
+            </a>
 
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-link" href="#">Home</a>
-            <a class="nav-link" href="./My-Cart/"
-              ><div class="notification">
-                Cart
+            <a class="nav-link" href="./My-Cart/">
+              <div class="notification">
+                <span class="d-none d-lg-block">Cart</span>
+                <img class="d-lg-none" src="images/cart-icon.png" />
                 <span id="cart_num2" class="a_badge">0</span>
-              </div></a
-            >
-            <a class="nav-link" href="./Liked-Items/">Liked Items</a>
-            <a class="nav-link" href="./My-Orders/">Your Orders</a>
+              </div>
+            </a>
+
+            <a class="nav-link" href="./Liked-Items/">
+              <span class="d-none d-lg-block">Liked Items</span>
+              <img class="d-lg-none" src="images/heart-icon.png" />
+            </a>
+
+            <a class="nav-link" href="./My-Orders/">
+              <span class="d-none d-lg-block">Your Orders</span>
+              <img class="d-lg-none" src="images/orders-icon.png" />
+            </a>
           </div>
         </div>
-        <form class="d-flex" id="form">
+
+        <form class="d-flex vw-md-25" id="form">
           <input
             class="form-control me-2"
             type="search"
@@ -59,13 +57,16 @@
             id="div2"
             list="history"
           />
-          <datalist id="history"> </datalist>
+          <datalist id="history"></datalist>
         </form>
       </div>
     </nav>
 
     <div class="container" id="main__menu">
-      <div class="row" id="items_body"></div>
+      <div
+        class="row d-flex align-items-center justify-content-start w-auto"
+        id="items_body"
+      ></div>
     </div>
 
     <div id="loader"></div>

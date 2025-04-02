@@ -1,4 +1,5 @@
 import { getDatabase, ref, get, child } from "./firebase.js";
+import getThemeColor from "./Utilities/ColorTheme.js";
 
 const db = getDatabase();
 const itemCodes = [];
@@ -53,7 +54,7 @@ function setItem(item) {
 function updateCartCount() {
   const cartList = JSON.parse(localStorage.getItem("cart")) || [];
   const cartCount = cartList.length || 0;
-  document.getElementById("cart_num").textContent = cartCount;
+  // document.getElementById("cart_num").textContent = cartCount;
   document.getElementById("cart_num2").textContent = cartCount;
 }
 
@@ -121,4 +122,5 @@ document.getElementById("div2").addEventListener("search", searchItem);
 window.onload = function () {
   updateCartCount();
   fetchProducts();
+  getThemeColor();
 };

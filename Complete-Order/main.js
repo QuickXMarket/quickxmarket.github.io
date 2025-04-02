@@ -8,6 +8,7 @@ import {
   getAuth,
   onAuthStateChanged,
 } from "../firebase.js";
+import getThemeColor from "../Utilities/ColorTheme.js";
 
 const db = getDatabase();
 let cartList = [];
@@ -22,7 +23,8 @@ const deliveryCharge = 100;
 const userDetails = JSON.parse(localStorage.getItem("details"));
 cartList = JSON.parse(localStorage.getItem("cart"));
 
-window.onload = function () {
+window.onload = () => {
+  getThemeColor();
   if (!cartList || cartList.length === 0) {
     window.location = "../My-Cart/";
   } else {

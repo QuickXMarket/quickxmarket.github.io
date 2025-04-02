@@ -1,11 +1,16 @@
 import { getDatabase, ref, get, child } from "../firebase.js";
+import getThemeColor from "../Utilities/ColorTheme.js";
 
 const database = getDatabase();
 let productData = null;
 let totalProducts = 0;
 const numberFormat = new Intl.NumberFormat("en-US");
+let primaryColor, secondaryColor;
 
-window.onload = fetchProductData;
+window.onload = () => {
+  ({ mainColor: primaryColor, subColor: secondaryColor } = getThemeColor());
+  fetchProductData();
+};
 
 function fetchProductsByCategory(selectedCategory, viewIndex) {
   if (productData) {
@@ -13,7 +18,7 @@ function fetchProductsByCategory(selectedCategory, viewIndex) {
 
     document.getElementById(
       `category_select${viewIndex}`
-    ).style.backgroundColor = "#000137";
+    ).style.backgroundColor = secondaryColor;
 
     const categoryBody = document.getElementById("category_body");
     categoryBody.innerHTML = "";
@@ -46,7 +51,7 @@ function fetchProductData() {
 function resetCategoryStyles() {
   for (let i = 1; i <= 5; i++) {
     document.getElementById(`category_select${i}`).style.backgroundColor =
-      "white";
+      primaryColor;
   }
 }
 

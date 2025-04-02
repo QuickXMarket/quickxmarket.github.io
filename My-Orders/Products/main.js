@@ -1,3 +1,4 @@
+import getThemeColor from "../../Utilities/ColorTheme";
 import {
   getDatabase,
   ref,
@@ -18,6 +19,7 @@ const formatter = new Intl.NumberFormat("en-US");
 const recentItems = JSON.parse(localStorage.getItem("recent")) || [];
 
 onload = () => {
+  getThemeColor();
   const searchParams = new URLSearchParams(window.location.search);
   orderId = searchParams.get("order");
   const auth = getAuth();

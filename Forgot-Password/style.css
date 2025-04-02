@@ -1,3 +1,13 @@
+:root {
+  --main-color: #000137;
+  --main-hover-color: #282f5f;
+  --sub-color: white;
+  --main-image-filter: invert(6%) sepia(63%) saturate(3693%) hue-rotate(232deg)
+    brightness(91%) contrast(117%);
+  --sub-image-filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(73deg)
+    brightness(104%) contrast(101%);
+}
+
 body {
   background-color: white;
   padding-top: 0px;
@@ -14,8 +24,14 @@ p {
   font-size: 25px;
   padding: 0px;
 }
+
+.div2 span {
+  color: var(--sub-color);
+  vertical-align: middle;
+}
+
 #div1 {
-  background-color: #000137;
+  background-color: var(--main-color);
   width: 100%;
   display: flex;
   vertical-align: middle;

@@ -1,4 +1,5 @@
 import { get, child, getDatabase, ref } from "../firebase.js";
+import getThemeColor from "../Utilities/ColorTheme.js";
 
 const db = getDatabase();
 const numberFormatter = new Intl.NumberFormat("en-US");
@@ -6,6 +7,7 @@ const recentItems = JSON.parse(localStorage.getItem("recent")) || [];
 let page;
 
 window.onload = () => {
+  getThemeColor();
   updateCartCount();
   const params = new URLSearchParams(window.location.search);
   const searchQuery = params.get("search");
@@ -87,9 +89,8 @@ const displayProduct = (product) => {
   const cartItem = cartItems.find((item) => item.code === product["code"]);
 
   const productHTML = `
-    <div class="col-sm-6 col-lg-4 items_view d-sm-inline-flex" id="${
-      product["code"]
-    }">
+  <div class= "col-sm-6 col-lg-4 d-sm-inline-flex items_view p-0">
+    <div class=" itemsInnerBody d-sm-inline-flex" id="${product["code"]}">
       <a href="${productURL}" class="d-sm-inline-flex text-decoration-none">
         <img class="item_image" src="${product["url"][0]}">
         <div>
@@ -110,6 +111,7 @@ const displayProduct = (product) => {
             `
         }
       </div>
+    </div>
     </div>
 `;
 

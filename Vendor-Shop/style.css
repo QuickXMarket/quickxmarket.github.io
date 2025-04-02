@@ -1,3 +1,13 @@
+:root {
+  --main-color: #000137;
+  --main-hover-color: #282f5f;
+  --sub-color: white;
+  --main-image-filter: invert(6%) sepia(63%) saturate(3693%) hue-rotate(232deg)
+    brightness(91%) contrast(117%);
+  --sub-image-filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(73deg)
+    brightness(104%) contrast(101%);
+}
+
 body {
   background-color: #eceff1;
 }
@@ -13,7 +23,7 @@ body {
   font-size: 16px;
 }
 #div1 {
-  background-color: #000137;
+  background-color: var(--main-color);
   width: 100%;
   display: flex;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -29,8 +39,13 @@ body {
   object-fit: scale-down;
   margin: 10px 5px 10px 10px;
 }
+
+.navbar-nav .nav-link {
+  color: var(--sub-color) !important;
+}
+
 .notification {
-  color: white;
+  color: var(--sub-color);
   text-decoration: none;
   position: relative;
   display: inline-block;
@@ -92,7 +107,7 @@ body {
   width: 40px;
   height: 40px;
   padding: 8px;
-  object-fit: scale-down;
+  object-fit: cover;
   border-radius: 50%;
 }
 .rightArrowImg {
@@ -109,7 +124,7 @@ body {
 .items_view {
   background-color: white;
   padding: 5px;
-  margin: 8px 0;
+  margin: 8px;
   border-radius: 15px;
   align-content: center;
   text-decoration: none;

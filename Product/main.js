@@ -1,4 +1,5 @@
 import { getDatabase, ref, get, child } from "../firebase.js";
+import getThemeColor from "../Utilities/ColorTheme.js";
 
 const db = getDatabase();
 const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
@@ -15,6 +16,7 @@ const cartButton = document.getElementById("add-box");
 const saveButton = document.getElementById("save");
 
 window.onload = () => {
+  getThemeColor();
   updateCartCount();
   loadProductDetails();
 };
