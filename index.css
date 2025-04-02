@@ -12,6 +12,7 @@ body {
   background-color: #eceff1;
   /* margin-bottom: 55px; */
   height: 100vh;
+  visibility: hidden;
 }
 #div2 {
   width: 100%;

@@ -13,6 +13,11 @@ body {
   margin-bottom: 18px;
   background-color: gainsboro;
 }
+
+body {
+  visibility: hidden;
+}
+
 #body {
   width: 100%;
   display: none;

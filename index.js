@@ -124,3 +124,4 @@ window.onload = function () {
   fetchProducts();
   getThemeColor();
 };
+

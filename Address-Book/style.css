@@ -13,6 +13,7 @@ body {
   padding-top: 0px;
   margin-top: -1px;
   margin-bottom: 55px;
+  visibility: hidden;
 }
 p {
   cursor: default;

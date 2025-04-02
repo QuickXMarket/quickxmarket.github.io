@@ -13,6 +13,11 @@ body {
   margin-bottom: 55px;
   background-color: gainsboro;
 }
+
+body {
+  visibility: hidden;
+}
+
 #loader {
   border: 9px solid #f3f3f3;
   border-top: 9px solid #000137;

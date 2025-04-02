@@ -15,6 +15,7 @@ body {
   margin-left: 0;
   background-color: #eeeeee;
   width: 100%;
+  visibility: hidden;
 
   height: 100%;
   margin-right: -1px;

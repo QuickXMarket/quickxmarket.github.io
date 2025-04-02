@@ -37,6 +37,8 @@ const getThemeColor = () => {
     "--sub-image-filter",
     subImageFilter
   );
+
+  document.body.style.visibility = "visible";
   return {
     mainColor,
     subColor,

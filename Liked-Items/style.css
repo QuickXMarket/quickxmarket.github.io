@@ -18,6 +18,7 @@ body {
 
   height: 100%;
   margin-right: -1px;
+  visibility: hidden;
 }
 p {
   cursor: default;
@@ -31,7 +32,6 @@ p {
   font-size: 25px;
   padding: 0px;
 }
-
 
 .div2 span {
   color: var(--sub-color);
