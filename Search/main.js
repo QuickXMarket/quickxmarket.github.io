@@ -15,7 +15,7 @@ window.onload = () => {
 
   document.getElementById("div2").value = searchQuery;
   document.getElementById("title").textContent = searchQuery;
-  console.log(page, searchQuery);
+  
   if (searchQuery) fetchProductDetails(searchQuery);
   else window.location.href = "/";
 };
@@ -40,18 +40,16 @@ const fetchProductDetails = (searchQuery) => {
         const products = snapshot.val();
         const productKeys = Object.keys(products).reverse();
 
-        const filteredKeys = searchQuery
-          ? productKeys.filter((key) =>
-              products[key]["name"]
-                .toLowerCase()
-                .includes(searchQuery.toLowerCase())
-            )
-          : productKeys; // If no search query, use all products
+        const filteredKeys = productKeys.filter((key) =>
+          products[key]["name"]
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+        );
 
         const searchResultLength = filteredKeys.length;
         const totalPages = Math.ceil(searchResultLength / 20);
 
-        if (page > totalPages)
+        if (totalPages > 0 && page > totalPages)
           window.location.href = `/Search?search=${searchQuery}`;
 
         const itemsPerPage = 20;
@@ -71,6 +69,7 @@ const fetchProductDetails = (searchQuery) => {
           document.getElementById("paginationBody").style.display = "none";
         } else {
           addEventListeners();
+          document.getElementById("paginationBody").style.display = "flex";
           setPaginationHref(parseInt(page), searchResultLength, searchQuery);
         }
 
@@ -205,6 +204,7 @@ const handleSearch = () => {
     `${window.location.protocol}//${window.location.host}/Search/`
   );
   searchURL.searchParams.append("search", searchQuery);
+
   window.location = searchURL;
 };
 
