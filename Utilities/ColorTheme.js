@@ -1,11 +1,11 @@
 const getThemeColor = () => {
-  let currentTheme = "light";
-  let theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+  let currentTheme = localStorage.getItem("theme");
+  let systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
     : "light";
-  console.log(theme);
+  if (currentTheme === "system") currentTheme = systemTheme;
   let mainColor, subColor, mainHoverColor, mainImageFilter, subImageFilter;
-  if (currentTheme === "dark" || !currentTheme) {
+  if (currentTheme === "default" || !currentTheme) {
     mainColor = "#000137";
     subColor = "white";
     mainHoverColor = "#282f5f";

@@ -24,6 +24,16 @@ import getThemeColor from "../Utilities/ColorTheme.js";
 
 window.onload = function () {
   getThemeColor();
+  const currentTheme = localStorage.getItem("theme");
+  if (currentTheme) {
+    const radio = document.querySelector(
+      `input[name="theme"][value="${currentTheme}"]`
+    );
+    if (radio) {
+      radio.checked = true;
+    }
+  }
+
   var cart_listnum = JSON.parse(localStorage.getItem("cart"));
   if (cart_listnum !== null && cart_listnum.length !== 0) {
     document.getElementById("cart_num").textContent = cart_listnum.length;
@@ -70,3 +80,29 @@ document.getElementById("login").onclick = function () {
       });
   }
 };
+
+document
+  .getElementById("displayMode")
+  .addEventListener("click", openThemeModal);
+document.getElementById("close").addEventListener("click", closeThemeModal);
+
+function openThemeModal() {
+  document.getElementById("themeModal").style.display = "block";
+}
+
+function closeThemeModal() {
+  document.getElementById("themeModal").style.display = "none";
+}
+
+const themeOptions = document.getElementById("themeOptions");
+
+themeOptions.addEventListener("change", function (event) {
+  if (event.target.name === "theme") {
+    handleThemeChange(event.target.value);
+  }
+});
+
+function handleThemeChange(selectedTheme) {
+  localStorage.setItem("theme", selectedTheme);
+  window.location.reload();
+}
