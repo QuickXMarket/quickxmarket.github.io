@@ -94,7 +94,7 @@ const displayProduct = (product) => {
       </div>
     </a>
   `;
-  console.log(productHTML);
+
   document.getElementById("list").innerHTML += productHTML;
   console.log(document.getElementById("list").innerHTML);
 };
