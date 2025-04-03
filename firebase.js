@@ -32,6 +32,11 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   sendPasswordResetEmail,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+  updatePassword,
+  sendEmailVerification,
+  updateEmail,
 } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js";
 
 import {
@@ -64,4 +69,9 @@ export {
   getDownloadURL,
   storage,
   sendPasswordResetEmail,
+  reauthenticateWithCredential,
+  updatePassword,
+  EmailAuthProvider,
+  sendEmailVerification,
+  updateEmail,
 };
