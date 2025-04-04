@@ -3,9 +3,10 @@ const getThemeColor = () => {
   let systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
     : "light";
+    
   if (currentTheme === "system") currentTheme = systemTheme;
   let mainColor, subColor, mainHoverColor, mainImageFilter, subImageFilter;
-  if (currentTheme === "default" || !currentTheme) {
+  if (currentTheme === "dark" || !currentTheme) {
     mainColor = "#000137";
     subColor = "white";
     mainHoverColor = "#282f5f";

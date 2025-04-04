@@ -66,6 +66,7 @@ function processUserData(user) {
       currentAddressBook[`lastName`]
     }`,
     hostel: currentAddressBook[`hostel`],
+    first: currentAddressBook[`firstName`],
     gender: currentAddressBook[`gender`],
     phone: currentAddressBook[`phone`],
     login: "yes",
