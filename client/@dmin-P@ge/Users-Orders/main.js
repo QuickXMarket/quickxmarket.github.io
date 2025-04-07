@@ -20,7 +20,7 @@ window.onload = () => {
       userID = user.uid;
       checkAccountType();
     } else {
-      window.location.replace("../Login");
+      window.location.replace("../../Login");
     }
   });
 };

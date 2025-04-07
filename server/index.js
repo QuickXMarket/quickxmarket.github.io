@@ -1,0 +1,77 @@
+const express = require("express");
+const nodemailer = require("nodemailer");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const fetch = require("node-fetch");
+require("dotenv").config();
+
+const app = express();
+const port = process.env.PORT || 3001;
+
+app.use(cors({ origin: "*" }));
+app.use(bodyParser.json());
+
+// 📦 Route: Send Email via Nodemailer
+app.post("/api/send-email", async (req, res) => {
+  const { name, email, message } = req.body;
+
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER, // e.g., mudiaosazuwa@gmail.com
+      pass: process.env.EMAIL_PASS, // your email app password
+    },
+  });
+
+  let mailOptions = {
+    from: process.env.ADMIN_EMAIL,
+    to: email, // recipient's email address
+    cc: process.env.ADMIN_EMAIL, // admin email address
+    subject: "New Contact Form Submission",
+    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).send("Email sent successfully");
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res.status(500).send("Failed to send email");
+  }
+});
+
+// 💳 Route: Paystack Payment Verification
+app.post("/verify-payment", async (req, res) => {
+  const { reference } = req.body;
+
+  try {
+    const response = await fetch(
+      `https://api.paystack.co/transaction/verify/${reference}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    if (data.data && data.data.status === "success") {
+      res.status(200).json({
+        verified: true,
+        email: data.data.customer.email,
+        reference: data.data.reference,
+      });
+    } else {
+      res.status(400).json({ verified: false });
+    }
+  } catch (err) {
+    console.error("Verification error:", err);
+    res.status(500).json({ verified: false });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});

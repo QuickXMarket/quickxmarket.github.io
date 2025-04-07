@@ -260,50 +260,34 @@ function generateRandomId(length) {
 
 function payWithPaystack(e) {
   e.preventDefault();
+
   const userDetails = JSON.parse(localStorage.getItem("details"));
 
+  const publicKey = "pk_live_8cd17500e1d21d97dbb4e7db77e58daa054d8b1d";
+
   var handler = PaystackPop.setup({
-    key: "pk_live_8cd17500e1d21d97dbb4e7db77e58daa054d8b1d",
-    email: userDetails["email"],
+    key: publicKey,
+    email: userDetails.email,
     amount: totalAmount * 100,
 
     callback: function (response) {
-      let message = "Payment complete! Reference: " + response.reference;
+      console.log("✅ Payment complete. Verifying...");
 
-      fetch(
-        "https://api.paystack.co/transaction/verify/" + response.reference,
-        {
-          headers: {
-            Authorization:
-              "Bearer sk_live_07ddc6fa4eb92cb9b7458f7405f93c9e0d588179",
-          },
-        }
-      )
+      // ✅ Send reference to your secure server
+      fetch("http://localhost:3001/verify-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reference: response.reference }),
+      })
         .then((res) => res.json())
         .then((data) => {
-          var status = data["data"]["status"];
-          if (status === "success") {
-            var s_email = data["data"]["customer"]["email"];
-            var reference = data["data"]["reference"];
-            var date = new Date();
-            var date_time =
-              date.getMonth() +
-              1 +
-              "/" +
-              date.getDate() +
-              "/" +
-              date.getFullYear() +
-              " " +
-              date.getHours() +
-              ":" +
-              date.getMinutes();
-
-            // Update UI and trigger upload
+          if (data.verified) {
+            // ✅ UI update or next step
             document.getElementById("body").style.display = "none";
             document.getElementById("loader").style.display = "block";
             uploadAdminOrder();
           } else {
-            console.log("Payment verification failed:", response);
+            alert("❌ Payment verification failed");
           }
         })
         .catch((error) => {
@@ -315,6 +299,7 @@ function payWithPaystack(e) {
       alert("Transaction cancelled");
     },
   });
+
   handler.openIframe();
 }
 

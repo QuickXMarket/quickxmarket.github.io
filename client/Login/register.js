@@ -4,6 +4,7 @@ import {
   set,
   getAuth,
   createUserWithEmailAndPassword,
+  sendEmailVerification,
 } from "../firebase.js";
 
 const db = getDatabase();
@@ -18,6 +19,8 @@ let userFormData = {
   gender: "",
   hostel: "",
 };
+
+const auth = getAuth();
 
 const paymentForm = document.getElementById("registerBoxes");
 paymentForm.addEventListener("submit", handleSubmit, false);
@@ -68,7 +71,6 @@ function validateForm({ first, last, email, password, phone, gender, hostel }) {
 
 function signUpUser() {
   const { email, password } = userFormData;
-  const auth = getAuth();
 
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
@@ -101,7 +103,9 @@ function insertUserData(user) {
     id: user.uid,
   })
     .then(() => {
-      setUserInfo(user.uid);
+      sendEmailVerification(auth.currentUser).then(() => {
+        setUserInfo(user.uid);
+      });
     })
     .catch((error) => {
       console.error(error);

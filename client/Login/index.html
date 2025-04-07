@@ -9,6 +9,10 @@
     <script type="module" src="register.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="../images/cart.png" sizes="16×16" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+    />
   </head>
   <body>
     <!-- <div id="div1">
@@ -33,7 +37,11 @@
           <div class="modal-dialog">
             <div class="modal-content shadow-lg">
               <div class="modal-header d-flex justify-content-between">
-                <ul class="nav nav-tabs w-100" id="authTabs">
+                <ul
+                  class="nav nav-tabs w-100"
+                  id="authTabs"
+                  style="display: none"
+                >
                   <li class="nav-item w-50">
                     <a
                       class="nav-link active"
@@ -53,9 +61,10 @@
                     >
                   </li>
                 </ul>
+                <h5 id="verificationMessageHead">Email Verification</h5>
               </div>
               <div class="modal-body">
-                <div id="loginForm">
+                <div id="loginForm " style="display: none">
                   <form id="loginBoxes" class="bg-white mx-0">
                     <input
                       required
@@ -281,6 +290,16 @@
                       style="width: 28px; height: 28px; border-width: 5px"
                     ></div>
                   </form>
+                </div>
+                <div
+                  id="verificationMessage"
+                  class="d-flex flex-column justify-content-center align-items-center"
+                >
+                  <span class="material-symbols-outlined"> mail </span>
+                  <p id="verificationMessageText">
+                    An email verification link has been sent to your registered
+                    email. Please verify your email.
+                  </p>
                 </div>
               </div>
             </div>
