@@ -126,8 +126,10 @@ function setUserInfo(userId) {
     login: "yes",
   };
 
+  document.getElementById("registerForm").style.display = "none";
+  document.getElementById("verificationMessage").style.display = "flex";
+  document.getElementById("verificationMessageHead").style.display = "blocks";
   localStorage.setItem("details", JSON.stringify(details));
-  window.location = "../";
 }
 
 document.getElementById("registerToggle").onclick = function () {

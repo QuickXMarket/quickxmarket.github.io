@@ -37,11 +37,7 @@
           <div class="modal-dialog">
             <div class="modal-content shadow-lg">
               <div class="modal-header d-flex justify-content-between">
-                <ul
-                  class="nav nav-tabs w-100"
-                  id="authTabs"
-                  style="display: none"
-                >
+                <ul class="nav nav-tabs w-100" id="authTabs">
                   <li class="nav-item w-50">
                     <a
                       class="nav-link active"
@@ -61,10 +57,12 @@
                     >
                   </li>
                 </ul>
-                <h5 id="verificationMessageHead">Email Verification</h5>
+                <h5 id="verificationMessageHead" class="d-none">
+                  Email Verification
+                </h5>
               </div>
               <div class="modal-body">
-                <div id="loginForm " style="display: none">
+                <div id="loginForm ">
                   <form id="loginBoxes" class="bg-white mx-0">
                     <input
                       required
@@ -293,13 +291,18 @@
                 </div>
                 <div
                   id="verificationMessage"
-                  class="d-flex flex-column justify-content-center align-items-center"
+                  class="d-none flex-column justify-content-center align-items-center"
                 >
                   <span class="material-symbols-outlined"> mail </span>
                   <p id="verificationMessageText">
                     An email verification link has been sent to your registered
                     email. Please verify your email.
                   </p>
+                  <a href="../">
+                    <button class="btn w-100 mt-3 shadow-sm">
+                      Go To HomePage
+                    </button></a
+                  >
                 </div>
               </div>
             </div>

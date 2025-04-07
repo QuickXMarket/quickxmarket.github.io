@@ -68,7 +68,8 @@ p {
 .text-shadow {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
-button.btn[type="submit"] {
+button.btn[type="submit"],
+verificationMessage .btn {
   background-color: var(--main-color);
   color: var(--sub-color);
   border: none;
