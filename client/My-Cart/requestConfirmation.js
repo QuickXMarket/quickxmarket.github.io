@@ -245,7 +245,7 @@ const sendEmails = async (orderId) => {
   // Create an array of all email requests
   const emailRequests = [
     // Email to user
-    fetch("http://localhost:3001/api/send-email", {
+    fetch("https://quickxmarket-server.vercel.app/api/send-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -258,7 +258,7 @@ const sendEmails = async (orderId) => {
     // Email to each vendor
     ...vendorsDetails.map((vendor) => {
       const vendorHtml = vendorOrderNotification(vendor.products, orderId);
-      fetch("http://localhost:3001/api/send-email", {
+      fetch("https://quickxmarket-server.vercel.app/api/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -270,7 +270,7 @@ const sendEmails = async (orderId) => {
     }),
 
     // Email to admin
-    fetch("http://localhost:3001/api/send-email", {
+    fetch("https://quickxmarket-server.vercel.app/api/send-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

@@ -18,18 +18,17 @@ app.post("/api/send-email", async (req, res) => {
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: process.env.EMAIL_USER, // e.g., mudiaosazuwa@gmail.com
-      pass: process.env.EMAIL_PASS, // your email app password
+      user: process.env.EMAIL_USER, 
+      pass: process.env.EMAIL_PASS,
     },
   });
 
-  // Define the mail options dynamically based on the request body
   let mailOptions = {
     from: process.env.ADMIN_EMAIL,
-    to: email, // recipient's email address
-    cc: process.env.ADMIN_EMAIL, // admin email address (can be changed depending on needs)
+    to: email,
+    cc: process.env.ADMIN_EMAIL, 
     subject: subject,
-    html: message, // We're using HTML instead of plain text
+    html: message, 
   };
 
   try {
