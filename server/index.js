@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 // 📦 Route: Send Email via Nodemailer
 app.post("/api/send-email", async (req, res) => {
-  const { name, email, message } = req.body;
+  const { email, subject, message } = req.body;
 
   let transporter = nodemailer.createTransport({
     service: "gmail",
@@ -23,12 +23,13 @@ app.post("/api/send-email", async (req, res) => {
     },
   });
 
+  // Define the mail options dynamically based on the request body
   let mailOptions = {
     from: process.env.ADMIN_EMAIL,
     to: email, // recipient's email address
-    cc: process.env.ADMIN_EMAIL, // admin email address
-    subject: "New Contact Form Submission",
-    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+    cc: process.env.ADMIN_EMAIL, // admin email address (can be changed depending on needs)
+    subject: subject,
+    html: message, // We're using HTML instead of plain text
   };
 
   try {

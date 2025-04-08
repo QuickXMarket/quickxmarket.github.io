@@ -7,12 +7,23 @@ import {
   getDatabase,
   getAuth,
 } from "../firebase.js";
+import {
+  userOrderConfirmation,
+  vendorOrderNotification,
+  adminOrderNotification,
+} from "../Utilities/mailTemplates.js";
 
-let userId, cartList, products, totalPrice;
+let userId,
+  cartList,
+  products,
+  totalPrice,
+  userEmail,
+  vendorsDetails = [],
+  userProductDetails = [],
+  adminEmail;
 const auth = getAuth();
 
 let userOrder = {};
-let vendorOrderDetails = {};
 let userDetails = JSON.parse(localStorage.getItem("details"));
 
 const db = getDatabase();
@@ -24,6 +35,7 @@ function addUserOrder(orderId) {
       if (snapshot.exists()) {
         const user = snapshot.val();
         const userOrders = user.orders || [];
+        userEmail = user.email;
 
         const orders = [];
 
@@ -31,6 +43,8 @@ function addUserOrder(orderId) {
           const productData = Object.values(products).find(
             (product) => product.code === item.code
           );
+          userProductDetails.push(getProductDetails(productData, item));
+
           orders.push({
             ...item,
             vendor: productData.vendorID,
@@ -54,17 +68,16 @@ function addUserOrder(orderId) {
           },
         ];
 
-        uploadUserOrder();
+        uploadUserOrder(orderId);
       }
     })
     .catch((error) => console.error("Error fetching user details:", error));
 }
 
-function uploadUserOrder() {
+function uploadUserOrder(orderId) {
   update(ref(db, `UsersDetails/${userId}`), { orders: userOrder })
     .then(() => {
-      localStorage.removeItem("cart");
-      // window.location = "../";
+      sendEmails(orderId);
     })
     .catch((error) => console.error("Error uploading user order:", error));
 }
@@ -121,6 +134,7 @@ function uploadVendorOrder(orderId) {
       if (snapshot.exists()) {
         const vendors = snapshot.val();
         const vendorOrders = {};
+
         cartList.forEach((item) => {
           const vendorKey = Object.keys(vendors).find((vendor) => {
             if (!vendors[vendor].products) return false;
@@ -128,10 +142,36 @@ function uploadVendorOrder(orderId) {
           });
 
           if (!vendorKey) return;
+
+          // Initialize vendor order if it does not exist
           if (!vendorOrders[vendorKey]) {
             vendorOrders[vendorKey] = [];
           }
+
           vendorOrders[vendorKey].push(item);
+
+          // Check if the vendor already exists in the vendorsDetails array
+          let vendorDetail = vendorsDetails.find(
+            (vendor) => vendor.email === vendors[vendorKey].email
+          );
+
+          // If the vendor is not in the array, add them
+          if (!vendorDetail) {
+            vendorDetail = {
+              email: vendors[vendorKey].email,
+              products: [], // Initialize the products array for this vendor
+            };
+            vendorsDetails.push(vendorDetail);
+          }
+
+          // Collect vendor product details
+          const productKey = Object.keys(products).find(
+            (key) => products[key]["code"] === item["code"]
+          );
+          if (productKey) {
+            const product = products[productKey];
+            vendorDetail.products.push(getProductDetails(product, item)); // Add the product details to the vendor
+          }
         });
 
         if (Object.keys(vendorOrders).length > 0) {
@@ -154,7 +194,7 @@ function uploadVendorOrder(orderId) {
               }
             });
 
-            vendorOrderDetails = {
+            const vendorOrderDetails = {
               orders: [
                 ...previousOrders,
                 {
@@ -198,21 +238,75 @@ function generateRandomId(length) {
   ).join("");
 }
 
-export default uploadAdminOrder;
+const sendEmails = async (orderId) => {
+  const userHtml = userOrderConfirmation(userProductDetails, orderId);
+  const adminHtml = adminOrderNotification(userProductDetails, orderId);
 
-const sendEmails = async () => {
-  const data = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    message: document.getElementById("message").value,
-  };
+  // Create an array of all email requests
+  const emailRequests = [
+    // Email to user
+    fetch("http://localhost:3001/api/send-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: userEmail,
+        subject: `QuickXMarket – Order #${orderId} Confirmed!`,
+        message: userHtml,
+      }),
+    }),
 
-  const res = await fetch("http://localhost:3001/api/send-email", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
+    // Email to each vendor
+    ...vendorsDetails.map((vendor) => {
+      const vendorHtml = vendorOrderNotification(vendor.products, orderId);
+      fetch("http://localhost:3001/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: vendor.email,
+          subject: `QuickXMarket – New Order #${orderId} Awaiting Confirmation`,
+          message: vendorHtml,
+        }),
+      });
+    }),
 
-  const msg = await res.text();
-  console.log(msg);
+    // Email to admin
+    fetch("http://localhost:3001/api/send-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: "quickxmarket@gmail.com",
+        subject: `QuickXMarket – New Order Placed: #${orderId}`,
+        message: adminHtml,
+      }),
+    }),
+  ];
+
+  // Send all email requests in parallel
+  try {
+    await Promise.all(emailRequests);
+    localStorage.removeItem("cart");
+    window.location = "../";
+  } catch (error) {
+    console.error("Error sending emails:", error);
+  }
 };
+
+const getProductDetails = (product, item) => {
+  const itemPrice = product["price"];
+  const itemQuantity = item["amount"];
+  const totalItemPrice = itemPrice * itemQuantity;
+  const myURL = new URL(
+    `${window.location.protocol}//${window.location.host}/Product/`
+  );
+  myURL.searchParams.append("product", product.code);
+
+  return {
+    name: product["name"],
+    imageUrl: product["url"][0],
+    quantity: itemQuantity,
+    totalPrice: totalItemPrice,
+    productLink: myURL,
+  };
+};
+
+export default uploadAdminOrder;

@@ -179,8 +179,6 @@ const modalCartItem = (name, price, quantity) => {
   document.getElementById("modalItems").appendChild(parentDiv);
 };
 
-const requestOrderConfirmation = () => {};
-
 function updateCartQuantity(index, delta) {
   const cartNumElem = document.getElementById(`cartnum${index}`);
   let newQuantity = parseInt(cartNumElem.textContent) + delta;
@@ -222,7 +220,9 @@ document.getElementById("continue").addEventListener("click", () => {
       modalCartItem(name, price, amount);
     }
   });
-  document.getElementById("modalTotal").innerText = totalPrice;
+  document.getElementById("modalTotal").innerText = `₦${formatter.format(
+    totalPrice
+  )}`;
   document.getElementsByClassName("modal")[0].style.display = "block";
 });
 
@@ -235,7 +235,7 @@ document.getElementById("modalConfirmBtn").addEventListener("click", () => {
         alert("Please select your hostel before proceeding.");
         window.location = "../Address-Book/";
       } else {
-        // uploadAdminOrder(userId, products, totalPrice);
+        uploadAdminOrder(userId, products, totalPrice);
       }
     } else {
       window.location.replace("../Login");
