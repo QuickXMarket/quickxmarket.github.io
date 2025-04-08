@@ -1,11 +1,20 @@
-import { getDatabase, ref, get, child } from "../firebase.js";
+import {
+  getDatabase,
+  ref,
+  get,
+  child,
+  getAuth,
+  onAuthStateChanged,
+} from "../firebase.js";
 import getThemeColor from "../Utilities/ColorTheme.js";
+import uploadAdminOrder from "./requestConfirmation.js";
 
 const db = getDatabase();
 let cartItems = [];
 let totalPrice = 0;
 let products = {};
 const formatter = new Intl.NumberFormat("en-US");
+const userDetails = JSON.parse(localStorage.getItem("details"));
 
 window.onload = () => {
   getThemeColor();
@@ -139,6 +148,39 @@ function createCartItemView(
   container.append(view);
 }
 
+const modalCartItem = (name, price, quantity) => {
+  const parentDiv = document.createElement("div");
+  parentDiv.classList.add(
+    "d-flex",
+    "align-items-center",
+    "justify-content-between",
+    "my-2"
+  );
+
+  const leftDiv = document.createElement("div");
+  leftDiv.classList.add("d-flex", "align-items-center");
+
+  const nameP = document.createElement("p");
+  nameP.classList.add("me-2");
+  nameP.textContent = name;
+
+  const qtyP = document.createElement("p");
+  qtyP.textContent = `×${quantity}`;
+
+  leftDiv.appendChild(nameP);
+  leftDiv.appendChild(qtyP);
+
+  const rightDiv = document.createElement("div");
+  rightDiv.textContent = `₦${formatter.format(price)}`;
+
+  parentDiv.appendChild(leftDiv);
+  parentDiv.appendChild(rightDiv);
+
+  document.getElementById("modalItems").appendChild(parentDiv);
+};
+
+const requestOrderConfirmation = () => {};
+
 function updateCartQuantity(index, delta) {
   const cartNumElem = document.getElementById(`cartnum${index}`);
   let newQuantity = parseInt(cartNumElem.textContent) + delta;
@@ -168,6 +210,38 @@ function updateTotalPrice() {
     totalPrice
   )}`;
 }
+
+document.getElementById("continue").addEventListener("click", () => {
+  cartItems.forEach((cartItem, index) => {
+    const product = Object.values(products).find(
+      (p) => p.code === cartItem.code
+    );
+    if (product) {
+      const { name, price } = product;
+      const { amount } = cartItem;
+      modalCartItem(name, price, amount);
+    }
+  });
+  document.getElementById("modalTotal").innerText = totalPrice;
+  document.getElementsByClassName("modal")[0].style.display = "block";
+});
+
+document.getElementById("modalConfirmBtn").addEventListener("click", () => {
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user && userDetails) {
+      const userId = user.uid;
+      if (userDetails.hostel === "None") {
+        alert("Please select your hostel before proceeding.");
+        window.location = "../Address-Book/";
+      } else {
+        // uploadAdminOrder(userId, products, totalPrice);
+      }
+    } else {
+      window.location.replace("../Login");
+    }
+  });
+});
 
 function createButton(type, id, onClick) {
   const button = document.createElement("img");

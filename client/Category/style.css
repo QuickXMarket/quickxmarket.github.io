@@ -130,7 +130,7 @@ section {
   align-content: center;
 }
 .items_image {
-  height: 130px;
+  height: 120px;
   object-fit: scale-down;
   width: 100%;
 }
@@ -156,6 +156,6 @@ section {
 }
 .item_name {
   color: black;
-  height: 65px;
+  height: 30px;
   overflow: hidden;
 }
