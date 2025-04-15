@@ -11,7 +11,6 @@ window.onload = () => {
   const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
   const cartCount = cartItems.length;
 
-  document.getElementById("cart_num").textContent = cartCount;
   document.getElementById("cart_num2").textContent = cartCount;
 
   initializePage();

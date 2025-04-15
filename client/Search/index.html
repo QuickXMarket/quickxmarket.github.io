@@ -12,6 +12,10 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+    />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="title">Search</title>
@@ -21,50 +25,47 @@
   </head>
   <body>
     <nav id="div1" class="navbar navbar-expand-lg navbar-light">
-      <div class="container-fluid">
-        <button
-          id="option"
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <div class="notification">
-            <img
-              style="width: 40px; height: 40px; object-fit: scale-down"
-              src="../images/ic_dehaze_black_24dp.png"
-              alt=""
-            />
-            <span id="cart_num" class="badge">0</span>
-          </div>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-link" href="../">Home</a>
-            <a class="nav-link" href="../My-Cart/"
-              ><div class="notification">
-                Cart
-                <span id="cart_num2" class="a_badge">0</span>
-              </div></a
-            >
-            <a class="nav-link" href="../Liked-Items/">Liked Items</a>
-            <a class="nav-link" href="../My-Orders/">Your Orders</a>
+      <div class="container-fluid flex-nowrap">
+        <div>
+          <div class="navbar-nav flex-row">
+            <a class="nav-link px-md-2 px-1" href="#">
+              <span class="d-none d-md-block">Home</span>
+              <img class="d-md-none" src="images/home-icon.png" />
+            </a>
           </div>
         </div>
-        <form class="d-flex" id="form">
-          <input
-            class="form-control me-2"
-            type="search"
-            placeholder="Search..."
-            id="div2"
-            list="history"
-          />
-          <datalist id="history"> </datalist>
-        </form>
+
+        <div class="d-flex align-items-center">
+          <form class="d-flex vw-md-25" id="form">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search..."
+              id="div2"
+              list="history"
+            />
+            <datalist id="history"></datalist>
+          </form>
+          <a class="nav-link px-md-2 px-1" href="../My-Cart/">
+            <div class="notification">
+              <span class="d-none d-md-block">Cart</span>
+              <span class="material-symbols-outlined d-md-none">
+                shopping_cart
+              </span>
+              <span id="cart_num2" class="a_badge">0</span>
+            </div>
+          </a>
+
+          <!-- <a class="nav-link px-md-2 px-1" href="./Liked-Items/">
+            <span class="d-none d-md-block">Liked Items</span>
+            <span class="material-symbols-outlined d-md-none"> favorite </span>
+          </a> -->
+
+          <a class="nav-link px-md-2 px-1" href="../My-Orders/">
+            <span class="d-none d-md-block">Your Orders</span>
+            <span class="material-symbols-outlined d-md-none"> orders </span>
+          </a>
+        </div>
       </div>
     </nav>
     <div id="body" style="display: none">

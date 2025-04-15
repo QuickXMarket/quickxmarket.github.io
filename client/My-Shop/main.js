@@ -13,6 +13,7 @@ import {
   onAuthStateChanged,
   remove,
 } from "../firebase.js";
+import getThemeColor from "../Utilities/ColorTheme.js";
 import { getVendorOrders } from "./order.js";
 
 const db = getDatabase();
@@ -42,15 +43,17 @@ var details = JSON.parse(localStorage.getItem("details")),
   vendorId,
   RegisteredItems,
   vendorDetails,
+  primaryColor,
+  secondaryColor,
   userID;
 
 onload = () => {
   const auth = getAuth();
-
   onAuthStateChanged(auth, (user) => {
     if (user) {
       userID = user.uid;
       checkAccountType();
+      ({ mainColor: primaryColor, subColor: secondaryColor } = getThemeColor());
     } else {
       window.location.replace("../Login");
     }
@@ -106,7 +109,7 @@ export function getShopData() {
       vendorName = vendorDetails["vendorName"];
       vendorId = vendorDetails["vendorId"];
       RegisteredItems = vendorDetails.products;
-      getVendorOrders(vendorDetails);
+      getVendorOrders(vendorDetails, primaryColor, secondaryColor);
 
       get(child(dbref, "ProductsDetails/"))
         .then((snapshot) => {

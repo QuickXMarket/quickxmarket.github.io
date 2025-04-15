@@ -330,3 +330,23 @@ p {
   border-radius: 50%;
   object-fit: cover;
 }
+
+@media (min-width: 768px) {
+  .vw-md-25 {
+    width: 25vw !important;
+  }
+}
+@media (max-width: 767px) {
+  .vw-md-25 {
+    width: 40vw !important;
+  }
+  .a_badge {
+    top: -5px;
+    right: -6px;
+  }
+}
+
+.navbar-nav .nav-link,
+.nav-link {
+  color: var(--sub-color) !important;
+}

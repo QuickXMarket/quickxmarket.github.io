@@ -1,3 +1,13 @@
+:root {
+  --main-color: #000137;
+  --main-hover-color: #282f5f;
+  --sub-color: white;
+  --main-image-filter: invert(6%) sepia(63%) saturate(3693%) hue-rotate(232deg)
+    brightness(91%) contrast(117%);
+  --sub-image-filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(73deg)
+    brightness(104%) contrast(101%);
+}
+
 body {
   background-color: #eceff1;
 }
@@ -13,7 +23,7 @@ body {
   font-size: 16px;
 }
 #div1 {
-  background-color: #000137;
+  background-color: var(--main-color);
   width: 100%;
   display: flex;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -82,55 +92,6 @@ body {
 
 #list {
   align-items: center;
-}
-
-.item_image {
-  width: 80px;
-  height: 100px;
-}
-.items_view {
-  background-color: white;
-  padding: 5px;
-  margin: 8px 0;
-  border-radius: 15px;
-  align-content: center;
-  text-decoration: none;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.item_name {
-  font-size: 18px;
-  color: black;
-  padding: 8px;
-  height: 30px;
-  overflow: hidden;
-}
-.item_price {
-  color: #000137;
-  font-size: 14px;
-  padding: 8px;
-}
-
-.rec_price {
-  text-align: center;
-  color: #000137;
-}
-.rec_image {
-  height: 130px;
-  object-fit: scale-down;
-  width: 100%;
-}
-.rec_view {
-  background-color: white;
-  width: 140px;
-  flex: 0 0 140px;
-  padding: 5px;
-  flex-basis: 140px;
-  margin: 8px;
-  border-radius: 15px;
-  align-content: center;
-  text-decoration: none;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 #no_items {
@@ -207,4 +168,91 @@ body {
   #orders {
     min-height: auto;
   }
+}
+
+#offcanvasMenu {
+  background-color: var(--main-color);
+  color: var(--sub-color);
+}
+
+#offcanvasMenu .nav-link {
+  color: var(--sub-color);
+  font-size: 16px;
+  padding: 10px 20px;
+}
+
+.offcanvas-header .btn-close {
+  color: var(--sub-color);
+}
+
+#sidebar {
+  background-color: var(--main-color);
+  z-index: 1040;
+}
+
+#sidebar .nav-link {
+  color: var(--sub-color);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#sidebar .nav-link:hover {
+  background-color: var(--main-hover-color);
+  color: var(--sub-color);
+}
+
+#sidebar .nav-item.active .nav-link {
+  background-color: var(--main-hover-color);
+  color: var(--sub-color);
+  font-weight: 600;
+  border-left: 4px solid var(--sub-color);
+}
+
+#sidebar .material-symbols-outlined {
+  font-size: 20px;
+}
+
+#offcanvasMenu {
+  background-color: var(--main-color);
+  color: var(--sub-color);
+  width: 250px;
+}
+
+#offcanvasMenu .offcanvas-title {
+  color: var(--sub-color);
+  font-size: 1.25rem;
+}
+
+#offcanvasMenu .btn-close {
+  filter: invert(1); /* make the close icon visible on dark bg */
+}
+
+#offcanvasMenu .nav-link {
+  color: var(--sub-color);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#offcanvasMenu .nav-link:hover {
+  background-color: var(--main-hover-color);
+  color: var(--sub-color);
+}
+
+#offcanvasMenu .material-symbols-outlined {
+  font-size: 20px;
+}
+
+#offcanvasMenu .nav-link.active {
+  background-color: var(--main-hover-color);
+  color: var(--sub-color);
+  font-weight: 600;
+  border-left: 4px solid var(--sub-color);
 }

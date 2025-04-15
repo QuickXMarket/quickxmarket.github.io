@@ -10,7 +10,7 @@ import {
 const db = getDatabase();
 const numberFormatter = new Intl.NumberFormat("en-US");
 const recentItems = JSON.parse(localStorage.getItem("recent")) || [];
-let userID;
+let userID, orders;
 
 window.onload = () => {
   const auth = getAuth();
@@ -58,7 +58,7 @@ const fetchUsersOrders = (searchQuery) => {
         document.getElementById("loader").style.display = "none";
         document.getElementById("body").style.display = "block";
 
-        const orders = snapshot.val();
+        orders = snapshot.val();
         const orderKeys = Object.keys(orders);
 
         orderKeys.reverse().forEach((key) => {
@@ -76,7 +76,7 @@ const fetchUsersOrders = (searchQuery) => {
     .catch((error) => console.error(error));
 };
 
-function displayOrderDetails( order) {
+function displayOrderDetails(order) {
   const orderView = document.createElement("div");
   const orderInfo = document.createElement("div");
   const orderNumber = document.createElement("div");
@@ -133,14 +133,24 @@ function displayOrderDetails( order) {
 
 const handleSearch = () => {
   const searchQuery = document.getElementById("div2").value;
-  const searchURL = new URL(
-    `${window.location.protocol}//${window.location.host}/@dmin-p@ge/Users-Orders/`
-  );
-  searchURL.searchParams.append("search", searchQuery);
-  window.location = searchURL;
-};
+  const filteredOrders = Object.values(orders).filter((order) => {
+    return (
+      order.orderId.includes(searchQuery) || order.userId.includes(searchQuery)
+    );
+  });
 
-document.getElementById("div2").addEventListener("search", handleSearch);
+  const orderValues = Object.values(filteredOrders);
+  document.getElementById("list").innerHTML = "";
+
+  orderValues.reverse().forEach((order) => {
+    displayOrderDetails(order);
+
+    if (document.getElementById("list").innerHTML === "") {
+      document.getElementById("no_items").style.display = "block";
+      document.getElementById("listBody").style.display = "none";
+    }
+  });
+};
 
 function formatDate(timestamp) {
   const date = new Date(timestamp);
@@ -153,3 +163,57 @@ function formatDate(timestamp) {
 
   return formattedDate;
 }
+
+const applyFilters = () => {
+  const statuses = [];
+  ["Pending", "Confirmed", "Shipped", "Delivered"].forEach((status) => {
+    const id = "status" + status;
+    const checkbox = document.getElementById(id);
+    if (checkbox.checked) {
+      switch (status) {
+        case "Pending":
+          statuses.push("Confirming Request");
+          break;
+        case "Confirmed":
+          statuses.push("Request confirmed");
+          break;
+        case "Shipped":
+          statuses.push("Shipped");
+          break;
+        case "Delivered":
+          statuses.push("Delivered");
+          break;
+      }
+      statuses.push(status);
+    }
+  });
+
+  const startDate = document.getElementById("startDate").value;
+  const endDate = document.getElementById("endDate").value;
+  const startTimestamp = new Date(startDate).getTime() || 0;
+  const endTimestamp = new Date(endDate).getTime() || Infinity;
+
+  const filteredOrders = Object.values(orders).filter((order) => {
+    const orderDate = new Date(order.date).getTime();
+    const isStatusMatch =
+      statuses.length === 0 || statuses.includes(order.status);
+    const isDateMatch =
+      orderDate >= startTimestamp && orderDate <= endTimestamp;
+    return isStatusMatch && isDateMatch;
+  });
+
+  const orderValues = Object.values(filteredOrders);
+  document.getElementById("list").innerHTML = "";
+
+  orderValues.reverse().forEach((order) => {
+    displayOrderDetails(order);
+
+    if (document.getElementById("list").innerHTML === "") {
+      document.getElementById("no_items").style.display = "block";
+      document.getElementById("listBody").style.display = "none";
+    }
+  });
+};
+
+document.getElementById("div2").addEventListener("input", handleSearch);
+document.getElementById("applyFilters").addEventListener("click", applyFilters);

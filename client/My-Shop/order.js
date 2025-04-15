@@ -15,10 +15,6 @@ function toggleVisibility(element1Id, element2Id) {
   }
 }
 
-onload = () => {
-  ({ mainColor: primaryColor, subColor: secondaryColor } = getThemeColor());
-};
-
 // Set up event listeners for options
 Object.values(document.getElementsByClassName("option_view")).forEach(
   (element, index) => {
@@ -36,7 +32,9 @@ Object.values(document.getElementsByClassName("option_view")).forEach(
   }
 );
 
-export function getVendorOrders(vendorDetails) {
+export function getVendorOrders(vendorDetails, mainColor, subColor) {
+  primaryColor = mainColor;
+  secondaryColor = subColor;
   const orderListEl = document.getElementById("orderList");
   if (!vendorDetails.orders) return;
 

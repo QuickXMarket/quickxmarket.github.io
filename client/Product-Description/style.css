@@ -147,3 +147,23 @@ p {
   text-decoration: none;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
+.navbar-nav .nav-link,
+.nav-link {
+  color: var(--sub-color) !important;
+}
+
+@media (min-width: 768px) {
+  .vw-md-25 {
+    width: 25vw !important;
+  }
+}
+@media (max-width: 767px) {
+  .vw-md-25 {
+    width: 40vw !important;
+  }
+  .a_badge {
+    top: -5px;
+    right: -6px;
+  }
+}

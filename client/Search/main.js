@@ -15,7 +15,7 @@ window.onload = () => {
 
   document.getElementById("div2").value = searchQuery;
   document.getElementById("title").textContent = searchQuery;
-  
+
   if (searchQuery) fetchProductDetails(searchQuery);
   else window.location.href = "/";
 };
@@ -24,7 +24,6 @@ const updateCartCount = () => {
   const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
   const cartCount = cartItems.length;
 
-  document.getElementById("cart_num").textContent = cartCount;
   document.getElementById("cart_num2").textContent = cartCount;
 };
 
