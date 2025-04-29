@@ -68,6 +68,7 @@ function displayProductDetails() {
 
   document.getElementById("title").textContent = currentProduct.name;
   document.getElementById("item_name").textContent = currentProduct.name;
+
   document.getElementById(
     "item_price"
   ).textContent = `₦${internationalNumberFormat.format(currentProduct.price)}`;
@@ -75,6 +76,17 @@ function displayProductDetails() {
   document.getElementById("item_description").textContent =
     currentProduct.description;
   document.getElementById("1").src = currentProduct.url[0];
+
+  if (currentProduct.pickupTime) {
+    const pickup = Number(currentProduct.pickupTime);
+    const minDelivery = pickup + 2;
+    const maxDelivery = pickup + 3;
+    document.getElementById(
+      "deliveryEstimate"
+    ).textContent = `${minDelivery}-${maxDelivery} `;
+  } else {
+    document.getElementById("deliveryText").style.display = "none";
+  }
 
   // Create Image Slider using template literals
   const slidercontainer = document.getElementById("slidercontainer");

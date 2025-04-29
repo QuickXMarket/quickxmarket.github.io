@@ -104,5 +104,6 @@ themeOptions.addEventListener("change", function (event) {
 
 function handleThemeChange(selectedTheme) {
   localStorage.setItem("theme", selectedTheme);
-  window.location.reload();
+  // window.location.reload();
+  getThemeColor()
 }

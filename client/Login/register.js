@@ -17,7 +17,8 @@ let userFormData = {
   re_password: "",
   phone: "",
   gender: "",
-  hostel: "",
+  location: "",
+  address: "",
 };
 
 const auth = getAuth();
@@ -29,10 +30,30 @@ function handleSubmit(event) {
   event.preventDefault();
   gatherFormData();
 
-  const { first, last, email, password, re_password, phone, gender, hostel } =
-    userFormData;
+  const {
+    first,
+    last,
+    email,
+    password,
+    re_password,
+    phone,
+    gender,
+    location,
+    address,
+  } = userFormData;
 
-  if (validateForm({ first, last, email, password, phone, gender, hostel })) {
+  if (
+    validateForm({
+      first,
+      last,
+      email,
+      password,
+      phone,
+      gender,
+      location,
+      address,
+    })
+  ) {
     if (password === re_password) {
       showLoader(true);
       signUpUser();
@@ -53,11 +74,21 @@ function gatherFormData() {
     re_password: document.getElementById("registerConfirmPass").value,
     phone: document.getElementById("registerPhone").value,
     gender: document.getElementById("registerGender").value,
-    hostel: document.getElementById("registerHostel").value,
+    location: document.getElementById("registerHostel").value,
+    address: document.getElementById("registerAddress").value,
   };
 }
 
-function validateForm({ first, last, email, password, phone, gender, hostel }) {
+function validateForm({
+  first,
+  last,
+  email,
+  password,
+  phone,
+  gender,
+  location,
+  address,
+}) {
   return (
     first &&
     last &&
@@ -65,7 +96,7 @@ function validateForm({ first, last, email, password, phone, gender, hostel }) {
     password &&
     phone &&
     gender !== "Gender" &&
-    hostel !== "Hostel"
+    location !== "General Location"
   );
 }
 
@@ -90,11 +121,12 @@ function insertUserData(user) {
     AccountType: "user",
     AddressBook: [
       {
+        address: userFormData.address,
         firstName: userFormData.first,
         lastName: userFormData.last,
         gender: userFormData.gender,
         phone: userFormData.phone,
-        hostel: userFormData.hostel,
+        location: userFormData.location,
         switch: true,
       },
     ],
@@ -116,21 +148,39 @@ function insertUserData(user) {
 function setUserInfo(userId) {
   const details = {
     AccountType: "user",
+    address: userFormData.address,
     email: userFormData.email,
     first: userFormData.first,
     name: `${userFormData.first} ${userFormData.last}`,
-    hostel: userFormData.hostel,
+    location: userFormData.location,
     gender: userFormData.gender,
     key: userId,
     phone: userFormData.phone,
     login: "yes",
   };
 
+  showLoader(false);
   document.getElementById("registerForm").style.display = "none";
+  document.getElementById("authTabs").style.display = "none";
+  document.getElementById("verificationMessage").classList.remove("d-none");
+  document.getElementById("verificationMessageHead").classList.remove("d-none");
   document.getElementById("verificationMessage").style.display = "flex";
   document.getElementById("verificationMessageHead").style.display = "blocks";
   localStorage.setItem("details", JSON.stringify(details));
 }
+
+document.getElementById("registerHostel").onchange = function () {
+  const selectedIndex = this.selectedIndex;
+  const addressField = document.getElementById("registerAddress");
+
+  if (selectedIndex > 19) {
+    addressField.style.display = "block";
+    addressField.setAttribute("required", true);
+  } else {
+    addressField.style.display = "none";
+    addressField.removeAttribute("required");
+  }
+};
 
 document.getElementById("registerToggle").onclick = function () {
   togglePasswordVisibility();
@@ -138,7 +188,7 @@ document.getElementById("registerToggle").onclick = function () {
 
 function togglePasswordVisibility() {
   const passwordField = document.getElementById("registerPassword");
-  const rePasswordField = document.getElementById("registerConfiirmPass");
+  const rePasswordField = document.getElementById("registerConfirmPass");
   const toggleIcon = document.getElementById("registerToggleImg");
 
   const isPasswordVisible = passwordField.type === "password";
@@ -152,6 +202,7 @@ function togglePasswordVisibility() {
 
 function showLoader(show) {
   const loader = document.getElementById("loader");
+  loader.classList.remove("d-none");
   loader.style.display = show ? "block" : "none";
 
   const fields = [
@@ -173,4 +224,9 @@ function showLoader(show) {
       element.removeAttribute("disabled");
     }
   });
+  if (show) {
+    loader.removeAttribute("d-none");
+  } else {
+    loader.setAttribute("d-none", true);
+  }
 }

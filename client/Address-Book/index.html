@@ -63,8 +63,11 @@
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
-          <select required id="edit-hostel">
-            <option value="" disabled selected>Hostel</option>
+          <select required class="form-select" id="edit-location">
+            <option value="General Location" disabled selected>
+              General Location
+            </option>
+            <!-- <option value="None">None</option> -->
             <option value="Hall 1">Hall 1</option>
             <option value="Hall 2">Hall 2</option>
             <option value="Hall 3">Hall 3</option>
@@ -86,8 +89,20 @@
             <option value="Sen. Danjuma">Sen. Danjuma</option>
             <option value="Sen. Danjuma Legacy">Sen. Danjuma Legacy</option>
             <option value="NNPC Hostel">NNPC Hostel</option>
+            <option value="June 12">June 12</option>
+            <option value="Ekosodin-Newton">Ekosodin-Newton</option>
+            <option value="Ekosodin-Edo">Ekosodin-Edo</option>
+            <option value="Ekosodin-JB">Ekosodin-JB</option>
+            <option value="Ekosodin-Market">Ekosodin-Market</option>
           </select>
         </div>
+        <input
+          
+          class="boxes"
+          type="text"
+          placeholder="Address"
+          id="edit-address"
+        />
         <button id="edit-submit" type="submit">Done</button>
         <div class="loader-container">
           <div id="edit-loader" class="loader"></div>

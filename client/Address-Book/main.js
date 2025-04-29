@@ -62,11 +62,27 @@ function displayAddresses() {
 
 function formatAddress(address) {
   return `
-    <div class="info-item"><span class="title">First Name:</span><span class="info">${address.firstName}</span></div>
-    <div class="info-item"><span class="title">Last Name:</span><span class="info">${address.lastName}</span></div>
-    <div class="info-item"><span class="title">Phone:</span><span class="info">+234${address.phone}</span></div>
-    <div class="info-item"><span class="title">Hostel:</span><span class="info">${address.hostel}</span></div>
-    <div class="info-item"><span class="title">Gender:</span><span class="info">${address.gender}</span></div>
+    <div class="info-item"><span class="title">First Name:</span><span class="info">${
+      address.firstName
+    }</span></div>
+    <div class="info-item"><span class="title">Last Name:</span><span class="info">${
+      address.lastName
+    }</span></div>
+    <div class="info-item"><span class="title">Phone:</span><span class="info">+234${
+      address.phone
+    }</span></div>
+    <div class="info-item"><span class="title">Location:</span><span class="info">${
+      address.location
+    }</span></div>
+${
+  address.address !== ""
+    ? `<div class="info-item"><span class="title">Address:</span><span class="info">${address.address}</span></div>`
+    : ""
+}
+
+    <div class="info-item"><span class="title">Gender:</span><span class="info">${
+      address.gender
+    }</span></div>
   `;
 }
 
@@ -120,8 +136,17 @@ function openEditForm(index) {
   document.getElementById("edit-first").value = address.firstName;
   document.getElementById("edit-last").value = address.lastName;
   document.getElementById("edit-phone").value = address.phone;
-  document.getElementById("edit-hostel").value = address.hostel;
+  document.getElementById("edit-location").value = address.location;
   document.getElementById("edit-gender").value = address.gender;
+
+  const locationSelect = document.getElementById("edit-location");
+
+  const locationIndex = Array.from(locationSelect.options).findIndex(
+    (option) => option.value === address.location
+  );
+  handleAddressField(locationIndex);
+
+  document.getElementById("edit-address").value = address.address;
   document.getElementById("edit-body").style.display = "flex";
   document.getElementById("edit-loader").style.display = "none";
   document.getElementById("formTitle").innerText = "Edit Address";
@@ -144,8 +169,9 @@ function clearFormFields() {
     "edit-first",
     "edit-last",
     "edit-phone",
-    "edit-hostel",
+    "edit-location",
     "edit-gender",
+    "edit-address",
   ].forEach((id) => {
     document.getElementById(id).value = "";
   });
@@ -169,14 +195,19 @@ function getFormValues() {
     firstName: document.getElementById("edit-first").value,
     lastName: document.getElementById("edit-last").value,
     phone: document.getElementById("edit-phone").value,
-    hostel: document.getElementById("edit-hostel").value,
+    location: document.getElementById("edit-location").value,
     gender: document.getElementById("edit-gender").value,
+    address: document.getElementById("edit-address").value,
   };
 }
 
-function validateForm({ firstName, lastName, phone, hostel, gender }) {
+function validateForm({ firstName, lastName, phone, location, gender }) {
   return (
-    firstName && lastName && phone && hostel !== "Hostel" && gender !== "Gender"
+    firstName &&
+    lastName &&
+    phone &&
+    location !== "General Location" &&
+    gender !== "Gender"
   );
 }
 
@@ -201,4 +232,21 @@ function updateAddress(formValues) {
       getAddress();
     })
     .catch((error) => console.error(error));
+}
+
+document.getElementById("edit-location").onchange = function () {
+  const selectedIndex = this.selectedIndex;
+  handleAddressField(selectedIndex);
+};
+
+function handleAddressField(selectedIndex) {
+  const addressField = document.getElementById("edit-address");
+
+  if (selectedIndex > 19) {
+    addressField.style.display = "block";
+    addressField.setAttribute("required", true);
+  } else {
+    addressField.style.display = "none";
+    addressField.removeAttribute("required");
+  }
 }

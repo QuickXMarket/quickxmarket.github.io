@@ -113,16 +113,22 @@ function handleError(error) {
 }
 
 function showLoader(show) {
-  document.getElementById("loader").style.display = show ? "block" : "none";
   const email = document.getElementById("loginEmail");
   const password = document.getElementById("loginPassword");
+  const loader = document.getElementById("loader");
+  const loginButton = document.getElementById("loginSubmit");
   if (show) {
+    loginButton.setAttribute("disabled", true);
     email.setAttribute("disabled", true);
     password.setAttribute("disabled", true);
+    loader.classList.remove("d-none");
   } else {
     email.removeAttribute("disabled");
     password.removeAttribute("disabled");
+    loginButton.removeAttribute("disabled");
+    loader.classList.add("d-none");
   }
+  document.getElementById("loader").style.display = show ? "block" : "none";
 }
 
 document.getElementById("loginToggle").onclick = () => {

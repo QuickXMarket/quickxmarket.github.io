@@ -232,7 +232,7 @@ document.getElementById("modalConfirmBtn").addEventListener("click", () => {
     if (user && userDetails) {
       const userId = user.uid;
       if (userDetails.hostel === "None") {
-        alert("Please select your hostel before proceeding.");
+        alert("Please set an address before proceeding.");
         window.location = "../Address-Book/";
       } else {
         uploadAdminOrder(userId, products, totalPrice);

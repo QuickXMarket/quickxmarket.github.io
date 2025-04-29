@@ -263,6 +263,10 @@ h2 {
   border-right: none;
 }
 
+#edit-address{
+  display: none;
+}
+
 #edit-submit {
   width: 100%;
   padding: 8px;

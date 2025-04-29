@@ -91,7 +91,13 @@
           </button>
           <ul class="file-list list-unstyled"></ul>
         </div>
-
+        <input
+          required
+          type="text"
+          class="form-control mb-3"
+          placeholder="Product Name"
+          id="name"
+        />
         <div class="input-group mb-3">
           <span class="input-group-text">₦</span>
           <input
@@ -103,6 +109,17 @@
           />
         </div>
 
+        <select required class="form-select mb-3" id="pickup-time">
+          <option value="Time" disabled selected>
+            Product Estimated PickUp Time (in days)
+          </option>
+          <option value="1">1 day</option>
+          <option value="2">2 days</option>
+          <option value="3">3 days</option>
+          <option value="4">4 days</option>
+          <option value="5">5 days</option>
+        </select>
+
         <input
           required
           type="number"
@@ -110,13 +127,6 @@
           placeholder="Product Quantity Available"
           id="quantity"
           min="1"
-        />
-        <input
-          required
-          type="text"
-          class="form-control mb-3"
-          placeholder="Product Name"
-          id="name"
         />
 
         <textarea

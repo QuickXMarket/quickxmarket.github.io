@@ -78,3 +78,7 @@ verificationMessage .btn {
 .w-25vh {
   width: 25vh !important;
 }
+
+#registerAddress{
+  display: none;
+}

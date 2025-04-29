@@ -35,6 +35,7 @@ var details = JSON.parse(localStorage.getItem("details")),
   description,
   quantity,
   category,
+  pickupTime,
   logoImg = "",
   logoImgUrl = "",
   ItemImgs = [],
@@ -178,10 +179,15 @@ function uploadCheckdata(e) {
   description = document.getElementById("description").value;
   quantity = document.getElementById("quantity").value;
   category = document.getElementById("category").value;
+  pickupTime = document.getElementById("pickup-time").value;
 
   price = price.replace(/,/g, "");
 
-  if (category !== " Select Category" && ItemImgs.length > 0) {
+  if (
+    category !== " Select Category" &&
+    pickupTime !== "time" &&
+    ItemImgs.length > 0
+  ) {
     document.getElementById("uploadLoader").style.display = "block";
     uploadFile(ItemImgs[0], "ProductImage", 0);
   }
@@ -205,6 +211,7 @@ function uploadProduct() {
     key,
     name,
     num: ItemImgsUrl.length,
+    pickupTime,
     price,
     quantity,
     vendorID: vendorId,
