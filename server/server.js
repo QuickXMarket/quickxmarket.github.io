@@ -22,6 +22,7 @@ await connectCloudinary();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://quickxmarket.vercel.app",
+  "https://quickxmarket.vercel.app/",
 ];
 
 app.post(
