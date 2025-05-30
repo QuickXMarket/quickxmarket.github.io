@@ -1,3 +1,2 @@
-
-cart.html
-firebaserules.json
+node_modules
+.env
