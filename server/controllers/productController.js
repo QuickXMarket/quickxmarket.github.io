@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from "cloudinary"
 import Product from "../models/Product.js"
+import User from "../models/User.js"
 
 // Add Product : /api/product/add
 export const addProduct = async (req, res)=>{
@@ -15,7 +16,13 @@ export const addProduct = async (req, res)=>{
             })
         )
 
-        await Product.create({...productData, image: imagesUrl})
+        // Add vendorId from authenticated user
+        const vendorId = req.body.userId;
+
+        const product = await Product.create({...productData, image: imagesUrl, vendorId})
+
+        // Update vendor's products array
+        await User.findByIdAndUpdate(vendorId, { $push: { products: product._id } })
 
         res.json({success: true, message: "Product Added"})
 
@@ -59,3 +66,19 @@ export const changeStock = async (req, res)=>{
         res.json({ success: false, message: error.message })
     }
 }
+
+// Get Product List by Vendor : /api/product/list/vendor
+export const productListByVendor = async (req, res) => {
+    try {
+        // Fix: user id is in req.user._id (mongoose object)
+        const vendorId = req.user?._id || req.body.userId;
+        if (!vendorId) {
+            return res.status(401).json({ success: false, message: "Unauthorized: vendor id missing" });
+        }
+        const products = await Product.find({ vendorId });
+        res.json({ success: true, products });
+    } catch (error) {
+        console.log(error.message);
+        res.json({ success: false, message: error.message });
+    }
+};

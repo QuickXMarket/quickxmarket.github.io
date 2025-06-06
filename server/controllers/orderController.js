@@ -148,11 +148,20 @@ export const getUserOrders = async (req, res) => {
 // Get All Orders ( for seller / admin) : /api/order/seller
 export const getAllOrders = async (req, res) => {
   try {
+    const vendorId = req.body.userId;
+
+    // Find products of this vendor
+    const vendorProducts = await Product.find({ vendorId }).select('_id');
+    const vendorProductIds = vendorProducts.map(p => p._id);
+
+    // Find orders that contain items with products belonging to this vendor
     const orders = await Order.find({
       $or: [{ paymentType: "COD" }, { isPaid: true }],
+      "items.product": { $in: vendorProductIds }
     })
       .populate("items.product address")
       .sort({ createdAt: -1 });
+
     res.json({ success: true, orders });
   } catch (error) {
     res.json({ success: false, message: error.message });

@@ -25,8 +25,9 @@ export const AppContextProvider = ({children})=>{
   // Fetch Seller Status
   const fetchSeller = async ()=>{
     try {
-        const {data} = await axios.get('/api/seller/is-auth');
-        if(data.success){
+        // Deprecated seller auth endpoint replaced with user auth and role check
+        const {data} = await axios.get('/api/user/is-auth');
+        if(data.success && data.user.role === 'vendor'){
             setIsSeller(true)
         }else{
             setIsSeller(false)

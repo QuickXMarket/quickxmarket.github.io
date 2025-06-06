@@ -10,14 +10,18 @@ const Login = () => {
     const [name, setName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
+    const [role, setRole] = React.useState("customer");
 
     const onSubmitHandler = async (event)=>{
         try {
             event.preventDefault();
 
-            const {data} = await axios.post(`/api/user/${state}`,{
-                name, email, password
-            });
+            const payload = { name, email, password };
+            if(state === "register"){
+                payload.role = role;
+            }
+
+            const {data} = await axios.post(`/api/user/${state}`, payload);
             if (data.success){
                 navigate('/')
                 setUser(data.user)
@@ -31,7 +35,6 @@ const Login = () => {
         }
         
        
-        
     }
 
   return (
@@ -42,10 +45,25 @@ const Login = () => {
                 <span className="text-primary">User</span> {state === "login" ? "Login" : "Sign Up"}
             </p>
             {state === "register" && (
+                <>
                 <div className="w-full">
                     <p>Name</p>
                     <input onChange={(e) => setName(e.target.value)} value={name} placeholder="type here" className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary" type="text" required />
                 </div>
+                <div className="w-full">
+                    <p>User Type</p>
+                    <div className="flex gap-4 mt-1">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="role" value="customer" checked={role === "customer"} onChange={(e) => setRole(e.target.value)} />
+                            Customer
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="role" value="vendor" checked={role === "vendor"} onChange={(e) => setRole(e.target.value)} />
+                            Vendor
+                        </label>
+                    </div>
+                </div>
+                </>
             )}
             <div className="w-full ">
                 <p>Email</p>
