@@ -131,44 +131,21 @@ const Navbar = () => {
       </div>
 
       {open && (
-        <div
-          className={`${
-            open ? "flex" : "hidden"
-          } absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}
-        >
-          <NavLink to="/" onClick={() => setOpen(false)}>
-            Home
-          </NavLink>
-          <NavLink to="/products" onClick={() => setOpen(false)}>
-            All Product
-          </NavLink>
-          {user && (
-            <NavLink to="/products" onClick={() => setOpen(false)}>
-              My Orders
-            </NavLink>
-          )}
-          <NavLink to="/" onClick={() => setOpen(false)}>
-            Contact
-          </NavLink>
-
-          {!user ? (
-            <button
-              onClick={() => {
-                setOpen(false);
-                setShowUserLogin(true);
-              }}
-              className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm"
-            >
-              Login
-            </button>
-          ) : (
-            <button
-              onClick={logout}
-              className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm"
-            >
-              Logout
-            </button>
-          )}
+        <div class="absolute z-50 top-14.5 left-0 w-full bg-white shadow-md py-4 flex flex-col items-start gap-4 px-5 md:hidden">
+          <div class="flex flex-col gap-4 md:hidden">
+            <a aria-current="page" class="active" href="/" data-discover="true">
+              Home
+            </a>
+            <a class="" href="/products" data-discover="true">
+              All Product
+            </a>
+            <a class="" href="/contact" data-discover="true">
+              Contact
+            </a>
+          </div>
+          <button class="cursor-pointer px-6 py-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm">
+            Login
+          </button>
         </div>
       )}
     </nav>

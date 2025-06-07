@@ -30,6 +30,7 @@ import phone_accessories_image from "./phone_accessories_image.jpg";
 import shoes_image from "./shoes_image.jpg";
 import cosmetics_image from "./cosmetics_image.jpg";
 import food_image from "./food_image.jpg";
+import background_test_image from "./background_test_image.jpg";
 
 export const assets = {
   logo,
@@ -59,6 +60,7 @@ export const assets = {
   bottom_banner_image_sm,
   add_address_iamge,
   box_icon,
+  background_test_image,
 };
 
 export const categories = [
