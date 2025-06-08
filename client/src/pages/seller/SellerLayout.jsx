@@ -1,10 +1,43 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { assets } from "../../assets/assets";
 import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
+import React, { useEffect } from "react";
+import SellerLogin from "../../components/seller/SellerLogin";
 
 const SellerLayout = () => {
-  const { axios, navigate } = useAppContext();
+  const { axios, user } = useAppContext();
+  const navigate = useNavigate();
+
+  const [isVendor, setIsVendor] = React.useState(null);
+  const [showSellerLogin, setShowSellerLogin] = React.useState(false);
+  const [businessName, setBusinessName] = React.useState("");
+
+  useEffect(() => {
+    const checkVendorStatus = async () => {
+      if (!user || user.role !== "vendor") {
+        // Not a vendor role, redirect or show login
+        setShowSellerLogin(true);
+        return;
+      }
+      try {
+        const { data } = await axios.get(`/api/seller/${user._id}`);
+        if (data.success) {
+          setBusinessName(data.vendor.businessName);
+          setIsVendor(true);
+          setShowSellerLogin(false);
+        } else {
+          setIsVendor(false);
+          setShowSellerLogin(true);
+        }
+      } catch (error) {
+        toast.error("Failed to verify vendor status");
+        setIsVendor(false);
+        setShowSellerLogin(true);
+      }
+    };
+    checkVendorStatus();
+  }, [user, axios]);
 
   const sidebarLinks = [
     { name: "Add Product", path: "/seller", icon: assets.add_icon },
@@ -30,6 +63,10 @@ const SellerLayout = () => {
     }
   };
 
+  if (showSellerLogin) {
+    return <SellerLogin setShowUserLogin={setShowSellerLogin} />;
+  }
+
   return (
     <>
       <div className="flex items-center justify-between px-4 md:px-8 border-b border-gray-300 py-3 bg-white">
@@ -41,7 +78,7 @@ const SellerLayout = () => {
           />
         </Link>
         <div className="flex items-center gap-5 text-gray-500">
-          <p>Hi! Admin</p>
+          <p>Hi! {businessName}</p>
           <button
             onClick={logout}
             className="border rounded-full text-sm px-4 py-1"
@@ -57,12 +94,14 @@ const SellerLayout = () => {
               to={item.path}
               key={item.name}
               end={item.path === "/seller"}
-              className={({ isActive }) => `flex items-center py-3 px-4 gap-3 
+              className={({ isActive }) =>
+                `flex items-center py-3 px-4 gap-3 
                             ${
                               isActive
                                 ? "border-r-4 md:border-r-[6px] bg-primary/10 border-primary text-primary"
                                 : "hover:bg-gray-100/90 border-white"
-                            }`}
+                            }`
+              }
             >
               <img src={item.icon} alt="" className="w-7 h-7" />
               <p className="md:block hidden text-center">{item.name}</p>

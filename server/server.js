@@ -39,6 +39,7 @@ app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.get("/", (req, res) => res.send("API is Working"));
 app.use("/api/user", userRouter);
 app.use("/api/seller", sellerRouter);
+app.use("/api/upload", (await import("./routes/uploadRoute.js")).default);
 app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/address", addressRouter);

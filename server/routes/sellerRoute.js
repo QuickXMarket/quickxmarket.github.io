@@ -1,7 +1,12 @@
 import express from 'express';
+import { createVendor, getVendorByUserId } from '../controllers/vendorController.js';
 
 const sellerRouter = express.Router();
 
-// Deprecated seller routes removed as seller login is unified with user login
+// Route to create vendor document after SellerLogin form submission
+sellerRouter.post('/register', createVendor);
+
+// Route to get vendor by userId
+sellerRouter.get('/:userId', getVendorByUserId);
 
 export default sellerRouter;

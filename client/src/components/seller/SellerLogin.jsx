@@ -1,7 +1,129 @@
-import React from 'react';
+import React, { useState } from "react";
+import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
+import { assets } from "../../assets/assets";
 
 const SellerLogin = () => {
-  return null; // SellerLogin component deprecated and removed. Use Login component for all users.
+  const { setShowUserLogin, axios, navigate, user } = useAppContext();
+
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [businessName, setBusinessName] = useState("");
+  const [number, setNumber] = useState("");
+  const [address, setAddress] = useState("");
+  const [uploadPreview, setUploadPreview] = useState(null);
+
+  const onFileChange = (e) => {
+    const file = e.target.files[0];
+    setProfilePhoto(file);
+    setUploadPreview(URL.createObjectURL(file));
+  };
+
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
+    if (!businessName || !number || !address) {
+      toast.error("Please fill all required fields");
+      return;
+    }
+
+    try {
+      // Upload profile photo to backend API which uploads to Cloudinary and returns URL
+      let profilePhotoUrl = "";
+      if (profilePhoto) {
+        const formData = new FormData();
+        formData.append("file", profilePhoto);
+        const uploadRes = await axios.post("/api/upload/profile-photo", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        profilePhotoUrl = uploadRes.data.url;
+      }
+
+      
+      const payload = {
+        userId: user._id,
+        profilePhoto: profilePhotoUrl,
+        businessName,
+        number,
+        address,
+      };
+
+      const { data } = await axios.post("/api/seller/register", payload);
+      if (data.success) {
+        toast.success("Vendor registered successfully");
+        setShowUserLogin(false);
+        navigate("/seller");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  return (
+    <div
+      onClick={() => setShowUserLogin(false)}
+      className="fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center text-sm text-gray-600 bg-black/50"
+    >
+      <form
+        onSubmit={onSubmitHandler}
+        onClick={(e) => e.stopPropagation()}
+        className="flex flex-col gap-4 m-auto items-center p-8 py-12 w-80 sm:w-[352px] rounded-lg shadow-xl border border-gray-200 bg-white"
+      >
+        <label htmlFor="profilePhoto" className="cursor-pointer">
+          <input
+            type="file"
+            id="profilePhoto"
+            accept="image/*"
+            onChange={onFileChange}
+            hidden
+          />
+          <img
+            src={uploadPreview || assets.upload_area}
+            alt="Upload Area"
+            width={100}
+            height={100}
+            className="rounded-full object-cover"
+          />
+        </label>
+        <div className="w-full">
+          <p>Business Name</p>
+          <input
+            type="text"
+            value={businessName}
+            onChange={(e) => setBusinessName(e.target.value)}
+            placeholder="Enter business name"
+            className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary"
+            required
+          />
+        </div>
+        <div className="w-full">
+          <p>Number</p>
+          <input
+            type="text"
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
+            placeholder="Enter contact number"
+            className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary"
+            required
+          />
+        </div>
+        <div className="w-full">
+          <p>Address</p>
+          <textarea
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            placeholder="Enter business address"
+            className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary resize-none"
+            rows={3}
+            required
+          />
+        </div>
+        <button className="bg-primary hover:bg-primary-dull transition-all text-white w-full py-2 rounded-md cursor-pointer">
+          Register Business
+        </button>
+      </form>
+    </div>
+  );
 };
 
 export default SellerLogin;
