@@ -1,9 +1,10 @@
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 import User from "../models/User.js";
+import Vendor from "../models/Vendor.js";
 import axios from "axios";
 
-
+// Existing haversineDistance function unchanged
 function haversineDistance(lat1, lon1, lat2, lon2) {
   function toRad(x) {
     return (x * Math.PI) / 180;
@@ -23,6 +24,48 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
   return d; // Distance in km
 }
 
+// New function to calculate total delivery fee for multiple vendors
+export const calculateTotalDeliveryFee = async (
+  customerLat,
+  customerLon,
+  vendorIds
+) => {
+  let totalDeliveryFee = 0;
+  for (const vendorId of vendorIds) {
+    const vendor = await Vendor.findOne({ userId: vendorId });
+    if (vendor && vendor.latitude && vendor.longitude) {
+      const distance = haversineDistance(
+        customerLat,
+        customerLon,
+        vendor.latitude,
+        vendor.longitude
+      );
+      // 100 Naira per km, minimum 100 Naira
+      const deliveryFee = Math.max(100, Math.round(distance) * 100);
+      totalDeliveryFee += deliveryFee;
+    }
+  }
+  return totalDeliveryFee;
+};
+
+// New API handler for delivery fee calculation
+export const getDeliveryFee = async (req, res) => {
+  try {
+    const { latitude, longitude, vendorIds } = req.body;
+    if (!latitude || !longitude || !Array.isArray(vendorIds)) {
+      return res.status(400).json({ success: false, message: "Invalid data" });
+    }
+    const totalDeliveryFee = await calculateTotalDeliveryFee(
+      latitude,
+      longitude,
+      vendorIds
+    );
+    return res.json({ success: true, totalDeliveryFee });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // Place Order COD : /api/order/cod
 export const placeOrderCOD = async (req, res) => {
   try {
@@ -41,7 +84,9 @@ export const placeOrderCOD = async (req, res) => {
     let deliveryFee = 0;
     if (address.latitude && address.longitude) {
       // Get vendor coordinates from first product's vendor
-      const firstProduct = await Product.findById(items[0].product).populate('vendorId');
+      const firstProduct = await Product.findById(items[0].product).populate(
+        "vendorId"
+      );
       if (firstProduct && firstProduct.vendorId) {
         const vendor = await Vendor.findById(firstProduct.vendorId._id);
         if (vendor && vendor.latitude && vendor.longitude) {
@@ -71,7 +116,11 @@ export const placeOrderCOD = async (req, res) => {
       paymentType: "COD",
     });
 
-    return res.json({ success: true, message: "Order Placed Successfully", deliveryFee });
+    return res.json({
+      success: true,
+      message: "Order Placed Successfully",
+      deliveryFee,
+    });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }
@@ -135,9 +184,15 @@ export const placeOrderPaystack = async (req, res) => {
     );
 
     if (paystackResponse.data.status) {
-      return res.json({ success: true, url: paystackResponse.data.data.authorization_url });
+      return res.json({
+        success: true,
+        url: paystackResponse.data.data.authorization_url,
+      });
     } else {
-      return res.json({ success: false, message: "Failed to initialize Paystack transaction" });
+      return res.json({
+        success: false,
+        message: "Failed to initialize Paystack transaction",
+      });
     }
   } catch (error) {
     return res.json({ success: false, message: error.message });
@@ -195,13 +250,13 @@ export const getAllOrders = async (req, res) => {
     const vendorId = req.body.userId;
 
     // Find products of this vendor
-    const vendorProducts = await Product.find({ vendorId }).select('_id');
-    const vendorProductIds = vendorProducts.map(p => p._id);
+    const vendorProducts = await Product.find({ vendorId }).select("_id");
+    const vendorProductIds = vendorProducts.map((p) => p._id);
 
     // Find orders that contain items with products belonging to this vendor
     const orders = await Order.find({
       $or: [{ paymentType: "COD" }, { isPaid: true }],
-      "items.product": { $in: vendorProductIds }
+      "items.product": { $in: vendorProductIds },
     })
       .populate("items.product address")
       .sort({ createdAt: -1 });

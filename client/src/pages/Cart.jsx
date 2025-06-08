@@ -22,6 +22,7 @@ const Cart = () => {
   const [showAddress, setShowAddress] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentOption, setPaymentOption] = useState("COD");
+  const [deliveryFee, setDeliveryFee] = useState(0);
 
   const getCart = () => {
     let tempArray = [];
@@ -48,6 +49,55 @@ const Cart = () => {
       toast.error(error.message);
     }
   };
+
+  const fetchDeliveryFee = async (latitude, longitude, vendorIds) => {
+    try {
+      const { data } = await axios.post("/api/order/delivery-fee", {
+        latitude,
+        longitude,
+        vendorIds,
+      });
+      if (data.success) {
+        setDeliveryFee(data.totalDeliveryFee);
+      } else {
+        setDeliveryFee(0);
+        toast.error("Failed to fetch delivery fee");
+      }
+    } catch (error) {
+      setDeliveryFee(0);
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (products.length > 0 && cartItems) {
+      getCart();
+    }
+  }, [products, cartItems]);
+
+  useEffect(() => {
+    if (user) {
+      getUserAddress();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (selectedAddress && cartArray.length > 0) {
+      // Extract unique vendor IDs from cartArray
+      const vendorIdsSet = new Set();
+      cartArray.forEach((product) => {
+        if (product.vendorId) {
+          vendorIdsSet.add(product.vendorId);
+        }
+      });
+      const vendorIds = Array.from(vendorIdsSet);
+      if (vendorIds.length > 0) {
+        fetchDeliveryFee(selectedAddress.latitude, selectedAddress.longitude, vendorIds);
+      } else {
+        setDeliveryFee(0);
+      }
+    }
+  }, [selectedAddress, cartArray]);
 
   const placeOrder = async () => {
     try {
@@ -95,18 +145,6 @@ const Cart = () => {
       toast.error(error.message);
     }
   };
-
-  useEffect(() => {
-    if (products.length > 0 && cartItems) {
-      getCart();
-    }
-  }, [products, cartItems]);
-
-  useEffect(() => {
-    if (user) {
-      getUserAddress();
-    }
-  }, [user]);
 
   return products.length > 0 && cartItems ? (
     <div className="flex flex-col md:flex-row mt-16">
@@ -269,20 +307,51 @@ const Cart = () => {
           </p>
           <p className="flex justify-between">
             <span>Shipping Fee</span>
-            {/* <span className="text-green-600">{deliveryFee ? `${currency}${deliveryFee}` : "Free"}</span> */}
+            <span className="text-green-600">{deliveryFee ? `${currency}${deliveryFee}` : "Free"}</span>
           </p>
-          <p className="flex justify-between">
+          {/* <p className="flex justify-between">
             <span>Tax (2%)</span>
             <span>
               {currency}
               {(getCartAmount() * 2) / 100}
+            </span>
+          </p> */}
+          <p className="flex justify-between">
+            <span>Service Fee</span>
+            <span>
+              {currency}
+              {(() => {
+                const totalPrice = getCartAmount() + deliveryFee;
+                let serviceFee = 0;
+                if (totalPrice < 2500) {
+                  serviceFee = (1.5 * totalPrice) / 100;
+                } else {
+                  serviceFee = (1.5 * totalPrice) / 100 + 100;
+                }
+                if (serviceFee > 2000) {
+                  serviceFee = 2000;
+                }
+                return serviceFee.toFixed(2);
+              })()}
             </span>
           </p>
           <p className="flex justify-between text-lg font-medium mt-3">
             <span>Total Amount:</span>
             <span>
               {currency}
-              {getCartAmount() + (getCartAmount() * 2) / 100}
+              {(() => {
+                const totalPrice = getCartAmount() + deliveryFee;
+                let serviceFee = 0;
+                if (totalPrice < 2500) {
+                  serviceFee = (1.5 * totalPrice) / 100;
+                } else {
+                  serviceFee = (1.5 * totalPrice) / 100 + 100;
+                }
+                if (serviceFee > 2000) {
+                  serviceFee = 2000;
+                }
+                return (getCartAmount() + (getCartAmount() * 2) / 100 + deliveryFee + serviceFee).toFixed(2);
+              })()}
             </span>
           </p>
         </div>
