@@ -40,7 +40,11 @@ const Navbar = () => {
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
       <NavLink to="/" onClick={() => setOpen(false)}>
-        <img className="h-9" src={assets.QuickXMarket_Logo_Transparent} alt="logo" />
+        <img
+          className="h-9"
+          src={assets.QuickXMarket_Logo_Transparent}
+          alt="logo"
+        />
       </NavLink>
 
       <div className="hidden sm:flex items-center gap-8">
@@ -133,19 +137,44 @@ const Navbar = () => {
       {open && (
         <div class="absolute z-50 top-14.5 left-0 w-full bg-white shadow-md py-4 flex flex-col items-start gap-4 px-5 md:hidden">
           <div class="flex flex-col gap-4 md:hidden">
-            <a aria-current="page" class="active" href="/" data-discover="true">
+            <NavLink
+              aria-current="page"
+              class="active"
+              to="/"
+              data-discover="true"
+            >
               Home
-            </a>
-            <a class="" href="/products" data-discover="true">
+            </NavLink>
+            <NavLink class="" to="/products" data-discover="true">
               All Product
-            </a>
-            <a class="" href="/contact" data-discover="true">
+            </NavLink>
+            {user && (
+              <NavLink to="/products" onClick={() => setOpen(false)}>
+                My Orders
+              </NavLink>
+            )}
+            <NavLink class="" to="/contact" data-discover="true">
               Contact
-            </a>
+            </NavLink>
           </div>
-          <button class="cursor-pointer px-6 py-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm">
-            Login
-          </button>
+          {!user ? (
+            <button
+              onClick={() => {
+                setOpen(false);
+                setShowUserLogin(true);
+              }}
+              className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm"
+            >
+              Login
+            </button>
+          ) : (
+            <button
+              onClick={logout}
+              className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm"
+            >
+              Logout
+            </button>
+          )}
         </div>
       )}
     </nav>
