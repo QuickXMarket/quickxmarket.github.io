@@ -6,6 +6,8 @@ const vendorSchema = new mongoose.Schema({
     businessName: { type: String, required: true },
     number: { type: String, required: true },
     address: { type: String, required: true },
+    latitude: { type: Number },
+    longitude: { type: Number },
     products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'product' }],
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'order' }]
 }, { timestamps: true });

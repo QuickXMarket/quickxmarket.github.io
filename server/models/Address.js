@@ -7,6 +7,8 @@ const addressSchema = new mongoose.Schema({
     email: {type: String, required: true},
     address: {type: String, required: true},
     phone: {type: String, required: true},
+    latitude: { type: Number },
+    longitude: { type: Number },
 })
 
 const Address = mongoose.models.address || mongoose.model('address', addressSchema)

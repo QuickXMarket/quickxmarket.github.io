@@ -3,18 +3,61 @@ import Product from "../models/Product.js";
 import User from "../models/User.js";
 import axios from "axios";
 
+
+function haversineDistance(lat1, lon1, lat2, lon2) {
+  function toRad(x) {
+    return (x * Math.PI) / 180;
+  }
+
+  const R = 6371; // Radius of Earth in km
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) *
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const d = R * c;
+  return d; // Distance in km
+}
+
 // Place Order COD : /api/order/cod
 export const placeOrderCOD = async (req, res) => {
   try {
     const { userId, items, address } = req.body;
     if (!address || items.length === 0) {
       return res.json({ success: false, message: "Invalid data" });
-    } 
+    }
+
     // Calculate Amount Using Items
     let amount = await items.reduce(async (acc, item) => {
       const product = await Product.findById(item.product);
       return (await acc) + product.offerPrice * item.quantity;
     }, 0);
+
+    // Calculate delivery fee based on distance
+    let deliveryFee = 0;
+    if (address.latitude && address.longitude) {
+      // Get vendor coordinates from first product's vendor
+      const firstProduct = await Product.findById(items[0].product).populate('vendorId');
+      if (firstProduct && firstProduct.vendorId) {
+        const vendor = await Vendor.findById(firstProduct.vendorId._id);
+        if (vendor && vendor.latitude && vendor.longitude) {
+          const distance = haversineDistance(
+            address.latitude,
+            address.longitude,
+            vendor.latitude,
+            vendor.longitude
+          );
+          // Example: delivery fee $1 per km, minimum $5
+          deliveryFee = Math.max(5, Math.round(distance));
+        }
+      }
+    }
+
+    amount += deliveryFee;
 
     // Add Tax Charge (2%)
     amount += Math.floor(amount * 0.02);
@@ -23,11 +66,12 @@ export const placeOrderCOD = async (req, res) => {
       userId,
       items,
       amount,
+      deliveryFee,
       address,
       paymentType: "COD",
     });
 
-    return res.json({ success: true, message: "Order Placed Successfully" });
+    return res.json({ success: true, message: "Order Placed Successfully", deliveryFee });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }

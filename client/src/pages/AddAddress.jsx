@@ -31,6 +31,10 @@ const AddAddress = () => {
     phone: "",
   });
 
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const [suggestions, setSuggestions] = useState([]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -38,13 +42,51 @@ const AddAddress = () => {
       ...prevAddress,
       [name]: value,
     }));
-    console.log(address);
+
+    if (name === "address") {
+      fetchSuggestions(value);
+    }
+  };
+
+  const fetchSuggestions = async (query) => {
+    if (!query) {
+      setSuggestions([]);
+      return;
+    }
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          query
+        )}&addressdetails=1&limit=5`
+      );
+      const data = await response.json();
+      setSuggestions(data);
+    } catch (error) {
+      console.error("Error fetching address suggestions:", error);
+    }
+  };
+
+  const onSuggestionClick = (suggestion) => {
+    setAddress((prevAddress) => ({
+      ...prevAddress,
+      address: suggestion.display_name,
+    }));
+    setLatitude(parseFloat(suggestion.lat));
+    setLongitude(parseFloat(suggestion.lon));
+    setSuggestions([]);
   };
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("/api/address/add", { address });
+      const payload = {
+        ...address,
+        latitude,
+        longitude,
+      };
+      const { data } = await axios.post("/api/address/add", {
+        address: payload,
+      });
 
       if (data.success) {
         toast.success(data.message);
@@ -95,13 +137,31 @@ const AddAddress = () => {
               type="email"
               placeholder="Email address"
             />
-            <InputField
-              handleChange={handleChange}
-              address={address}
-              name="address"
-              type="text"
-              placeholder="Address"
-            />
+            <div className="relative">
+              <input
+                className="w-full px-2 py-2.5 border border-gray-500/30 rounded outline-none text-gray-500 focus:border-primary transition"
+                type="text"
+                placeholder="Address"
+                onChange={handleChange}
+                name="address"
+                value={address.address}
+                required
+                autoComplete="off"
+              />
+              {suggestions.length > 0 && (
+                <ul className="absolute z-50 bg-white border border-gray-300 rounded w-full max-h-40 overflow-auto mt-1">
+                  {suggestions.map((suggestion) => (
+                    <li
+                      key={suggestion.place_id}
+                      onClick={() => onSuggestionClick(suggestion)}
+                      className="p-2 cursor-pointer hover:bg-gray-200"
+                    >
+                      {suggestion.display_name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
             <InputField
               handleChange={handleChange}
