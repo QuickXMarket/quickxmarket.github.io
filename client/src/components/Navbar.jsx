@@ -40,7 +40,7 @@ const Navbar = () => {
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
       <NavLink to="/" onClick={() => setOpen(false)}>
-        <img className="h-9" src={assets.logo} alt="logo" />
+        <img className="h-9" src={assets.QuickXMarket_Logo_Transparent} alt="logo" />
       </NavLink>
 
       <div className="hidden sm:flex items-center gap-8">

@@ -33,7 +33,7 @@ const MainBanner = () => {
             />
           </Link>
 
-          <Link
+          {/* <Link
             to={"/products"}
             className="group hidden md:flex items-center gap-2 px-9 py-3 cursor-pointer text-white"
           >
@@ -43,7 +43,7 @@ const MainBanner = () => {
               src={assets.white_arrow_icon}
               alt="arrow"
             />
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>

@@ -31,6 +31,7 @@ import shoes_image from "./shoes_image.jpg";
 import cosmetics_image from "./cosmetics_image.jpg";
 import food_image from "./food_image.jpg";
 import background_test_image from "./background_test_image.jpg";
+import QuickXMarket_Logo_Transparent from "./QuickXMarket_Logo_Transparent.png";
 
 export const assets = {
   logo,
@@ -61,6 +62,7 @@ export const assets = {
   add_address_iamge,
   box_icon,
   background_test_image,
+  QuickXMarket_Logo_Transparent,
 };
 
 export const categories = [
