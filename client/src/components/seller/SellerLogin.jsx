@@ -27,13 +27,36 @@ const SellerLogin = () => {
       return;
     }
     try {
+      const lat = 6.400101079346673;
+      const lon = 5.609512639756239;
+      const limit = 6;
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        `https://photon.komoot.io/api/?q=${encodeURIComponent(
           query
-        )}&addressdetails=1&limit=5`
+        )}&limit=${limit}&lat=${lat}&lon=${lon}`
       );
       const data = await response.json();
-      setSuggestions(data);
+      // Photon API returns features array, map to expected format
+      const suggestions = data.features.map((feature) => {
+        const props = feature.properties;
+        const parts = [
+          props.name,
+          props.housenumber,
+          props.street,
+          props.suburb,
+          props.city,
+          props.state,
+          props.country,
+        ].filter(Boolean); // remove undefined/null
+        return {
+          place_id: props.osm_id,
+          display_name: parts.join(", "),
+          lat: feature.geometry.coordinates[1],
+          lon: feature.geometry.coordinates[0],
+        };
+      });
+
+      setSuggestions(suggestions);
     } catch (error) {
       console.error("Error fetching address suggestions:", error);
     }
