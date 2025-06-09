@@ -153,10 +153,16 @@ const Navbar = () => {
                 My Orders
               </NavLink>
             )}
+            {user && user.role === "vendor" && (
+              <NavLink class="" to="/seller" data-discover="true">
+                Seller Dashboard
+              </NavLink>
+            )}
             <NavLink class="" to="/contact" data-discover="true">
               Contact
             </NavLink>
           </div>
+
           {!user ? (
             <button
               onClick={() => {
