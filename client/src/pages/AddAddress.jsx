@@ -54,37 +54,16 @@ const AddAddress = () => {
       return;
     }
     try {
-      const lat = 6.400101079346673;
-      const lon = 5.609512639756239;
-      const limit = 6;
+      const limit = 5;
+      const left = 5.564212639756239;
+      const right = 5.654812639756239;
+      const top = 6.445101079346673;
+      const bottom = 6.355101079346673;
       const response = await fetch(
-        `https://photon.komoot.io/api/?q=${encodeURIComponent(
-          query
-        )}&limit=${limit}&lat=${lat}&lon=${lon}`
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=${limit}&viewbox=${left},${top},${right},${bottom}&bounded=1`
       );
       const data = await response.json();
-      // Photon API returns features array, map to expected format
- 
-      const suggestions = data.features.map((feature) => {
-        const props = feature.properties;
-        const parts = [
-          props.name,
-          props.housenumber,
-          props.street,
-          props.suburb,
-          props.city,
-          props.state,
-          props.country,
-        ].filter(Boolean); 
-        return {
-          place_id: props.osm_id,
-          display_name: parts.join(", "),
-          lat: feature.geometry.coordinates[1],
-          lon: feature.geometry.coordinates[0],
-        };
-      });
-
-      setSuggestions(suggestions);
+      setSuggestions(data);
     } catch (error) {
       console.error("Error fetching address suggestions:", error);
     }
