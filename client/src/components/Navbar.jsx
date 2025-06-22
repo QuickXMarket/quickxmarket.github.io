@@ -10,6 +10,7 @@ const Navbar = () => {
     user,
     setUser,
     setShowUserLogin,
+    setShowSellerLogin,
     navigate,
     setSearchQuery,
     searchQuery,
@@ -48,13 +49,24 @@ const Navbar = () => {
       </NavLink>
 
       <div className="hidden sm:flex items-center gap-8">
-        {user && user.role === "vendor" && (
-          <NavLink to="/seller">
-            <button className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80">
-              Seller Dashboard
+        {user &&
+          (user.role === "vendor" ? (
+            <NavLink to="/seller">
+              <button className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80">
+                Seller Dashboard
+              </button>
+            </NavLink>
+          ) : user.role === "customer" ? (
+            <button
+              className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80"
+              onClick={() => {
+                setShowSellerLogin(true);
+              }}
+            >
+              Register as a Vendor
             </button>
-          </NavLink>
-        )}
+          ) : null)}
+
         <NavLink to="/">Home</NavLink>
         <NavLink to="/products">All Product</NavLink>
         {/* <NavLink to="/">Contact</NavLink> */}
@@ -153,11 +165,23 @@ const Navbar = () => {
                 My Orders
               </NavLink>
             )}
-            {user && user.role === "vendor" && (
-              <NavLink class="" to="/seller" data-discover="true">
-                Seller Dashboard
-              </NavLink>
-            )}
+            {user &&
+              (user.role === "vendor" ? (
+                <NavLink className="" to="/seller" data-discover="true">
+                  Seller Dashboard
+                </NavLink>
+              ) : user.role === "customer" ? (
+                <NavLink
+                  className=""
+                  data-discover="true"
+                  onClick={() => {
+                    setOpen(false);
+                    setShowSellerLogin(true);
+                  }}
+                >
+                  Register as a Vendor
+                </NavLink>
+              ) : null)}
             <NavLink class="" to="/contact" data-discover="true">
               Contact
             </NavLink>

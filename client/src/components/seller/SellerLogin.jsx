@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { assets } from "../../assets/assets";
 
 const SellerLogin = () => {
-  const { setShowUserLogin, axios, navigate, user } = useAppContext();
+  const { setShowSellerLogin, axios, navigate, user } = useAppContext();
 
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [businessName, setBusinessName] = useState("");
@@ -105,6 +105,7 @@ const SellerLogin = () => {
         );
         profilePhotoUrl = uploadRes.data.url;
       }
+ 
 
       const payload = {
         userId: user._id,
@@ -118,9 +119,27 @@ const SellerLogin = () => {
 
       const { data } = await axios.post("/api/seller/register", payload);
       if (data.success) {
-        toast.success("Vendor registered successfully");
-        setShowUserLogin(false);
-        navigate("/seller");
+        // Update user role to vendor
+        try {
+          const updateRoleRes = await axios.patch("/api/user/update-role", {
+            userId: user._id,
+            role: "vendor",
+          });
+          if (updateRoleRes.data.success) {
+            toast.success("Vendor registered successfully and role updated");
+            setShowSellerLogin(false);
+            navigate("/seller");
+          } else {
+            toast.error(
+              "Vendor registered but failed to update role: " +
+                updateRoleRes.data.message
+            );
+          }
+        } catch (error) {
+          toast.error(
+            "Vendor registered but error updating role: " + error.message
+          );
+        }
       } else {
         toast.error(data.message);
       }
@@ -131,7 +150,7 @@ const SellerLogin = () => {
 
   return (
     <div
-      onClick={() => setShowUserLogin(false)}
+      // onClick={() => setShowUserLogin(false)}
       className="fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center text-sm text-gray-600 bg-black/50"
     >
       <form
