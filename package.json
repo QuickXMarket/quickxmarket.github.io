@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "strip-bom": "^5.0.0"
+  }
+}
