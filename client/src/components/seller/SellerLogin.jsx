@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 import { assets } from "../../assets/assets";
@@ -14,6 +14,8 @@ const SellerLogin = () => {
   const [longitude, setLongitude] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
   const [uploadPreview, setUploadPreview] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const abortControllerRef = useRef(null);
 
   const onFileChange = (e) => {
     const file = e.target.files[0];
@@ -24,16 +26,29 @@ const SellerLogin = () => {
   const fetchSuggestions = async (query) => {
     if (!query) {
       setSuggestions([]);
+      setLoading(false);
       return;
     }
 
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    setLoading(true);
     try {
       const response = await axios.get(
-        `/api/geocoding/geocode-suggest?q=${encodeURIComponent(query)}`
+        `/api/geocoding/geocode-suggest?q=${encodeURIComponent(query)}`,
+        { signal: controller.signal }
       );
       setSuggestions(response.data.suggestions);
     } catch (error) {
-      console.error("Error fetching address suggestions:", error);
+      if (error.name !== "AbortError") {
+        console.error("Error fetching address suggestions:", error);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,8 +67,26 @@ const SellerLogin = () => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+
+    const phoneRegex =
+      /^(?:\+?234|0)(701|702|703|704|705|706|707|708|709|802|803|804|805|806|807|808|809|810|811|812|813|814|815|816|817|818|819|901|902|903|904|905|906|907|908|909|911)\d{7}$/;
+
+    if (loading) {
+      toast.error("Address is still loading, please wait.");
+      return;
+    }
     if (!businessName || !number || !address) {
       toast.error("Please fill all required fields");
+      return;
+    }
+
+    if (!phoneRegex.test(number)) {
+      toast.error("Please enter a valid Nigerian phone number.");
+      return;
+    }
+
+    if (latitude === null || longitude === null) {
+      toast.error("Please select a valid address from suggestions.");
       return;
     }
 
@@ -169,7 +202,15 @@ const SellerLogin = () => {
             </ul>
           )}
         </div>
-        <button className="bg-primary hover:bg-primary-dull transition-all text-white w-full py-2 rounded-md cursor-pointer">
+        <button
+          type="submit"
+          disabled={loading || latitude === null || longitude === null}
+          className={`cursor-pointer bg-primary text-white w-full py-2 rounded-md transition-all ${
+            loading || latitude === null || longitude === null
+              ? "bg-gray-400 cursor-not-allowed"
+              : "hover:bg-primary-dull"
+          }`}
+        >
           Register Business
         </button>
       </form>

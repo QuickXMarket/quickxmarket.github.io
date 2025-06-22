@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { assets } from "../assets/assets";
 import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
@@ -34,6 +34,8 @@ const AddAddress = () => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const abortControllerRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,15 +53,29 @@ const AddAddress = () => {
   const fetchSuggestions = async (query) => {
     if (!query) {
       setSuggestions([]);
+      setLoading(false);
       return;
     }
+
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    setLoading(true);
     try {
       const response = await axios.get(
-        `/api/geocoding/geocode-suggest?q=${encodeURIComponent(query)}`
+        `/api/geocoding/geocode-suggest?q=${encodeURIComponent(query)}`,
+        { signal: controller.signal }
       );
       setSuggestions(response.data.suggestions);
     } catch (error) {
-      console.error("Error fetching address suggestions:", error);
+      if (error.name !== "AbortError") {
+        console.error("Error fetching address suggestions:", error);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -68,6 +84,7 @@ const AddAddress = () => {
       ...prevAddress,
       address: suggestion.display_name,
     }));
+
     setLatitude(parseFloat(suggestion.lat));
     setLongitude(parseFloat(suggestion.lon));
     setSuggestions([]);
@@ -75,6 +92,25 @@ const AddAddress = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+
+    const phoneRegex =
+      /^(?:\+?234|0)(701|702|703|704|705|706|707|708|709|802|803|804|805|806|807|808|809|810|811|812|813|814|815|816|817|818|819|901|902|903|904|905|906|907|908|909|911)\d{7}$/;
+
+    if (loading) {
+      toast.error("Address is still loading, please wait.");
+      return;
+    }
+
+    if (!phoneRegex.test(address.phone)) {
+      toast.error("Please enter a valid Nigerian phone number.");
+      return;
+    }
+
+    if (latitude === null || longitude === null) {
+      toast.error("Please select a valid address from suggestions.");
+      return;
+    }
+
     try {
       const payload = {
         ...address,
@@ -168,7 +204,15 @@ const AddAddress = () => {
               placeholder="Phone"
             />
 
-            <button className="w-full mt-6 bg-primary text-white py-3 hover:bg-primary-dull transition cursor-pointer uppercase">
+            <button
+              type="submit"
+              disabled={loading || latitude === null || longitude === null}
+              className={`w-full mt-6 py-3 uppercase transition cursor-pointer text-white ${
+                loading || latitude === null || longitude === null
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-primary hover:bg-primary-dull"
+              }`}
+            >
               Save address
             </button>
           </form>

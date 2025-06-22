@@ -19,6 +19,21 @@ let fuse;
 let isInitialized = false;
 let geocodingData = [];
 
+// Helper to calculate centroid of an array of [lon, lat] points
+function getCentroid(coords) {
+  let sumLat = 0;
+  let sumLon = 0;
+  let count = 0;
+
+  coords.forEach(([lon, lat]) => {
+    sumLat += lat;
+    sumLon += lon;
+    count++;
+  });
+
+  return [sumLon / count, sumLat / count];
+}
+
 async function loadGeoJsonData() {
   if (isInitialized && fuse) return fuse;
 
@@ -33,13 +48,31 @@ async function loadGeoJsonData() {
 
     features.forEach((feature) => {
       if (feature.geometry && feature.properties) {
+        let lat, lon;
+        const { type, coordinates } = feature.geometry;
+
+        if (type === "Point") {
+          [lon, lat] = coordinates;
+        } else if (type === "Polygon") {
+          [lon, lat] = getCentroid(coordinates[0]);
+        } else if (type === "MultiPolygon") {
+          [lon, lat] = getCentroid(coordinates[0][0]);
+        } else if (type === "LineString") {
+          [lon, lat] = getCentroid(coordinates);
+        } else if (type === "MultiLineString") {
+          const allCoords = coordinates.flat();
+          [lon, lat] = getCentroid(allCoords);
+        } else {
+          return; // Skip unsupported types
+        }
+        
         geocodingData.push({
           display_name:
             feature.properties.name ||
             feature.properties.address ||
             "Unknown Address",
-          lat: feature.geometry.coordinates[1],
-          lon: feature.geometry.coordinates[0],
+          lat,
+          lon,
           city: feature.properties.city,
           country: feature.properties.country,
         });
