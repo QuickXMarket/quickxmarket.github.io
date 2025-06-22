@@ -16,52 +16,48 @@ const geojsonFiles = [
 ];
 
 let fuse;
+let isInitialized = false;
 let geocodingData = [];
 
 async function loadGeoJsonData() {
-  try {
-    for (const file of geojsonFiles) {
-      const filePath = path.join(MAP_FOLDER, file);
-      const rawData = await readFile(filePath, "utf-8");
-      const cleaned = rawData.replace(/^\uFEFF/, "");
-      const geojson = JSON.parse(cleaned)
+  if (isInitialized && fuse) return fuse;
 
-      const features =
-        geojson.type === "FeatureCollection" ? geojson.features : [geojson];
+  geocodingData = [];
+  for (const file of geojsonFiles) {
+    const filePath = path.join(MAP_FOLDER, file);
+    const rawData = await readFile(filePath, "utf-8");
+    const cleaned = rawData.replace(/^\uFEFF/, "");
+    const geojson = JSON.parse(cleaned);
+    const features =
+      geojson.type === "FeatureCollection" ? geojson.features : [geojson];
 
-      features.forEach((feature) => {
-        if (feature.geometry && feature.properties) {
-          geocodingData.push({
-            display_name:
-              feature.properties.name ||
-              feature.properties.address ||
-              "Unknown Address",
-            lat: feature.geometry.coordinates[1],
-            lon: feature.geometry.coordinates[0],
-            city: feature.properties.city,
-            country: feature.properties.country,
-          });
-        }
-      });
-    }
-
-    console.log(`Loaded ${geocodingData.length} geocoding entries.`);
-
-    const fuseOptions = {
-      keys: ["display_name", "city", "country"],
-      threshold: 0.3,
-      includeScore: false,
-      ignoreLocation: true,
-      findAllMatches: true,
-    };
-
-    fuse = new Fuse(geocodingData, fuseOptions);
-    console.log("Fuse.js index built successfully.");
-  } catch (error) {
-    console.error("Error loading GeoJSON data:", error);
-    geocodingData = [];
-    fuse = undefined;
+    features.forEach((feature) => {
+      if (feature.geometry && feature.properties) {
+        geocodingData.push({
+          display_name:
+            feature.properties.name ||
+            feature.properties.address ||
+            "Unknown Address",
+          lat: feature.geometry.coordinates[1],
+          lon: feature.geometry.coordinates[0],
+          city: feature.properties.city,
+          country: feature.properties.country,
+        });
+      }
+    });
   }
+
+  fuse = new Fuse(geocodingData, {
+    keys: ["display_name", "city", "country"],
+    threshold: 0.3,
+    includeScore: false,
+    ignoreLocation: true,
+    findAllMatches: true,
+  });
+
+  isInitialized = true;
+  console.log("GeoJSON data loaded and Fuse index built.");
+  return fuse;
 }
 
 function searchAddresses(query) {
