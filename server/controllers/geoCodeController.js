@@ -2,7 +2,6 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 import Fuse from "fuse.js";
-import stripBom from "strip-bom";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,7 +24,7 @@ async function loadGeoJsonData() {
       const filePath = path.join(MAP_FOLDER, file);
       const rawData = await readFile(filePath, "utf-8");
       const cleaned = rawData.replace(/^\uFEFF/, "");
-      const geojson = JSON.parse(stripBom(cleaned));
+      const geojson = JSON.parse(cleaned)
 
       const features =
         geojson.type === "FeatureCollection" ? geojson.features : [geojson];
