@@ -65,7 +65,7 @@ function searchAddresses(query) {
     console.warn("Fuse.js index not initialized. Cannot perform search.");
     return [];
   }
-  const results = fuse.search(query);
+  const results = fuse.search(query).slice(0, 5);
   return results.map((result) => result.item);
 }
 
