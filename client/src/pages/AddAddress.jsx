@@ -53,6 +53,8 @@ const AddAddress = () => {
   const fetchSuggestions = async (query) => {
     if (!query) {
       setSuggestions([]);
+      setLatitude(null);
+      setLongitude(null);
       setLoading(false);
       return;
     }
@@ -65,11 +67,18 @@ const AddAddress = () => {
 
     setLoading(true);
     try {
-      const response = await axios.get(
-        `/api/geocoding/geocode-suggest?q=${encodeURIComponent(query)}`,
-        { signal: controller.signal }
+      const limit = 5;
+      const left = 5.564212639756239;
+      const right = 5.654812639756239;
+      const top = 6.445101079346673;
+      const bottom = 6.355101079346673;
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          query
+        )}&addressdetails=1&limit=${limit}&viewbox=${left},${top},${right},${bottom}&bounded=1`
       );
-      setSuggestions(response.data.suggestions);
+      const data = await response.json();
+      setSuggestions(data);
     } catch (error) {
       if (error.name !== "AbortError") {
         console.error("Error fetching address suggestions:", error);
@@ -84,7 +93,6 @@ const AddAddress = () => {
       ...prevAddress,
       address: suggestion.display_name,
     }));
-
     setLatitude(parseFloat(suggestion.lat));
     setLongitude(parseFloat(suggestion.lon));
     setSuggestions([]);
