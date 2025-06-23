@@ -30,6 +30,7 @@ import phone_accessories_image from "./phone_accessories_image.jpg";
 import shoes_image from "./shoes_image.jpg";
 import cosmetics_image from "./cosmetics_image.jpg";
 import food_image from "./food_image.jpg";
+import hair_accessories_image from "./hair_accessories_image.jpg";
 import background_test_image from "./background_test_image.jpg";
 import QuickXMarket_Logo_Transparent from "./QuickXMarket_Logo_Transparent.png";
 import Slideshow_1 from "./Slideshow_1.jpg";
@@ -79,6 +80,12 @@ export const categories = [
     path: "PhoneAccessories",
     image: phone_accessories_image,
     bgColor: "#E0F7FA",
+  },
+  {
+    text: "Hair Accessories",
+    path: "HairAccessories",
+    image: hair_accessories_image,
+    bgColor: "#F1F8E9",
   },
   {
     text: "Clothing",
