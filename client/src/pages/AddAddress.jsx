@@ -53,12 +53,12 @@ const AddAddress = () => {
   const fetchSuggestions = async (query) => {
     if (!query) {
       setSuggestions([]);
-      setLatitude(null);
-      setLongitude(null);
       setLoading(false);
       return;
     }
-
+    
+    setLatitude(null);
+    setLongitude(null);
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }

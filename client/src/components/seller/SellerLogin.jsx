@@ -27,11 +27,11 @@ const SellerLogin = () => {
     if (!query) {
       setSuggestions([]);
       setLoading(false);
-      setLatitude(null);
-      setLongitude(null);
       return;
     }
 
+    setLatitude(null);
+    setLongitude(null);
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
