@@ -88,8 +88,8 @@ export const categories = [
     bgColor: "#F1F8E9",
   },
   {
-    text: "Clothing",
-    path: "Clothing",
+    text: "Fashion and Accessories",
+    path: "Fashion&Accessories",
     image: clothing_image,
     bgColor: "#FCE4EC",
   },
@@ -117,32 +117,32 @@ export const footerLinks = [
   {
     title: "Quick Links",
     links: [
-      { text: "Home", url: "#" },
-      { text: "Best Sellers", url: "#" },
-      { text: "Offers & Deals", url: "#" },
-      { text: "Contact Us", url: "#" },
-      { text: "FAQs", url: "#" },
+      { text: "Home", url: "/" },
+      // { text: "Best Sellers", url: "#" },
+      // { text: "Offers & Deals", url: "#" },
+      { text: "Contact Us", url: "/Contact" },
+      // { text: "FAQs", url: "#" },
     ],
   },
   {
     title: "Need help?",
     links: [
-      { text: "Delivery Information", url: "#" },
-      { text: "Return & Refund Policy", url: "#" },
-      { text: "Payment Methods", url: "#" },
-      { text: "Track your Order", url: "#" },
-      { text: "Contact Us", url: "#" },
+      // { text: "Delivery Information", url: "#" },
+      // { text: "Return & Refund Policy", url: "#" },
+      // { text: "Payment Methods", url: "#" },
+      { text: "Track your Order", url: "/my-orders" },
+      { text: "Contact Us", url: "/Contact" },
     ],
   },
-  {
-    title: "Follow Us",
-    links: [
-      { text: "Instagram", url: "#" },
-      { text: "Twitter", url: "#" },
-      { text: "Facebook", url: "#" },
-      { text: "YouTube", url: "#" },
-    ],
-  },
+  // {
+  //   title: "Follow Us",
+  //   links: [
+  //     { text: "Instagram", url: "#" },
+  //     { text: "Twitter", url: "#" },
+  //     { text: "Facebook", url: "#" },
+  //     { text: "YouTube", url: "#" },
+  //   ],
+  // },
 ];
 
 export const features = [
