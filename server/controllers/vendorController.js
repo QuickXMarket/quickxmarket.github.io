@@ -3,9 +3,24 @@ import Vendor from "../models/Vendor.js";
 // Create Vendor document after user fills SellerLogin form
 export const createVendor = async (req, res) => {
   try {
-    const { userId, profilePhoto, businessName, number, address } = req.body;
+    const {
+      userId,
+      profilePhoto,
+      businessName,
+      number,
+      address,
+      latitude,
+      longitude,
+    } = req.body;
 
-    if (!userId || !businessName || !number || !address) {
+    if (
+      !userId ||
+      !businessName ||
+      !number ||
+      !address ||
+      !latitude ||
+      !longitude
+    ) {
       return res.json({ success: false, message: "Missing required fields" });
     }
 
@@ -23,6 +38,8 @@ export const createVendor = async (req, res) => {
       address,
       products: [],
       orders: [],
+      latitude,
+      longitude,
     });
 
     return res.json({ success: true, vendor });
@@ -36,7 +53,9 @@ export const createVendor = async (req, res) => {
 export const getVendorByUserId = async (req, res) => {
   try {
     const { userId } = req.params;
-    const vendor = await Vendor.findOne({ userId }).populate("products").populate("orders");
+    const vendor = await Vendor.findOne({ userId })
+      .populate("products")
+      .populate("orders");
     if (!vendor) {
       return res.json({ success: false, message: "Vendor not found" });
     }

@@ -16,6 +16,12 @@ const Login = () => {
     try {
       event.preventDefault();
 
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        toast.error("Invalid email format.");
+        return;
+      }
+
       const payload = { name, email: email.toLowerCase(), password };
       if (state === "register") {
         payload.role = role;

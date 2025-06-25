@@ -103,6 +103,12 @@ const AddAddress = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(address.email)) {
+      toast.error("Invalid email format.");
+      return;
+    }
+
     const phoneRegex =
       /^(?:\+?234|0)(701|702|703|704|705|706|707|708|709|802|803|804|805|806|807|808|809|810|811|812|813|814|815|816|817|818|819|901|902|903|904|905|906|907|908|909|911)\d{7}$/;
 

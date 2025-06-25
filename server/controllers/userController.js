@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { isEmailDomainValid } from "../utils/emailValidation.js";
 
 // Register User : /api/user/register
 export const register = async (req, res) => {
@@ -9,6 +10,12 @@ export const register = async (req, res) => {
 
     if (!name || !email || !password || !role) {
       return res.json({ success: false, message: "Missing Details" });
+    }
+
+    // Validate email domain MX record
+    const isValidDomain = await isEmailDomainValid(email);
+    if (!isValidDomain) {
+      return res.status(400).json({ success: false, message: "Invalid email domain." });
     }
 
     const existingUser = await User.findOne({ email });
@@ -62,6 +69,13 @@ export const login = async (req, res) => {
         success: false,
         message: "Email and password are required",
       });
+
+    // Validate email domain MX record
+    const isValidDomain = await isEmailDomainValid(email);
+    if (!isValidDomain) {
+      return res.status(400).json({ success: false, message: "Invalid email domain." });
+    }
+
     const user = await User.findOne({ email });
 
     if (!user) {

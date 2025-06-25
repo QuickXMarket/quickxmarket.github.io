@@ -100,7 +100,6 @@ const SellerLogin = () => {
     }
 
     try {
-      // Upload profile photo to backend API which uploads to Cloudinary and returns URL
       let profilePhotoUrl = "";
       if (profilePhoto) {
         const formData = new FormData();
