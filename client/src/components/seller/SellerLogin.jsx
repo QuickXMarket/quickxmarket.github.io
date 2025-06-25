@@ -48,7 +48,7 @@ const SellerLogin = () => {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
           query
-        )}&addressdetails=1&limit=${limit}&viewbox=${left},${top},${right},${bottom}&bounded=1`
+        )}&addressdetails=1&limit=${limit}&countrycodes=ng&viewbox=${left},${top},${right},${bottom}&bounded=1`
       );
       const data = await response.json();
       setSuggestions(data);
