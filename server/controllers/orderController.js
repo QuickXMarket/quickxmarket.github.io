@@ -2,7 +2,9 @@ import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 import User from "../models/User.js";
 import Vendor from "../models/Vendor.js";
+import Address from "../models/Address.js";
 import axios from "axios";
+import { sendOrderNotification } from "./mailController.js";
 
 // Existing haversineDistance function unchanged
 function haversineDistance(lat1, lon1, lat2, lon2) {
@@ -32,7 +34,7 @@ export const calculateTotalDeliveryFee = async (
 ) => {
   let totalDeliveryFee = 0;
   for (const vendorId of vendorIds) {
-    const vendor = await Vendor.findOne({ userId: vendorId });
+    const vendor = await Vendor.findById(vendorId);
     if (vendor && vendor.latitude && vendor.longitude) {
       const distance = haversineDistance(
         customerLat,
@@ -66,66 +68,6 @@ export const getDeliveryFee = async (req, res) => {
   }
 };
 
-// Place Order COD : /api/order/cod
-export const placeOrderCOD = async (req, res) => {
-  try {
-    const { userId, items, address } = req.body;
-    if (!address || items.length === 0) {
-      return res.json({ success: false, message: "Invalid data" });
-    }
-
-    // Calculate Amount Using Items
-    let amount = await items.reduce(async (acc, item) => {
-      const product = await Product.findById(item.product);
-      return (await acc) + product.offerPrice * item.quantity;
-    }, 0);
-
-    // Calculate delivery fee based on distance
-    let deliveryFee = 0;
-    if (address.latitude && address.longitude) {
-      // Get vendor coordinates from first product's vendor
-      const firstProduct = await Product.findById(items[0].product).populate(
-        "vendorId"
-      );
-      if (firstProduct && firstProduct.vendorId) {
-        const vendor = await Vendor.findById(firstProduct.vendorId._id);
-        if (vendor && vendor.latitude && vendor.longitude) {
-          const distance = haversineDistance(
-            address.latitude,
-            address.longitude,
-            vendor.latitude,
-            vendor.longitude
-          );
-          // Example: delivery fee $1 per km, minimum $5
-          deliveryFee = Math.max(5, Math.round(distance));
-        }
-      }
-    }
-
-    amount += deliveryFee;
-
-    // Add Tax Charge (2%)
-    amount += Math.floor(amount * 0.02);
-
-    await Order.create({
-      userId,
-      items,
-      amount,
-      deliveryFee,
-      address,
-      paymentType: "COD",
-    });
-
-    return res.json({
-      success: true,
-      message: "Order Placed Successfully",
-      deliveryFee,
-    });
-  } catch (error) {
-    return res.json({ success: false, message: error.message });
-  }
-};
-
 // Place Order Paystack : /api/order/paystack
 export const placeOrderPaystack = async (req, res) => {
   try {
@@ -136,16 +78,10 @@ export const placeOrderPaystack = async (req, res) => {
       return res.json({ success: false, message: "Invalid data" });
     }
 
-    let productData = [];
-
     // Calculate Amount Using Items
     let amount = await items.reduce(async (acc, item) => {
       const product = await Product.findById(item.product);
-      productData.push({
-        name: product.name,
-        price: product.offerPrice,
-        quantity: item.quantity,
-      });
+
       return (await acc) + product.offerPrice * item.quantity;
     }, 0);
 
@@ -223,6 +159,44 @@ export const paystackWebhooks = async (req, res) => {
     await Order.findByIdAndUpdate(orderId, { isPaid: true });
     // Clear user cart
     await User.findByIdAndUpdate(userId, { cartItems: {} });
+
+    // Fetch order details for email
+    const order = await Order.findById(orderId).populate(
+      "items.product address"
+    );
+    const productDetails = order.items.map((item) => ({
+      name: item.product.name,
+      quantity: item.quantity,
+      totalPrice: item.product.offerPrice * item.quantity,
+      imageUrl: item.product.imageUrl || "",
+      productLink: `https://quickxmarket.vercel.app/products/${item.product.category}/${item.product._id}`,
+      vendorId: item.product.vendorId,
+    }));
+
+    if (order) {
+      const vendorIds = [
+        ...new Set(
+          productDetails.map((product) => product.vendorId.toString())
+        ),
+      ];
+
+      const vendorEmails = [];
+      for (const vendorId of vendorIds) {
+        const vendor = await Vendor.findById(vendorId).populate("userId");
+        if (vendor && vendor.userId && vendor.userId.email) {
+          vendorEmails.push(vendor.userId.email);
+        }
+      }
+
+      const customerAddress = await Address.findById(order.address);
+
+      await sendOrderNotification({
+        orderId: order._id.toString(),
+        products: productDetails,
+        customerEmail: customerAddress.email,
+        vendorEmails,
+      });
+    }
   }
 
   res.json({ received: true });
@@ -234,7 +208,7 @@ export const getUserOrders = async (req, res) => {
     const { userId } = req.body;
     const orders = await Order.find({
       userId,
-      $or: [{ paymentType: "COD" }, { isPaid: true }],
+      isPaid: true,
     })
       .populate("items.product address")
       .sort({ createdAt: -1 });
@@ -255,7 +229,7 @@ export const getAllOrders = async (req, res) => {
 
     // Find orders that contain items with products belonging to this vendor
     const orders = await Order.find({
-      $or: [{ paymentType: "COD" }, { isPaid: true }],
+      isPaid: true,
       "items.product": { $in: vendorProductIds },
     })
       .populate("items.product address")

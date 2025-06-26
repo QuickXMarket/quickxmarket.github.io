@@ -21,7 +21,7 @@ const Cart = () => {
   const [addresses, setAddresses] = useState([]);
   const [showAddress, setShowAddress] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [paymentOption, setPaymentOption] = useState("COD");
+  // const [paymentOption, setPaymentOption] = useState("COD");
   const [deliveryFee, setDeliveryFee] = useState(0);
 
   const getCart = () => {
@@ -106,6 +106,7 @@ const Cart = () => {
       }
 
       // Place Order with COD
+      /*
       if (paymentOption === "COD") {
         const { data } = await axios.post("/api/order/cod", {
           userId: user._id,
@@ -124,6 +125,7 @@ const Cart = () => {
           toast.error(data.message);
         }
       } else {
+      */
         // Place Order with Paystack
         const { data } = await axios.post("/api/order/paystack", {
           userId: user._id,
@@ -140,7 +142,9 @@ const Cart = () => {
         } else {
           toast.error(data.message);
         }
+      /*
       }
+      */
     } catch (error) {
       toast.error(error.message);
     }
@@ -283,9 +287,10 @@ const Cart = () => {
               </div>
             )}
           </div>
+{/* 
+          <p className="text-sm font-medium uppercase mt-6">Payment Method</p> */}
 
-          <p className="text-sm font-medium uppercase mt-6">Payment Method</p>
-
+          {/*
           <select
             onChange={(e) => setPaymentOption(e.target.value)}
             className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none"
@@ -293,6 +298,7 @@ const Cart = () => {
             <option value="COD">Cash On Delivery</option>
             <option value="Online">Online Payment</option>
           </select>
+          */}
         </div>
 
         <hr className="border-gray-300" />
@@ -307,7 +313,9 @@ const Cart = () => {
           </p>
           <p className="flex justify-between">
             <span>Shipping Fee</span>
-            <span className="text-green-600">{deliveryFee ? `${currency}${deliveryFee}` : "Free"}</span>
+            <span className="text-green-600">
+              {deliveryFee ? `${currency}${deliveryFee}` : "Free"}
+            </span>
           </p>
           {/* <p className="flex justify-between">
             <span>Tax (2%)</span>
@@ -350,7 +358,12 @@ const Cart = () => {
                 if (serviceFee > 2000) {
                   serviceFee = 2000;
                 }
-                return (getCartAmount() + (getCartAmount() * 2) / 100 + deliveryFee + serviceFee).toFixed(2);
+                return (
+                  getCartAmount() +
+                  (getCartAmount() * 2) / 100 +
+                  deliveryFee +
+                  serviceFee
+                ).toFixed(2);
               })()}
             </span>
           </p>
@@ -360,7 +373,8 @@ const Cart = () => {
           onClick={placeOrder}
           className="w-full py-3 mt-6 cursor-pointer bg-primary text-white font-medium hover:bg-primary-dull transition"
         >
-          {paymentOption === "COD" ? "Place Order" : "Proceed to Checkout"}
+          {/* {paymentOption === "COD" ? "Place Order" : "Proceed to Checkout"} */}
+          Proceed to Checkout
         </button>
       </div>
     </div>

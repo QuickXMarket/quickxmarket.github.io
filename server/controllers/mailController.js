@@ -1,15 +1,21 @@
 import nodemailer from "nodemailer";
 import "dotenv/config";
+import {
+  userOrderConfirmation,
+  vendorOrderNotification,
+  adminOrderNotification,
+} from "../utils/mailTemplates.js";
 
+// Ensure admin email is set
 const adminEmail = process.env.ADMIN_EMAIL;
-
 if (!adminEmail) {
-  console.error("ADMIN_EMAIL is not set in environment variables.");
+  console.error("❌ ADMIN_EMAIL is not set in environment variables.");
 }
 
+// Setup mail transporter
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
-  port: process.env.SMTP_PORT,
+  port: parseInt(process.env.SMTP_PORT, 10),
   secure: process.env.SMTP_SECURE === "true",
   auth: {
     user: process.env.SMTP_USER,
@@ -17,24 +23,25 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Send a general contact message to the admin
 export const sendContactEmail = async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
-    // Attachment handling if any
     const attachment = req.file;
 
     if (!name || !email || !subject || !message) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Missing required fields" });
+      return res.status(400).json({
+        success: false,
+        message: "All fields (name, email, subject, message) are required.",
+      });
     }
 
     const mailOptions = {
-      from: `"${name}" <${email}>`,
+      from: `"${name}" <${process.env.SMTP_USER}>`, // use server email in "from"
       to: adminEmail,
-      subject: subject,
+      subject,
       text: message,
-      html: `<p>${message}</p><p>From: ${name} (${email})</p>`,
+      html: `<p>${message}</p><p><strong>From:</strong> ${name} (${email})</p>`,
       replyTo: email,
     };
 
@@ -49,9 +56,48 @@ export const sendContactEmail = async (req, res) => {
 
     await transporter.sendMail(mailOptions);
 
-    res.json({ success: true, message: "Email sent successfully" });
+    res.json({ success: true, message: "Email sent successfully." });
   } catch (error) {
-    console.error("Error sending contact email:", error);
-    res.status(500).json({ success: false, message: "Failed to send email" });
+    console.error("❌ Error sending contact email:", error);
+    res.status(500).json({ success: false, message: "Failed to send email." });
+  }
+};
+
+// Send order-related notifications to admin, vendors, and customer
+export const sendOrderNotification = async ({
+  orderId,
+  products,
+  customerEmail,
+  vendorEmails,
+}) => {
+  try {
+    // Notify admin
+    await transporter.sendMail({
+      from: `"YourBrand" <${process.env.SMTP_USER}>`,
+      to: adminEmail,
+      subject: `New Order Placed - Order #${orderId}`,
+      html: adminOrderNotification(products, orderId),
+    });
+
+    // Group products by vendorId if needed later
+    // For now, all vendors get full order info
+    for (const vendorEmail of vendorEmails) {
+      await transporter.sendMail({
+        from: `"YourBrand" <${process.env.SMTP_USER}>`,
+        to: vendorEmail,
+        subject: `New Order Notification - Order #${orderId}`,
+        html: vendorOrderNotification(products, orderId),
+      });
+    }
+
+    // Notify customer
+    await transporter.sendMail({
+      from: `"YourBrand" <${process.env.SMTP_USER}>`,
+      to: customerEmail,
+      subject: `Order Confirmation - Order #${orderId}`,
+      html: userOrderConfirmation(products, orderId),
+    });
+  } catch (error) {
+    console.error("❌ Error sending order notification emails:", error);
   }
 };
