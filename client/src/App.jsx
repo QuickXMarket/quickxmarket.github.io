@@ -23,7 +23,8 @@ import FoodVendors from "./pages/FoodVendors";
 
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller");
-  const { showUserLogin, isSeller, showSellerLogin, user } = useAppContext();
+  const { showUserLogin, isSeller, showSellerLogin, user, loading } =
+    useAppContext();
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-white">
@@ -54,7 +55,15 @@ const App = () => {
           <Route
             path="/seller"
             element={
-              !user ? <Login /> : isSeller ? <SellerLayout /> : <SellerLogin />
+              loading ? (
+                <Loading />
+              ) : !user ? (
+                <Login />
+              ) : isSeller ? (
+                <SellerLayout />
+              ) : (
+                <SellerLogin />
+              )
             }
           >
             <Route index element={isSeller ? <AddProduct /> : null} />

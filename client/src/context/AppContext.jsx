@@ -21,35 +21,29 @@ export const AppContextProvider = ({ children }) => {
 
   const [cartItems, setCartItems] = useState({});
   const [searchQuery, setSearchQuery] = useState({});
+  const [loading, setLoading] = useState(true);
 
   // Fetch Seller Status
-  const fetchSeller = async () => {
-    try {
-      // Deprecated seller auth endpoint replaced with user auth and role check
-      const { data } = await axios.get("/api/user/is-auth");
-    
-      if (data.success && data.user.role === "vendor") {
-        setIsSeller(true);
-      } else {
-        setIsSeller(false);
-      }
-    } catch (error) {
-      setIsSeller(false);
-    }
-  };
-
-  // Fetch User Auth Status , User Data and Cart Items
   const fetchUser = async () => {
-    try {
-      const { data } = await axios.get("api/user/is-auth");
-      if (data.success) {
-        setUser(data.user);
-        setCartItems(data.user.cartItems);
-      }
-    } catch (error) {
-      setUser(null);
+  try {
+    const { data } = await axios.get("api/user/is-auth");
+    if (data.success) {
+      setUser(data.user);
+      setCartItems(data.user.cartItems);
     }
-  };
+  } catch {
+    setUser(null);
+  }
+};
+
+const fetchSeller = async () => {
+  try {
+    const { data } = await axios.get("/api/user/is-auth");
+    setIsSeller(data.success && data.user.role === "vendor");
+  } catch {
+    setIsSeller(false);
+  }
+};
 
   // Fetch All Products
   const fetchProducts = async () => {
@@ -121,10 +115,18 @@ export const AppContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchUser();
-    fetchSeller();
-    fetchProducts();
+    const loadInitialData = async () => {
+      try {
+        await Promise.all([fetchUser(), fetchSeller(), fetchProducts()]);
+      } catch (err) {
+        // Optional: log or toast error
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadInitialData();
   }, []);
+  
 
   // Update Database Cart Items
   useEffect(() => {
@@ -168,7 +170,8 @@ export const AppContextProvider = ({ children }) => {
     axios,
     fetchProducts,
     setCartItems,
-    fetchSeller
+    fetchSeller,
+    loading,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
