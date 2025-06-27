@@ -92,7 +92,11 @@ const Cart = () => {
       });
       const vendorIds = Array.from(vendorIdsSet);
       if (vendorIds.length > 0) {
-        fetchDeliveryFee(selectedAddress.latitude, selectedAddress.longitude, vendorIds);
+        fetchDeliveryFee(
+          selectedAddress.latitude,
+          selectedAddress.longitude,
+          vendorIds
+        );
       } else {
         setDeliveryFee(0);
       }
@@ -126,22 +130,22 @@ const Cart = () => {
         }
       } else {
       */
-        // Place Order with Paystack
-        const { data } = await axios.post("/api/order/paystack", {
-          userId: user._id,
-          items: cartArray.map((item) => ({
-            product: item._id,
-            quantity: item.quantity,
-          })),
-          address: selectedAddress._id,
-          email: user.email,
-        });
+      // Place Order with Paystack
+      const { data } = await axios.post("/api/order/paystack", {
+        userId: user._id,
+        items: cartArray.map((item) => ({
+          product: item._id,
+          quantity: item.quantity,
+        })),
+        address: selectedAddress._id,
+        email: user.email,
+      });
 
-        if (data.success) {
-          window.location.replace(data.url);
-        } else {
-          toast.error(data.message);
-        }
+      if (data.success) {
+        window.location.replace(data.url);
+      } else {
+        toast.error(data.message);
+      }
       /*
       }
       */
@@ -287,7 +291,7 @@ const Cart = () => {
               </div>
             )}
           </div>
-{/* 
+          {/* 
           <p className="text-sm font-medium uppercase mt-6">Payment Method</p> */}
 
           {/*

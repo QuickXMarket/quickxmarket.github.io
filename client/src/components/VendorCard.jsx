@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const VendorCard = ({ vendor }) => {
+const VendorCard = ({ vendor, link }) => {
   return (
-    <Link to={`/products/food/${vendor._id}`}>
+    <Link to={link}>
       <div className="border border-gray-300 rounded-md overflow-hidden shadow-sm cursor-pointer hover:shadow-md transition">
         {vendor.profilePhoto ? (
           <img
@@ -12,7 +12,7 @@ const VendorCard = ({ vendor }) => {
             alt={vendor.businessName}
           />
         ) : (
-          <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center text-gray-500">
+          <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center text-gray-500">
             No Image
           </div>
         )}

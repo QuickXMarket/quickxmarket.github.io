@@ -4,7 +4,7 @@ import { useAppContext } from "../context/AppContext";
 import { useParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 
-const FoodVendors = () => {
+const FoodVendorProducts = () => {
   const { products, axios } = useAppContext();
   const { vendorId } = useParams();
   const [vendor, setVendor] = useState(null);
@@ -57,4 +57,4 @@ const FoodVendors = () => {
   );
 };
 
-export default FoodVendors;
+export default FoodVendorProducts;

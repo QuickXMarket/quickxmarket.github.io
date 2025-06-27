@@ -3,6 +3,7 @@ import {
   createVendor,
   getVendorById,
   getVendorByUserId,
+  vendorList,
 } from "../controllers/vendorController.js";
 import { upload } from "../configs/multer.js";
 
@@ -15,5 +16,7 @@ sellerRouter.post("/register", upload.single("profilePhoto"), createVendor);
 sellerRouter.get("/user/:userId", getVendorByUserId);
 
 sellerRouter.get("/vendor/:vendorId", getVendorById);
+
+sellerRouter.get("/list", vendorList);
 
 export default sellerRouter;

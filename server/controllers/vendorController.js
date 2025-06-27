@@ -83,3 +83,20 @@ export const getVendorById = async (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 };
+
+export const vendorList = async (req, res) => {
+  try {
+    const vendors = await Vendor.find({}, "businessName profilePhoto _id").sort(
+      {
+        businessName: 1,
+      }
+    );
+    if (!vendors || vendors.length === 0) {
+      return res.json({ success: false, message: "No vendors found" });
+    }
+    res.json({ success: true, vendors });
+  } catch (error) {
+    console.log(error.message);
+    res.json({ success: false, message: error.message });
+  }
+};
