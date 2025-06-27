@@ -1,9 +1,11 @@
+
 import nodemailer from "nodemailer";
 import "dotenv/config";
 import {
   userOrderConfirmation,
   vendorOrderNotification,
   adminOrderNotification,
+  vendorProductUploadConfirmation,
 } from "../utils/mailTemplates.js";
 
 // Ensure admin email is set
@@ -60,6 +62,20 @@ export const sendContactEmail = async (req, res) => {
   } catch (error) {
     console.error("❌ Error sending contact email:", error);
     res.status(500).json({ success: false, message: "Failed to send email." });
+  }
+};
+
+  
+export const sendVendorProductUploadConfirmation = async (vendorEmail, product) => {
+  try {
+    await transporter.sendMail({
+      from: `"YourBrand" <${process.env.SMTP_USER}>`,
+      to: vendorEmail,
+      subject: `Product Upload Confirmation - ${product.name}`,
+      html: vendorProductUploadConfirmation(product),
+    });
+  } catch (error) {
+    console.error("❌ Error sending vendor product upload confirmation email:", error);
   }
 };
 

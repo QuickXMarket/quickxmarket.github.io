@@ -159,6 +159,7 @@ export const paystackWebhooks = async (req, res) => {
     await Order.findByIdAndUpdate(orderId, { isPaid: true });
     // Clear user cart
     await User.findByIdAndUpdate(userId, { cartItems: {} });
+    const websiteDomain = process.env.WEBSITE_URL;
 
     // Fetch order details for email
     const order = await Order.findById(orderId).populate(
@@ -169,7 +170,7 @@ export const paystackWebhooks = async (req, res) => {
       quantity: item.quantity,
       totalPrice: item.product.offerPrice * item.quantity,
       imageUrl: item.product.imageUrl || "",
-      productLink: `https://quickxmarket.vercel.app/products/${item.product.category}/${item.product._id}`,
+      productLink: `${websiteDomain}/products/${item.product.category}/${item.product._id}`,
       vendorId: item.product.vendorId,
     }));
 

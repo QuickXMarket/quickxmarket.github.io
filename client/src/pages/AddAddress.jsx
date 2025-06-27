@@ -59,7 +59,7 @@ const AddAddress = () => {
 
     setLatitude(null);
     setLongitude(null);
-    
+
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
@@ -94,7 +94,7 @@ const AddAddress = () => {
       ...prevAddress,
       address: suggestion.display_name,
     }));
-    
+
     setLatitude(parseFloat(suggestion.lat));
     setLongitude(parseFloat(suggestion.lon));
     setSuggestions([]);
@@ -110,7 +110,7 @@ const AddAddress = () => {
     }
 
     const phoneRegex =
-      /^(?:\+?234|0)(701|702|703|704|705|706|707|708|709|802|803|804|805|806|807|808|809|810|811|812|813|814|815|816|817|818|819|901|902|903|904|905|906|907|908|909|911)\d{7}$/;
+      /^(?:\+?234|0)(701|702|703|704|705|706|707|708|709|802|803|804|805|806|807|808|809|810|811|812|813|814|815|816|817|818|819|901|902|903|904|905|906|907|908|909|911|912|913|915|916)\d{7}$/;
 
     if (loading) {
       toast.error("Address is still loading, please wait.");

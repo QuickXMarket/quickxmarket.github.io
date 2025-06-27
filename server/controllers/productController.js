@@ -1,6 +1,7 @@
 import { v2 as cloudinary } from "cloudinary";
 import Product from "../models/Product.js";
 import Vendor from "../models/Vendor.js";
+import { sendVendorProductUploadConfirmation } from "./mailController.js";
 
 // Add Product : /api/product/add
 export const addProduct = async (req, res) => {
@@ -20,7 +21,7 @@ export const addProduct = async (req, res) => {
 
     // Add vendorId from authenticated user
     const userId = req.body.userId;
-    const vendor = await Vendor.findOne({ userId });
+    const vendor = await Vendor.findOne({ userId }).populate("userId");
     if (!vendor) {
       return res
         .status(404)
@@ -36,6 +37,10 @@ export const addProduct = async (req, res) => {
     // Update vendor's products array in Vendor document
     vendor.products.push(product._id);
     await vendor.save();
+
+    if (vendor.userId && vendor.userId.email) {
+      await sendVendorProductUploadConfirmation(vendor.userId.email, product);
+    }
 
     res.json({ success: true, message: "Product Added" });
   } catch (error) {
