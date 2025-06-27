@@ -83,13 +83,19 @@ export const changeStock = async (req, res) => {
 export const productListByVendor = async (req, res) => {
   try {
     // Fix: user id is in req.user._id (mongoose object)
-    const vendorId = req.user?._id || req.body.userId;
-    if (!vendorId) {
+    const userId = req.user?._id || req.body.userId;
+    if (!userId) {
       return res
         .status(401)
         .json({ success: false, message: "Unauthorized: vendor id missing" });
     }
-    const products = await Product.find({ vendorId });
+    const vendor = await Vendor.findOne({ userId });
+    if (!vendor) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Vendor not found" });
+    }
+    const products = await Product.find({ vendorId: vendor._id });
     res.json({ success: true, products });
   } catch (error) {
     console.log(error.message);
