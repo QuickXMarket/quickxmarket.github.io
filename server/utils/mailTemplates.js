@@ -120,27 +120,10 @@ const vendorOrderNotification = (products, orderId) => {
   `;
 };
 
-const adminOrderNotification = (products, orderId) => {
-  let total = 0;
 
-  const productHTML = products
-    .map((product) => {
-      const { name, quantity, totalPrice, imageUrl, productLink } = product;
-
-      total += totalPrice;
-
-      return `
-      <div style="display: flex; align-items: center; margin-bottom: 15px;">
-        <img src="${imageUrl}" alt="${name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px; margin-right: 15px;" />
-        <div>
-          <a href="${productLink}" style="font-weight: bold; color: #007bff; text-decoration: none;">${name}</a>
-          <div style="font-size: 14px; color: #555;">Quantity: ${quantity}</div>
-          <div style="font-size: 14px; color: #555;">Total: ₦${totalPrice.toLocaleString()}</div>
-        </div>
-      </div>
-    `;
-    })
-    .join("");
+const vendorProductUploadConfirmation = (product) => {
+  const websiteDomain = process.env.WEBSITE_URL;
+  const productLink = `${websiteDomain}/product/${product.category}/${product._id}`;
 
   return `
 <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
