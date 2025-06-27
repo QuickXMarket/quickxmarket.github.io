@@ -21,7 +21,7 @@ const SellerLayout = () => {
         return;
       }
       try {
-        const { data } = await axios.get(`/api/seller/${user._id}`);
+        const { data } = await axios.get(`/api/seller/user/${user._id}`);
         if (data.success) {
           setBusinessName(data.vendor.businessName);
           setIsVendor(true);

@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createVendor,
+  getVendorById,
   getVendorByUserId,
 } from "../controllers/vendorController.js";
 import { upload } from "../configs/multer.js";
@@ -11,6 +12,8 @@ const sellerRouter = express.Router();
 sellerRouter.post("/register", upload.single("profilePhoto"), createVendor);
 
 // Route to get vendor by userId
-sellerRouter.get("/:userId", getVendorByUserId);
+sellerRouter.get("/user/:userId", getVendorByUserId);
+
+sellerRouter.get("/vendor/:vendorId", getVendorById);
 
 export default sellerRouter;

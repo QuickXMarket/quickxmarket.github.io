@@ -201,9 +201,7 @@ const vendorProductUploadConfirmation = (product) => {
     <h2 style="color: #333;">Product Upload Confirmation</h2>
     <p style="color: #666; font-size: 15px;">
       Hello Vendor,<br /><br />
-      Your product <strong>${
-        product.name
-      }</strong> has been successfully uploaded.
+      Your product <strong>${product.name}</strong> has been successfully uploaded.
     </p>
 
     <p style="color: #666; font-size: 15px;">
@@ -211,9 +209,7 @@ const vendorProductUploadConfirmation = (product) => {
     </p>
 
     <p style="color: #999; font-size: 13px; margin-top: 20px;">
-      If you have any questions, just reply to this email or feel free to contact <a href="${
-        websiteDomain / Contact
-      }" style="color: #007bff; text-decoration: none;">support</a>. We're happy to help!
+      If you have any questions, just reply to this email or feel free to contact <a href="${websiteDomain}/Contact" style="color: #007bff; text-decoration: none;">support</a>. We're happy to help!
     </p>
 
   </div>

@@ -67,3 +67,19 @@ export const getVendorByUserId = async (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 };
+
+export const getVendorById = async (req, res) => {
+  try {
+    const { vendorId } = req.params;
+    const vendor = await Vendor.findById(vendorId)
+      .populate("products")
+      .populate("orders");
+    if (!vendor) {
+      return res.json({ success: false, message: "Vendor not found" });
+    }
+    return res.json({ success: true, vendor });
+  } catch (error) {
+    console.error(error.message);
+    return res.json({ success: false, message: error.message });
+  }
+};
