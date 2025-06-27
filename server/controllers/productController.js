@@ -7,18 +7,6 @@ import { sendVendorProductUploadConfirmation } from "./mailController.js";
 export const addProduct = async (req, res) => {
   try {
     let productData = JSON.parse(req.body.productData);
-
-    const images = req.files;
-
-    let imagesUrl = await Promise.all(
-      images.map(async (item) => {
-        let result = await cloudinary.uploader.upload(item.path, {
-          resource_type: "image",
-        });
-        return result.secure_url;
-      })
-    );
-
     // Add vendorId from authenticated user
     const userId = req.body.userId;
     const vendor = await Vendor.findOne({ userId }).populate("userId");
@@ -27,6 +15,21 @@ export const addProduct = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Vendor not found" });
     }
+
+    const images = req.files;
+
+    let imagesUrl = await Promise.all(
+      images.map(async (item, index) => {
+        let result = await cloudinary.uploader.upload(item.path, {
+          resource_type: "image",
+          folder: `/Product Images/${vendor._id}`,
+          public_id: `${productData.name.replace(/\s+/g, "_").toLowerCase()}_${
+            index + 1
+          }`,
+        });
+        return result.secure_url;
+      })
+    );
 
     const product = await Product.create({
       ...productData,

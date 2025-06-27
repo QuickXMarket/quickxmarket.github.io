@@ -8,7 +8,12 @@ export const uploadProfilePhoto = async (req, res) => {
       return res.status(400).json({ success: false, message: "No file uploaded" });
     }
 
-    const result = await cloudinary.uploader.upload(req.file.path, { resource_type: "image" });
+    const businessName = req.body.businessName || "business_photo";
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      resource_type: "image",
+      folder: "/Business Photos",
+      public_id: businessName.replace(/\s+/g, "_").toLowerCase(),
+    });
 
     // Delete the file from local storage after upload
     fs.unlinkSync(req.file.path);

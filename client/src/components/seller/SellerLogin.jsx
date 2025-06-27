@@ -100,31 +100,20 @@ const SellerLogin = () => {
     }
 
     try {
-      let profilePhotoUrl = "";
+      const formData = new FormData();
+      formData.append("userId", user._id);
+      formData.append("businessName", businessName);
+      formData.append("number", number);
+      formData.append("address", address);
+      formData.append("latitude", latitude);
+      formData.append("longitude", longitude);
       if (profilePhoto) {
-        const formData = new FormData();
-        formData.append("file", profilePhoto);
-        const uploadRes = await axios.post(
-          "/api/upload/profile-photo",
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
-        profilePhotoUrl = uploadRes.data.url;
+        formData.append("profilePhoto", profilePhoto);
       }
 
-      const payload = {
-        userId: user._id,
-        profilePhoto: profilePhotoUrl,
-        businessName,
-        number,
-        address,
-        latitude,
-        longitude,
-      };
-
-      const { data } = await axios.post("/api/seller/register", payload);
+      const { data } = await axios.post("/api/seller/register", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       if (data.success) {
         // Update user role to vendor
         try {

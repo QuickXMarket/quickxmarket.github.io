@@ -1,17 +1,12 @@
 import Vendor from "../models/Vendor.js";
 
 // Create Vendor document after user fills SellerLogin form
+import { v2 as cloudinary } from "cloudinary";
+
 export const createVendor = async (req, res) => {
   try {
-    const {
-      userId,
-      profilePhoto,
-      businessName,
-      number,
-      address,
-      latitude,
-      longitude,
-    } = req.body;
+    const { userId, businessName, number, address, latitude, longitude } =
+      req.body;
 
     if (
       !userId ||
@@ -23,16 +18,23 @@ export const createVendor = async (req, res) => {
     ) {
       return res.json({ success: false, message: "Missing required fields" });
     }
-
     // Check if vendor already exists for this user
     const existingVendor = await Vendor.findOne({ userId });
     if (existingVendor) {
       return res.json({ success: false, message: "Vendor already registered" });
     }
 
+    let profilePhotoUrl = "";
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        resource_type: "image",
+      });
+      profilePhotoUrl = result.secure_url;
+    }
+
     const vendor = await Vendor.create({
       userId,
-      profilePhoto,
+      profilePhoto: profilePhotoUrl,
       businessName,
       number,
       address,
