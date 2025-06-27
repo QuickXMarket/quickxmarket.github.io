@@ -33,7 +33,7 @@ const userOrderConfirmation = (products, orderId) => {
     <!-- Intro -->
     <h2 style="color: #333;">Your order has been received!</h2>
     <p style="color: #666; font-size: 15px;">
-      Thank you for placing an order with <strong>YourBrand</strong>. We're notifying the vendors and will update you when they confirm availability and delivery dates.
+      Thank you for placing an order with <strong>QuickXMarket</strong>. We're notifying the vendors and will update you when they confirm availability and delivery dates.
     </p>
 
     <!-- Products List -->

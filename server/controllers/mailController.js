@@ -69,7 +69,7 @@ export const sendContactEmail = async (req, res) => {
 export const sendVendorProductUploadConfirmation = async (vendorEmail, product) => {
   try {
     await transporter.sendMail({
-      from: `"YourBrand" <${process.env.SMTP_USER}>`,
+      from: `"QuickXMarket" <${process.env.SMTP_USER}>`,
       to: vendorEmail,
       subject: `Product Upload Confirmation - ${product.name}`,
       html: vendorProductUploadConfirmation(product),
@@ -89,7 +89,7 @@ export const sendOrderNotification = async ({
   try {
     // Notify admin
     await transporter.sendMail({
-      from: `"YourBrand" <${process.env.SMTP_USER}>`,
+      from: `"QuickXMarket" <${process.env.SMTP_USER}>`,
       to: adminEmail,
       subject: `New Order Placed - Order #${orderId}`,
       html: adminOrderNotification(products, orderId),
@@ -99,7 +99,7 @@ export const sendOrderNotification = async ({
     // For now, all vendors get full order info
     for (const vendorEmail of vendorEmails) {
       await transporter.sendMail({
-        from: `"YourBrand" <${process.env.SMTP_USER}>`,
+        from: `"QuickXMarket" <${process.env.SMTP_USER}>`,
         to: vendorEmail,
         subject: `New Order Notification - Order #${orderId}`,
         html: vendorOrderNotification(products, orderId),
@@ -108,7 +108,7 @@ export const sendOrderNotification = async ({
 
     // Notify customer
     await transporter.sendMail({
-      from: `"YourBrand" <${process.env.SMTP_USER}>`,
+      from: `"QuickXMarket" <${process.env.SMTP_USER}>`,
       to: customerEmail,
       subject: `Order Confirmation - Order #${orderId}`,
       html: userOrderConfirmation(products, orderId),
