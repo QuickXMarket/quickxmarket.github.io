@@ -25,7 +25,7 @@ const ProductCard = ({ product }) => {
           />
         </div>
         <div className="text-gray-500/60 text-sm">
-          <p>{product.category}</p>
+          <p className="truncate">{product.category}</p>
           <p className="text-gray-700 font-medium text-lg truncate w-full">
             {product.name}
           </p>
@@ -35,7 +35,7 @@ const ProductCard = ({ product }) => {
               .map((_, i) => (
                 <img
                   key={i}
-                  className="md:w-3.5 w3"
+                  className="md:w-3.5 w-3"
                   src={i < 4 ? assets.star_icon : assets.star_dull_icon}
                   alt=""
                 />
