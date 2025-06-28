@@ -8,11 +8,15 @@ const MainBanner = () => {
       large: assets.first_banner_image,
       small: assets.first_banner_image,
       color: "white",
+      buttonText: "Explore Products",
+      buttonLink: "/products",
     },
     {
       large: assets.second_banner_image,
       small: assets.second_banner_image,
       color: "#2f855a",
+      buttonText: "Visit Shops",
+      buttonLink: "/shops",
     },
   ];
 
@@ -87,10 +91,10 @@ const MainBanner = () => {
 
         <div className="flex items-center mt-6 font-medium md:mt-12 ">
           <Link
-            to={"/products"}
+            to={slides[0].buttonLink}
             className="group flex items-center gap-2 px-7 md:px-9 py-3 bg-primary hover:bg-primary-dull transition rounded text-white cursor-pointer"
           >
-            Shop now
+            {slides[0].buttonText}
             <img
               className="md:hidden transition group-focus:translate-x-1"
               src={assets.white_arrow_icon}
