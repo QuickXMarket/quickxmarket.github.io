@@ -71,22 +71,12 @@ export const getDeliveryFee = async (req, res) => {
 // Place Order Paystack : /api/order/paystack
 export const placeOrderPaystack = async (req, res) => {
   try {
-    const { userId, items, address } = req.body;
+    const { userId, items, address, amount } = req.body;
     const { origin } = req.headers;
 
     if (!address || items.length === 0) {
       return res.json({ success: false, message: "Invalid data" });
     }
-
-    // Calculate Amount Using Items
-    let amount = await items.reduce(async (acc, item) => {
-      const product = await Product.findById(item.product);
-
-      return (await acc) + product.offerPrice * item.quantity;
-    }, 0);
-
-    // Add Tax Charge (2%)
-    amount += Math.floor(amount * 0.02);
 
     // Prepare order data to send in metadata
     const orderData = {
@@ -108,7 +98,7 @@ export const placeOrderPaystack = async (req, res) => {
     const paystackResponse = await axios.post(
       "https://api.paystack.co/transaction/initialize",
       {
-        email: req.body.email || "customer@example.com",
+        email: req.body.email,
         amount: amount * 100, // amount in kobo
         metadata: {
           orderData,

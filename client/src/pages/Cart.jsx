@@ -23,6 +23,8 @@ const Cart = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   // const [paymentOption, setPaymentOption] = useState("COD");
   const [deliveryFee, setDeliveryFee] = useState(0);
+  const [serviceFee, setServiceFee] = useState(0);
+  const [totalAmount, setTotalAmount] = useState(0);
 
   const getCart = () => {
     let tempArray = [];
@@ -72,6 +74,7 @@ const Cart = () => {
   useEffect(() => {
     if (products.length > 0 && cartItems) {
       getCart();
+      setTotalAmount(getCartAmount());
     }
   }, [products, cartItems]);
 
@@ -102,6 +105,23 @@ const Cart = () => {
       }
     }
   }, [selectedAddress, cartArray]);
+
+  useEffect(() => {
+    if (!cartArray || cartArray.length === 0) return;
+    const totalPrice = getCartAmount() + deliveryFee;
+    let serviceFee = 0;
+    if (totalPrice < 2500) {
+      serviceFee = (1.5 * totalPrice) / 100;
+    } else {
+      serviceFee = (1.5 * totalPrice) / 100 + 100;
+    }
+    if (serviceFee > 2000) {
+      serviceFee = 2000;
+    }
+    const roundedServiceFee = Math.ceil(serviceFee / 10) * 10;
+    setServiceFee(roundedServiceFee);
+    setTotalAmount(totalPrice + roundedServiceFee);
+  }, [deliveryFee, cartArray]);
 
   const placeOrder = async () => {
     try {
@@ -139,6 +159,7 @@ const Cart = () => {
         })),
         address: selectedAddress._id,
         email: user.email,
+        amount: totalAmount,
       });
 
       if (data.success) {
@@ -316,7 +337,7 @@ const Cart = () => {
             </span>
           </p>
           <p className="flex justify-between">
-            <span>Shipping Fee</span>
+            <span>Delivery Fee</span>
             <span className="text-green-600">
               {deliveryFee ? `${currency}${deliveryFee}` : "Free"}
             </span>
@@ -330,46 +351,11 @@ const Cart = () => {
           </p> */}
           <p className="flex justify-between">
             <span>Service Fee</span>
-            <span>
-              {currency}
-              {(() => {
-                const totalPrice = getCartAmount() + deliveryFee;
-                let serviceFee = 0;
-                if (totalPrice < 2500) {
-                  serviceFee = (1.5 * totalPrice) / 100;
-                } else {
-                  serviceFee = (1.5 * totalPrice) / 100 + 100;
-                }
-                if (serviceFee > 2000) {
-                  serviceFee = 2000;
-                }
-                return serviceFee.toFixed(2);
-              })()}
-            </span>
+            <span>{`${currency}${serviceFee}`}</span>
           </p>
           <p className="flex justify-between text-lg font-medium mt-3">
             <span>Total Amount:</span>
-            <span>
-              {currency}
-              {(() => {
-                const totalPrice = getCartAmount() + deliveryFee;
-                let serviceFee = 0;
-                if (totalPrice < 2500) {
-                  serviceFee = (1.5 * totalPrice) / 100;
-                } else {
-                  serviceFee = (1.5 * totalPrice) / 100 + 100;
-                }
-                if (serviceFee > 2000) {
-                  serviceFee = 2000;
-                }
-                return (
-                  getCartAmount() +
-                  (getCartAmount() * 2) / 100 +
-                  deliveryFee +
-                  serviceFee
-                ).toFixed(2);
-              })()}
-            </span>
+            <span>{`${currency}${totalAmount}`}</span>
           </p>
         </div>
 

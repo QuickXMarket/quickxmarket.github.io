@@ -25,25 +25,25 @@ export const AppContextProvider = ({ children }) => {
 
   // Fetch Seller Status
   const fetchUser = async () => {
-  try {
-    const { data } = await axios.get("api/user/is-auth");
-    if (data.success) {
-      setUser(data.user);
-      setCartItems(data.user.cartItems);
+    try {
+      const { data } = await axios.get("api/user/is-auth");
+      if (data.success) {
+        setUser(data.user);
+        setCartItems(data.user.cartItems);
+      }
+    } catch {
+      setUser(null);
     }
-  } catch {
-    setUser(null);
-  }
-};
+  };
 
-const fetchSeller = async () => {
-  try {
-    const { data } = await axios.get("/api/user/is-auth");
-    setIsSeller(data.success && data.user.role === "vendor");
-  } catch {
-    setIsSeller(false);
-  }
-};
+  const fetchSeller = async () => {
+    try {
+      const { data } = await axios.get("/api/user/is-auth");
+      setIsSeller(data.success && data.user.role === "vendor");
+    } catch {
+      setIsSeller(false);
+    }
+  };
 
   // Fetch All Products
   const fetchProducts = async () => {
@@ -107,7 +107,7 @@ const fetchSeller = async () => {
     let totalAmount = 0;
     for (const items in cartItems) {
       let itemInfo = products.find((product) => product._id === items);
-      if (cartItems[items] > 0) {
+      if (cartItems[items] > 0 && itemInfo) {
         totalAmount += itemInfo.offerPrice * cartItems[items];
       }
     }
@@ -126,7 +126,6 @@ const fetchSeller = async () => {
     };
     loadInitialData();
   }, []);
-  
 
   // Update Database Cart Items
   useEffect(() => {
