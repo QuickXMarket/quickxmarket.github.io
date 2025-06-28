@@ -160,11 +160,15 @@ const Navbar = () => {
             <NavLink class="" to="/products" data-discover="true">
               All Product
             </NavLink>
+            <NavLink class="" to="/shops" data-discover="true">
+              Shops
+            </NavLink>
             {user && (
               <NavLink to="/products" onClick={() => setOpen(false)}>
                 My Orders
               </NavLink>
             )}
+
             {user &&
               (user.role === "vendor" ? (
                 <NavLink className="" to="/seller" data-discover="true">
@@ -182,9 +186,15 @@ const Navbar = () => {
                   Register as a Vendor
                 </NavLink>
               ) : null)}
-            <NavLink class="" to="/contact" data-discover="true">
-              Contact
-            </NavLink>
+          </div>
+          <div className="w-full border border-gray-300 px-3 py-1.5 rounded-full flex items-center gap-2">
+            <input
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-transparent outline-none w-full placeholder-gray-500 text-sm"
+              type="text"
+              placeholder="Search products"
+            />
+            <img src={assets.search_icon} alt="search" className="w-4 h-4" />
           </div>
 
           {!user ? (
