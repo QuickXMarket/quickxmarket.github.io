@@ -5,11 +5,12 @@ import { assets } from "../assets/assets";
 import ProductCard from "../components/ProductCard";
 
 const ProductDetails = () => {
-  const { products, navigate, currency, addToCart } = useAppContext();
+  const { products, navigate, currency, addToCart, axios } = useAppContext();
   const { id } = useParams();
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [otherProductsFromVendor, setOtherProductsFromVendor] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
+  const [vendor, setVendor] = useState(null);
 
   const product = products.find((item) => item._id === id);
 
@@ -26,6 +27,22 @@ const ProductDetails = () => {
       );
       setOtherProductsFromVendor(vendorProducts.slice(0, 5));
     }
+    const fetchVendor = async () => {
+      if (!product || !product.vendorId) return;
+      try {
+        const { data } = await axios.get(
+          `/api/seller/vendor/${product.vendorId}`
+        );
+        if (data.success) {
+          setVendor(data.vendor.businessName);
+        } else {
+          console.log(data.message);
+        }
+      } catch (error) {
+        console.log("Failed to fetch vendor details.");
+      }
+    };
+    fetchVendor();
   }, [products]);
 
   useEffect(() => {
@@ -65,6 +82,18 @@ const ProductDetails = () => {
 
           <div className="text-sm w-full md:w-1/2">
             <h1 className="text-3xl font-medium">{product.name}</h1>
+
+            {vendor && (
+              <p className="text-sm mt-1 text-gray-600">
+                Sold by:{" "}
+                <Link
+                  to={`/shops/${product.vendorId}`}
+                  className="text-primary hover:underline font-medium"
+                >
+                  {vendor}
+                </Link>
+              </p>
+            )}
 
             <div className="flex items-center gap-0.5 mt-1">
               {Array(5)
