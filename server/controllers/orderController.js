@@ -88,13 +88,18 @@ export const placeOrderPaystack = async (req, res) => {
     // Add Tax Charge (2%)
     amount += Math.floor(amount * 0.02);
 
-    const order = await Order.create({
+    // Prepare order data to send in metadata
+    const orderData = {
       userId,
-      items,
+      items: items.map((item) => ({
+        product: item.product,
+        quantity: item.quantity,
+        status: "Order Placed",
+      })),
       amount,
       address,
       paymentType: "Online",
-    });
+    };
 
     // Paystack Initialize
     const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
@@ -106,7 +111,7 @@ export const placeOrderPaystack = async (req, res) => {
         email: req.body.email || "customer@example.com",
         amount: amount * 100, // amount in kobo
         metadata: {
-          orderId: order._id.toString(),
+          orderData,
           userId,
         },
         callback_url: `${origin}/loader?next=my-orders`,
@@ -153,28 +158,30 @@ export const paystackWebhooks = async (req, res) => {
   const event = req.body;
 
   if (event.event === "charge.success") {
-    const { orderId, userId } = event.data.metadata;
+    const { orderData, userId } = event.data.metadata;
 
-    // Mark Payment as Paid
-    await Order.findByIdAndUpdate(orderId, { isPaid: true });
+    // Create order in DB after payment confirmation
+    const order = await Order.create({ ...orderData, isPaid: true });
+
     // Clear user cart
     await User.findByIdAndUpdate(userId, { cartItems: {} });
     const websiteDomain = process.env.WEBSITE_URL;
 
     // Fetch order details for email
-    const order = await Order.findById(orderId).populate(
-      "items.product address"
-    );
-    const productDetails = order.items.map((item) => ({
-      name: item.product.name,
-      quantity: item.quantity,
-      totalPrice: item.product.offerPrice * item.quantity,
-      imageUrl: item.product.imageUrl || "",
-      productLink: `${websiteDomain}/products/${item.product.category}/${item.product._id}`,
-      vendorId: item.product.vendorId,
-    }));
+    const populatedOrder = await Order.populate(order, {
+      path: "items.product address",
+    });
 
-    if (order) {
+    if (populatedOrder) {
+      const productDetails = populatedOrder.items.map((item) => ({
+        name: item.product.name,
+        quantity: item.quantity,
+        totalPrice: item.product.offerPrice * item.quantity,
+        imageUrl: item.product.imageUrl || "",
+        productLink: `${websiteDomain}/products/${item.product.category}/${item.product._id}`,
+        vendorId: item.product.vendorId,
+      }));
+
       const vendorIds = [
         ...new Set(
           productDetails.map((product) => product.vendorId.toString())
@@ -189,10 +196,10 @@ export const paystackWebhooks = async (req, res) => {
         }
       }
 
-      const customerAddress = await Address.findById(order.address);
+      const customerAddress = populatedOrder.address || {};
 
       await sendOrderNotification({
-        orderId: order._id.toString(),
+        orderId: populatedOrder._id.toString(),
         products: productDetails,
         customerEmail: customerAddress.email,
         vendorEmails,
@@ -209,7 +216,6 @@ export const getUserOrders = async (req, res) => {
     const { userId } = req.body;
     const orders = await Order.find({
       userId,
-      isPaid: true,
     })
       .populate("items.product address")
       .sort({ createdAt: -1 });

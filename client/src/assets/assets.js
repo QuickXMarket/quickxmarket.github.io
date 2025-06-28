@@ -34,6 +34,7 @@ import hair_accessories_image from "./hair_accessories_image.jpg";
 import first_banner_image from "./1st_banner_image.jpg";
 import second_banner_image from "./2nd_banner_image.jpg";
 import QuickXMarket_Logo_Transparent from "./QuickXMarket_Logo_Transparent.png";
+import Favicon_rounded from "./Favicon2-rounded.png";
 import Slideshow_1 from "./Slideshow_1.jpg";
 import Slideshow_2 from "./Slideshow_2.jpg";
 import Slideshow_3 from "./Slideshow_3.jpg";
@@ -67,6 +68,7 @@ export const assets = {
   bottom_banner_image_sm,
   add_address_iamge,
   box_icon,
+  Favicon_rounded,
   first_banner_image,
   second_banner_image,
   QuickXMarket_Logo_Transparent,
