@@ -10,6 +10,7 @@ const MainBanner = () => {
       color: "white",
       buttonText: "Explore Products",
       buttonLink: "/products",
+      bannerText: "Experience the art of easy shopping!",
     },
     {
       large: assets.second_banner_image,
@@ -17,6 +18,7 @@ const MainBanner = () => {
       color: "#2f855a",
       buttonText: "Visit Shops",
       buttonLink: "/shops",
+      bannerText: "From browsing to checkout, simplicity in every step.",
     },
   ];
 
@@ -86,7 +88,7 @@ const MainBanner = () => {
           className="text-3xl md:text-4xl lg:text-5xl font-bold text-center md:text-left max-w-72 md:max-w-80 lg:max-w-105 leading-tight lg:leading-15 transition-colors duration-500"
           style={{ color: slides[0].color }}
         >
-          Experience the art of easy shopping!{" "}
+          {slides[0].bannerText}{" "}
         </h1>
 
         <div className="flex items-center mt-6 font-medium md:mt-12 ">

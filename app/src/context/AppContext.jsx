@@ -49,23 +49,30 @@ export const AppContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const backHandler = CapacitorApp.addListener("backButton", () => {
-      const currentPath = location.pathname;
+    let removeListener;
 
-      // Define what pages should cause the app to exit
-      const exitPaths = ["/", "/home"];
+    const setupBackHandler = async () => {
+      const handler = await CapacitorApp.addListener("backButton", () => {
+        const currentPath = location.pathname;
 
-      if (exitPaths.includes(currentPath)) {
-        CapacitorApp.exitApp();
-      } else {
-        navigate(-1); // Go back
-      }
-    });
+        const exitPaths = ["/", "/home"];
+        if (exitPaths.includes(currentPath)) {
+          CapacitorApp.exitApp();
+        } else {
+          navigate(-1);
+        }
+      });
+
+      removeListener = handler.remove;
+    };
+
+    setupBackHandler();
 
     return () => {
-      backHandler.remove();
+      if (removeListener) removeListener();
     };
   }, [navigate, location]);
+  
 
   const fetchUser = async () => {
     try {

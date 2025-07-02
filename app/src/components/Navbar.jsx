@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -47,7 +48,11 @@ const Navbar = () => {
     <div>
       <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
         <NavLink to="/" onClick={() => setOpen(false)}>
-          <img className="h-5 sm:h-7 lg:h-9" src={assets.QuickXMarket_Logo_Transparent} alt="logo" />
+          <img
+            className="h-5 sm:h-7 lg:h-9"
+            src={assets.QuickXMarket_Logo_Transparent}
+            alt="logo"
+          />
         </NavLink>
 
         <div className="hidden sm:flex items-center gap-8">

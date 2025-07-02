@@ -1,6 +1,6 @@
 {
   "appId": "io.ionic.quickxmarket",
-  "appName": "quickxmarket",
+  "appName": "QuickXMarket",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "dist",
