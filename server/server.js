@@ -14,6 +14,7 @@ import { paystackWebhooks } from "./controllers/orderController.js";
 import geoCodeRouter from "./routes/geoCodeRoute.js";
 import { loadGeoJsonData } from "./controllers/geoCodeController.js";
 import mailRouter from "./routes/mailRoute.js";
+import smsRouter from "./routes/smsRoute.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -48,6 +49,7 @@ app.use("/api/address", addressRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/geocoding", geoCodeRouter);
 app.use("/api/mail", mailRouter);
+app.use("/api/sms", smsRouter);
 
 // loadGeoJsonData();
 
