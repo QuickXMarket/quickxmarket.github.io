@@ -6,7 +6,7 @@ import ProductCard from "../components/ProductCard";
 import VendorCard from "../components/VendorCard";
 
 const ProductCategory = () => {
-  const { products, axios } = useAppContext();
+  const { products, makeRequest } = useAppContext();
   const { category } = useParams();
 
   const [vendors, setVendors] = useState([]);
@@ -30,7 +30,7 @@ const ProductCategory = () => {
           ];
           const vendorsData = [];
           for (const vendorId of uniqueVendorIds) {
-            const { data } = await axios.get(`/api/seller/vendor/${vendorId}`);
+            const data = await makeRequest({ method: "GET", url: `/api/seller/vendor/${vendorId}` });
             if (!data.success) continue;
             vendorsData.push(data.vendor);
           }

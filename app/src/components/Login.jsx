@@ -3,8 +3,14 @@ import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
 
 const Login = () => {
-  const { setShowUserLogin, setUser, axios, navigate, location, fetchSeller } =
-    useAppContext();
+  const {
+    setShowUserLogin,
+    setUser,
+    makeRequest,
+    navigate,
+    location,
+    fetchSeller,
+  } = useAppContext();
 
   const [state, setState] = React.useState("login");
   const [name, setName] = React.useState("");
@@ -27,7 +33,12 @@ const Login = () => {
         payload.role = role;
       }
 
-      const { data } = await axios.post(`/api/user/${state}`, payload);
+      const data = await makeRequest({
+        method: "POST",
+        url: `/api/user/${state}`,
+        data: payload,
+      });
+
       if (data.success) {
         setUser(data.user);
         setShowUserLogin(false);

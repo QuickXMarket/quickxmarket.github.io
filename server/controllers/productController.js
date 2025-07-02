@@ -3,6 +3,19 @@ import Product from "../models/Product.js";
 import Vendor from "../models/Vendor.js";
 import { sendVendorProductUploadConfirmation } from "./mailController.js";
 
+async function uploadBase64Image(base64String, folder, publicId) {
+  try {
+    const result = await cloudinary.uploader.upload(base64String, {
+      resource_type: "image",
+      folder,
+      public_id: publicId,
+    });
+    return result.secure_url;
+  } catch (error) {
+    throw new Error("Failed to upload base64 image: " + error.message);
+  }
+}
+
 // Add Product : /api/product/add
 export const addProduct = async (req, res) => {
   try {
@@ -16,20 +29,33 @@ export const addProduct = async (req, res) => {
         .json({ success: false, message: "Vendor not found" });
     }
 
-    const images = req.files;
+    let imagesUrl = [];
 
-    let imagesUrl = await Promise.all(
-      images.map(async (item, index) => {
-        let result = await cloudinary.uploader.upload(item.path, {
-          resource_type: "image",
-          folder: `/Product Images/${vendor._id}`,
-          public_id: `${productData.name.replace(/\s+/g, "_").toLowerCase()}_${
+    if (req.files && req.files.length > 0) {
+      // Handle formData files
+      imagesUrl = await Promise.all(
+        req.files.map(async (item, index) => {
+          let result = await cloudinary.uploader.upload(item.path, {
+            resource_type: "image",
+            folder: `/Product Images/${vendor._id}`,
+            public_id: `${productData.name.replace(/\s+/g, "_").toLowerCase()}_${
+              index + 1
+            }`,
+          });
+          return result.secure_url;
+        })
+      );
+    } else if (req.body.images && Array.isArray(req.body.images)) {
+      // Handle base64 images in JSON
+      imagesUrl = await Promise.all(
+        req.body.images.map(async (base64String, index) => {
+          const publicId = `${productData.name.replace(/\s+/g, "_").toLowerCase()}_${
             index + 1
-          }`,
-        });
-        return result.secure_url;
-      })
-    );
+          }`;
+          return await uploadBase64Image(base64String, `/Product Images/${vendor._id}`, publicId);
+        })
+      );
+    }
 
     const product = await Product.create({
       ...productData,

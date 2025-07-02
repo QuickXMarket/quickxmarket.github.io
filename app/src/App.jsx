@@ -22,6 +22,7 @@ import Contact from "./pages/Contact";
 import FoodVendorProducts from "./pages/FoodVendorProducts";
 import ShopList from "./pages/ShopList";
 import ShopProducts from "./pages/ShopProducts";
+import Account from "./pages/Account";
 
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller");
@@ -59,6 +60,7 @@ const App = () => {
           <Route path="/my-orders" element={<MyOrders />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/loader" element={<Loading />} />
+          <Route path="/account" element={<Account />} />
           <Route
             path="/seller"
             element={
@@ -79,7 +81,7 @@ const App = () => {
           </Route>
         </Routes>
       </div>
-      {!isSellerPath && <Footer />}
+      {/* {!isSellerPath && <Footer />} */}
     </div>
   );
 };

@@ -17,7 +17,7 @@ const InputField = ({ type, placeholder, name, handleChange, address }) => (
 );
 
 const AddAddress = () => {
-  const { axios, user, navigate } = useAppContext();
+  const { makeRequest, user, navigate } = useAppContext();
 
   const [address, setAddress] = useState({
     firstName: "",
@@ -133,8 +133,10 @@ const AddAddress = () => {
         latitude,
         longitude,
       };
-      const { data } = await axios.post("/api/address/add", {
-        address: payload,
+      const data = await makeRequest({
+        method: "POST",
+        url: "/api/address/add",
+        data: { address: payload },
       });
 
       if (data.success) {

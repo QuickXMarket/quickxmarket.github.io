@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useAppContext } from "../context/AppContext";
-import { useParams } from "react-router-dom";
-import { categories } from "../assets/assets";
-import ProductCard from "../components/ProductCard";
 import VendorCard from "../components/VendorCard";
 
 const ShopList = () => {
-  const { axios } = useAppContext();
+  const { makeRequest } = useAppContext();
 
   const [vendors, setVendors] = useState([]);
   const [loadingVendors, setLoadingVendors] = useState(false);
@@ -15,7 +12,10 @@ const ShopList = () => {
     const fetchVendors = async () => {
       setLoadingVendors(true);
       try {
-        const { data } = await axios.get(`/api/seller/list`);
+        const  data  = await makeRequest({
+          url: `/api/seller/list`,
+          method: "GET",
+        });
 
         setVendors(data.vendors || []);
       } catch (error) {

@@ -13,7 +13,7 @@ const Cart = () => {
     updateCartItem,
     navigate,
     getCartAmount,
-    axios,
+    makeRequest,
     user,
     setCartItems,
   } = useAppContext();
@@ -38,7 +38,7 @@ const Cart = () => {
 
   const getUserAddress = async () => {
     try {
-      const { data } = await axios.get("/api/address/get");
+      const data = await makeRequest({ method: "GET", url: "/api/address/get" });
       if (data.success) {
         setAddresses(data.addresses);
         if (data.addresses.length > 0) {
@@ -54,10 +54,14 @@ const Cart = () => {
 
   const fetchDeliveryFee = async (latitude, longitude, vendorIds) => {
     try {
-      const { data } = await axios.post("/api/order/delivery-fee", {
-        latitude,
-        longitude,
-        vendorIds,
+      const data = await makeRequest({
+        method: "POST",
+        url: "/api/order/delivery-fee",
+        data: {
+          latitude,
+          longitude,
+          vendorIds,
+        },
       });
       if (data.success) {
         setDeliveryFee(data.totalDeliveryFee);
@@ -132,13 +136,17 @@ const Cart = () => {
       // Place Order with COD
       /*
       if (paymentOption === "COD") {
-        const { data } = await axios.post("/api/order/cod", {
-          userId: user._id,
-          items: cartArray.map((item) => ({
-            product: item._id,
-            quantity: item.quantity,
-          })),
-          address: selectedAddress._id,
+        const data = await makeRequest({
+          method: "POST",
+          url: "/api/order/cod",
+          data: {
+            userId: user._id,
+            items: cartArray.map((item) => ({
+              product: item._id,
+              quantity: item.quantity,
+            })),
+            address: selectedAddress._id,
+          },
         });
 
         if (data.success) {
@@ -151,15 +159,19 @@ const Cart = () => {
       } else {
       */
       // Place Order with Paystack
-      const { data } = await axios.post("/api/order/paystack", {
-        userId: user._id,
-        items: cartArray.map((item) => ({
-          product: item._id,
-          quantity: item.quantity,
-        })),
-        address: selectedAddress._id,
-        email: user.email,
-        amount: totalAmount,
+      const data = await makeRequest({
+        method: "POST",
+        url: "/api/order/paystack",
+        data: {
+          userId: user._id,
+          items: cartArray.map((item) => ({
+            product: item._id,
+            quantity: item.quantity,
+          })),
+          address: selectedAddress._id,
+          email: user.email,
+          amount: totalAmount,
+        },
       });
 
       if (data.success) {

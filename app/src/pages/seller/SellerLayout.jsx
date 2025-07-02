@@ -6,7 +6,7 @@ import React, { useEffect } from "react";
 import SellerLogin from "../../components/seller/SellerLogin";
 
 const SellerLayout = () => {
-  const { axios, user } = useAppContext();
+  const { makeRequest, user } = useAppContext();
   const navigate = useNavigate();
 
   const [isVendor, setIsVendor] = React.useState(null);
@@ -21,7 +21,10 @@ const SellerLayout = () => {
         return;
       }
       try {
-        const { data } = await axios.get(`/api/seller/user/${user._id}`);
+        const data = await makeRequest({
+          url: `/api/seller/user/${user._id}`,
+          method: "GET",
+        });
         if (data.success) {
           setBusinessName(data.vendor.businessName);
           setIsVendor(true);
@@ -37,7 +40,7 @@ const SellerLayout = () => {
       }
     };
     checkVendorStatus();
-  }, [user, axios]);
+  }, [user, makeRequest]);
 
   const sidebarLinks = [
     { name: "Add Product", path: "/seller", icon: assets.add_icon },

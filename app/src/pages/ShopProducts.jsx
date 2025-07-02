@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 
 const ShopProducts = () => {
-  const { products, axios } = useAppContext();
+  const { products, makeRequest } = useAppContext();
   const { vendorId } = useParams();
   const [vendor, setVendor] = useState(null);
 
@@ -17,7 +17,10 @@ const ShopProducts = () => {
   useEffect(() => {
     const fetchVendor = async () => {
       try {
-        const { data } = await axios.get(`/api/seller/vendor/${vendorId}`);
+        const  data  = await makeRequest({
+          url: `/api/seller/vendor/${vendorId}`,
+          method: "GET",
+        });
         if (data.success) {
           setVendor(data.vendor);
         } else {
@@ -28,7 +31,7 @@ const ShopProducts = () => {
       }
     };
     fetchVendor();
-  }, [vendorId, axios]);
+  }, [vendorId, makeRequest]);
 
   return (
     <div className="mt-16">

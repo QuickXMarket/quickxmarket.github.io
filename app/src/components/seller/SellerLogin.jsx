@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { assets } from "../../assets/assets";
 
 const SellerLogin = () => {
-  const { setShowSellerLogin, axios, navigate, user } = useAppContext();
+  const { setShowSellerLogin, navigate, user, makeRequest, fileToBase64 } = useAppContext();
 
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [businessName, setBusinessName] = useState("");
@@ -100,35 +100,46 @@ const SellerLogin = () => {
     }
 
     try {
-      const formData = new FormData();
-      formData.append("userId", user._id);
-      formData.append("businessName", businessName);
-      formData.append("number", number);
-      formData.append("address", address);
-      formData.append("latitude", latitude);
-      formData.append("longitude", longitude);
+      let profilePhotoBase64 = null;
       if (profilePhoto) {
-        formData.append("profilePhoto", profilePhoto);
+        profilePhotoBase64 = await fileToBase64(profilePhoto);
       }
 
-      const { data } = await axios.post("/api/seller/register", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const data = {
+        userId: user._id,
+        businessName,
+        number,
+        address,
+        latitude,
+        longitude,
+        profilePhoto: profilePhotoBase64,
+      };
+
+      const response = await makeRequest({
+        method: "POST",
+        url: "/api/seller/register",
+        data,
       });
-      if (data.success) {
+
+      if (response.success) {
         // Update user role to vendor
         try {
-          const updateRoleRes = await axios.patch("/api/user/update-role", {
-            userId: user._id,
-            role: "vendor",
+          const updateRoleRes = await makeRequest({
+            method: "PATCH",
+            url: "/api/user/update-role",
+            data: {
+              userId: user._id,
+              role: "vendor",
+            },
           });
-          if (updateRoleRes.data.success) {
+          if (updateRoleRes.success) {
             toast.success("Vendor registered successfully and role updated");
             setShowSellerLogin(false);
             navigate("/seller");
           } else {
             toast.error(
               "Vendor registered but failed to update role: " +
-                updateRoleRes.data.message
+                updateRoleRes.message
             );
           }
         } catch (error) {
@@ -137,7 +148,7 @@ const SellerLogin = () => {
           );
         }
       } else {
-        toast.error(data.message);
+        toast.error(response.message);
       }
     } catch (error) {
       toast.error(error.message);

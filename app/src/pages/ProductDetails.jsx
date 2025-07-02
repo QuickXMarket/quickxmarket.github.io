@@ -5,7 +5,8 @@ import { assets } from "../assets/assets";
 import ProductCard from "../components/ProductCard";
 
 const ProductDetails = () => {
-  const { products, navigate, currency, addToCart, axios } = useAppContext();
+  const { products, navigate, currency, addToCart, makeRequest } =
+    useAppContext();
   const { id } = useParams();
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [otherProductsFromVendor, setOtherProductsFromVendor] = useState([]);
@@ -30,9 +31,10 @@ const ProductDetails = () => {
     const fetchVendor = async () => {
       if (!product || !product.vendorId) return;
       try {
-        const { data } = await axios.get(
-          `/api/seller/vendor/${product.vendorId}`
-        );
+        const data = await makeRequest({
+          method: "GET",
+          url: `/api/seller/vendor/${product.vendorId}`,
+        });
         if (data.success) {
           setVendor(data.vendor.businessName);
         } else {

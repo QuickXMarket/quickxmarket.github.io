@@ -2,10 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import { App as CapacitorApp } from "@capacitor/app";
-import axios from "axios";
-
-axios.defaults.withCredentials = true;
-axios.defaults.baseURL = "https://quickxmarket-server.vercel.app/";
+import { Http } from "@capacitor-community/http";
 
 export const AppContext = createContext();
 
@@ -23,6 +20,33 @@ export const AppContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState({});
   const [searchQuery, setSearchQuery] = useState({});
   const [loading, setLoading] = useState(true);
+  const baseUrl = "https://quickxmarket-server.vercel.app";
+
+  const makeRequest = async ({ method, url, data }) => {
+    try {
+      const response = await Http.request({
+        method,
+        url: `${baseUrl}${url}`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data,
+      });
+      return response.data;
+    } catch (err) {
+      throw new Error(err?.error || "Network Error");
+    }
+  };
+
+  // Utility function to convert File to base64 string
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
   useEffect(() => {
     const backHandler = CapacitorApp.addListener("backButton", () => {
@@ -43,10 +67,12 @@ export const AppContextProvider = ({ children }) => {
     };
   }, [navigate, location]);
 
-  // Fetch Seller Status
   const fetchUser = async () => {
     try {
-      const { data } = await axios.get("api/user/is-auth");
+      const data = await makeRequest({
+        method: "GET",
+        url: "/api/user/is-auth",
+      });
       if (data.success) {
         setUser(data.user);
         setCartItems(data.user.cartItems);
@@ -58,17 +84,22 @@ export const AppContextProvider = ({ children }) => {
 
   const fetchSeller = async () => {
     try {
-      const { data } = await axios.get("/api/user/is-auth");
+      const data = await makeRequest({
+        method: "GET",
+        url: "/api/user/is-auth",
+      });
       setIsSeller(data.success && data.user.role === "vendor");
     } catch {
       setIsSeller(false);
     }
   };
 
-  // Fetch All Products
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get("/api/product/list");
+      const data = await makeRequest({
+        method: "GET",
+        url: "/api/product/list",
+      });
       if (data.success) {
         setProducts(data.products);
       } else {
@@ -151,12 +182,14 @@ export const AppContextProvider = ({ children }) => {
   useEffect(() => {
     const updateCart = async () => {
       try {
-        const { data } = await axios.post("/api/cart/update", { cartItems });
-        if (!data.success) {
-          toast.error(data.message);
-        }
-      } catch (error) {
-        toast.error(error.message);
+        const data = await makeRequest({
+          method: "POST",
+          url: "/api/cart/update",
+          data: { cartItems },
+        });
+        if (!data.success) toast.error(data.message);
+      } catch (err) {
+        toast.error(err.message);
       }
     };
 
@@ -186,11 +219,12 @@ export const AppContextProvider = ({ children }) => {
     setSearchQuery,
     getCartAmount,
     getCartCount,
-    axios,
+    makeRequest,
     fetchProducts,
     setCartItems,
     fetchSeller,
     loading,
+    fileToBase64,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

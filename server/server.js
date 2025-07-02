@@ -22,11 +22,7 @@ const port = process.env.PORT || 4000;
 await connectDB();
 await connectCloudinary();
 
-// Allow multiple origins
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://quickxmarket.vercel.app",
-];
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
 
 app.post(
   "/paystack-webhook",

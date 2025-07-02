@@ -3,6 +3,17 @@ import Vendor from "../models/Vendor.js";
 // Create Vendor document after user fills SellerLogin form
 import { v2 as cloudinary } from "cloudinary";
 
+async function uploadBase64Image(base64String) {
+  try {
+    const result = await cloudinary.uploader.upload(base64String, {
+      resource_type: "image",
+    });
+    return result.secure_url;
+  } catch (error) {
+    throw new Error("Failed to upload base64 image: " + error.message);
+  }
+}
+
 export const createVendor = async (req, res) => {
   try {
     const { userId, businessName, number, address, latitude, longitude } =
@@ -30,6 +41,9 @@ export const createVendor = async (req, res) => {
         resource_type: "image",
       });
       profilePhotoUrl = result.secure_url;
+    } else if (req.body.profilePhoto && req.body.profilePhoto.startsWith("data:image")) {
+      // Handle base64 profile photo
+      profilePhotoUrl = await uploadBase64Image(req.body.profilePhoto);
     }
 
     const vendor = await Vendor.create({

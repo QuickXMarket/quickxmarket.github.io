@@ -4,7 +4,7 @@ import { assets } from "../assets/assets";
 
 const MyOrders = () => {
   const [myOrders, setMyOrders] = useState([]);
-  const { currency, axios, user } = useAppContext();
+  const { currency, makeRequest, user } = useAppContext();
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggleAccordion = (index) => {
@@ -13,7 +13,7 @@ const MyOrders = () => {
 
   const fetchMyOrders = async () => {
     try {
-      const { data } = await axios.get("/api/order/user");
+      const data = await makeRequest({ method: "GET", url: "/api/order/user" });
 
       if (data.success) {
         const statusFlow = [

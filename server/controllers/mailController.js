@@ -1,4 +1,3 @@
-
 import nodemailer from "nodemailer";
 import "dotenv/config";
 import {
@@ -29,7 +28,19 @@ const transporter = nodemailer.createTransport({
 export const sendContactEmail = async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
-    const attachment = req.file;
+    let attachment = null;
+    if (req.file) attachment = req.file;
+    else if (
+      req.body.attachment.base64 &&
+      req.body.attachment.base64.startsWith("data:")
+    ) {
+      const base64Data = req.body.attachment.base64.split(",")[1];
+      const buffer = Buffer.from(base64Data, "base64");
+      attachment = {
+        originalname: req.body.attachment.name,
+        buffer,
+      };
+    }
 
     if (!name || !email || !subject || !message) {
       return res.status(400).json({
@@ -39,7 +50,7 @@ export const sendContactEmail = async (req, res) => {
     }
 
     const mailOptions = {
-      from: `"${name}" <${process.env.SMTP_USER}>`, // use server email in "from"
+      from: `"${name}" <${process.env.SMTP_USER}>`, 
       to: adminEmail,
       subject,
       text: message,
@@ -65,8 +76,10 @@ export const sendContactEmail = async (req, res) => {
   }
 };
 
-  
-export const sendVendorProductUploadConfirmation = async (vendorEmail, product) => {
+export const sendVendorProductUploadConfirmation = async (
+  vendorEmail,
+  product
+) => {
   try {
     await transporter.sendMail({
       from: `"QuickXMarket" <${process.env.SMTP_USER}>`,
@@ -75,7 +88,10 @@ export const sendVendorProductUploadConfirmation = async (vendorEmail, product) 
       html: vendorProductUploadConfirmation(product),
     });
   } catch (error) {
-    console.error("❌ Error sending vendor product upload confirmation email:", error);
+    console.error(
+      "❌ Error sending vendor product upload confirmation email:",
+      error
+    );
   }
 };
 

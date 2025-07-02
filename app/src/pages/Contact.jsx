@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast";
 import { useAppContext } from "../context/AppContext";
 
 const Contact = () => {
-  const { axios, navigate } = useAppContext();
+  const { makeRequest, navigate, fileToBase64 } = useAppContext();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -17,19 +17,26 @@ const Contact = () => {
     setLoading(true);
 
     try {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("email", email);
-      formData.append("subject", subject);
-      formData.append("message", message);
+      let attachmentName = null;
+      let attachmentBase64 = null;
+
       if (attachment) {
-        formData.append("attachment", attachment);
+        attachmentBase64 = await fileToBase64(attachment);
+        attachmentName = attachment.name;
       }
 
-      const { data } = await axios.post("/api/mail/contact", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      const formData = {
+        name,
+        email,
+        subject,
+        message,
+        attachment: { base64: attachmentBase64, name: attachmentName },
+      };
+
+      const data = await makeRequest({
+        method: "POST",
+        url: "/api/mail/contact",
+        data: formData,
       });
 
       if (data.success) {

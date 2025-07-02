@@ -5,12 +5,15 @@ import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 
 const ProductList = () => {
-  const { currency, axios } = useAppContext();
+  const { currency, makeRequest } = useAppContext();
   const [products, setProducts] = useState([]);
 
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get("/api/product/list/vendor");
+      const data = await makeRequest({
+        url: "/api/product/list/vendor",
+        method: "GET",
+      });
       if (data.success) {
         setProducts(data.products);
       } else {
@@ -23,7 +26,11 @@ const ProductList = () => {
 
   const toggleStock = async (id, inStock) => {
     try {
-      const { data } = await axios.post("/api/product/stock", { id, inStock });
+      const data = await makeRequest({
+        url: "/api/product/stock",
+        data: { id, inStock },
+        method: "POST",
+      });
       if (data.success) {
         fetchProducts();
         toast.success(data.message);
