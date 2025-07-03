@@ -1,13 +1,21 @@
-import express from 'express';
-import { isAuth, login, logout, register, updateUserRole } from '../controllers/userController.js';
-import authUser from '../middlewares/authUser.js';
+import express from "express";
+import {
+  isAuth,
+  login,
+  logout,
+  register,
+  updateUserFcmToken,
+  updateUserRole,
+} from "../controllers/userController.js";
+import authUser from "../middlewares/authUser.js";
 
 const userRouter = express.Router();
 
-userRouter.post('/register', register)
-userRouter.post('/login', login)
-userRouter.get('/is-auth', authUser, isAuth)
-userRouter.get('/logout', authUser, logout)
-userRouter.patch('/update-role', authUser, updateUserRole)
+userRouter.post("/register", register);
+userRouter.post("/login", login);
+userRouter.get("/is-auth", authUser, isAuth);
+userRouter.get("/logout", authUser, logout);
+userRouter.patch("/update-role", authUser, updateUserRole);
+userRouter.patch("/update-fcm-token", authUser, updateUserFcmToken);
 
-export default userRouter
+export default userRouter;

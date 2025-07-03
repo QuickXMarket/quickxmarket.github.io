@@ -6,6 +6,7 @@ import { App as CapacitorApp } from "@capacitor/app";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { Capacitor, CapacitorHttp } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
+import { PushNotifications } from "@capacitor/push-notifications";
 
 export const AppContext = createContext();
 
@@ -39,6 +40,69 @@ export const AppContextProvider = ({ children }) => {
     } catch (err) {
       throw new Error(err?.error || "Network Error");
     }
+  };
+
+  const copyToClipboard = async (text) => {
+    try {
+      await Clipboard.write({
+        string: text,
+      });
+      toast.success("Copied to clipboard:", text);
+    } catch (err) {
+      toast.error("Failed to copy:", err);
+    }
+  };
+
+  const setupPushNotifications = () => {
+    // Request permission on mobile
+    PushNotifications.requestPermissions().then((result) => {
+      if (result.receive === "granted") {
+        PushNotifications.register();
+      } else {
+        console.warn("Push permission not granted");
+      }
+    });
+
+    // On successful registration, get FCM token
+    PushNotifications.addListener("registration", async (token) => {
+      console.log("FCM Token:", token.value);
+      // copyToClipboard(token.value);
+      try {
+        await makeRequest({
+          method: "POST",
+          url: "/api/user/update-fcm-token",
+          data: {
+            userId: user?._id,
+            fcmToken: token.value,
+          },
+        });
+        console.log("FCM token saved successfully");
+      } catch (error) {
+        console.error("Failed to save FCM token:", error.message);
+      }
+    });
+
+    // If registration fails
+    PushNotifications.addListener("registrationError", (error) => {
+      console.error("Registration error:", error);
+    });
+
+    // Handle received push
+    PushNotifications.addListener(
+      "pushNotificationReceived",
+      (notification) => {
+        console.log("Push received:", notification);
+      }
+    );
+
+    // Handle user tapping the notification
+    PushNotifications.addListener(
+      "pushNotificationActionPerformed",
+      (notification) => {
+        console.log("Notification action performed", notification);
+        // Maybe navigate based on notification.data
+      }
+    );
   };
 
   // Utility function to convert File to base64 string
@@ -251,6 +315,12 @@ export const AppContextProvider = ({ children }) => {
       updateCart();
     }
   }, [cartItems]);
+
+  useEffect(() => {
+    if (Capacitor.isNativePlatform() && user) {
+      setupPushNotifications();
+    }
+  }, [user]);
 
   const value = {
     navigate,
