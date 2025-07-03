@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import { App as CapacitorApp } from "@capacitor/app";
 import { Http } from "@capacitor-community/http";
+import { StatusBar, Style } from "@capacitor/status-bar";
+import { Capacitor } from "@capacitor/core";
 
 export const AppContext = createContext();
 
@@ -31,6 +33,9 @@ export const AppContextProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
         data,
+        webFetchExtra: {
+          credentials: "include",
+        },
       });
       return response.data;
     } catch (err) {
@@ -54,7 +59,6 @@ export const AppContextProvider = ({ children }) => {
     const setupBackHandler = async () => {
       const handler = await CapacitorApp.addListener("backButton", () => {
         const currentPath = location.pathname;
-
         const exitPaths = ["/", "/home"];
         if (exitPaths.includes(currentPath)) {
           CapacitorApp.exitApp();
@@ -68,11 +72,29 @@ export const AppContextProvider = ({ children }) => {
 
     setupBackHandler();
 
+    const configureStatusBar = async () => {
+      if (!Capacitor.isNativePlatform()) return;
+      try {
+        await StatusBar.setOverlaysWebView({ overlay: false });
+
+        const isDark =
+          document.documentElement.classList.contains("dark") ||
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+        await StatusBar.setStyle({
+          style: isDark ? Style.Light : Style.Dark,
+        });
+      } catch (error) {
+        console.warn("StatusBar config failed:", error);
+      }
+    };
+
+    configureStatusBar();
+
     return () => {
       if (removeListener) removeListener();
     };
   }, [navigate, location]);
-  
 
   const fetchUser = async () => {
     try {

@@ -56,24 +56,6 @@ const Navbar = () => {
         </NavLink>
 
         <div className="hidden sm:flex items-center gap-8">
-          {user &&
-            (user.role === "vendor" ? (
-              <NavLink to="/seller">
-                <button className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80">
-                  Seller Dashboard
-                </button>
-              </NavLink>
-            ) : user.role === "customer" ? (
-              <button
-                className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80"
-                onClick={() => {
-                  setShowSellerLogin(true);
-                }}
-              >
-                Register as a Vendor
-              </button>
-            ) : null)}
-
           {/* Search bar on large screens */}
           <div className="hidden sm:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
             <input

@@ -53,9 +53,10 @@ const ProductDetails = () => {
 
   return (
     product && (
-      <div className="mt-12">
-        <p>
-          <Link to={"/"}>Home</Link> /<Link to={"/products"}> Products</Link> /
+      <div className="mt-8 ">
+        {/* Breadcrumbs */}
+        <p className="text-xs sm:text-sm text-gray-500">
+          <Link to="/">Home</Link> /<Link to="/products"> Products</Link> /
           <Link to={`/products/${product.category.toLowerCase()}`}>
             {" "}
             {product.category}
@@ -63,34 +64,48 @@ const ProductDetails = () => {
           /<span className="text-primary"> {product.name}</span>
         </p>
 
-        <div className="flex flex-col md:flex-row gap-16 mt-4">
-          <div className="flex gap-3">
-            <div className="flex flex-col gap-3">
+        {/* Product Content */}
+        <div className="flex flex-col md:flex-row gap-6 md:gap-16 mt-4">
+          {/* Images */}
+          <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+            {/* Main Image */}
+            <div className="border border-gray-300 rounded overflow-hidden max-w-full">
+              <img
+                src={thumbnail}
+                alt="Selected product"
+                className="object-cover w-full"
+              />
+            </div>
+            {/* Thumbnail List */}
+            <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-visible">
               {product.image.map((image, index) => (
                 <div
                   key={index}
                   onClick={() => setThumbnail(image)}
-                  className="border max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer"
+                  className="w-16 h-16 border rounded overflow-hidden flex-shrink-0 cursor-pointer"
                 >
-                  <img src={image} alt={`Thumbnail ${index + 1}`} />
+                  <img
+                    src={image}
+                    alt={`Thumbnail ${index + 1}`}
+                    className="object-cover w-full h-full"
+                  />
                 </div>
               ))}
             </div>
-
-            <div className="border border-gray-500/30 max-w-100 rounded overflow-hidden">
-              <img src={thumbnail} alt="Selected product" />
-            </div>
           </div>
 
-          <div className="text-sm w-full md:w-1/2">
-            <h1 className="text-3xl font-medium">{product.name}</h1>
+          {/* Info */}
+          <div className="text-sm w-full">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold">
+              {product.name}
+            </h1>
 
             {vendor && (
-              <p className="text-sm mt-1 text-gray-600">
+              <p className="text-xs sm:text-sm mt-1 text-gray-600">
                 Sold by:{" "}
                 <Link
                   to={`/shops/${product.vendorId}`}
-                  className="text-primary hover:underline font-medium"
+                  className="text-primary font-medium underline"
                 >
                   {vendor}
                 </Link>
@@ -102,33 +117,37 @@ const ProductDetails = () => {
                 .fill("")
                 .map((_, i) => (
                   <img
+                    key={i}
                     src={i < 4 ? assets.star_icon : assets.star_dull_icon}
                     alt=""
-                    className="md:w-4 w-3.5"
+                    className="w-3.5 sm:w-4"
                   />
                 ))}
-              <p className="text-base ml-2">(4)</p>
+              <p className="text-xs sm:text-sm ml-2">(4)</p>
             </div>
 
-            <div className="mt-6">
-              <p className="text-gray-500/70 line-through">
+            {/* Price */}
+            <div className="mt-4">
+              <p className="text-sm text-gray-500 line-through">
                 MRP: {currency}
                 {product.price}
               </p>
-              <p className="text-2xl font-medium">
-                MRP: {currency}
+              <p className="text-xl font-semibold">
+                {currency}
                 {product.offerPrice}
               </p>
-              <span className="text-gray-500/70">(inclusive of all taxes)</span>
+              <span className="text-xs text-gray-400">(incl. taxes)</span>
             </div>
 
+            {/* Description */}
             <p className="text-base font-medium mt-6">About Product</p>
-            <ul className="list-disc ml-4 text-gray-500/70">
+            <ul className="list-disc ml-4 text-gray-600 text-sm">
               {product.description.map((desc, index) => (
                 <li key={index}>{desc}</li>
               ))}
             </ul>
 
+            {/* Buttons */}
             <div className="flex items-center mt-10 gap-4 text-base">
               <button
                 onClick={() => addToCart(product._id)}
