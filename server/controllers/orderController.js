@@ -5,6 +5,7 @@ import Vendor from "../models/Vendor.js";
 import Address from "../models/Address.js";
 import axios from "axios";
 import { sendOrderNotification } from "./mailController.js";
+import { sendPushNotification } from "../utils/fcmService.js";
 
 // Existing haversineDistance function unchanged
 function haversineDistance(lat1, lon1, lat2, lon2) {

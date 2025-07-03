@@ -92,18 +92,14 @@ export const AppContextProvider = ({ children }) => {
     PushNotifications.addListener(
       "pushNotificationReceived",
       async (notification) => {
-        console.log("Push received:", notification);
-
-        // Display as local notification
+        const route = notification.notification.data?.route;
         await LocalNotifications.schedule({
           notifications: [
             {
               title: notification.title || "New Notification",
               body: notification.body || "",
               id: Date.now(),
-              extra: {
-                route: notification.notification.data?.route,
-              },
+              ...(route && { extra: { route } }),
             },
           ],
         });
@@ -117,7 +113,7 @@ export const AppContextProvider = ({ children }) => {
         console.log("Notification action performed", notification);
         const route = notification.notification.data?.route;
         if (route) {
-          navigate(route); // If you're using React Router
+          navigate(route);
         }
       }
     );
