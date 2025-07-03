@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { toast } from "react-hot-toast";
 import { useAppContext } from "../context/AppContext";
 
 const Contact = () => {
-  const { makeRequest, navigate, fileToBase64 } = useAppContext();
+  const { makeRequest, navigate, fileToBase64, user } = useAppContext();
+  const fileInputRef = useRef(null);
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [attachment, setAttachment] = useState(null);
   const [message, setMessage] = useState("");
@@ -17,6 +16,8 @@ const Contact = () => {
     setLoading(true);
 
     try {
+      const name = user.name;
+      const email = user.email;
       let attachmentName = null;
       let attachmentBase64 = null;
 
@@ -41,8 +42,6 @@ const Contact = () => {
 
       if (data.success) {
         toast.success("Message sent successfully.");
-        setName("");
-        setEmail("");
         setSubject("");
         setAttachment(null);
         setMessage("");
@@ -62,49 +61,18 @@ const Contact = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-4">
       <form
         onSubmit={onSubmitHandler}
-        className="flex flex-col gap-4 w-full max-w-md p-8 rounded-lg shadow-xl border border-gray-200 bg-white"
+        className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow p-5 sm:p-6 md:p-8 space-y-4"
       >
-        <p className="text-2xl font-medium text-center mb-4">
+        <p className="text-xl sm:text-2xl font-medium text-center mb-2">
           <span className="text-primary">Contact</span> Us
         </p>
 
-        <div className="w-full">
-          <label htmlFor="name" className="block mb-1">
-            Name
-          </label>
-          <input
-            id="name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Your full name"
-            className="border border-gray-200 rounded w-full p-2 outline-primary"
-            required
-            disabled={loading}
-          />
-        </div>
-
-        <div className="w-full">
-          <label htmlFor="email" className="block mb-1">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Your email address"
-            className="border border-gray-200 rounded w-full p-2 outline-primary"
-            required
-            disabled={loading}
-          />
-        </div>
-
-        <div className="w-full">
-          <label htmlFor="subject" className="block mb-1">
+        {/* Subject */}
+        <div>
+          <label htmlFor="subject" className="block text-sm mb-1">
             Subject
           </label>
           <input
@@ -113,30 +81,40 @@ const Contact = () => {
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             placeholder="Subject"
-            className="border border-gray-200 rounded w-full p-2 outline-primary"
+            className="w-full border border-gray-200 rounded px-3 py-2 text-sm outline-primary"
             required
             disabled={loading}
           />
         </div>
 
-        <div className="w-full">
-          <label htmlFor="attachment" className="block mb-1">
-            Attachment (optional)
-          </label>
+        {/* Custom Attachment Button */}
+        <div>
+          <label className="block text-sm mb-1">Attachment (optional)</label>
           <input
-            id="attachment"
             type="file"
+            ref={fileInputRef}
             onChange={onAttachmentChange}
-            className="w-full border border-gray-200 rounded cursor-pointer"
+            className="hidden"
             disabled={loading}
           />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={loading}
+            className="text-sm px-4 py-2 border rounded bg-white hover:bg-gray-100 transition"
+          >
+            {attachment ? "Change File" : "Attach File"}
+          </button>
           {attachment && (
-            <p className="mt-1 text-sm text-gray-600">{attachment.name}</p>
+            <p className="mt-1 text-sm text-gray-600 truncate">
+              {attachment.name}
+            </p>
           )}
         </div>
 
-        <div className="w-full">
-          <label htmlFor="message" className="block mb-1">
+        {/* Message */}
+        <div>
+          <label htmlFor="message" className="block text-sm mb-1">
             Message
           </label>
           <textarea
@@ -144,17 +122,18 @@ const Contact = () => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Your message"
-            className="border border-gray-200 rounded w-full p-2 outline-primary resize-y"
+            className="w-full border border-gray-200 rounded px-3 py-2 text-sm outline-primary resize-y"
             rows={5}
             required
             disabled={loading}
           />
         </div>
 
+        {/* Submit */}
         <button
           type="submit"
           disabled={loading}
-          className={`bg-primary transition-all text-white w-full py-2 rounded-md cursor-pointer ${
+          className={`w-full py-2 text-sm font-medium rounded-md text-white bg-primary transition ${
             loading ? "opacity-50 cursor-not-allowed" : "hover:bg-primary-dull"
           }`}
         >

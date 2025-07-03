@@ -12,31 +12,13 @@ const Navbar = () => {
     user,
     setUser,
     setShowUserLogin,
-    setShowSellerLogin,
     navigate,
     setSearchQuery,
     searchQuery,
     getCartCount,
     makeRequest,
   } = useAppContext();
-  const logout = async () => {
-    try {
-      const data = await makeRequest({
-        method: "GET",
-        url: "/api/user/logout",
-      });
 
-      if (data.success) {
-        toast.success(data.message);
-        setUser(null);
-        navigate("/");
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
 
   useEffect(() => {
     if (searchQuery.length > 0) {
@@ -49,7 +31,7 @@ const Navbar = () => {
       <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
         <NavLink to="/" onClick={() => setOpen(false)}>
           <img
-            className="h-5 sm:h-7 lg:h-9"
+            className="h-6 sm:h-7 lg:h-9"
             src={assets.QuickXMarket_Logo_Transparent}
             alt="logo"
           />

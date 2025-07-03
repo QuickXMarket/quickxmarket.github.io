@@ -7,12 +7,12 @@ import NewsLetter from '../components/NewsLetter'
 
 const Home = () => {
   return (
-    <div className='mt-10'>
+    <div className='mt-10 mb-10'>
       <MainBanner />
       <Categories />
       <BestSeller />
       <BottomBanner/>
-      <NewsLetter />
+      {/* <NewsLetter /> */}
     </div>
   )
 }

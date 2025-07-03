@@ -105,7 +105,7 @@ const ProductDetails = () => {
                 Sold by:{" "}
                 <Link
                   to={`/shops/${product.vendorId}`}
-                  className="text-primary font-medium underline"
+                  className="text-primary font-medium "
                 >
                   {vendor}
                 </Link>

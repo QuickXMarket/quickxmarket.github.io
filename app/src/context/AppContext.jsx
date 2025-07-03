@@ -5,6 +5,7 @@ import { App as CapacitorApp } from "@capacitor/app";
 import { Http } from "@capacitor-community/http";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { Capacitor } from "@capacitor/core";
+import { Preferences } from "@capacitor/preferences";
 
 export const AppContext = createContext();
 
@@ -105,6 +106,10 @@ export const AppContextProvider = ({ children }) => {
       if (data.success) {
         setUser(data.user);
         setCartItems(data.user.cartItems);
+        await Preferences.set({
+          key: "user",
+          value: JSON.stringify(data.user),
+        });
       }
     } catch {
       setUser(null);
@@ -194,9 +199,34 @@ export const AppContextProvider = ({ children }) => {
     return Math.floor(totalAmount * 100) / 100;
   };
 
+  const logout = async () => {
+    try {
+      const data = await makeRequest({
+        url: "/api/user/logout",
+        method: "GET",
+      });
+      if (data.success) {
+        toast.success(data.message);
+        await Preferences.remove({ key: "user" });
+        setUser(null);
+        navigate("/");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     const loadInitialData = async () => {
       try {
+        const storedUser = await Preferences.get({ key: "user" });
+        if (storedUser.value) {
+          const parsedUser = JSON.parse(storedUser.value);
+          setUser(parsedUser);
+          setCartItems(parsedUser.cartItems || {});
+        }
         await Promise.all([fetchUser(), fetchSeller(), fetchProducts()]);
       } catch (err) {
         // Optional: log or toast error
@@ -237,6 +267,7 @@ export const AppContextProvider = ({ children }) => {
     showUserLogin,
     setShowUserLogin,
     showSellerLogin,
+    logout,
     setShowSellerLogin,
     products,
     currency,
