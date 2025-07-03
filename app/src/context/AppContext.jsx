@@ -2,9 +2,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import { App as CapacitorApp } from "@capacitor/app";
-import { Http } from "@capacitor-community/http";
+// import { Http } from "@capacitor-community/http";
 import { StatusBar, Style } from "@capacitor/status-bar";
-import { Capacitor } from "@capacitor/core";
+import { Capacitor, CapacitorHttp } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 
 export const AppContext = createContext();
@@ -27,16 +27,13 @@ export const AppContextProvider = ({ children }) => {
 
   const makeRequest = async ({ method, url, data }) => {
     try {
-      const response = await Http.request({
+      const response = await CapacitorHttp.request({
         method,
         url: `${baseUrl}${url}`,
         headers: {
           "Content-Type": "application/json",
         },
         data,
-        webFetchExtra: {
-          credentials: "include",
-        },
       });
       return response.data;
     } catch (err) {
@@ -78,13 +75,11 @@ export const AppContextProvider = ({ children }) => {
       try {
         await StatusBar.setOverlaysWebView({ overlay: false });
 
-        const isDark =
-          document.documentElement.classList.contains("dark") ||
-          window.matchMedia("(prefers-color-scheme: dark)").matches;
+        // const isDark =
+        //   document.documentElement.classList.contains("dark") ||
+        //   window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-        await StatusBar.setStyle({
-          style: isDark ? Style.Light : Style.Dark,
-        });
+        await StatusBar.setStyle({ style: Style.Light });
       } catch (error) {
         console.warn("StatusBar config failed:", error);
       }

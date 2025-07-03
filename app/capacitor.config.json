@@ -4,5 +4,15 @@
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "dist",
-  "cordova": {}
+  "cordova": {},
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    },
+    "StatusBar": {
+      "overlaysWebView": false,
+      "style": "DARK",
+      "backgroundColor": "#ffffffff"
+    }
+  }
 }

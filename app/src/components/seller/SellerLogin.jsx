@@ -4,7 +4,14 @@ import toast from "react-hot-toast";
 import { assets } from "../../assets/assets";
 
 const SellerLogin = () => {
-  const { setShowSellerLogin, navigate, user, makeRequest, fileToBase64 } = useAppContext();
+  const {
+    setShowSellerLogin,
+    navigate,
+    user,
+    makeRequest,
+    fileToBase64,
+    location,
+  } = useAppContext();
 
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [businessName, setBusinessName] = useState("");
@@ -155,9 +162,14 @@ const SellerLogin = () => {
     }
   };
 
+  const handleSellerLoginCLose = () => {
+    setShowSellerLogin(false);
+    if (location.pathname === "/seller") navigate("/");
+  };
+
   return (
     <div
-      // onClick={() => setShowUserLogin(false)}
+      onClick={() => handleSellerLoginCLose()}
       className="fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center text-sm text-gray-600 bg-black/50"
     >
       <form

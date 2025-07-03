@@ -30,7 +30,7 @@ const App = () => {
     useAppContext();
 
   return (
-    <div className="text-default min-h-screen text-gray-700 bg-white">
+    <div className="text-default min-h-screen text-gray-700 bg-white mt-8">
       {isSellerPath ? null : <Navbar />}
       {showUserLogin ? <Login /> : null}
       {showSellerLogin ? <SellerLogin /> : null}
