@@ -179,10 +179,15 @@ export const paystackWebhooks = async (req, res) => {
       ];
 
       const vendorEmails = [];
+      const vendorFcmTokens = [];
+
       for (const vendorId of vendorIds) {
         const vendor = await Vendor.findById(vendorId).populate("userId");
-        if (vendor && vendor.userId && vendor.userId.email) {
-          vendorEmails.push(vendor.userId.email);
+        if (vendor?.userId) {
+          const { email, fcmToken } = vendor.userId;
+
+          if (email) vendorEmails.push(email);
+          if (fcmToken) vendorFcmTokens.push(fcmToken);
         }
       }
 
@@ -194,6 +199,18 @@ export const paystackWebhooks = async (req, res) => {
         customerEmail: customerAddress.email,
         vendorEmails,
       });
+
+      for (const token of vendorFcmTokens) {
+        await sendPushNotification(
+          token,
+          "New Order Received",
+          "You have a new order. Check your seller dashboard.",
+          {
+            route: `/seller/orders/`,
+          }
+        );
+      }
+      
     }
   }
 

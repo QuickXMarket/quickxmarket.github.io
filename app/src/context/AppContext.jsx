@@ -7,6 +7,7 @@ import { StatusBar, Style } from "@capacitor/status-bar";
 import { Capacitor, CapacitorHttp } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 import { PushNotifications } from "@capacitor/push-notifications";
+import { LocalNotifications } from "@capacitor/local-notifications";
 
 export const AppContext = createContext();
 
@@ -90,8 +91,22 @@ export const AppContextProvider = ({ children }) => {
     // Handle received push
     PushNotifications.addListener(
       "pushNotificationReceived",
-      (notification) => {
+      async (notification) => {
         console.log("Push received:", notification);
+
+        // Display as local notification
+        await LocalNotifications.schedule({
+          notifications: [
+            {
+              title: notification.title || "New Notification",
+              body: notification.body || "",
+              id: Date.now(),
+              extra: {
+                route: notification.notification.data?.route,
+              },
+            },
+          ],
+        });
       }
     );
 
@@ -100,7 +115,20 @@ export const AppContextProvider = ({ children }) => {
       "pushNotificationActionPerformed",
       (notification) => {
         console.log("Notification action performed", notification);
-        // Maybe navigate based on notification.data
+        const route = notification.notification.data?.route;
+        if (route) {
+          navigate(route); // If you're using React Router
+        }
+      }
+    );
+
+    LocalNotifications.addListener(
+      "localNotificationActionPerformed",
+      (event) => {
+        const route = event.notification.extra?.route;
+        if (route) {
+          navigate(route);
+        }
       }
     );
   };
@@ -150,6 +178,17 @@ export const AppContextProvider = ({ children }) => {
     };
 
     configureStatusBar();
+
+    const requestLocalNotificationPermission = async () => {
+      const granted = await LocalNotifications.requestPermissions();
+      if (granted.display === "granted") {
+        console.log("Local notification permission granted");
+      } else {
+        console.warn("Local notification permission denied");
+      }
+    };
+
+    requestLocalNotificationPermission();
 
     return () => {
       if (removeListener) removeListener();

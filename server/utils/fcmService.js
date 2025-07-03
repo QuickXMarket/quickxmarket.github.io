@@ -15,15 +15,24 @@ admin.initializeApp({
  * @param {string} fcmToken - Recipient's FCM token
  * @param {string} title - Notification title
  * @param {string} body - Notification body
+ * @param {object} data - Notification body
  */
 
-export const sendPushNotification = async (fcmToken, title, body) => {
+export const sendPushNotification = async (
+  fcmToken,
+  title,
+  body,
+  data = {}
+) => {
   if (!fcmToken) return;
 
   const message = {
     notification: {
       title,
       body,
+    },
+    data: {
+      ...data,
     },
     token: fcmToken,
   };
