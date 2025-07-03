@@ -69,7 +69,7 @@ export const AppContextProvider = ({ children }) => {
       // copyToClipboard(token.value);
       try {
         await makeRequest({
-          method: "POST",
+          method: "PATCH",
           url: "/api/user/update-fcm-token",
           data: {
             userId: user?._id,
