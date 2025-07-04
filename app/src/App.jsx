@@ -23,23 +23,24 @@ import FoodVendorProducts from "./pages/FoodVendorProducts";
 import ShopList from "./pages/ShopList";
 import ShopProducts from "./pages/ShopProducts";
 import Account from "./pages/Account";
+import BottomNavbar from "./components/BottomNavbar";
 
 const App = () => {
-  const isSellerPath = useLocation().pathname.includes("seller");
-  const { showUserLogin, isSeller, showSellerLogin, user, loading } =
+  const { showUserLogin, isSeller, showSellerLogin, user, loading, location } =
     useAppContext();
+  const isSellerPath = location.pathname.includes("seller");
+
+  const showBottomNav = ["/", "/shops", "/wishlist", "/account"].includes(
+    location.pathname
+  );
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-white mt-8">
-      {isSellerPath ? null : <Navbar />}
-      {showUserLogin ? <Login /> : null}
-      {showSellerLogin ? <SellerLogin /> : null}
-
+      {!isSellerPath && <Navbar />}
+      {showUserLogin && <Login />}
+      {showSellerLogin && <SellerLogin />}
       <Toaster />
-
-      <div
-        className={`${isSellerPath ? "" : "px-6 md:px-16 lg:px-24 xl:px-32"}`}
-      >
+      <div className={isSellerPath ? "" : "px-6 md:px-16 lg:px-24 xl:px-32"}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<AllProducts />} />
@@ -81,7 +82,7 @@ const App = () => {
           </Route>
         </Routes>
       </div>
-      {/* {!isSellerPath && <Footer />} */}
+      {showBottomNav && <BottomNavbar />}
     </div>
   );
 };

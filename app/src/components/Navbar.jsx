@@ -65,7 +65,7 @@ const Navbar = () => {
           </div>
 
           {/* Login / Profile */}
-          {!user ? (
+          {/* {!user ? (
             <button
               onClick={() => setShowUserLogin(true)}
               className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dull transition text-white rounded-full"
@@ -76,7 +76,7 @@ const Navbar = () => {
             <Link to="/account">
               <img src={assets.profile_icon} className="w-10" alt="profile" />
             </Link>
-          )}
+          )} */}
         </div>
 
         {/* Mobile View */}
@@ -105,7 +105,7 @@ const Navbar = () => {
           </div>
 
           {/* Login / Profile */}
-          {!user ? (
+          {/* {!user ? (
             <img
               src={assets.login} // Replace with your login icon asset
               className="w-6 cursor-pointer opacity-80 "
@@ -116,7 +116,7 @@ const Navbar = () => {
             <Link to="/account">
               <img src={assets.profile_icon} className="w-8" alt="profile" />
             </Link>
-          )}
+          )} */}
         </div>
       </nav>
       {searchOpen && (

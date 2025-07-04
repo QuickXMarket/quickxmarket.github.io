@@ -38,6 +38,10 @@ import Favicon_rounded from "./Favicon2-rounded.png";
 import Favicon from "./Favicon.png";
 import login from "./login.svg";
 import logout from "./logout.svg";
+import account_icon from "./account-icon.svg";
+import home_icon from "./home-icon.svg";
+import wishlist_icon from "./heart-icon.svg";
+import shop_icon from "./shop.svg";
 import Slideshow_1 from "./Slideshow_1.jpg";
 import Slideshow_2 from "./Slideshow_2.jpg";
 import Slideshow_3 from "./Slideshow_3.jpg";
@@ -75,6 +79,10 @@ export const assets = {
   Favicon,
   login,
   logout,
+  account_icon,
+  home_icon,
+  wishlist_icon,
+  shop_icon,
   first_banner_image,
   second_banner_image,
   QuickXMarket_Logo_Transparent,
