@@ -65,18 +65,18 @@ const Navbar = () => {
           </div>
 
           {/* Login / Profile */}
-          {/* {!user ? (
+          {!user ? (
             <button
               onClick={() => setShowUserLogin(true)}
-              className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dull transition text-white rounded-full"
+              className="hidden lg:block cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dull transition text-white rounded-full"
             >
               Login
             </button>
           ) : (
-            <Link to="/account">
+            <Link to="/account" className="hidden lg:block">
               <img src={assets.profile_icon} className="w-10" alt="profile" />
             </Link>
-          )} */}
+          )}
         </div>
 
         {/* Mobile View */}

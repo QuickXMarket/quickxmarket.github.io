@@ -1,20 +1,23 @@
 import React from "react";
 import { useAppContext } from "../context/AppContext";
 import { assets } from "../assets/assets";
-// import { ReactComponent as Shop } from "../assets/shop.svg";
+import HomeIcon from "../assets/house-door-fill.svg?react";
+import WishlistIcon from "../assets/heart-fill.svg?react";
+import AccountIcon from "../assets/person-circle.svg?react";
+import ShopIcon from "../assets/shop.svg?react";
 
 const navItems = [
-  { name: "Home", path: "/", icon: assets.home_icon },
-  { name: "Shops", path: "/shops", icon: assets.shop_icon },
-  { name: "Wishlist", path: "/wishlist", icon: assets.wishlist_icon },
-  { name: "Account", path: "/account", icon: assets.account_icon },
+  { name: "Home", path: "/", icon: HomeIcon },
+  { name: "Shops", path: "/shops", icon: ShopIcon },
+  { name: "Wishlist", path: "/wishlist", icon: WishlistIcon },
+  { name: "Account", path: "/account", icon: AccountIcon },
 ];
 
 const BottomNavbar = () => {
   const { navigate, location } = useAppContext();
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-sm flex justify-around py-2 md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-sm flex justify-around py-2 lg:hidden">
       {/* <ShopIcon /> */}
       {navItems.map((item) => {
         const isActive = location.pathname === item.path;
@@ -26,7 +29,11 @@ const BottomNavbar = () => {
               isActive ? "text-primary" : "text-gray-500"
             }`}
           >
-            <img src={item.icon} alt={item.name} className="w-6 h-6 mb-0.5 " />
+            <item.icon
+              className={`w-6 h-6  ${
+                isActive ? "text-primary" : "text-gray-500"
+              }`}
+            />
             <span className="text-[11px]">{item.name}</span>
           </button>
         );

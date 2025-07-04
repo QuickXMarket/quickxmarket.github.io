@@ -3,6 +3,7 @@ import { useAppContext } from "../context/AppContext";
 import { Link, useParams } from "react-router-dom";
 import { assets } from "../assets/assets";
 import ProductCard from "../components/ProductCard";
+import WishlistIcon from "../assets/heart-fill.svg?react";
 
 const ProductDetails = () => {
   const { products, navigate, currency, addToCart, makeRequest } =
@@ -12,6 +13,7 @@ const ProductDetails = () => {
   const [otherProductsFromVendor, setOtherProductsFromVendor] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
   const [vendor, setVendor] = useState(null);
+  const [isWishListed, setIsWishListed] = useState(false);
 
   const product = products.find((item) => item._id === id);
 
@@ -99,6 +101,11 @@ const ProductDetails = () => {
             <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold">
               {product.name}
             </h1>
+            <WishlistIcon
+              className={`w-5 h-5 sm:w-6 sm:h-6 ml-auto cursor-pointer hover:scale-110 transition  ${
+                isWishListed ? "text-primary" : "text-gray-500"
+              }`}
+            />
 
             {vendor && (
               <p className="text-xs sm:text-sm mt-1 text-gray-600">
