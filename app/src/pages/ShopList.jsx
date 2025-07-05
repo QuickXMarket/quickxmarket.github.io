@@ -29,7 +29,7 @@ const ShopList = () => {
   }, []);
 
   return (
-    <div className="mt-16">
+    <div className="mt-16 mb-16 lg:mb-0">
       {loadingVendors ? (
         <div className="flex items-center justify-center h-[60vh]">
           <p className="text-2xl font-medium text-primary">

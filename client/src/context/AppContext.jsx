@@ -84,11 +84,14 @@ export const AppContextProvider = ({ children }) => {
 
   const updateWishList = (itemId) => {
     let wishListData = structuredClone(wishList);
-    if (wishListData.includes(itemId))
+    if (wishListData.includes(itemId)) {
       wishListData = wishListData.filter((item) => item !== itemId);
-    else wishListData.push(itemId);
+      toast.success("Removed from Wish List");
+    } else {
+      wishListData.push(itemId);
+      toast.success("Added to Wish List");
+    }
     setWishList(wishListData);
-    toast.success("Added to Wish List");
   };
 
   // Remove Product from Cart

@@ -20,7 +20,7 @@ const Account = () => {
       {/* Greeting */}
       <div className="px-4 py-6 sm:px-6 md:px-10 lg:px-16 text-center mb-6">
         <img
-          src={assets.profile_icon}
+          src={assets.account_icon}
           alt="Profile"
           className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
         />

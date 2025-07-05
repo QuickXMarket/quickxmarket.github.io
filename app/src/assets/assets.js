@@ -38,7 +38,7 @@ import Favicon_rounded from "./Favicon2-rounded.png";
 import Favicon from "./Favicon.png";
 import login from "./login.svg";
 import logout from "./logout.svg";
-import account_icon from "./account-icon.svg";
+import account_icon from "./person-circle.svg";
 import home_icon from "./home-icon.svg";
 import wishlist_icon from "./heart-icon.svg";
 import shop_icon from "./shop.svg";
