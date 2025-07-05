@@ -50,6 +50,7 @@ const Login = () => {
 
         if (wishList && wishList.length > 0) {
           let wishListData = structuredClone(wishList);
+          if (data.user.wishList && data.user.wishList.length > 0)
           wishListData = wishListData.filter(
             (item) => !data.user.wishList.includes(item)
           );

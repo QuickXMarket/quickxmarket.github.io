@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
     role: { type: String, enum: ["customer", "vendor"], default: "customer" },
     products: [{ type: mongoose.Schema.Types.ObjectId, ref: "product" }],
     fcmToken: { type: String, default: null },
+    wishList: [{ type: mongoose.Schema.Types.ObjectId, ref: "product", default: [] }],
   },
   { minimize: false }
 );

@@ -179,9 +179,9 @@ export const AppContextProvider = ({ children }) => {
     const requestLocalNotificationPermission = async () => {
       const granted = await LocalNotifications.requestPermissions();
       if (granted.display === "granted") {
-        console.log("Local notification permission granted");
+        // console.log("Local notification permission granted");
       } else {
-        console.warn("Local notification permission denied");
+        // console.warn("Local notification permission denied");
       }
     };
 
@@ -201,7 +201,7 @@ export const AppContextProvider = ({ children }) => {
       if (data.success) {
         setUser(data.user);
         setCartItems(data.user.cartItems);
-        setWishList(data.user.wishList);
+        setWishList(data.user.wishList || []);
         await Preferences.set({
           key: "user",
           value: JSON.stringify(data.user),
