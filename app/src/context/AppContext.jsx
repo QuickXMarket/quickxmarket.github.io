@@ -8,6 +8,8 @@ import { Capacitor, CapacitorHttp } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 import { PushNotifications } from "@capacitor/push-notifications";
 import { LocalNotifications } from "@capacitor/local-notifications";
+import { EdgeToEdge } from "@capawesome/capacitor-android-edge-to-edge-support";
+
 
 export const AppContext = createContext();
 
@@ -169,6 +171,7 @@ export const AppContextProvider = ({ children }) => {
         //   window.matchMedia("(prefers-color-scheme: dark)").matches;
 
         await StatusBar.setStyle({ style: Style.Light });
+        await EdgeToEdge.enable();
       } catch (error) {
         console.warn("StatusBar config failed:", error);
       }

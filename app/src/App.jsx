@@ -36,7 +36,7 @@ const App = () => {
   );
 
   return (
-    <div className="text-default min-h-screen text-gray-700 bg-white mt-8">
+    <div className="text-default min-h-screen text-gray-700 bg-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {!isSellerPath && <Navbar />}
       {showUserLogin && <Login />}
       {showSellerLogin && <SellerLogin />}
