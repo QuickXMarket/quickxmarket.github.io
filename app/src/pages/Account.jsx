@@ -3,15 +3,27 @@ import { Link } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { assets } from "../assets/assets";
 import toast from "react-hot-toast";
+import AccountOption from "../components/AccountOption";
 
 const Account = () => {
-  const { user, setUser, setShowSellerLogin, navigate, makeRequest, logout } =
-    useAppContext();
+  const {
+    user,
+    setUser,
+    setShowSellerLogin,
+    setShowUserLogin,
+    makeRequest,
+    logout,
+  } = useAppContext();
 
   return (
     <div className="max-w-xl mx-auto">
       {/* Greeting */}
-      <div className=" px-4 py-6 sm:px-6 md:px-10 lg:px-16 text-center mb-6">
+      <div className="px-4 py-6 sm:px-6 md:px-10 lg:px-16 text-center mb-6">
+        <img
+          src={assets.profile_icon}
+          alt="Profile"
+          className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
+        />
         <h1 className="text-2xl font-semibold">
           {user ? `Welcome, ${user.name}` : "Welcome, Guest"}
         </h1>
@@ -25,54 +37,50 @@ const Account = () => {
       {/* Options List */}
       <div className="flex flex-col text-sm divide-y divide-gray-200">
         {/* Seller Dashboard / Register */}
-        {user?.role === "vendor" ? (
-          <Link
-            to={"/seller"}
-            className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"
-          >
-            <span>Seller Dashboard</span>
-            <img src={assets.black_arrow_icon} className="w-4" alt=">" />
-          </Link>
-        ) : (
-          <div
-            className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"
-            onClick={() => {
-              setShowSellerLogin(true);
-            }}
-          >
-            <span>Register as a Vendor</span>
-            <img src={assets.black_arrow_icon} className="w-4" alt=">" />
-          </div>
-        )}
-        {/* My Orders */}
-        <Link
+        {user &&
+          (user.role === "vendor" ? (
+            <Link
+              to="/seller"
+              className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"
+            >
+              <span>Seller Dashboard</span>
+              <img src={assets.black_arrow_icon} className="w-4" alt=">" />
+            </Link>
+          ) : (
+            <div
+              className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"
+              onClick={() => setShowSellerLogin(true)}
+            >
+              <span>Register as a Vendor</span>
+              <img src={assets.black_arrow_icon} className="w-4" alt=">" />
+            </div>
+          ))}
+
+        <AccountOption
           to="/my-orders"
-          className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"
-        >
-          <span>My Orders</span>
-          <img src={assets.black_arrow_icon} className="w-4" alt=">" />
-        </Link>
+          label="My Orders"
+          icon={assets.black_arrow_icon}
+          onClick={() => setShowUserLogin(true)}
+        />
 
         {/* Profile Details */}
-        <Link
+        <AccountOption
           to="/profile"
-          className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"
-        >
-          <span>Profile Details</span>
-          <img src={assets.black_arrow_icon} className="w-4" alt=">" />
-        </Link>
+          label="Profile Details"
+          icon={assets.black_arrow_icon}
+          onClick={() => setShowUserLogin(true)}
+        />
 
         {/* Contact Us */}
-        <Link
+        <AccountOption
           to="/contact"
-          className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"
-        >
-          <span>Contact Us</span>
-          <img src={assets.black_arrow_icon} className="w-4" alt=">" />
-        </Link>
+          label="Contact Us"
+          icon={assets.black_arrow_icon}
+          onClick={() => setShowUserLogin(true)}
+        />
 
         {/* Sign Out */}
-        {user && (
+        {user ? (
           <button
             onClick={logout}
             className="flex items-center justify-between py-4 text-red-600 hover:bg-red-50 px-1 transition"
@@ -83,6 +91,14 @@ const Account = () => {
               className="w-4"
               alt=">"
             />
+          </button>
+        ) : (
+          <button
+            onClick={() => setShowUserLogin(true)}
+            className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"
+          >
+            <span>Sign In</span>
+            <img src={assets.login} className="w-4" alt=">" />
           </button>
         )}
       </div>
