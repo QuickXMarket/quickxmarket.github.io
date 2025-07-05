@@ -24,6 +24,7 @@ import ShopList from "./pages/ShopList";
 import ShopProducts from "./pages/ShopProducts";
 import Account from "./pages/Account";
 import BottomNavbar from "./components/BottomNavbar";
+import WishList from "./pages/WishList";
 
 const App = () => {
   const { showUserLogin, isSeller, showSellerLogin, user, loading, location } =
@@ -62,6 +63,7 @@ const App = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/loader" element={<Loading />} />
           <Route path="/account" element={<Account />} />
+          <Route path="/wishlist" element={<WishList />} />
           <Route
             path="/seller"
             element={

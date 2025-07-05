@@ -10,6 +10,10 @@ const Login = () => {
     navigate,
     location,
     fetchSeller,
+    setCartItems,
+    setWishList,
+    wishList,
+    cartItems,
   } = useAppContext();
 
   const [state, setState] = React.useState("login");
@@ -42,6 +46,22 @@ const Login = () => {
       if (data.success) {
         setUser(data.user);
         setShowUserLogin(false);
+        if (cartItems && Object.keys(cartItems).length > 0) {
+          setCartItems({
+            ...data.user.cartItems,
+            ...cartItems,
+          });
+        }
+
+        if (wishList && wishList.length > 0) {
+          let wishListData = structuredClone(wishList);
+          wishListData = wishListData.filter(
+            (item) => !data.user.wishList.includes(item)
+          );
+          wishListData = [...data.user.wishList, ...wishListData];
+          setWishList(wishListData);
+        }
+        
         fetchSeller();
         if (location.pathname !== "/seller") navigate("/");
       } else {

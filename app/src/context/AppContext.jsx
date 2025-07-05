@@ -382,8 +382,8 @@ export const AppContextProvider = ({ children }) => {
   }, [wishList]);
 
   useEffect(() => {
-    if (Capacitor.isNativePlatform() && user) {
-      setupPushNotifications();
+    if (user) {
+      if (Capacitor.isNativePlatform()) setupPushNotifications();
     }
   }, [user]);
 
@@ -414,6 +414,7 @@ export const AppContextProvider = ({ children }) => {
     makeRequest,
     fetchProducts,
     setCartItems,
+    setWishList,
     fetchSeller,
     loading,
 

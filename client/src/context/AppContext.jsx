@@ -18,6 +18,7 @@ export const AppContextProvider = ({ children }) => {
   const [showUserLogin, setShowUserLogin] = useState(false);
   const [showSellerLogin, setShowSellerLogin] = useState(false);
   const [products, setProducts] = useState([]);
+  const [wishList, setWishList] = useState([]);
 
   const [cartItems, setCartItems] = useState({});
   const [searchQuery, setSearchQuery] = useState({});
@@ -78,6 +79,15 @@ export const AppContextProvider = ({ children }) => {
     cartData[itemId] = quantity;
     setCartItems(cartData);
     toast.success("Cart Updated");
+  };
+
+  const updateWishList = (itemId) => {
+    let wishListData = structuredClone(wishList);
+    if (wishListData.includes(itemId))
+      wishListData = wishListData.filter((item) => item !== itemId);
+    else wishListData.push(itemId);
+    setWishList(wishListData);
+    toast.success("Added to Wish List");
   };
 
   // Remove Product from Cart
@@ -145,6 +155,25 @@ export const AppContextProvider = ({ children }) => {
     }
   }, [cartItems]);
 
+  useEffect(() => {
+    const updateWishList = async () => {
+      try {
+        const data = await makeRequest({
+          method: "POST",
+          url: "/api/user/wishListUpdate",
+          data: { wishList },
+        });
+        if (!data.success) toast.error(data.message);
+      } catch (err) {
+        toast.error(err.message);
+      }
+    };
+
+    if (user) {
+      updateWishList();
+    }
+  }, [wishList]);
+
   const value = {
     navigate,
     location,
@@ -156,6 +185,8 @@ export const AppContextProvider = ({ children }) => {
     setShowUserLogin,
     showSellerLogin,
     setShowSellerLogin,
+    updateWishList,
+    wishList,
     products,
     currency,
     addToCart,
@@ -169,6 +200,7 @@ export const AppContextProvider = ({ children }) => {
     axios,
     fetchProducts,
     setCartItems,
+    setWishList,
     fetchSeller,
     loading,
   };

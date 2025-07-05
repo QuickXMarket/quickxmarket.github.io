@@ -58,7 +58,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     setThumbnail(product?.image[0] ? product.image[0] : null);
-    setIsWishListed(wishList.includes(product._id));
+    setIsWishListed(wishList.includes(product?._id));
   }, [product]);
 
   return (
