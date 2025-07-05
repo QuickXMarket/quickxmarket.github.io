@@ -6,8 +6,15 @@ import ProductCard from "../components/ProductCard";
 import WishlistIcon from "../assets/heart-fill.svg?react";
 
 const ProductDetails = () => {
-  const { products, navigate, currency, addToCart, makeRequest } =
-    useAppContext();
+  const {
+    products,
+    navigate,
+    currency,
+    addToCart,
+    makeRequest,
+    updateWishList,
+    wishList,
+  } = useAppContext();
   const { id } = useParams();
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [otherProductsFromVendor, setOtherProductsFromVendor] = useState([]);
@@ -51,6 +58,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     setThumbnail(product?.image[0] ? product.image[0] : null);
+    setIsWishListed(wishList.includes(product._id));
   }, [product]);
 
   return (
@@ -105,6 +113,10 @@ const ProductDetails = () => {
               className={`w-5 h-5 sm:w-6 sm:h-6 ml-auto cursor-pointer hover:scale-110 transition  ${
                 isWishListed ? "text-primary" : "text-gray-500"
               }`}
+              onClick={() => {
+                updateWishList(product._id);
+                setIsWishListed(!isWishListed);
+              }}
             />
 
             {vendor && (

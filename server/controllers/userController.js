@@ -169,6 +169,17 @@ export const updateUserRole = async (req, res) => {
   }
 };
 
+export const updateWishList = async (req, res) => {
+  try {
+    const { userId, wishList } = req.body;
+    await User.findByIdAndUpdate(userId, { wishList });
+    res.json({ success: true, message: "Added to Wish List" });
+  } catch (error) {
+    console.log(error.message);
+    res.json({ success: false, message: error.message });
+  }
+};
+
 export const updateUserFcmToken = async (req, res) => {
   try {
     const { userId, fcmToken } = req.body;

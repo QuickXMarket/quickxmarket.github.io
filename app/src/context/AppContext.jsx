@@ -23,6 +23,7 @@ export const AppContextProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
 
   const [cartItems, setCartItems] = useState({});
+  const [wishList, setWishList] = useState([]);
   const [searchQuery, setSearchQuery] = useState({});
   const [loading, setLoading] = useState(true);
   const baseUrl = "https://quickxmarket-server.vercel.app";
@@ -200,6 +201,7 @@ export const AppContextProvider = ({ children }) => {
       if (data.success) {
         setUser(data.user);
         setCartItems(data.user.cartItems);
+        setWishList(data.user.wishList);
         await Preferences.set({
           key: "user",
           value: JSON.stringify(data.user),
@@ -257,6 +259,15 @@ export const AppContextProvider = ({ children }) => {
     cartData[itemId] = quantity;
     setCartItems(cartData);
     toast.success("Cart Updated");
+  };
+
+  const updateWishList = (itemId) => {
+    let wishListData = structuredClone(wishList);
+    if (wishListData.includes(itemId))
+      wishListData = wishListData.filter((item) => item !== itemId);
+    else wishListData.push(itemId);
+    setWishList(wishListData);
+    toast.success("Added to Wish List");
   };
 
   // Remove Product from Cart
@@ -352,6 +363,25 @@ export const AppContextProvider = ({ children }) => {
   }, [cartItems]);
 
   useEffect(() => {
+    const updateWishList = async () => {
+      try {
+        const data = await makeRequest({
+          method: "POST",
+          url: "/api/user/wishListUpdate",
+          data: { wishList },
+        });
+        if (!data.success) toast.error(data.message);
+      } catch (err) {
+        toast.error(err.message);
+      }
+    };
+
+    if (user) {
+      updateWishList();
+    }
+  }, [wishList]);
+
+  useEffect(() => {
     if (Capacitor.isNativePlatform() && user) {
       setupPushNotifications();
     }
@@ -375,6 +405,8 @@ export const AppContextProvider = ({ children }) => {
     updateCartItem,
     removeFromCart,
     cartItems,
+    updateWishList,
+    wishList,
     searchQuery,
     setSearchQuery,
     getCartAmount,
@@ -384,6 +416,7 @@ export const AppContextProvider = ({ children }) => {
     setCartItems,
     fetchSeller,
     loading,
+
     fileToBase64,
   };
 

@@ -17,5 +17,6 @@ userRouter.get("/is-auth", authUser, isAuth);
 userRouter.get("/logout", authUser, logout);
 userRouter.patch("/update-role", authUser, updateUserRole);
 userRouter.patch("/update-fcm-token", authUser, updateUserFcmToken);
+userRouter.post("/wishListUpdate", authUser, );
 
 export default userRouter;
