@@ -19,7 +19,11 @@ async function uploadBase64Image(base64String, folder, publicId) {
 // Add Product : /api/product/add
 export const addProduct = async (req, res) => {
   try {
-    let productData = JSON.parse(req.body.productData);
+    let productData =
+      typeof req.body.productData === "string"
+        ? JSON.parse(req.body.productData)
+        : req.body.productData;
+
     // Add vendorId from authenticated user
     const userId = req.body.userId;
     const vendor = await Vendor.findOne({ userId }).populate("userId");
@@ -38,9 +42,9 @@ export const addProduct = async (req, res) => {
           let result = await cloudinary.uploader.upload(item.path, {
             resource_type: "image",
             folder: `/Product Images/${vendor._id}`,
-            public_id: `${productData.name.replace(/\s+/g, "_").toLowerCase()}_${
-              index + 1
-            }`,
+            public_id: `${productData.name
+              .replace(/\s+/g, "_")
+              .toLowerCase()}_${index + 1}`,
           });
           return result.secure_url;
         })
@@ -49,10 +53,14 @@ export const addProduct = async (req, res) => {
       // Handle base64 images in JSON
       imagesUrl = await Promise.all(
         req.body.images.map(async (base64String, index) => {
-          const publicId = `${productData.name.replace(/\s+/g, "_").toLowerCase()}_${
-            index + 1
-          }`;
-          return await uploadBase64Image(base64String, `/Product Images/${vendor._id}`, publicId);
+          const publicId = `${productData.name
+            .replace(/\s+/g, "_")
+            .toLowerCase()}_${index + 1}`;
+          return await uploadBase64Image(
+            base64String,
+            `/Product Images/${vendor._id}`,
+            publicId
+          );
         })
       );
     }
