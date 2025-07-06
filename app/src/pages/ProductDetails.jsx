@@ -201,7 +201,7 @@ const ProductDetails = () => {
           </div>
           <button
             onClick={() => {
-              navigate("/products");
+              navigate(`/products/${product.category.toLowerCase()}`);
               scrollTo(0, 0);
             }}
             className="mx-auto cursor-pointer px-12 my-16 py-2.5 border rounded text-primary hover:bg-primary/10 transition"
@@ -228,7 +228,7 @@ const ProductDetails = () => {
           </div>
           <button
             onClick={() => {
-              navigate("/products");
+              navigate(`/shops/${product.vendorId}`);
               scrollTo(0, 0);
             }}
             className="mx-auto cursor-pointer px-12 my-16 py-2.5 border rounded text-primary hover:bg-primary/10 transition"

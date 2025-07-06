@@ -4,7 +4,6 @@ import WishListCard from "../components/WishListCard";
 
 const WishList = () => {
   const { wishList, products } = useAppContext();
-  console.log(wishList, products);
 
   const wishListProducts = products.filter((p) => wishList.includes(p._id));
 

@@ -58,6 +58,7 @@ const SellerLayout = () => {
 
   return (
     <>
+      {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-8 border-b border-gray-300 py-3 bg-white">
         <Link to="/">
           <img
@@ -68,17 +69,13 @@ const SellerLayout = () => {
         </Link>
         <div className="flex items-center gap-5 text-gray-500">
           <p className="truncate w-20 sm:w-full">Hi! {businessName}</p>
-
-          {/* <button
-            onClick={logout}
-            className="border rounded-full text-sm px-4 py-1"
-          >
-            Logout
-          </button> */}
         </div>
       </div>
+
+      {/* Main layout */}
       <div className="flex">
-        <div className="md:w-64 w-16 border-r h-[95vh] text-base border-gray-300 pt-4 flex flex-col">
+        {/* Sidebar - visible on lg and up */}
+        <div className="hidden lg:flex lg:w-64 w-16 border-r h-[95vh] text-base border-gray-300 pt-4 flex-col">
           {sidebarLinks.map((item) => (
             <NavLink
               to={item.path}
@@ -86,11 +83,11 @@ const SellerLayout = () => {
               end={item.path === "/seller"}
               className={({ isActive }) =>
                 `flex items-center py-3 px-4 gap-3 
-                            ${
-                              isActive
-                                ? "border-r-4 md:border-r-[6px] bg-primary/10 border-primary text-primary"
-                                : "hover:bg-gray-100/90 border-white"
-                            }`
+              ${
+                isActive
+                  ? "border-r-4 md:border-r-[6px] bg-primary/10 border-primary text-primary"
+                  : "hover:bg-gray-100/90 border-white"
+              }`
               }
             >
               <img src={item.icon} alt="" className="w-7 h-7" />
@@ -98,7 +95,31 @@ const SellerLayout = () => {
             </NavLink>
           ))}
         </div>
-        <Outlet />
+
+        {/* Page Content */}
+        <div className="flex-grow pb-16 lg:pb-0">
+          <Outlet />
+        </div>
+      </div>
+
+      {/* Bottom Nav for mobile - visible only on < lg */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-sm flex justify-around py-2 lg:hidden">
+        {sidebarLinks.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <NavLink
+              to={item.path}
+              key={item.name}
+              end={item.path === "/seller"}
+              className={`flex flex-col items-center text-xs ${
+                isActive ? "text-primary" : "text-gray-500"
+              }`}
+            >
+              <img src={item.icon} className="w-6 h-6" alt={item.name} />
+              <span className="text-[11px]">{item.name}</span>
+            </NavLink>
+          );
+        })}
       </div>
     </>
   );

@@ -186,7 +186,7 @@ const adminOrderNotification = (products, orderId) => {
 
 const vendorProductUploadConfirmation = (product) => {
   const websiteDomain = process.env.WEBSITE_URL;
-  const productLink = `${websiteDomain}/product/${product.category}/${product._id}`;
+  const productLink = `${websiteDomain}/products/${product.category}/${product._id}`;
 
   return `
 <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
