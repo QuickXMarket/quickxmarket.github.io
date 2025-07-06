@@ -42,7 +42,7 @@ export const AppContextProvider = ({ children }) => {
         },
         data,
       });
-      toast.success(response.message);
+      
       return response.data;
     } catch (err) {
       throw new Error(err?.error || "Network Error");
@@ -72,8 +72,6 @@ export const AppContextProvider = ({ children }) => {
 
     // On successful registration, get FCM token
     PushNotifications.addListener("registration", async (token) => {
-      console.log("FCM Token:", token.value);
-      // copyToClipboard(token.value);
       try {
         await makeRequest({
           method: "PATCH",
@@ -208,6 +206,7 @@ export const AppContextProvider = ({ children }) => {
         setUser(data.user);
         setCartItems(data.user.cartItems);
         setWishList(data.user.wishList || []);
+        setIsSeller(data.user.role === "vendor");
         await Preferences.set({
           key: "user",
           value: JSON.stringify(data.user),
@@ -215,18 +214,6 @@ export const AppContextProvider = ({ children }) => {
       }
     } catch {
       setUser(null);
-    }
-  };
-
-  const fetchSeller = async () => {
-    try {
-      const data = await makeRequest({
-        method: "GET",
-        url: "/api/user/is-auth",
-      });
-      setIsSeller(data.success && data.user.role === "vendor");
-    } catch {
-      setIsSeller(false);
     }
   };
 
@@ -341,7 +328,7 @@ export const AppContextProvider = ({ children }) => {
           const parsedUser = JSON.parse(storedUser.value);
           setUser(parsedUser);
         }
-        await Promise.all([fetchUser(), fetchSeller(), fetchProducts()]);
+        await Promise.all([fetchUser(),fetchProducts()]);
       } catch (err) {
         // Optional: log or toast error
       } finally {
@@ -424,7 +411,6 @@ export const AppContextProvider = ({ children }) => {
     fetchProducts,
     setCartItems,
     setWishList,
-    fetchSeller,
     loading,
     Preferences,
     fileToBase64,

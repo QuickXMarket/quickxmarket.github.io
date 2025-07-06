@@ -6,6 +6,7 @@ import {
   register,
   updateUserFcmToken,
   updateUserRole,
+  updateWishList,
 } from "../controllers/userController.js";
 import authUser from "../middlewares/authUser.js";
 
@@ -17,6 +18,6 @@ userRouter.get("/is-auth", authUser, isAuth);
 userRouter.get("/logout", authUser, logout);
 userRouter.patch("/update-role", authUser, updateUserRole);
 userRouter.patch("/update-fcm-token", authUser, updateUserFcmToken);
-userRouter.post("/wishListUpdate", authUser, );
+userRouter.post("/wishListUpdate", authUser, updateWishList);
 
 export default userRouter;
