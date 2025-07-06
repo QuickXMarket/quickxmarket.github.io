@@ -162,10 +162,8 @@ export const AppContextProvider = ({ children }) => {
   useEffect(() => {
     const updateWishList = async () => {
       try {
-        const data = await makeRequest({
-          method: "POST",
-          url: "/api/user/wishListUpdate",
-          data: { wishList },
+        const { data } = await axios.post("/api/user/wishListUpdate", {
+          wishList,
         });
         if (!data.success) toast.error(data.message);
       } catch (err) {
