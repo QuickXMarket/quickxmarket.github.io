@@ -31,11 +31,14 @@ export const AppContextProvider = ({ children }) => {
 
   const makeRequest = async ({ method, url, data }) => {
     try {
+      const token = (await Preferences.get({ key: "authToken" })).value;
+
       const response = await CapacitorHttp.request({
         method,
         url: `${baseUrl}${url}`,
         headers: {
           "Content-Type": "application/json",
+          ...(token && { Authorization: `Bearer ${token}` }),
         },
         data,
       });
@@ -318,6 +321,7 @@ export const AppContextProvider = ({ children }) => {
       if (data.success) {
         toast.success(data.message);
         await Preferences.remove({ key: "user" });
+        await Preferences.remove({ key: "authToken" });
         setUser(null);
         navigate("/");
       } else {
@@ -422,7 +426,7 @@ export const AppContextProvider = ({ children }) => {
     setWishList,
     fetchSeller,
     loading,
-
+    Preferences,
     fileToBase64,
   };
 

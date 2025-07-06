@@ -95,10 +95,14 @@ const Account = () => {
         ) : (
           <button
             onClick={() => setShowUserLogin(true)}
-            className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"
+            className="flex items-center justify-between py-4 text-primary hover:bg-gray-50 px-1 transition"
           >
             <span>Sign In</span>
-            <img src={assets.login} className="w-4" alt=">" />
+            <img
+              src={assets.login || assets.black_arrow_icon}
+              className="w-4"
+              alt=">"
+            />
           </button>
         )}
       </div>

@@ -14,6 +14,7 @@ const Login = () => {
     setWishList,
     wishList,
     cartItems,
+    Preferences
   } = useAppContext();
 
   const [state, setState] = React.useState("login");
@@ -45,6 +46,7 @@ const Login = () => {
 
       if (data.success) {
         setUser(data.user);
+        await Preferences.set({ key: "authToken", value: data.token });
         setShowUserLogin(false);
         if (cartItems && Object.keys(cartItems).length > 0) {
           setCartItems({

@@ -15,7 +15,9 @@ export const register = async (req, res) => {
     // Validate email domain MX record
     const isValidDomain = await isEmailDomainValid(email);
     if (!isValidDomain) {
-      return res.status(400).json({ success: false, message: "Invalid email domain." });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid email domain." });
     }
 
     const existingUser = await User.findOne({ email });
@@ -45,6 +47,7 @@ export const register = async (req, res) => {
 
     return res.json({
       success: true,
+      token,
       user: {
         email: user.email,
         name: user.name,
@@ -73,7 +76,9 @@ export const login = async (req, res) => {
     // Validate email domain MX record
     const isValidDomain = await isEmailDomainValid(email);
     if (!isValidDomain) {
-      return res.status(400).json({ success: false, message: "Invalid email domain." });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid email domain." });
     }
 
     const user = await User.findOne({ email });
@@ -97,9 +102,10 @@ export const login = async (req, res) => {
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    
+
     return res.json({
       success: true,
+      token,
       user: {
         email: user.email,
         name: user.name,
