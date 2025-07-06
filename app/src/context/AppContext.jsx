@@ -42,6 +42,7 @@ export const AppContextProvider = ({ children }) => {
         },
         data,
       });
+      toast.success(response.message);
       return response.data;
     } catch (err) {
       throw new Error(err?.error || "Network Error");
@@ -339,7 +340,6 @@ export const AppContextProvider = ({ children }) => {
         if (storedUser.value) {
           const parsedUser = JSON.parse(storedUser.value);
           setUser(parsedUser);
-          setCartItems(parsedUser.cartItems || {});
         }
         await Promise.all([fetchUser(), fetchSeller(), fetchProducts()]);
       } catch (err) {
