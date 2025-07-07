@@ -17,7 +17,7 @@ const InputField = ({ type, placeholder, name, handleChange, address }) => (
 );
 
 const AddAddress = () => {
-  const { makeRequest, user, navigate } = useAppContext();
+  const { makeRequest, user, navigate, fuse } = useAppContext();
 
   const [address, setAddress] = useState({
     firstName: "",
@@ -68,22 +68,12 @@ const AddAddress = () => {
 
     setLoading(true);
     try {
-      const limit = 5;
-      const left = 5.564212639756239;
-      const right = 5.654812639756239;
-      const top = 6.445101079346673;
-      const bottom = 6.355101079346673;
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          query
-        )}&addressdetails=1&limit=${limit}&countrycodes=ng&viewbox=${left},${top},${right},${bottom}&bounded=1`
-      );
-      const data = await response.json();
-      setSuggestions(data);
+      const results = fuse.search(query).slice(0, 5);
+      const suggestionsData = results.map((result) => result.item);
+      setSuggestions(suggestionsData);
     } catch (error) {
-      if (error.name !== "AbortError") {
-        console.error("Error fetching address suggestions:", error);
-      }
+      console.error("Error fetching suggestions:", error);
+      toast.error("Failed to fetch address suggestions");
     } finally {
       setLoading(false);
     }
@@ -92,7 +82,7 @@ const AddAddress = () => {
   const onSuggestionClick = (suggestion) => {
     setAddress((prevAddress) => ({
       ...prevAddress,
-      address: suggestion.display_name,
+      address: `${suggestion.display_name} ${suggestion.street || ""}`,
     }));
 
     setLatitude(parseFloat(suggestion.lat));
@@ -207,7 +197,7 @@ const AddAddress = () => {
                       onClick={() => onSuggestionClick(suggestion)}
                       className="p-2 cursor-pointer hover:bg-gray-200"
                     >
-                      {suggestion.display_name}
+                      {`${suggestion.display_name} ${suggestion.street || ""}`}
                     </li>
                   ))}
                 </ul>

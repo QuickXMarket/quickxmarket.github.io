@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
+import Fuse from "fuse.js";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
@@ -23,6 +24,7 @@ export const AppContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState({});
   const [searchQuery, setSearchQuery] = useState({});
   const [loading, setLoading] = useState(true);
+  const [fuse, setFuse] = useState(null);
 
   // Fetch Seller Status
   const fetchUser = async () => {
@@ -58,6 +60,25 @@ export const AppContextProvider = ({ children }) => {
       }
     } catch (error) {
       toast.error(error.message);
+    }
+  };
+
+  const fetchAddresses = async () => {
+    try {
+      const { data } = await axios.get("/api/geocoding/fetchAddresses");
+      if (data.success) {
+        const fuseIndex = new Fuse(data.data, {
+          keys: ["display_name", "city", "country"],
+          threshold: 0.3,
+          includeScore: false,
+          ignoreLocation: true,
+          findAllMatches: true,
+        });
+        setFuse(fuseIndex);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch addresses: " + error.message);
+      return [];
     }
   };
 
@@ -131,7 +152,12 @@ export const AppContextProvider = ({ children }) => {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        await Promise.all([fetchUser(), fetchSeller(), fetchProducts()]);
+        await Promise.all([
+          fetchUser(),
+          fetchSeller(),
+          fetchProducts(),
+          fetchAddresses(),
+        ]);
       } catch (err) {
         // Optional: log or toast error
       } finally {
@@ -205,6 +231,7 @@ export const AppContextProvider = ({ children }) => {
     setWishList,
     fetchSeller,
     loading,
+    fuse
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

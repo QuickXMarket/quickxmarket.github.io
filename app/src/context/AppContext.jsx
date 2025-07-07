@@ -9,6 +9,7 @@ import { Preferences } from "@capacitor/preferences";
 import { PushNotifications } from "@capacitor/push-notifications";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { EdgeToEdge } from "@capawesome/capacitor-android-edge-to-edge-support";
+import Fuse from "fuse.js";
 
 export const AppContext = createContext();
 
@@ -22,6 +23,7 @@ export const AppContextProvider = ({ children }) => {
   const [showUserLogin, setShowUserLogin] = useState(false);
   const [showSellerLogin, setShowSellerLogin] = useState(false);
   const [products, setProducts] = useState([]);
+  const [fuse, setFuse] = useState(null);
 
   const [cartItems, setCartItems] = useState({});
   const [wishList, setWishList] = useState([]);
@@ -42,7 +44,7 @@ export const AppContextProvider = ({ children }) => {
         },
         data,
       });
-      
+
       return response.data;
     } catch (err) {
       throw new Error(err?.error || "Network Error");
@@ -233,6 +235,28 @@ export const AppContextProvider = ({ children }) => {
     }
   };
 
+  const fetchAddresses = async () => {
+    try {
+      const data = await makeRequest({
+        method: "GET",
+        url: "/api/geocoding/fetchAddresses",
+      });
+      if (data.success) {
+        const fuseIndex = new Fuse(data.data, {
+          keys: ["display_name", "city", "country"],
+          threshold: 0.3,
+          includeScore: false,
+          ignoreLocation: true,
+          findAllMatches: true,
+        });
+        setFuse(fuseIndex);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch addresses: " + error.message);
+      return [];
+    }
+  };
+
   // Add Product to Cart
   const addToCart = (itemId) => {
     let cartData = structuredClone(cartItems);
@@ -328,7 +352,7 @@ export const AppContextProvider = ({ children }) => {
           const parsedUser = JSON.parse(storedUser.value);
           setUser(parsedUser);
         }
-        await Promise.all([fetchUser(),fetchProducts()]);
+        await Promise.all([fetchUser(), fetchProducts(), fetchAddresses()]);
       } catch (err) {
         // Optional: log or toast error
       } finally {
@@ -414,6 +438,7 @@ export const AppContextProvider = ({ children }) => {
     loading,
     Preferences,
     fileToBase64,
+    fuse,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

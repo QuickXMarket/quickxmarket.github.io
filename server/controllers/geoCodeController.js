@@ -65,17 +65,19 @@ async function loadGeoJsonData() {
         } else {
           return; // Skip unsupported types
         }
-        
-        geocodingData.push({
-          display_name:
-            feature.properties.name ||
-            feature.properties.address ||
-            "Unknown Address",
-          lat,
-          lon,
-          city: feature.properties.city,
-          country: feature.properties.country,
-        });
+        if (feature.properties.name === "Keystone Hostel")
+          console.log();
+          geocodingData.push({
+            display_name:
+              feature.properties.name ||
+              feature.properties.address ||
+              "Unknown Address",
+            lat,
+            lon,
+            street: feature.properties["addr:street"] || "",
+            city: feature.properties["addr:city"],
+            country: feature.properties.country,
+          });
       }
     });
   }
@@ -92,6 +94,16 @@ async function loadGeoJsonData() {
   console.log("GeoJSON data loaded and Fuse index built.");
   return fuse;
 }
+
+export const fetchAddresses = async (req, res) => {
+  try {
+    // await loadGeoJsonData();
+    res.json({ success: true, data: geocodingData });
+  } catch (error) {
+    console.error("Error loading GeoJSON data:", error);
+    res.status(500).json({ success: false, message: "Failed to load data." });
+  }
+};
 
 function searchAddresses(query) {
   if (!fuse) {

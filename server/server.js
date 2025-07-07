@@ -47,7 +47,7 @@ app.use("/api/geocoding", geoCodeRouter);
 app.use("/api/mail", mailRouter);
 app.use("/api/sms", smsRouter);
 
-// loadGeoJsonData();
+loadGeoJsonData();
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

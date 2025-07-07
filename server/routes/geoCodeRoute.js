@@ -1,6 +1,5 @@
 import express from "express";
-import { searchAddresses } from "../controllers/geoCodeController.js";
-
+import { fetchAddresses, searchAddresses } from "../controllers/geoCodeController.js";
 
 const geoCodeRouter = express.Router();
 
@@ -15,5 +14,7 @@ geoCodeRouter.get("/geocode-suggest", (req, res) => {
   const suggestions = searchAddresses(query);
   res.json({ success: true, suggestions });
 });
+
+geoCodeRouter.get("/fetchAddresses", fetchAddresses);
 
 export default geoCodeRouter;
