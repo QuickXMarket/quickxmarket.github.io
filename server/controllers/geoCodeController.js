@@ -98,7 +98,7 @@ async function loadGeoJsonData() {
 export const fetchAddresses = async (req, res) => {
   try {
     const geocodingData = await loadGeoJsonData();
-    console.log(geocodingData.length, "addresses loaded");
+    
     res.json({ success: true, data: geocodingData });
   } catch (error) {
     console.error("Error loading GeoJSON data:", error);

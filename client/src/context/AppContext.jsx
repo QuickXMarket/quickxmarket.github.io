@@ -67,7 +67,6 @@ export const AppContextProvider = ({ children }) => {
     try {
       const { data } = await axios.get("/api/geocoding/fetchAddresses");
       if (data.success) {
-        console.log(data.data);
         const fuseIndex = new Fuse(data.data, {
           keys: ["display_name", "city", "country"],
           threshold: 0.3,
@@ -75,7 +74,6 @@ export const AppContextProvider = ({ children }) => {
           ignoreLocation: true,
           findAllMatches: true,
         });
-        console.log(fuseIndex)
         setFuse(fuseIndex);
       }
     } catch (error) {
