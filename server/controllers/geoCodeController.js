@@ -65,39 +65,40 @@ async function loadGeoJsonData() {
         } else {
           return; // Skip unsupported types
         }
-        if (feature.properties.name === "Keystone Hostel")
-          console.log();
-          geocodingData.push({
-            display_name:
-              feature.properties.name ||
-              feature.properties.address ||
-              "Unknown Address",
-            lat,
-            lon,
-            street: feature.properties["addr:street"] || "",
-            city: feature.properties["addr:city"],
-            country: feature.properties.country,
-          });
+        if (feature.properties.name === "Keystone Hostel") console.log();
+        geocodingData.push({
+          display_name:
+            feature.properties.name ||
+            feature.properties.address ||
+            "Unknown Address",
+          lat,
+          lon,
+          street: feature.properties["addr:street"] || "",
+          city: feature.properties["addr:city"],
+          country: feature.properties.country,
+        });
       }
     });
   }
+  return geocodingData
 
-  fuse = new Fuse(geocodingData, {
-    keys: ["display_name", "city", "country"],
-    threshold: 0.3,
-    includeScore: false,
-    ignoreLocation: true,
-    findAllMatches: true,
-  });
+  // fuse = new Fuse(geocodingData, {
+  //   keys: ["display_name", "city", "country"],
+  //   threshold: 0.3,
+  //   includeScore: false,
+  //   ignoreLocation: true,
+  //   findAllMatches: true,
+  // });
 
-  isInitialized = true;
-  console.log("GeoJSON data loaded and Fuse index built.");
-  return fuse;
+  // isInitialized = true;
+  // console.log("GeoJSON data loaded and Fuse index built.");
+  // return fuse;
 }
 
 export const fetchAddresses = async (req, res) => {
   try {
-    // await loadGeoJsonData();
+    const geocodingData = await loadGeoJsonData();
+    console.log(geocodingData.length, "addresses loaded");
     res.json({ success: true, data: geocodingData });
   } catch (error) {
     console.error("Error loading GeoJSON data:", error);
