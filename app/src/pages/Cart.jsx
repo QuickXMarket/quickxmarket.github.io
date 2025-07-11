@@ -15,7 +15,7 @@ const Cart = () => {
     getCartAmount,
     makeRequest,
     user,
-    setCartItems,
+    Browser,
   } = useAppContext();
   const [cartArray, setCartArray] = useState([]);
   const [addresses, setAddresses] = useState([]);
@@ -38,7 +38,10 @@ const Cart = () => {
 
   const getUserAddress = async () => {
     try {
-      const data = await makeRequest({ method: "GET", url: "/api/address/get" });
+      const data = await makeRequest({
+        method: "GET",
+        url: "/api/address/get",
+      });
       if (data.success) {
         setAddresses(data.addresses);
         if (data.addresses.length > 0) {
@@ -159,6 +162,7 @@ const Cart = () => {
       } else {
       */
       // Place Order with Paystack
+      const isNativeApp = Capacitor.isNativePlatform();
       const data = await makeRequest({
         method: "POST",
         url: "/api/order/paystack",
@@ -171,11 +175,16 @@ const Cart = () => {
           address: selectedAddress._id,
           email: user.email,
           amount: totalAmount,
+          isNativeApp,
         },
       });
 
       if (data.success) {
-        window.location.replace(data.url);
+        if (Capacitor.isNativePlatform()) {
+          await Browser.open({ url: data.url });
+        } else {
+          window.location.replace(data.url);
+        }
       } else {
         toast.error(data.message);
       }

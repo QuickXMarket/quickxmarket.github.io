@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 import { assets } from "../../assets/assets";
 import toast from "react-hot-toast";
+import { useOutletContext } from "react-router-dom";
 
 const Orders = () => {
   const { currency, makeRequest } = useAppContext();
@@ -10,7 +11,7 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-      const  data = await makeRequest({
+      const data = await makeRequest({
         url: `/api/order/seller${vendorId}`,
         method: "GET",
       });

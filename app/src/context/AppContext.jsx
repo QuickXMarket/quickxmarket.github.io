@@ -9,6 +9,7 @@ import { Preferences } from "@capacitor/preferences";
 import { PushNotifications } from "@capacitor/push-notifications";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { EdgeToEdge } from "@capawesome/capacitor-android-edge-to-edge-support";
+import { Browser } from "@capacitor/browser";
 import Fuse from "fuse.js";
 
 export const AppContext = createContext();
@@ -30,7 +31,7 @@ export const AppContextProvider = ({ children }) => {
   const [wishList, setWishList] = useState([]);
   const [searchQuery, setSearchQuery] = useState({});
   const [loading, setLoading] = useState(true);
-  const baseUrl = "http://192.168.0.101:4000";
+  const baseUrl = "http://192.168.0.100:4000";
 
   const makeRequest = async ({ method, url, data }) => {
     try {
@@ -163,7 +164,19 @@ export const AppContextProvider = ({ children }) => {
       removeListener = handler.remove;
     };
 
+    const setupPaystackCallback = () => {
+      CapacitorApp.addListener("appUrlOpen", (event) => {
+        const url = event.url;
+        const route = url.replace("quickxmarket://", "");
+
+        if (route) {
+          navigate("/" + route);
+        }
+      });
+    };
+
     setupBackHandler();
+    setupPaystackCallback();
 
     const configureStatusBar = async () => {
       if (!Capacitor.isNativePlatform()) return;
@@ -205,7 +218,7 @@ export const AppContextProvider = ({ children }) => {
         method: "GET",
         url: "/api/user/is-auth",
       });
-      
+
       if (data.success) {
         setUser(data.user);
         setCartItems(data.user.cartItems);
@@ -444,6 +457,7 @@ export const AppContextProvider = ({ children }) => {
     Preferences,
     fileToBase64,
     fuse,
+    Browser,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

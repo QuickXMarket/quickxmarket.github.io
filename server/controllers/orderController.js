@@ -72,7 +72,7 @@ export const getDeliveryFee = async (req, res) => {
 // Place Order Paystack : /api/order/paystack
 export const placeOrderPaystack = async (req, res) => {
   try {
-    const { userId, items, address, amount } = req.body;
+    const { userId, items, address, amount, isNativeApp } = req.body;
     const { origin } = req.headers;
 
     if (!address || items.length === 0) {
@@ -92,6 +92,10 @@ export const placeOrderPaystack = async (req, res) => {
       paymentType: "Online",
     };
 
+    const callback_url = isNativeApp
+      ? "quickxmarket://my-orders"
+      : `${origin}/loader?next=my-orders`;
+
     // Paystack Initialize
     const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
 
@@ -105,7 +109,7 @@ export const placeOrderPaystack = async (req, res) => {
           orderData,
           userId,
         },
-        callback_url: `${origin}/loader?next=my-orders`,
+        callback_url,
       },
       {
         headers: {
@@ -199,13 +203,29 @@ export const paystackWebhooks = async (req, res) => {
         );
       }
 
+      const riders = await Rider.find().populate("userId");
+
+      const riderEmails = [];
+      const riderFcmTokens = [];
+
+      for (const rider of riders) {
+        if (rider?.userId) {
+          const { email, fcmToken } = rider.userId;
+
+          if (email) riderEmails.push(email);
+          if (fcmToken) riderFcmTokens.push(fcmToken);
+        }
+      }
+
       const customerAddress = populatedOrder.address || {};
 
       await sendOrderNotification({
         orderId: populatedOrder._id.toString(),
         products: productDetails,
         customerEmail: customerAddress.email,
+        customerAddress,
         vendorEmails,
+        riderEmails,
       });
 
       for (const token of vendorFcmTokens) {
@@ -215,6 +235,17 @@ export const paystackWebhooks = async (req, res) => {
           "You have a new order. Check your seller dashboard.",
           {
             route: `/seller/orders/`,
+          }
+        );
+      }
+
+      for (const token of riderFcmTokens) {
+        await sendPushNotification(
+          token,
+          "New Delivery Request",
+          "A new order has been placed. Check your rider dashboard.",
+          {
+            route: `/rider`,
           }
         );
       }

@@ -5,6 +5,7 @@ import {
   vendorOrderNotification,
   adminOrderNotification,
   vendorProductUploadConfirmation,
+  riderOrderNotification,
 } from "../utils/mailTemplates.js";
 
 // Ensure admin email is set
@@ -50,7 +51,7 @@ export const sendContactEmail = async (req, res) => {
     }
 
     const mailOptions = {
-      from: `"${name}" <${process.env.SMTP_USER}>`, 
+      from: `"${name}" <${process.env.SMTP_USER}>`,
       to: adminEmail,
       subject,
       text: message,
@@ -100,7 +101,9 @@ export const sendOrderNotification = async ({
   orderId,
   products,
   customerEmail,
+  customerAddress,
   vendorEmails,
+  riderEmails,
 }) => {
   try {
     // Notify admin
@@ -119,6 +122,15 @@ export const sendOrderNotification = async ({
         to: vendorEmail,
         subject: `New Order Notification - Order #${orderId}`,
         html: vendorOrderNotification(products, orderId),
+      });
+    }
+
+    for (const riderEmail of riderEmails) {
+      await transporter.sendMail({
+        from: `"QuickXMarket" <${process.env.SMTP_USER}>`,
+        to: riderEmail,
+        subject: `New Delivery Request - Order #${orderId}`,
+        html: riderOrderNotification(products, orderId, customerAddress),
       });
     }
 

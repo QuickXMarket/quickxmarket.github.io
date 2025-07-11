@@ -12,7 +12,7 @@ const RiderOrderCard = ({ order }) => {
         onClick={toggleAccordion}
         className="cursor-pointer bg-gray-50 px-4 py-3 active:bg-gray-100 transition-all"
       >
-        {/* Order ID and Date */}
+        {/* Order ID, Date & Overall Status */}
         <div className="flex justify-between items-center">
           <span className="text-sm text-primary font-medium">
             Order ID: {order._id}
@@ -32,6 +32,11 @@ const RiderOrderCard = ({ order }) => {
             {order.address.phone}
           </p>
         </div>
+
+        {/* Overall Status */}
+        <div className="mt-1 text-xs text-primary font-medium">
+          Status: {order.status}
+        </div>
       </div>
 
       {/* Accordion Body */}
@@ -44,6 +49,9 @@ const RiderOrderCard = ({ order }) => {
                 <div className="flex-1">
                   <p className="font-semibold text-primary">{vendor.name}</p>
                   <p className="text-xs text-gray-500">{vendor.address}</p>
+                  <p className="text-xs text-primary font-medium mt-1">
+                    Vendor Status: {vendor.status}
+                  </p>
                 </div>
                 <p className="text-sm text-gray-600 whitespace-nowrap">
                   {vendor.phone}

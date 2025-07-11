@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAppContext } from "../../context/AppContext";
 import RiderOrderCard from "../../components/rider/RiderOrderCard";
+import { useOutletContext } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const RidersOrders = () => {
   const [activeTab, setActiveTab] = useState("pending");
@@ -76,33 +78,6 @@ const RidersOrders = () => {
     fetchOrders();
   }, []);
 
-  // const orders = [{
-  //   _id: "ORD123456",
-  //   createdAt: "2025-07-07T14:00:00Z",
-  //   customer: {
-  //     name: "Jane Doe",
-  //     address: "123 Main St, Ikeja",
-  //     phone: "08012345678",
-  //   },
-  //   vendors: [
-  //     {
-  //       name: "Vendor One",
-  //       address: "45 Broad Street, Lagos",
-  //       phone: "08098765432",
-  //       products: [
-  //         { name: "Tomatoes", quantity: 2, totalPrice: 1000 },
-  //         { name: "Onions", quantity: 3, totalPrice: 1500 },
-  //       ],
-  //     },
-  //     {
-  //       name: "Vendor Two",
-  //       address: "12 Market Road, Abuja",
-  //       phone: "08011223344",
-  //       products: [{ name: "Rice", quantity: 1, totalPrice: 5000 }],
-  //     },
-  //   ],
-  // }];
-
   return (
     <div className="p-4 w-full max-w-2xl mx-auto">
       {/* Top Tabs */}
@@ -132,8 +107,8 @@ const RidersOrders = () => {
       {/* Orders List */}
       <div className="space-y-4">
         {activeTab === "pending" ? (
-          orders?.length > 0 ? (
-            orders.map((order, index) => (
+          pendingOrders?.length > 0 ? (
+            pendingOrders.map((order, index) => (
               <RiderOrderCard order={order} key={index} />
             ))
           ) : (
