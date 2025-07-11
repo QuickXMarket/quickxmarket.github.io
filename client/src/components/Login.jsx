@@ -125,6 +125,7 @@ const Login = () => {
             className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary"
             type="password"
             required
+            autoComplete="current-password"
           />
         </div>
         {state === "register" ? (

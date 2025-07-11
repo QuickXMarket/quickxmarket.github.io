@@ -28,11 +28,20 @@ import WishList from "./pages/WishList";
 import { SplashScreen } from "@capacitor/splash-screen";
 import RiderLayout from "./pages/rider/RiderLayout";
 import RiderLogin from "./components/rider/RiderLogin";
+import RidersOrders from "./pages/rider/RidersOrders";
 
 const App = () => {
-  const { showUserLogin, isSeller, isRider, showSellerLogin, user, loading, location } =
-    useAppContext();
+  const {
+    showUserLogin,
+    isSeller,
+    isRider,
+    showSellerLogin,
+    user,
+    loading,
+    location,
+  } = useAppContext();
   const isSellerPath = location.pathname.includes("seller");
+  const isRiderPath = location.pathname.includes("rider");
 
   const showBottomNav = ["/", "/shops", "/wishlist", "/account"].includes(
     location.pathname
@@ -47,11 +56,15 @@ const App = () => {
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-white ">
-      {!isSellerPath && <Navbar />}
+      {!(isSellerPath || isRiderPath) && <Navbar />}
       {showUserLogin && <Login />}
       {showSellerLogin && <SellerLogin />}
       <Toaster />
-      <div className={isSellerPath ? "" : "px-6 md:px-16 lg:px-24 xl:px-32"}>
+      <div
+        className={
+          isSellerPath || isRiderPath ? "" : "px-6 md:px-16 lg:px-24 xl:px-32"
+        }
+      >
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<AllProducts />} />
@@ -106,7 +119,7 @@ const App = () => {
               )
             }
           >
-            <Route index element={isSeller ? <AddProduct /> : null} />
+            <Route index element={isRider ? <RidersOrders /> : null} />
             <Route path="product-list" element={<ProductList />} />
             <Route path="orders" element={<Orders />} />
           </Route>

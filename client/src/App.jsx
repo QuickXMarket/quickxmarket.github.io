@@ -26,19 +26,22 @@ import WishList from "./pages/WishList";
 
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller");
+  const isRiderPath = useLocation().pathname.includes("rider");
   const { showUserLogin, isSeller, showSellerLogin, user, loading } =
     useAppContext();
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-white">
-      {isSellerPath ? null : <Navbar />}
+      {isSellerPath || isRiderPath ? null : <Navbar />}
       {showUserLogin ? <Login /> : null}
       {showSellerLogin ? <SellerLogin /> : null}
 
       <Toaster />
 
       <div
-        className={`${isSellerPath ? "" : "px-6 md:px-16 lg:px-24 xl:px-32"}`}
+        className={`${
+          isSellerPath || isRiderPath ? "" : "px-6 md:px-16 lg:px-24 xl:px-32"
+        }`}
       >
         <Routes>
           <Route path="/" element={<Home />} />
@@ -81,7 +84,7 @@ const App = () => {
           </Route>
         </Routes>
       </div>
-      {!isSellerPath && <Footer />}
+      {!(isSellerPath || isRiderPath) && <Footer />}
     </div>
   );
 };

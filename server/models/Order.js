@@ -14,6 +14,7 @@ const orderSchema = new mongoose.Schema(
     address: { type: String, required: true, ref: "address" },
     paymentType: { type: String, required: true },
     isPaid: { type: Boolean, required: true, default: false },
+    riderId: { type: String, default: null, ref: "rider" },
   },
   { timestamps: true }
 );

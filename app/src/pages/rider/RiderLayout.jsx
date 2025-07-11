@@ -10,6 +10,7 @@ const RiderLayout = () => {
 
   const [showLogin, setShowLogin] = useState(false);
   const [riderName, setRiderName] = useState("");
+  const [riderId, setRiderId] = useState("");
 
   useEffect(() => {
     const verifyRider = async () => {
@@ -25,6 +26,7 @@ const RiderLayout = () => {
 
         if (data.success) {
           setRiderName(data.rider.name || user.name);
+          setRiderId(data.rider._id);
           setShowLogin(false);
         } else {
           toast.error("Not a valid rider account");
@@ -85,7 +87,7 @@ const RiderLayout = () => {
 
         {/* Main Page Content */}
         <div className="flex-grow pb-16 lg:pb-0">
-          <Outlet />
+          <Outlet context={{ riderId }} />
         </div>
       </div>
 

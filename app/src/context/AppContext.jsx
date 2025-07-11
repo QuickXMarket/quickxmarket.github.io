@@ -30,7 +30,7 @@ export const AppContextProvider = ({ children }) => {
   const [wishList, setWishList] = useState([]);
   const [searchQuery, setSearchQuery] = useState({});
   const [loading, setLoading] = useState(true);
-  const baseUrl = "https://quickxmarket-server.vercel.app/";
+  const baseUrl = "http://192.168.0.101:4000";
 
   const makeRequest = async ({ method, url, data }) => {
     try {
@@ -205,7 +205,7 @@ export const AppContextProvider = ({ children }) => {
         method: "GET",
         url: "/api/user/is-auth",
       });
-      console.log(data);
+      
       if (data.success) {
         setUser(data.user);
         setCartItems(data.user.cartItems);

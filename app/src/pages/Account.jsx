@@ -37,24 +37,45 @@ const Account = () => {
       {/* Options List */}
       <div className="flex flex-col text-sm divide-y divide-gray-200">
         {/* Seller Dashboard / Register */}
-        {user &&
-          (user.isSeller ? (
-            <Link
-              to="/seller"
-              className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"
-            >
-              <span>Seller Dashboard</span>
-              <img src={assets.black_arrow_icon} className="w-4" alt=">" />
-            </Link>
-          ) : (
-            <div
-              className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"
-              onClick={() => setShowSellerLogin(true)}
-            >
-              <span>Register as a Vendor</span>
-              <img src={assets.black_arrow_icon} className="w-4" alt=">" />
-            </div>
-          ))}
+        {user && (
+          <>
+            {user.isSeller ? (
+              <Link
+                to="/seller"
+                className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"
+              >
+                <span>Seller Dashboard</span>
+                <img src={assets.black_arrow_icon} className="w-4" alt=">" />
+              </Link>
+            ) : (
+              <div
+                className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"
+                onClick={() => setShowSellerLogin(true)}
+              >
+                <span>Register as a Vendor</span>
+                <img src={assets.black_arrow_icon} className="w-4" alt=">" />
+              </div>
+            )}
+
+            {user.isRider ? (
+              <Link
+                to="/rider"
+                className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"
+              >
+                <span>Rider Dashboard</span>
+                <img src={assets.black_arrow_icon} className="w-4" alt=">" />
+              </Link>
+            ) : (
+              <div
+                className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"
+                onClick={() => setShowRiderLogin(true)}
+              >
+                <span>Register as a Rider</span>
+                <img src={assets.black_arrow_icon} className="w-4" alt=">" />
+              </div>
+            )}
+          </>
+        )}
 
         <AccountOption
           to="/my-orders"

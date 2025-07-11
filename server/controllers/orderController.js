@@ -184,12 +184,19 @@ export const paystackWebhooks = async (req, res) => {
 
       for (const vendorId of vendorIds) {
         const vendor = await Vendor.findById(vendorId).populate("userId");
+
         if (vendor?.userId) {
           const { email, fcmToken } = vendor.userId;
 
           if (email) vendorEmails.push(email);
           if (fcmToken) vendorFcmTokens.push(fcmToken);
         }
+
+        await Vendor.findByIdAndUpdate(
+          vendorId,
+          { $push: { orders: order._id } },
+          { new: true }
+        );
       }
 
       const customerAddress = populatedOrder.address || {};
@@ -211,7 +218,6 @@ export const paystackWebhooks = async (req, res) => {
           }
         );
       }
-      
     }
   }
 
@@ -233,24 +239,94 @@ export const getUserOrders = async (req, res) => {
   }
 };
 
-// Get All Orders ( for seller / admin) : /api/order/seller
-export const getAllOrders = async (req, res) => {
+// Get Vendor Orders : /api/order/vendor
+export const getVendorOrders = async (req, res) => {
   try {
-    const vendorId = req.body.userId;
+    const { vendorId } = req.body;
+    const vendor = await Vendor.findById(vendorId);
+    if (!vendor) {
+      return res.json({ success: false, message: "Vendor not found" });
+    }
 
-    // Find products of this vendor
-    const vendorProducts = await Product.find({ vendorId }).select("_id");
-    const vendorProductIds = vendorProducts.map((p) => p._id);
+    await vendor.populate({
+      path: "orders",
+      match: { isPaid: true },
+      populate: {
+        path: "items.product address",
+      },
+      options: {
+        sort: { createdAt: -1 },
+      },
+    });
 
-    // Find orders that contain items with products belonging to this vendor
-    const orders = await Order.find({
-      isPaid: true,
-      "items.product": { $in: vendorProductIds },
-    })
+    res.json({ success: true, orders });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export const getRiderOrders = async (req, res) => {
+  try {
+    const riderId = req.body.riderId;
+
+    const orders = await Order.find({ riderId, isPaid: true })
       .populate("items.product address")
       .sort({ createdAt: -1 });
 
-    res.json({ success: true, orders });
+    const modifiedOrders = [];
+
+    for (const order of orders) {
+      const vendorMap = new Map();
+
+      // Group products by vendorId
+      for (const item of order.items) {
+        const product = item.product;
+        const vendorId = product.vendorId.toString();
+
+        if (!vendorMap.has(vendorId)) {
+          vendorMap.set(vendorId, {
+            vendorId,
+            products: [],
+          });
+        }
+
+        vendorMap.get(vendorId).products.push({
+          name: product.name,
+          quantity: item.quantity,
+          totalPrice: product.offerPrice * item.quantity,
+        });
+      }
+
+      // Fetch vendor details for each group
+      const vendorGroups = [];
+
+      for (const [vendorId, group] of vendorMap.entries()) {
+        const vendor = await Vendor.findById(vendorId).select(
+          "businessName number address"
+        );
+
+        if (vendor) {
+          vendorGroups.push({
+            vendor: {
+              _id: vendor._id,
+              name: vendor.businessName,
+              phone: vendor.number,
+              address: vendor.address,
+            },
+            products: group.products,
+          });
+        }
+      }
+
+      modifiedOrders.push({
+        _id: order._id,
+        createdAt: order.createdAt,
+        address: order.address,
+        vendors: vendorGroups,
+      });
+    }
+
+    res.json({ success: true, orders: modifiedOrders });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
