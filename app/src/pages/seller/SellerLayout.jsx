@@ -6,8 +6,7 @@ import React, { useEffect } from "react";
 import SellerLogin from "../../components/seller/SellerLogin";
 
 const SellerLayout = () => {
-  const { makeRequest, user } = useAppContext();
-  const navigate = useNavigate();
+  const { makeRequest, user, navigation, location } = useAppContext();
 
   const [isVendor, setIsVendor] = React.useState(null);
   const [showSellerLogin, setShowSellerLogin] = React.useState(false);
@@ -15,7 +14,7 @@ const SellerLayout = () => {
 
   useEffect(() => {
     const checkVendorStatus = async () => {
-      if (!user || user.role !== "vendor") {
+      if (!user || !user.isSeller) {
         // Not a vendor role, redirect or show login
         setShowSellerLogin(true);
         return;

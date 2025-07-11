@@ -15,6 +15,7 @@ import geoCodeRouter from "./routes/geoCodeRoute.js";
 import { loadGeoJsonData } from "./controllers/geoCodeController.js";
 import mailRouter from "./routes/mailRoute.js";
 import smsRouter from "./routes/smsRoute.js";
+import riderRouter from "./routes/riderRoute.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -38,6 +39,7 @@ app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.get("/", (req, res) => res.send("API is Working"));
 app.use("/api/user", userRouter);
 app.use("/api/seller", sellerRouter);
+app.use("/api/rider", riderRouter);
 app.use("/api/upload", (await import("./routes/uploadRoute.js")).default);
 app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);

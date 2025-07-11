@@ -6,9 +6,9 @@ import { isEmailDomainValid } from "../utils/emailValidation.js";
 // Register User : /api/user/register
 export const register = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
 
-    if (!name || !email || !password || !role) {
+    if (!name || !email || !password) {
       return res.json({ success: false, message: "Missing Details" });
     }
 
@@ -31,7 +31,6 @@ export const register = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role,
     });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
@@ -51,7 +50,6 @@ export const register = async (req, res) => {
       user: {
         email: user.email,
         name: user.name,
-        role: user.role,
         _id: user._id,
       },
     });
@@ -109,7 +107,8 @@ export const login = async (req, res) => {
       user: {
         email: user.email,
         name: user.name,
-        role: user.role,
+        isSeller: user.isSeller,
+        isRider: user.isRider,
         _id: user._id,
       },
     });
@@ -123,7 +122,7 @@ export const login = async (req, res) => {
 export const isAuth = async (req, res) => {
   try {
     const { userId } = req.body;
-    
+
     const user = await User.findById(userId).select("-password");
     return res.json({ success: true, user });
   } catch (error) {
@@ -163,12 +162,23 @@ export const updateUserRole = async (req, res) => {
         .status(404)
         .json({ success: false, message: "User not found" });
     }
-    user.role = role;
+    if (role === "vendor" && !user.isSeller) {
+      user.isSeller = true;
+    } else if (role === "rider" && !user.isRider) {
+      user.isRider = true;
+    }
+    
     await user.save();
     return res.json({
       success: true,
       message: "User role updated successfully",
-      user: { email: user.email, name: user.name, role: user.role },
+      user: {
+        email: user.email,
+        name: user.name,
+        isSeller: user.isSeller,
+        isRider: user.isRider,
+        _id: user._id,
+      },
     });
   } catch (error) {
     console.log(error.message);

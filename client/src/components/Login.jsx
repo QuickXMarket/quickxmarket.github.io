@@ -9,18 +9,17 @@ const Login = () => {
     axios,
     navigate,
     location,
-    fetchSeller,
     setCartItems,
     setWishList,
     wishList,
     cartItems,
+    set,
   } = useAppContext();
 
   const [state, setState] = React.useState("login");
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [role, setRole] = React.useState("customer");
 
   const onSubmitHandler = async (event) => {
     try {
@@ -33,9 +32,6 @@ const Login = () => {
       }
 
       const payload = { name, email: email.toLowerCase(), password };
-      if (state === "register") {
-        payload.role = role;
-      }
 
       const { data } = await axios.post(`/api/user/${state}`, payload);
       if (data.success) {
@@ -51,13 +47,13 @@ const Login = () => {
         if (wishList && wishList.length > 0) {
           let wishListData = structuredClone(wishList);
           if (data.user.wishList && data.user.wishList.length > 0)
-          wishListData = wishListData.filter(
-            (item) => !data.user.wishList.includes(item)
-          );
+            wishListData = wishListData.filter(
+              (item) => !data.user.wishList.includes(item)
+            );
           wishListData = [...data.user.wishList, ...wishListData];
           setWishList(wishListData);
         }
-        fetchSeller();
+        setIsSeller(data.user.isSeller);
         if (location.pathname !== "/seller") navigate("/");
       } else {
         toast.error(data.message);

@@ -52,13 +52,13 @@ const Navbar = () => {
 
         <div className="hidden sm:flex items-center gap-8">
           {user &&
-            (user.role === "vendor" ? (
+            (user.isSeller ? (
               <NavLink to="/seller">
                 <button className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80">
                   Seller Dashboard
                 </button>
               </NavLink>
-            ) : user.role === "customer" ? (
+            ) : !user.isSeller ? (
               <button
                 className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80"
                 onClick={() => {
@@ -260,11 +260,11 @@ const Navbar = () => {
                 </details>
               )}
               {user &&
-                (user.role === "vendor" ? (
+                (user.isSeller ? (
                   <NavLink className="" to="/seller" data-discover="true">
                     Seller Dashboard
                   </NavLink>
-                ) : user.role === "customer" ? (
+                ) : !user.isSeller ? (
                   <NavLink
                     className=""
                     data-discover="true"

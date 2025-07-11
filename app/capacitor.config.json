@@ -5,6 +5,10 @@
   "npmClient": "npm",
   "webDir": "dist",
   "cordova": {},
+  "server": {
+    "url": "http://192.168.0.101:5173",
+    "cleartext": true
+  },
   "plugins": {
     "CapacitorHttp": {
       "enabled": true
@@ -12,6 +16,13 @@
     "StatusBar": {
       "overlaysWebView": false,
       "style": "DARK",
+      "backgroundColor": "#ffffffff"
+    },
+    "SplashScreen": {
+      "launchAutoHide": false,
+      "showSpinner": false,
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
       "backgroundColor": "#ffffffff"
     }
   }

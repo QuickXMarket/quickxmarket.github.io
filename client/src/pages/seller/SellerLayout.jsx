@@ -15,7 +15,7 @@ const SellerLayout = () => {
 
   useEffect(() => {
     const checkVendorStatus = async () => {
-      if (!user || user.role !== "vendor") {
+      if (!user || !user.isSeller) {
         // Not a vendor role, redirect or show login
         setShowSellerLogin(true);
         return;

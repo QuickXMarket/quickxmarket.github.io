@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "./components/Navbar";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import { Toaster } from "react-hot-toast";
 import Footer from "./components/Footer";
@@ -25,9 +25,12 @@ import ShopProducts from "./pages/ShopProducts";
 import Account from "./pages/Account";
 import BottomNavbar from "./components/BottomNavbar";
 import WishList from "./pages/WishList";
+import { SplashScreen } from "@capacitor/splash-screen";
+import RiderLayout from "./pages/rider/RiderLayout";
+import RiderLogin from "./components/rider/RiderLogin";
 
 const App = () => {
-  const { showUserLogin, isSeller, showSellerLogin, user, loading, location } =
+  const { showUserLogin, isSeller, isRider, showSellerLogin, user, loading, location } =
     useAppContext();
   const isSellerPath = location.pathname.includes("seller");
 
@@ -35,8 +38,15 @@ const App = () => {
     location.pathname
   );
 
+  useEffect(() => {
+    const hideSplashScreen = async () => {
+      await SplashScreen.hide();
+    };
+    hideSplashScreen();
+  }, []);
+
   return (
-    <div className="text-default min-h-screen text-gray-700 bg-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+    <div className="text-default min-h-screen text-gray-700 bg-white ">
       {!isSellerPath && <Navbar />}
       {showUserLogin && <Login />}
       {showSellerLogin && <SellerLogin />}
@@ -75,6 +85,24 @@ const App = () => {
                 <SellerLayout />
               ) : (
                 <SellerLogin />
+              )
+            }
+          >
+            <Route index element={isSeller ? <AddProduct /> : null} />
+            <Route path="product-list" element={<ProductList />} />
+            <Route path="orders" element={<Orders />} />
+          </Route>
+          <Route
+            path="/rider"
+            element={
+              loading ? (
+                <Loading />
+              ) : !user ? (
+                <Login />
+              ) : isRider ? (
+                <RiderLayout />
+              ) : (
+                <RiderLogin />
               )
             }
           >

@@ -20,6 +20,7 @@ export const AppContextProvider = ({ children }) => {
   const location = useLocation();
   const [user, setUser] = useState(null);
   const [isSeller, setIsSeller] = useState(false);
+  const [isRider, setIsRider] = useState(false);
   const [showUserLogin, setShowUserLogin] = useState(false);
   const [showSellerLogin, setShowSellerLogin] = useState(false);
   const [products, setProducts] = useState([]);
@@ -29,7 +30,7 @@ export const AppContextProvider = ({ children }) => {
   const [wishList, setWishList] = useState([]);
   const [searchQuery, setSearchQuery] = useState({});
   const [loading, setLoading] = useState(true);
-  const baseUrl = "https://quickxmarket-server.vercel.app";
+  const baseUrl = "https://quickxmarket-server.vercel.app/";
 
   const makeRequest = async ({ method, url, data }) => {
     try {
@@ -204,11 +205,13 @@ export const AppContextProvider = ({ children }) => {
         method: "GET",
         url: "/api/user/is-auth",
       });
+      console.log(data);
       if (data.success) {
         setUser(data.user);
         setCartItems(data.user.cartItems);
         setWishList(data.user.wishList || []);
-        setIsSeller(data.user.role === "vendor");
+        setIsSeller(data.user.isSeller || data.role === "vendor");
+        setIsRider(data.user.isRider || false);
         await Preferences.set({
           key: "user",
           value: JSON.stringify(data.user),
@@ -414,6 +417,8 @@ export const AppContextProvider = ({ children }) => {
     setUser,
     setIsSeller,
     isSeller,
+    setIsRider,
+    isRider,
     showUserLogin,
     setShowUserLogin,
     showSellerLogin,

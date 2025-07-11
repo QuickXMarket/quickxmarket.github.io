@@ -38,7 +38,7 @@ const Account = () => {
       <div className="flex flex-col text-sm divide-y divide-gray-200">
         {/* Seller Dashboard / Register */}
         {user &&
-          (user.role === "vendor" ? (
+          (user.isSeller ? (
             <Link
               to="/seller"
               className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition"

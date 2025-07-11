@@ -15,13 +15,13 @@ const Login = () => {
     wishList,
     cartItems,
     Preferences,
+    setIsRider,
   } = useAppContext();
 
   const [state, setState] = React.useState("login");
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [role, setRole] = React.useState("customer");
 
   const onSubmitHandler = async (event) => {
     try {
@@ -34,9 +34,6 @@ const Login = () => {
       }
 
       const payload = { name, email: email.toLowerCase(), password };
-      if (state === "register") {
-        payload.role = role;
-      }
 
       const data = await makeRequest({
         method: "POST",
@@ -65,7 +62,8 @@ const Login = () => {
           setWishList(wishListData);
         }
 
-        setIsSeller(data.user.role === "vendor");
+        setIsSeller(data.user.isSeller);
+        setIsRider(data.user.isRider || false);
         if (location.pathname !== "/seller") navigate("/");
       } else {
         toast.error(data.message);

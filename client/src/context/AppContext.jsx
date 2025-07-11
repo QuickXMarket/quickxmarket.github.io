@@ -16,6 +16,7 @@ export const AppContextProvider = ({ children }) => {
   const location = useLocation();
   const [user, setUser] = useState(null);
   const [isSeller, setIsSeller] = useState(false);
+  const [isRider, setIsRider] = useState(false);
   const [showUserLogin, setShowUserLogin] = useState(false);
   const [showSellerLogin, setShowSellerLogin] = useState(false);
   const [products, setProducts] = useState([]);
@@ -34,18 +35,11 @@ export const AppContextProvider = ({ children }) => {
         setUser(data.user);
         setCartItems(data.user.cartItems || {});
         setWishList(data.user.wishList || []);
+        setIsSeller(data.user.isSeller || data.role === "vendor");
+        setIsRider(data.user.isRider || false);
       }
     } catch {
       setUser(null);
-    }
-  };
-
-  const fetchSeller = async () => {
-    try {
-      const { data } = await axios.get("/api/user/is-auth");
-      setIsSeller(data.success && data.user.role === "vendor");
-    } catch {
-      setIsSeller(false);
     }
   };
 
@@ -152,12 +146,7 @@ export const AppContextProvider = ({ children }) => {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        await Promise.all([
-          fetchUser(),
-          fetchSeller(),
-          fetchProducts(),
-          fetchAddresses(),
-        ]);
+        await Promise.all([fetchUser(), fetchProducts(), fetchAddresses()]);
       } catch (err) {
         // Optional: log or toast error
       } finally {
@@ -209,6 +198,8 @@ export const AppContextProvider = ({ children }) => {
     setUser,
     setIsSeller,
     isSeller,
+    isRider,
+    setIsRider,
     showUserLogin,
     setShowUserLogin,
     showSellerLogin,
@@ -229,9 +220,9 @@ export const AppContextProvider = ({ children }) => {
     fetchProducts,
     setCartItems,
     setWishList,
-    fetchSeller,
+
     loading,
-    fuse
+    fuse,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
