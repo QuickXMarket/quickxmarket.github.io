@@ -41,9 +41,9 @@ const RiderLayout = () => {
   }, [user, makeRequest]);
 
   const navLinks = [
-    { name: "Home", path: "/rider", icon: assets.home_icon },
-    { name: "Wallet", path: "/rider/wallet", icon: assets.wallet_icon },
-    { name: "Profile", path: "/rider/profile", icon: assets.profile_icon },
+    { name: "Home", path: "/rider", icon: assets.home_outline },
+    { name: "Wallet", path: "/rider/wallet", icon: assets.wallet_outline },
+    { name: "Profile", path: "/rider/profile", icon: assets.profile_outline },
   ];
 
   if (showLogin) return <RiderLogin setShowUserLogin={setShowLogin} />;

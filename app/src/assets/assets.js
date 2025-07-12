@@ -41,6 +41,9 @@ import logout from "./logout.svg";
 import account_icon from "./person-circle.svg";
 import home_icon from "./home-icon.svg";
 import wallet_icon from "./wallet_icon.svg";
+import wallet_outline from "./wallet_outline.svg";
+import home_outline from "./house_outline.svg";
+import profile_outline from "./person_outline.svg";
 import wishlist_icon from "./heart-icon.svg";
 import shop_icon from "./shop.svg";
 import Slideshow_1 from "./Slideshow_1.jpg";
@@ -92,6 +95,9 @@ export const assets = {
   Slideshow_2,
   Slideshow_3,
   Slideshow_4,
+  home_outline,
+  wallet_outline,
+  profile_outline,
 };
 
 export const categories = [
