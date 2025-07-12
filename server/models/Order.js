@@ -15,6 +15,7 @@ const orderSchema = new mongoose.Schema(
     paymentType: { type: String, required: true },
     isPaid: { type: Boolean, required: true, default: false },
     riderId: { type: String, default: null, ref: "rider" },
+    paystackReference: { type: String, unique: true, sparse: true },
   },
   { timestamps: true }
 );

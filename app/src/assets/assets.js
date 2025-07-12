@@ -40,7 +40,7 @@ import login from "./login.svg";
 import logout from "./logout.svg";
 import account_icon from "./person-circle.svg";
 import home_icon from "./home-icon.svg";
-import wallet_icon from "./wallet-icon.svg";
+import wallet_icon from "./wallet_icon.svg";
 import wishlist_icon from "./heart-icon.svg";
 import shop_icon from "./shop.svg";
 import Slideshow_1 from "./Slideshow_1.jpg";

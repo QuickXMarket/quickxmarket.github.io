@@ -154,9 +154,19 @@ export const paystackWebhooks = async (req, res) => {
 
   if (event.event === "charge.success") {
     const { orderData, userId } = event.data.metadata;
+    const reference = event.data.reference;
 
-    // Create order in DB after payment confirmation
-    const order = await Order.create({ ...orderData, isPaid: true });
+    const existingOrder = await Order.findOne({ paystackReference: reference });
+    if (existingOrder) {
+      return res.status(200).json({ received: true });
+    }
+
+    // If not, proceed to create
+    const order = await Order.create({
+      ...orderData,
+      isPaid: true,
+      paystackReference: reference,
+    });
 
     // Clear user cart
     await User.findByIdAndUpdate(userId, { cartItems: {} });
@@ -353,6 +363,7 @@ export const getRiderOrders = async (req, res) => {
         _id: order._id,
         createdAt: order.createdAt,
         address: order.address,
+        riderId: order.riderId,
         vendors: vendorGroups,
       });
     }

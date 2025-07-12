@@ -60,13 +60,18 @@ const RidersOrders = () => {
             status: orderStatus,
           };
         });
-        console.log(modifiedOrders);
+
         setOrders(modifiedOrders);
 
         const pending = modifiedOrders.filter(
-          (order) => order.status !== "Order Delivered"
+          (order) =>
+            order.status !== "Order Delivered" && order.riderId === riderId
+        );
+        const ongoing = modifiedOrders.filter(
+          (order) => order.status !== "Order Delivered" && !order.riderId
         );
         setPendingOrders(pending);
+        setOngoingOrders(ongoing);
       } else {
         toast.error(data.message);
         console.error(data);
