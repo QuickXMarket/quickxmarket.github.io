@@ -13,7 +13,7 @@ const Login = () => {
     setWishList,
     wishList,
     cartItems,
-    set,
+    setIsSeller,
   } = useAppContext();
 
   const [state, setState] = React.useState("login");
