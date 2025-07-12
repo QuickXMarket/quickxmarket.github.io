@@ -18,7 +18,6 @@ orderRouter.get("/rider/:riderId", authUser, getRiderOrders);
 orderRouter.post("/paystack", authUser, placeOrderPaystack);
 orderRouter.post("/delivery-fee", authUser, getDeliveryFee);
 
-// Add webhook route for Paystack payment verification (no auth)
 orderRouter.post("/paystack-webhook", paystackWebhooks);
 
 export default orderRouter;

@@ -40,6 +40,7 @@ import login from "./login.svg";
 import logout from "./logout.svg";
 import account_icon from "./person-circle.svg";
 import home_icon from "./home-icon.svg";
+import wallet_icon from "./wallet-icon.svg";
 import wishlist_icon from "./heart-icon.svg";
 import shop_icon from "./shop.svg";
 import Slideshow_1 from "./Slideshow_1.jpg";
@@ -83,6 +84,7 @@ export const assets = {
   home_icon,
   wishlist_icon,
   shop_icon,
+  wallet_icon,
   first_banner_image,
   second_banner_image,
   QuickXMarket_Logo_Transparent,

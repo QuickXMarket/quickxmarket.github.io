@@ -15,11 +15,12 @@ const RidersOrders = () => {
   const fetchOrders = async () => {
     try {
       const data = await makeRequest({
-        url: `/api/order/rider${riderId}`,
+        url: `/api/order/rider/${riderId}`,
         method: "GET",
       });
 
       if (data.success) {
+        console.log(data.orders);
         const statusFlow = [
           "Order Placed",
           "Order Confirmed",
@@ -59,7 +60,7 @@ const RidersOrders = () => {
             status: orderStatus,
           };
         });
-
+        console.log(modifiedOrders);
         setOrders(modifiedOrders);
 
         const pending = modifiedOrders.filter(
@@ -68,15 +69,17 @@ const RidersOrders = () => {
         setPendingOrders(pending);
       } else {
         toast.error(data.message);
+        console.error(data);
       }
     } catch (error) {
       toast.error(error.message);
+      console.log(error);
     }
   };
 
   useEffect(() => {
-    fetchOrders();
-  }, []);
+    if (riderId) fetchOrders();
+  }, [riderId]);
 
   return (
     <div className="p-4 w-full max-w-2xl mx-auto">

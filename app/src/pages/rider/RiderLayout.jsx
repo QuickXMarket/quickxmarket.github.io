@@ -104,7 +104,7 @@ const RiderLayout = () => {
                 isActive ? "text-primary" : "text-gray-500"
               }`}
             >
-              <img src={item.icon} className="w-5 h-5" alt={item.name} />
+              <img src={item.icon} className="w-6 h-6" alt={item.name} />
               <span className="text-[11px]">{item.name}</span>
             </NavLink>
           );

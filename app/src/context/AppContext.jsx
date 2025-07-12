@@ -31,11 +31,12 @@ export const AppContextProvider = ({ children }) => {
   const [wishList, setWishList] = useState([]);
   const [searchQuery, setSearchQuery] = useState({});
   const [loading, setLoading] = useState(true);
-  const baseUrl = "http://192.168.0.100:4000";
+  const baseUrl = "https://quickxmarket-server.vercel.app";
 
   const makeRequest = async ({ method, url, data }) => {
     try {
       const token = (await Preferences.get({ key: "authToken" })).value;
+      console.log(token);
 
       const response = await CapacitorHttp.request({
         method,

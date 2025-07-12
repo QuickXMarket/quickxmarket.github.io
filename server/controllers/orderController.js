@@ -356,6 +356,7 @@ export const getRiderOrders = async (req, res) => {
         vendors: vendorGroups,
       });
     }
+    console.log(modifiedOrders);
 
     res.json({ success: true, orders: modifiedOrders });
   } catch (error) {

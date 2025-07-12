@@ -47,14 +47,14 @@ const RiderOrderCard = ({ order }) => {
               {/* Vendor Info */}
               <div className="flex justify-between gap-4 text-sm">
                 <div className="flex-1">
-                  <p className="font-semibold text-primary">{vendor.name}</p>
-                  <p className="text-xs text-gray-500">{vendor.address}</p>
+                  <p className="font-semibold text-primary">{vendor.vendor.name}</p>
+                  <p className="text-xs text-gray-500">{vendor.vendor.address}</p>
                   <p className="text-xs text-primary font-medium mt-1">
-                    Vendor Status: {vendor.status}
+                    Vendor Status: {vendor.vendor.status}
                   </p>
                 </div>
                 <p className="text-sm text-gray-600 whitespace-nowrap">
-                  {vendor.phone}
+                  {vendor.vendor.phone}
                 </p>
               </div>
 
