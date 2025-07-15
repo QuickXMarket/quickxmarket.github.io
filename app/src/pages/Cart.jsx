@@ -93,7 +93,6 @@ const Cart = () => {
 
   useEffect(() => {
     if (selectedAddress && cartArray.length > 0) {
-      // Extract unique vendor IDs from cartArray
       const vendorIdsSet = new Set();
       cartArray.forEach((product) => {
         if (product.vendorId) {

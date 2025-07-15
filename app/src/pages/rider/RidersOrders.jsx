@@ -20,7 +20,6 @@ const RidersOrders = () => {
       });
 
       if (data.success) {
-        console.log(data.orders);
         const statusFlow = [
           "Order Placed",
           "Order Confirmed",
@@ -62,19 +61,19 @@ const RidersOrders = () => {
         });
 
         setOrders(modifiedOrders);
+        console.log(modifiedOrders);
 
-        const pending = modifiedOrders.filter(
+        const ongoing = modifiedOrders.filter(
           (order) =>
             order.status !== "Order Delivered" && order.riderId === riderId
         );
-        const ongoing = modifiedOrders.filter(
+        const pending = modifiedOrders.filter(
           (order) => order.status !== "Order Delivered" && !order.riderId
         );
         setPendingOrders(pending);
         setOngoingOrders(ongoing);
       } else {
         toast.error(data.message);
-        console.error(data);
       }
     } catch (error) {
       toast.error(error.message);

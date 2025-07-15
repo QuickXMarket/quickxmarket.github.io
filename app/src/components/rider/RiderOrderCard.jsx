@@ -14,7 +14,7 @@ const RiderOrderCard = ({ order }) => {
       >
         {/* Order ID, Date & Overall Status */}
         <div className="flex justify-between items-center">
-          <span className="text-sm text-primary font-medium">
+          <span className="text-sm text-gray-700 font-medium">
             Order ID: {order._id}
           </span>
           <span className="text-xs text-gray-400">
@@ -28,13 +28,19 @@ const RiderOrderCard = ({ order }) => {
             <p className="font-semibold text-gray-800">{`${order.address.firstName} ${order.address.lastName}`}</p>
             <p className="text-xs text-gray-500">{order.address.address}</p>
           </div>
-          <p className="text-sm text-gray-600 whitespace-nowrap">
-            {order.address.phone}
-          </p>
+          {order.address.phone && (
+            <a
+              href={`tel:${order.address.phone}`}
+              className="text-sm text-primary font-medium whitespace-nowrap"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {order.address.phone}
+            </a>
+          )}
         </div>
 
         {/* Overall Status */}
-        <div className="mt-1 text-xs text-primary font-medium">
+        <div className="mt-1 text-xs text-green-600 font-semibold">
           Status: {order.status}
         </div>
       </div>
@@ -47,15 +53,25 @@ const RiderOrderCard = ({ order }) => {
               {/* Vendor Info */}
               <div className="flex justify-between gap-4 text-sm">
                 <div className="flex-1">
-                  <p className="font-semibold text-primary">{vendor.vendor.name}</p>
-                  <p className="text-xs text-gray-500">{vendor.vendor.address}</p>
-                  <p className="text-xs text-primary font-medium mt-1">
-                    Vendor Status: {vendor.vendor.status}
+                  <p className="font-semibold text-gray-700">
+                    {vendor.vendor.name}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {vendor.vendor.address}
+                  </p>
+                  <p className="text-xs text-amber-600 font-medium mt-1">
+                    Vendor Status: {vendor.status}
                   </p>
                 </div>
-                <p className="text-sm text-gray-600 whitespace-nowrap">
-                  {vendor.vendor.phone}
-                </p>
+                {vendor.vendor.phone && (
+                  <a
+                    href={`tel:${vendor.vendor.phone}`}
+                    className="text-sm text-primary font-medium whitespace-nowrap"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {vendor.vendor.phone}
+                  </a>
+                )}
               </div>
 
               {/* Product List */}

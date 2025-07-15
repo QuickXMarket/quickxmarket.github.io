@@ -80,7 +80,6 @@ export const placeOrderPaystack = async (req, res) => {
       return res.json({ success: false, message: "Invalid data" });
     }
 
-    // Prepare order data to send in metadata
     const orderData = {
       userId,
       items: items.map((item) => ({
@@ -336,6 +335,7 @@ export const getRiderOrders = async (req, res) => {
           name: product.name,
           quantity: item.quantity,
           totalPrice: product.offerPrice * item.quantity,
+          status: item.status,
         });
       }
 
@@ -368,7 +368,7 @@ export const getRiderOrders = async (req, res) => {
         vendors: vendorGroups,
       });
     }
-    console.log(modifiedOrders);
+    
 
     res.json({ success: true, orders: modifiedOrders });
   } catch (error) {

@@ -2,6 +2,7 @@ import Vendor from "../models/Vendor.js";
 
 // Create Vendor document after user fills SellerLogin form
 import { v2 as cloudinary } from "cloudinary";
+import { createWalletLogic } from "./walletController.js";
 
 async function uploadBase64Image(base64String) {
   try {
@@ -41,7 +42,10 @@ export const createVendor = async (req, res) => {
         resource_type: "image",
       });
       profilePhotoUrl = result.secure_url;
-    } else if (req.body.profilePhoto && req.body.profilePhoto.startsWith("data:image")) {
+    } else if (
+      req.body.profilePhoto &&
+      req.body.profilePhoto.startsWith("data:image")
+    ) {
       // Handle base64 profile photo
       profilePhotoUrl = await uploadBase64Image(req.body.profilePhoto);
     }
@@ -57,6 +61,11 @@ export const createVendor = async (req, res) => {
       latitude,
       longitude,
     });
+
+    const walletResult = await createWalletLogic(userId, "vendor");
+    if (!walletResult.success) {
+      console.warn("Wallet not created:", walletResult.message);
+    }
 
     return res.json({ success: true, vendor });
   } catch (error) {

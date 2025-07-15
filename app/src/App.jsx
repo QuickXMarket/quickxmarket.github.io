@@ -29,6 +29,7 @@ import { SplashScreen } from "@capacitor/splash-screen";
 import RiderLayout from "./pages/rider/RiderLayout";
 import RiderLogin from "./components/rider/RiderLogin";
 import RidersOrders from "./pages/rider/RidersOrders";
+import RiderWallet from "./pages/rider/RiderWallet";
 
 const App = () => {
   const {
@@ -120,8 +121,8 @@ const App = () => {
             }
           >
             <Route index element={isRider ? <RidersOrders /> : null} />
-            <Route path="product-list" element={<ProductList />} />
-            <Route path="orders" element={<Orders />} />
+            <Route path="wallet" element={<RiderWallet />} />
+            <Route path="profile" element={<Orders />} />
           </Route>
         </Routes>
       </div>

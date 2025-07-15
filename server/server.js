@@ -16,6 +16,7 @@ import { loadGeoJsonData } from "./controllers/geoCodeController.js";
 import mailRouter from "./routes/mailRoute.js";
 import smsRouter from "./routes/smsRoute.js";
 import riderRouter from "./routes/riderRoute.js";
+import walletRouter from "./routes/walletRoute.js"; 
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -48,6 +49,7 @@ app.use("/api/order", orderRouter);
 app.use("/api/geocoding", geoCodeRouter);
 app.use("/api/mail", mailRouter);
 app.use("/api/sms", smsRouter);
+app.use("/api/wallet", walletRouter);
 
 // loadGeoJsonData();
 

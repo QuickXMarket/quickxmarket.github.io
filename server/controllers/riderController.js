@@ -1,4 +1,5 @@
 import Rider from "../models/Rider.js";
+import { createWalletLogic } from "./walletController.js";
 
 export const createRider = async (req, res) => {
   try {
@@ -20,6 +21,11 @@ export const createRider = async (req, res) => {
       dob,
       vehicleType: vehicle,
     });
+
+    const walletResult = await createWalletLogic(userId, "rider");
+    if (!walletResult.success) {
+      console.warn("Wallet not created:", walletResult.message);
+    }
 
     return res.json({ success: true, rider });
   } catch (error) {
