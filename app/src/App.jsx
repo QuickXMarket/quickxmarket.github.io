@@ -30,6 +30,7 @@ import RiderLayout from "./pages/rider/RiderLayout";
 import RiderLogin from "./components/rider/RiderLogin";
 import RidersOrders from "./pages/rider/RidersOrders";
 import RiderWallet from "./pages/rider/RiderWallet";
+import RiderProfile from "./pages/rider/RiderProfile";
 
 const App = () => {
   const {
@@ -122,7 +123,7 @@ const App = () => {
           >
             <Route index element={isRider ? <RidersOrders /> : null} />
             <Route path="wallet" element={<RiderWallet />} />
-            <Route path="profile" element={<Orders />} />
+            <Route path="profile" element={<RiderProfile />} />
           </Route>
         </Routes>
       </div>

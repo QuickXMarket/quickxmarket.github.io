@@ -10,12 +10,12 @@ const RidersOrders = () => {
   const [orders, setOrders] = useState([]);
   const [ongoingOrders, setOngoingOrders] = useState([]);
   const [pendingOrders, setPendingOrders] = useState([]);
-  const { riderId } = useOutletContext();
+  const { rider } = useOutletContext();
 
   const fetchOrders = async () => {
     try {
       const data = await makeRequest({
-        url: `/api/order/rider/${riderId}`,
+        url: `/api/order/rider/${rider._id}`,
         method: "GET",
       });
 
@@ -61,11 +61,10 @@ const RidersOrders = () => {
         });
 
         setOrders(modifiedOrders);
-        console.log(modifiedOrders);
 
         const ongoing = modifiedOrders.filter(
           (order) =>
-            order.status !== "Order Delivered" && order.riderId === riderId
+            order.status !== "Order Delivered" && order.riderId === rider._id
         );
         const pending = modifiedOrders.filter(
           (order) => order.status !== "Order Delivered" && !order.riderId
@@ -82,8 +81,8 @@ const RidersOrders = () => {
   };
 
   useEffect(() => {
-    if (riderId) fetchOrders();
-  }, [riderId]);
+    if (rider && rider._id) fetchOrders();
+  }, [rider]);
 
   return (
     <div className="p-4 w-full max-w-2xl mx-auto">

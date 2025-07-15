@@ -5,10 +5,13 @@ import { useOutletContext } from "react-router-dom";
 
 const RiderWallet = () => {
   const { makeRequest, user } = useAppContext();
-  const { riderId } = useOutletContext();
+  const { rider } = useOutletContext();
 
   const [wallet, setWallet] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [withdrawAmount, setWithdrawAmount] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchWallet = async () => {
@@ -33,6 +36,44 @@ const RiderWallet = () => {
     if (user && user._id) fetchWallet();
   }, [user, makeRequest]);
 
+  const handleWithdraw = async () => {
+    if (!withdrawAmount || withdrawAmount <= 0) {
+      toast.error("Enter a valid amount");
+      return;
+    }
+    if (withdrawAmount > wallet.balance) {
+      toast.error("Insufficient balance");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await makeRequest({
+        url: "/api/wallet/withdrawal-request",
+        method: "POST",
+        data: {
+          amount: withdrawAmount,
+          description: "Withdrawal",
+          walletType: "rider",
+          userId: user._id,
+        },
+      });
+
+      if (res.success) {
+        setWallet(res.wallet);
+        setShowModal(false);
+        setWithdrawAmount(0);
+        toast.success("Withdrawal request submitted");
+      } else {
+        toast.error(res.message || "Withdrawal failed");
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   if (loading)
     return (
       <div className="flex items-center justify-center h-[60vh]">
@@ -52,7 +93,10 @@ const RiderWallet = () => {
           </h2>
         </div>
         <div className="w-full flex justify-end">
-          <button className="bg-primary text-white px-4 py-2 rounded-xl text-sm font-medium shadow hover:bg-primary/90">
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-primary text-white px-4 py-2 rounded-xl text-sm font-medium shadow hover:bg-primary/90"
+          >
             Request Withdrawal
           </button>
         </div>
@@ -76,8 +120,11 @@ const RiderWallet = () => {
                 </h3>
                 <span
                   className={`text-sm font-semibold ${
-                    tx.type === "debit" || tx.type === "withdrawal"
+                    (tx.type === "debit" || tx.type === "withdrawal") &&
+                    tx.status === "approved"
                       ? "text-red-500"
+                      : tx.status === "pending"
+                      ? "text-yellow-500"
                       : "text-primary"
                   }`}
                 >
@@ -93,6 +140,40 @@ const RiderWallet = () => {
           ))
         )}
       </div>
+
+      {/* Withdraw Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-white w-70 max-w-sm rounded-lg p-6 space-y-4 shadow-xl">
+            <h2 className="text-lg font-bold text-gray-800">
+              Request Withdrawal
+            </h2>
+            <input
+              type="number"
+              value={withdrawAmount}
+              onChange={(e) => setWithdrawAmount(Number(e.target.value))}
+              placeholder="Enter amount"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            />
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-sm text-gray-600 hover:underline"
+                disabled={submitting}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleWithdraw}
+                className="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium shadow hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={submitting}
+              >
+                {submitting ? "Submitting..." : "Submit"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
