@@ -42,8 +42,8 @@ const Login = () => {
       });
 
       if (data.success) {
-        setUser(data.user);
         await Preferences.set({ key: "authToken", value: data.token });
+        setUser(data.user);
         setShowUserLogin(false);
         if (cartItems && Object.keys(cartItems).length > 0) {
           setCartItems({

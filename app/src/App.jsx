@@ -38,6 +38,7 @@ const App = () => {
     isSeller,
     isRider,
     showSellerLogin,
+    showRiderLogin,
     user,
     loading,
     location,
@@ -61,6 +62,7 @@ const App = () => {
       {!(isSellerPath || isRiderPath) && <Navbar />}
       {showUserLogin && <Login />}
       {showSellerLogin && <SellerLogin />}
+      {showRiderLogin && <RiderLogin />}
       <Toaster />
       <div
         className={

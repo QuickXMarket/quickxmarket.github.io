@@ -11,6 +11,7 @@ const Account = () => {
     setUser,
     setShowSellerLogin,
     setShowUserLogin,
+    setShowRiderLogin,
     makeRequest,
     logout,
   } = useAppContext();

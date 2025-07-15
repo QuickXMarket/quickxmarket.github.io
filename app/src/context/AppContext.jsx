@@ -24,6 +24,7 @@ export const AppContextProvider = ({ children }) => {
   const [isRider, setIsRider] = useState(false);
   const [showUserLogin, setShowUserLogin] = useState(false);
   const [showSellerLogin, setShowSellerLogin] = useState(false);
+  const [showRiderLogin, setShowRiderLogin] = useState(false);
   const [products, setProducts] = useState([]);
   const [fuse, setFuse] = useState(null);
 
@@ -31,7 +32,7 @@ export const AppContextProvider = ({ children }) => {
   const [wishList, setWishList] = useState([]);
   const [searchQuery, setSearchQuery] = useState({});
   const [loading, setLoading] = useState(true);
-  const baseUrl = "https://quickxmarket-server.vercel.app/";
+  const baseUrl = "https://quickxmarket-server.vercel.app";
 
   const makeRequest = async ({ method, url, data }) => {
     try {
@@ -213,6 +214,9 @@ export const AppContextProvider = ({ children }) => {
   }, [navigate, location]);
 
   const fetchUser = async () => {
+    const token = (await Preferences.get({ key: "authToken" })).value;
+    if (!token) return;
+
     try {
       const data = await makeRequest({
         method: "GET",
@@ -437,6 +441,8 @@ export const AppContextProvider = ({ children }) => {
     showSellerLogin,
     logout,
     setShowSellerLogin,
+    showRiderLogin,
+    setShowRiderLogin,
     products,
     currency,
     addToCart,
