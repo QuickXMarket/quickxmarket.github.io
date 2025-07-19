@@ -11,7 +11,7 @@ const SellerLayout = () => {
   const [isVendor, setIsVendor] = React.useState(null);
   const [showSellerLogin, setShowSellerLogin] = React.useState(false);
   const [businessName, setBusinessName] = React.useState("");
-  const [vendorId, setVendorId] = React.useState("");
+  const [vendor, setVendor] = React.useState("");
 
   useEffect(() => {
     const checkVendorStatus = async () => {
@@ -29,7 +29,8 @@ const SellerLayout = () => {
           setBusinessName(data.vendor.businessName);
           setIsVendor(true);
           setShowSellerLogin(false);
-          setVendorId(data.vendor._id);
+          setVendor(data.vendor);
+
         } else {
           setIsVendor(false);
           setShowSellerLogin(true);
@@ -51,6 +52,7 @@ const SellerLayout = () => {
       icon: assets.product_list_icon,
     },
     { name: "Orders", path: "/seller/orders", icon: assets.order_icon },
+    { name: "Wallet", path: "/seller/wallet", icon: assets.wallet_outline },
   ];
 
   if (showSellerLogin) {
@@ -99,7 +101,7 @@ const SellerLayout = () => {
 
         {/* Page Content */}
         <div className="flex-grow pb-16 lg:pb-0">
-          <Outlet context={{ vendorId }} />
+          <Outlet context={{ vendor }} />
         </div>
       </div>
 

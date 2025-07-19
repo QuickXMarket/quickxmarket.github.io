@@ -40,8 +40,19 @@ const RiderOrderCard = ({ order }) => {
         </div>
 
         {/* Overall Status */}
-        <div className="mt-1 text-xs text-green-600 font-semibold">
-          Status: {order.status}
+        <div className="flex justify-between items-center mt-1">
+          <span className=" text-xs text-green-600 font-semibold">
+            Status: {order.status}
+          </span>
+          <button
+            className=" bg-primary text-white text-sm px-3 py-1 rounded hover:bg-primary/90"
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log("Button clicked for order", order._id);
+            }}
+          >
+            Action
+          </button>
         </div>
       </div>
 

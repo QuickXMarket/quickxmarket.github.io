@@ -4,9 +4,9 @@ import toast from "react-hot-toast";
 import PullToRefresh from "pulltorefreshjs";
 import { useOutletContext } from "react-router-dom";
 
-const RiderWallet = () => {
+const VendorWallet = () => {
   const { makeRequest, user } = useAppContext();
-  const { rider } = useOutletContext();
+  const { vendor } = useOutletContext();
 
   const [wallet, setWallet] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,7 +18,7 @@ const RiderWallet = () => {
   const fetchWallet = async () => {
     try {
       const res = await makeRequest({
-        url: `/api/wallet/rider`,
+        url: `/api/wallet/vendor`,
         method: "GET",
       });
 
@@ -69,7 +69,7 @@ const RiderWallet = () => {
         data: {
           amount: withdrawAmount,
           description: "Withdrawal",
-          walletType: "rider",
+          walletType: "vendor",
           userId: user._id,
         },
       });
@@ -193,4 +193,4 @@ const RiderWallet = () => {
   );
 };
 
-export default RiderWallet;
+export default VendorWallet;

@@ -3,8 +3,14 @@ import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 
 const RiderLogin = () => {
-  const { setShowRiderLogin, navigate, user, makeRequest, location } =
-    useAppContext();
+  const {
+    setShowRiderLogin,
+    navigate,
+    user,
+    makeRequest,
+    location,
+    setIsRider,
+  } = useAppContext();
 
   const [fullName, setFullName] = useState("");
   const [number, setNumber] = useState("");
@@ -75,10 +81,12 @@ const RiderLogin = () => {
 
         if (updateRes.success) {
           toast.success("Rider registered successfully");
+          setIsRider(true);
           setShowRiderLogin(false);
           navigate("/rider");
         } else {
-          toast.error("Registered but failed to update role");
+          console.error(updateRes);
+          toast.error(updateRes.message || "Failed to update user role.");
         }
       } else {
         toast.error(response.message);
@@ -141,8 +149,8 @@ const RiderLogin = () => {
             className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary"
             required
           >
-            <option value="bicycle">Bicycle</option>
-            <option value="motorcycle">Motorcycle</option>
+            <option value="Bicycle">Bicycle</option>
+            <option value="Motorcycle">Motorcycle</option>
           </select>
         </div>
 

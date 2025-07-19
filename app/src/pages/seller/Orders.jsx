@@ -7,12 +7,13 @@ import { useOutletContext } from "react-router-dom";
 const Orders = () => {
   const { currency, makeRequest } = useAppContext();
   const [orders, setOrders] = useState([]);
-  const { vendorId } = useOutletContext();
+  const { vendor } = useOutletContext();
+  const [activeIndex, setActiveIndex] = useState(null);
 
   const fetchOrders = async () => {
     try {
       const data = await makeRequest({
-        url: `/api/order/seller${vendorId}`,
+        url: `/api/order/seller/${vendor._id}`,
         method: "GET",
       });
       if (data.success) {
@@ -26,56 +27,97 @@ const Orders = () => {
   };
 
   useEffect(() => {
-    fetchOrders();
-  }, []);
+    if (vendor && vendor._id) fetchOrders();
+  }, [vendor]);
+
+  const toggleAccordion = (index) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
 
   return (
     <div className="no-scrollbar flex-1 h-[95vh] overflow-y-scroll">
       <div className="md:p-10 p-4 space-y-4">
         <h2 className="text-lg font-medium">Orders List</h2>
+
         {orders.map((order, index) => (
           <div
             key={index}
-            className="flex flex-col md:items-center md:flex-row gap-5 justify-between p-5 max-w-4xl rounded-md border border-gray-300"
+            className="rounded-md border border-gray-300 overflow-hidden"
           >
-            <div className="flex gap-5 max-w-80">
-              <img
-                className="w-12 h-12 object-cover"
-                src={assets.box_icon}
-                alt="boxIcon"
-              />
-              <div>
-                {order.items.map((item, index) => (
-                  <div key={index} className="flex flex-col">
-                    <p className="font-medium">
-                      {item.product.name}{" "}
-                      <span className="text-primary">x {item.quantity}</span>
-                    </p>
-                  </div>
-                ))}
+            {/* Accordion Header */}
+            <div
+              onClick={() => toggleAccordion(index)}
+              className="flex items-center justify-between  bg-gray-50 px-4 py-3 active:bg-gray-100 cursor-pointer"
+            >
+              <div className="flex gap-3 items-center">
+                <img
+                  className="w-8 h-8 object-cover"
+                  src={assets.box_icon}
+                  alt="boxIcon"
+                />
+                <div>
+                  <p className="font-medium text-sm">
+                    {order.address.firstName} {order.address.lastName}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {order.paymentType} •{" "}
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-right">
+                <p className="text-sm font-semibold">
+                  {currency}
+                  {order.amount}
+                </p>
+                <p
+                  className={`text-xs ${
+                    order.isPaid ? "text-green-600" : "text-red-500"
+                  }`}
+                >
+                  {order.isPaid ? "Paid" : "Pending"}
+                </p>
               </div>
             </div>
 
-            <div className="text-sm md:text-base text-black/60">
-              <p className="text-black/80">
-                {order.address.firstName} {order.address.lastName}
-              </p>
+            {/* Accordion Body */}
+            {activeIndex === index && (
+              <div className="bg-white px-4 py-3 space-y-4">
+                <div>
+                  <h3 className="text-sm font-semibold mb-2">Items</h3>
+                  {order.items.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="text-sm flex justify-between py-1 border-b border-gray-200"
+                    >
+                      <p>{item.product.name}</p>
+                      <p>x{item.quantity}</p>
+                      <p className="text-primary font-semibold">
+                        {currency}
+                        {item.product.price}
+                      </p>
+                    </div>
+                  ))}
+                </div>
 
-              <p>{order.address.address}</p>
-              <p></p>
-              <p>{order.address.phone}</p>
-            </div>
+                <div>
+                  <h3 className="text-sm font-semibold mb-2">Shipping Info</h3>
+                  <p className="text-sm text-black/70">
+                    {order.address.address}, {order.address.phone}
+                  </p>
+                </div>
 
-            <p className="font-medium text-lg my-auto">
-              {currency}
-              {order.amount}
-            </p>
-
-            <div className="flex flex-col text-sm md:text-base text-black/60">
-              <p>Method: {order.paymentType}</p>
-              <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
-              <p>Payment: {order.isPaid ? "Paid" : "Pending"}</p>
-            </div>
+                <div className="flex gap-3 mt-3">
+                  <button className="flex-1 px-3 py-2 rounded bg-primary text-white text-sm">
+                    Mark as Delivered
+                  </button>
+                  <button className="flex-1 px-3 py-2 rounded bg-blue-500 text-white text-sm">
+                    Contact Buyer
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         ))}
       </div>

@@ -10,6 +10,7 @@ import { PushNotifications } from "@capacitor/push-notifications";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { EdgeToEdge } from "@capawesome/capacitor-android-edge-to-edge-support";
 import { Browser } from "@capacitor/browser";
+import { Keyboard } from "@capacitor/keyboard";
 import Fuse from "fuse.js";
 
 export const AppContext = createContext();
@@ -32,6 +33,8 @@ export const AppContextProvider = ({ children }) => {
   const [wishList, setWishList] = useState([]);
   const [searchQuery, setSearchQuery] = useState({});
   const [loading, setLoading] = useState(true);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
   const baseUrl = "https://quickxmarket-server.vercel.app";
 
   const makeRequest = async ({ method, url, data }) => {
@@ -119,7 +122,6 @@ export const AppContextProvider = ({ children }) => {
     PushNotifications.addListener(
       "pushNotificationActionPerformed",
       (notification) => {
-        console.log("Notification action performed", notification);
         const route = notification.notification.data?.route;
         if (route) {
           navigate(route);
@@ -136,6 +138,15 @@ export const AppContextProvider = ({ children }) => {
         }
       }
     );
+  };
+
+  const keyboardListeners = () => {
+    Keyboard.addListener("keyboardWillShow", (info) => {
+      setKeyboardVisible(true);
+    });
+    Keyboard.addListener("keyboardWillHide", () => {
+      setKeyboardVisible(false);
+    });
   };
 
   // Utility function to convert File to base64 string
@@ -373,6 +384,7 @@ export const AppContextProvider = ({ children }) => {
           setUser(parsedUser);
         }
         await Promise.all([fetchUser(), fetchProducts(), fetchAddresses()]);
+        keyboardListeners();
       } catch (err) {
         // Optional: log or toast error
       } finally {
@@ -464,6 +476,7 @@ export const AppContextProvider = ({ children }) => {
     fileToBase64,
     fuse,
     Browser,
+    keyboardVisible,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

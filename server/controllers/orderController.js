@@ -79,9 +79,11 @@ export const placeOrderPaystack = async (req, res) => {
     if (!address || items.length === 0) {
       return res.json({ success: false, message: "Invalid data" });
     }
+    const deliveryCode = Math.floor(1000 + Math.random() * 9000).toString();
 
     const orderData = {
       userId,
+      deliveryCode,
       items: items.map((item) => ({
         product: item.product,
         quantity: item.quantity,
@@ -255,7 +257,7 @@ export const paystackWebhooks = async (req, res) => {
           "New Delivery Request",
           "A new order has been placed. Check your rider dashboard.",
           {
-            route: `/rider`,
+            route: `/rider/`,
           }
         );
       }
@@ -283,13 +285,13 @@ export const getUserOrders = async (req, res) => {
 // Get Vendor Orders : /api/order/vendor
 export const getVendorOrders = async (req, res) => {
   try {
-    const { vendorId } = req.body;
+    const { vendorId } = req.params;
     const vendor = await Vendor.findById(vendorId);
     if (!vendor) {
       return res.json({ success: false, message: "Vendor not found" });
     }
 
-    await vendor.populate({
+    const populatedVendor = await vendor.populate({
       path: "orders",
       match: { isPaid: true },
       populate: {
@@ -299,6 +301,8 @@ export const getVendorOrders = async (req, res) => {
         sort: { createdAt: -1 },
       },
     });
+
+    const orders = populatedVendor.orders;
 
     res.json({ success: true, orders });
   } catch (error) {
@@ -368,7 +372,6 @@ export const getRiderOrders = async (req, res) => {
         vendors: vendorGroups,
       });
     }
-    
 
     res.json({ success: true, orders: modifiedOrders });
   } catch (error) {

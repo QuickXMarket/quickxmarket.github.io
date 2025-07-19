@@ -91,14 +91,14 @@ export const login = async (req, res) => {
       return res.json({ success: false, message: "Invalid email or password" });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+      expiresIn: "30d",
     });
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
     return res.json({
@@ -167,7 +167,7 @@ export const updateUserRole = async (req, res) => {
     } else if (role === "rider" && !user.isRider) {
       user.isRider = true;
     }
-    
+
     await user.save();
     return res.json({
       success: true,

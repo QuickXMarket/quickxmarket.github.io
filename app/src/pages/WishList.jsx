@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppContext } from "../context/AppContext";
-import WishListCard from "../components/WishListCard"; 
+import WishListCard from "../components/WishListCard";
 
 const WishList = () => {
   const { wishList, products } = useAppContext();

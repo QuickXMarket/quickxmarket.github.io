@@ -31,6 +31,7 @@ import RiderLogin from "./components/rider/RiderLogin";
 import RidersOrders from "./pages/rider/RidersOrders";
 import RiderWallet from "./pages/rider/RiderWallet";
 import RiderProfile from "./pages/rider/RiderProfile";
+import VendorWallet from "./pages/seller/Wallet";
 
 const App = () => {
   const {
@@ -41,14 +42,15 @@ const App = () => {
     showRiderLogin,
     user,
     loading,
+    keyboardVisible,
     location,
   } = useAppContext();
   const isSellerPath = location.pathname.includes("seller");
   const isRiderPath = location.pathname.includes("rider");
 
-  const showBottomNav = ["/", "/shops", "/wishlist", "/account"].includes(
-    location.pathname
-  );
+  const showBottomNav =
+    ["/", "/shops", "/wishlist", "/account"].includes(location.pathname) &&
+    !keyboardVisible;
 
   useEffect(() => {
     const hideSplashScreen = async () => {
@@ -108,6 +110,7 @@ const App = () => {
             <Route index element={isSeller ? <AddProduct /> : null} />
             <Route path="product-list" element={<ProductList />} />
             <Route path="orders" element={<Orders />} />
+            <Route path="wallet" element={<VendorWallet />} />
           </Route>
           <Route
             path="/rider"

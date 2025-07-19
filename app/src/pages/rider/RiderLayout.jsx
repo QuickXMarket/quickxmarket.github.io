@@ -6,7 +6,8 @@ import React, { useEffect, useState } from "react";
 import RiderLogin from "../../components/rider/RiderLogin";
 
 const RiderLayout = () => {
-  const { user, makeRequest, navigation, location } = useAppContext();
+  const { user, makeRequest, navigation, location, keyboardVisible } =
+    useAppContext();
 
   const [showLogin, setShowLogin] = useState(false);
   const [riderName, setRiderName] = useState("");
@@ -45,6 +46,7 @@ const RiderLayout = () => {
     { name: "Wallet", path: "/rider/wallet", icon: assets.wallet_outline },
     { name: "Profile", path: "/rider/profile", icon: assets.profile_outline },
   ];
+  
 
   if (showLogin) return <RiderLogin setShowUserLogin={setShowLogin} />;
 
@@ -88,29 +90,30 @@ const RiderLayout = () => {
         {/* Main Page Content */}
         <div className="flex-grow pb-16 lg:pb-0">
           <Outlet context={{ rider }} />
-          
         </div>
       </div>
 
       {/* Bottom Navigation for mobile */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-sm flex justify-around py-2 lg:hidden">
-        {navLinks.map((item) => {
-          const isActive = location.pathname === item.path;
-          return (
-            <NavLink
-              to={item.path}
-              key={item.name}
-              end={item.path === "/rider"}
-              className={`flex flex-col items-center text-xs ${
-                isActive ? "text-primary" : "text-gray-500"
-              }`}
-            >
-              <img src={item.icon} className="w-6 h-6" alt={item.name} />
-              <span className="text-[11px]">{item.name}</span>
-            </NavLink>
-          );
-        })}
-      </div>
+      {!keyboardVisible && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-sm flex justify-around py-2 lg:hidden">
+          {navLinks.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <NavLink
+                to={item.path}
+                key={item.name}
+                end={item.path === "/rider"}
+                className={`flex flex-col items-center text-xs ${
+                  isActive ? "text-primary" : "text-gray-500"
+                }`}
+              >
+                <img src={item.icon} className="w-6 h-6" alt={item.name} />
+                <span className="text-[11px]">{item.name}</span>
+              </NavLink>
+            );
+          })}
+        </div>
+      )}
     </>
   );
 };

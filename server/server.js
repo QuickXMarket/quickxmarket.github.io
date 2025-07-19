@@ -12,11 +12,10 @@ import addressRouter from "./routes/addressRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import { paystackWebhooks } from "./controllers/orderController.js";
 import geoCodeRouter from "./routes/geoCodeRoute.js";
-import { loadGeoJsonData } from "./controllers/geoCodeController.js";
 import mailRouter from "./routes/mailRoute.js";
 import smsRouter from "./routes/smsRoute.js";
 import riderRouter from "./routes/riderRoute.js";
-import walletRouter from "./routes/walletRoute.js"; 
+import walletRouter from "./routes/walletRoute.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -50,8 +49,6 @@ app.use("/api/geocoding", geoCodeRouter);
 app.use("/api/mail", mailRouter);
 app.use("/api/sms", smsRouter);
 app.use("/api/wallet", walletRouter);
-
-// loadGeoJsonData();
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

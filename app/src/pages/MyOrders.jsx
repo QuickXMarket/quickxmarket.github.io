@@ -56,82 +56,97 @@ const MyOrders = () => {
       {myOrders.map((order, index) => (
         <div
           key={index}
-          className="border border-gray-300 rounded-lg mb-6 overflow-hidden max-w-4xl mx-auto"
+          className="rounded-lg shadow-md mb-6 border border-gray-200 overflow-hidden max-w-4xl mx-auto"
         >
           {/* Accordion Header */}
           <div
             onClick={() => toggleAccordion(index)}
-            className="cursor-pointer bg-white px-5 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3"
+            className="cursor-pointer bg-gray-50 px-5 py-4 active:bg-gray-100 transition-all"
           >
-            <div className="flex items-center gap-4">
-              <img
-                src={assets.Favicon_rounded}
-                alt="logo"
-                className="w-8 h-8 shrink-0"
-              />
-              <div>
-                <p className="text-gray-800 text-sm font-semibold break-all">
-                  Order ID: {order._id}
-                </p>
-                <p className="text-xs text-gray-400">
-                  Placed on: {new Date(order.createdAt).toLocaleDateString()}
-                </p>
-              </div>
+            {/* Order ID & Date */}
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-700 font-medium break-all">
+                Order ID: {order._id}
+              </span>
             </div>
 
-            <div className="text-sm text-gray-600 sm:text-right">
-              <p>
-                Status: <span className="text-green-600">{order.status}</span>
-              </p>
-              <p>
+            {/* Status and Total */}
+            <div className="mt-2 flex justify-between text-sm text-gray-600">
+              <div>
+                Status:{" "}
+                <span className="text-green-600 font-semibold">
+                  {order.status}
+                </span>
+              </div>
+              <div>
                 Total:{" "}
-                <span className="font-medium text-primary">
+                <span className="text-primary font-medium">
                   {currency}
                   {order.amount}
                 </span>
-              </p>
+              </div>
+            </div>
+            <div className="flex justify-end mt-1">
+              <span className="text-xs text-gray-400">
+                {new Date(order.createdAt).toLocaleDateString()}
+              </span>
             </div>
           </div>
 
           {/* Accordion Body */}
           {openIndex === index && (
-            <div className="border-t border-gray-200">
+            <div className="bg-white px-5 py-4 space-y-4 border-t border-gray-200">
               {order.items.map((item, idx) => (
                 <div
                   key={idx}
-                  className={`p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 ${
-                    order.items.length !== idx + 1 && "border-b border-gray-200"
-                  }`}
+                  className={`flex flex-row items-center justify-between flex-wrap gap-4 border-b border-gray-200 pb-4`}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="bg-primary/10 p-3 rounded-lg">
-                      <img
-                        src={item.product.image[0]}
-                        alt=""
-                        className="w-16 h-16 object-cover"
-                      />
-                    </div>
-                    <div>
-                      <h2 className="text-gray-800 font-medium">
-                        {item.product.name}
-                      </h2>
-                      <p className="text-gray-500 text-sm">
-                        Category: {item.product.category}
-                      </p>
-                    </div>
+                  {/* Image */}
+                  <div className="bg-primary/10 p-3 rounded-lg shrink-0">
+                    <img
+                      src={item.product.image[0]}
+                      alt=""
+                      className="w-16 h-16 object-cover"
+                    />
                   </div>
 
-                  <div className="flex flex-col text-sm text-gray-500">
+                  {/* Product Info */}
+                  <div className="min-w-[150px] flex-1">
+                    <p className="text-gray-800 font-medium">
+                      {item.product.name}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Category: {item.product.category}
+                    </p>
+                  </div>
+
+                  {/* Quantity & Status */}
+                  <div className="text-sm text-gray-500 space-y-1 min-w-[100px] text-left">
                     <p>Qty: {item.quantity || "1"}</p>
                     <p>Status: {item.status}</p>
                   </div>
 
-                  <p className="text-primary font-semibold">
+                  {/* Price */}
+                  <div className="text-primary font-semibold whitespace-nowrap min-w-[80px] text-right">
                     {currency}
                     {item.product.offerPrice * item.quantity}
-                  </p>
+                  </div>
                 </div>
               ))}
+
+              {/* Optional 4-digit code */}
+              {order.deliveryCode && (
+                <div className="flex justify-center gap-2 mt-2">
+                  {order.deliveryCode.split("").map((digit, i) => (
+                    <div
+                      key={i}
+                      className="w-10 h-12 flex items-center justify-center border border-gray-300 rounded-md text-lg font-semibold text-gray-700 bg-gray-50"
+                    >
+                      {digit}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>

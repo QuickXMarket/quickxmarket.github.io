@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAppContext } from "../../context/AppContext";
 import RiderOrderCard from "../../components/rider/RiderOrderCard";
 import { useOutletContext } from "react-router-dom";
 import toast from "react-hot-toast";
+import PullToRefresh from "pulltorefreshjs";
 
 const RidersOrders = () => {
   const [activeTab, setActiveTab] = useState("pending");
@@ -11,6 +12,7 @@ const RidersOrders = () => {
   const [ongoingOrders, setOngoingOrders] = useState([]);
   const [pendingOrders, setPendingOrders] = useState([]);
   const { rider } = useOutletContext();
+  const containerRef = useRef();
 
   const fetchOrders = async () => {
     try {
@@ -84,6 +86,19 @@ const RidersOrders = () => {
     if (rider && rider._id) fetchOrders();
   }, [rider]);
 
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    PullToRefresh.init({
+      mainElement: containerRef.current,
+      onRefresh() {
+        return fetchOrders();
+      },
+    });
+
+    return () => PullToRefresh.destroyAll();
+  }, []);
+
   return (
     <div className="p-4 w-full max-w-2xl mx-auto">
       {/* Top Tabs */}
@@ -111,7 +126,7 @@ const RidersOrders = () => {
       </div>
 
       {/* Orders List */}
-      <div className="space-y-4">
+      <div className="space-y-4" ref={containerRef}>
         {activeTab === "pending" ? (
           pendingOrders?.length > 0 ? (
             pendingOrders.map((order, index) => (
