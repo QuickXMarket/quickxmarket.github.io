@@ -151,7 +151,7 @@ const Cart = () => {
       } else {
       */
       // Place Order with Paystack
-      const { data } = await axios.post("/api/order/paystack", {
+      const { data } = await axios.post("/api/payment/paystack", {
         userId: user._id,
         items: cartArray.map((item) => ({
           product: item._id,

@@ -13,7 +13,7 @@ const orderSchema = new mongoose.Schema(
     amount: { type: Number, required: true },
     address: { type: String, required: true, ref: "address" },
     paymentType: { type: String, required: true },
-    deliveryCode: { type: String, required: true },
+    deliveryCode: { type: String },
     isPaid: { type: Boolean, required: true, default: false },
     riderId: { type: String, default: null, ref: "rider" },
     paystackReference: { type: String, unique: true, sparse: true },

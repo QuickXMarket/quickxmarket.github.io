@@ -1,9 +1,74 @@
 import React, { useState } from "react";
+import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
+import DeliveryCodeModal from "./DeliveryCodeModal";
 
-const RiderOrderCard = ({ order }) => {
+const RiderOrderCard = ({ order, riderId, fetchOrders }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { makeRequest } = useAppContext();
+  const [showCodeModal, setShowCodeModal] = useState(false);
 
   const toggleAccordion = () => setIsOpen(!isOpen);
+
+  const orderStatusActions = [
+    {
+      status: "Order Confirmed",
+      buttonText: "Accept Order",
+      newStatus: "Order Assigned",
+    },
+    {
+      status: "Order Assigned",
+      buttonText: "Pick Order",
+      newStatus: "Order Picked",
+    },
+    {
+      status: "Order Picked",
+      buttonText: "Deliver Order",
+      newStatus: "Order Delivered",
+    },
+  ];
+
+  const handleBtnClick = async () => {
+    try {
+      if (order.status === "Order Confirmed" && !order.riderId) {
+        const data = await makeRequest({
+          url: `/api/order/accept`,
+          method: "POST",
+          data: { orderId: order._id, riderId },
+        });
+        if (data.success) {
+          toast.success("Order accepted successfully");
+          fetchOrders();
+        } else {
+          toast.error(data.message);
+        }
+      } else {
+        const action = orderStatusActions.find(
+          (action) => action.status === order.status
+        );
+        if (action) {
+          if (order.status === "Order Picked") {
+            setShowCodeModal(true);
+            return;
+          }
+          const data = await makeRequest({
+            url: "/api/order/update-status",
+            method: "PATCH",
+            data: {
+              orderId: order._id,
+              status: action.newStatus,
+            },
+          });
+          if (data.success) {
+            toast.success("Order status updated successfully");
+            fetchOrders();
+          } else {
+            toast.error(data.message);
+          }
+        }
+      }
+    } catch {}
+  };
 
   return (
     <div className="rounded-lg shadow-md mb-4 border border-gray-200 overflow-hidden">
@@ -48,10 +113,11 @@ const RiderOrderCard = ({ order }) => {
             className=" bg-primary text-white text-sm px-3 py-1 rounded hover:bg-primary/90"
             onClick={(e) => {
               e.stopPropagation();
-              console.log("Button clicked for order", order._id);
+              handleBtnClick();
             }}
           >
-            Action
+            {orderStatusActions.find((action) => action.status === order.status)
+              ?.buttonText || "Update Status"}
           </button>
         </div>
       </div>
@@ -104,6 +170,14 @@ const RiderOrderCard = ({ order }) => {
             </div>
           ))}
         </div>
+      )}
+      {showCodeModal && (
+        <DeliveryCodeModal
+          orderId={order._id}
+          onClose={() => setShowCodeModal(false)}
+          fetchOrders={fetchOrders}
+          riderId={riderId}
+        />
       )}
     </div>
   );

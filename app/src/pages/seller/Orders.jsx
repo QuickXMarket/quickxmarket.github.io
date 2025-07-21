@@ -30,6 +30,30 @@ const Orders = () => {
     if (vendor && vendor._id) fetchOrders();
   }, [vendor]);
 
+  const handleOrderStatusUpdate = async (orderId, status) => {
+    try {
+      const data = await makeRequest({
+        url: "/api/order/update-status",
+        method: "PATCH",
+        data: {
+          orderId,
+          status,
+          vendorId: vendor._id,
+        },
+      });
+      if (data.success) {
+        toast.success("Order status updated successfully");
+        fetchOrders();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setActiveIndex(null);
+    }
+  };
+
   const toggleAccordion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
@@ -95,7 +119,7 @@ const Orders = () => {
                       <p>x{item.quantity}</p>
                       <p className="text-primary font-semibold">
                         {currency}
-                        {item.product.price}
+                        {item.product.offerPrice * item.quantity}
                       </p>
                     </div>
                   ))}
@@ -107,15 +131,27 @@ const Orders = () => {
                     {order.address.address}, {order.address.phone}
                   </p>
                 </div>
-
-                <div className="flex gap-3 mt-3">
-                  <button className="flex-1 px-3 py-2 rounded bg-primary text-white text-sm">
-                    Mark as Delivered
-                  </button>
-                  <button className="flex-1 px-3 py-2 rounded bg-blue-500 text-white text-sm">
-                    Contact Buyer
-                  </button>
-                </div>
+                {order.items.every(
+                  (item) => item.status === "Order Placed"
+                ) && (
+                  <div className="flex gap-3 mt-3">
+                    <button
+                      className="flex-1 px-3 py-2 rounded bg-primary text-white text-sm"
+                      onClick={() =>
+                        handleOrderStatusUpdate(order._id, "Order Confirmed")
+                      }
+                    >
+                      Available
+                    </button>
+                    <button className="flex-1 px-3 py-2 rounded bg-red-500 text-white text-sm">
+                      Unavailable
+                    </button>
+                  </div>
+                )}
+                <span className="text-xs text-gray-500">
+                  *Please confirm that the above Products are available is
+                  ordered
+                </span>
               </div>
             )}
           </div>

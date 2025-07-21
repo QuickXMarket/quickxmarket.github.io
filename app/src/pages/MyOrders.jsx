@@ -19,6 +19,7 @@ const MyOrders = () => {
         const statusFlow = [
           "Order Placed",
           "Order Confirmed",
+          "Order Assigned",
           "Order Picked",
           "Order Delivered",
         ];

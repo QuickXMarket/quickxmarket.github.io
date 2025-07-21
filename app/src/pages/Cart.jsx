@@ -164,7 +164,7 @@ const Cart = () => {
       const isNativeApp = Capacitor.isNativePlatform();
       const data = await makeRequest({
         method: "POST",
-        url: "/api/order/paystack",
+        url: "/api/payment/paystack",
         data: {
           userId: user._id,
           items: cartArray.map((item) => ({

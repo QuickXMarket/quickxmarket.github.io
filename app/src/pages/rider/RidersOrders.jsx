@@ -25,10 +25,10 @@ const RidersOrders = () => {
         const statusFlow = [
           "Order Placed",
           "Order Confirmed",
+          "Order Assigned",
           "Order Picked",
           "Order Delivered",
         ];
-
         const modifiedOrders = data.orders.map((order) => {
           // Loop through each vendor and compute their status
           const updatedVendors = order.vendors.map((vendor) => {
@@ -65,12 +65,10 @@ const RidersOrders = () => {
         setOrders(modifiedOrders);
 
         const ongoing = modifiedOrders.filter(
-          (order) =>
-            order.status !== "Order Delivered" && order.riderId === rider._id
+          (order) => order.riderId === rider._id
         );
-        const pending = modifiedOrders.filter(
-          (order) => order.status !== "Order Delivered" && !order.riderId
-        );
+
+        const pending = modifiedOrders.filter((order) => !order.riderId);
         setPendingOrders(pending);
         setOngoingOrders(ongoing);
       } else {
@@ -130,7 +128,12 @@ const RidersOrders = () => {
         {activeTab === "pending" ? (
           pendingOrders?.length > 0 ? (
             pendingOrders.map((order, index) => (
-              <RiderOrderCard order={order} key={index} />
+              <RiderOrderCard
+                order={order}
+                riderId={rider._id}
+                fetchOrders={fetchOrders}
+                key={index}
+              />
             ))
           ) : (
             <div className="text-gray-500 text-center">
@@ -139,7 +142,12 @@ const RidersOrders = () => {
           )
         ) : ongoingOrders?.length > 0 ? (
           ongoingOrders.map((order, index) => (
-            <RiderOrderCard order={order} key={index} />
+            <RiderOrderCard
+              order={order}
+              riderId={rider._id}
+              fetchOrders={fetchOrders}
+              key={index}
+            />
           ))
         ) : (
           <div className="text-gray-500 text-center">
