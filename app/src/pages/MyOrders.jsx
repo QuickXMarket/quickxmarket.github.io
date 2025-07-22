@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useAppContext } from "../context/AppContext";
 import { assets } from "../assets/assets";
+import { useAuthContext } from "../context/AuthContext";
+import { useCoreContext } from "../context/CoreContext";
 
 const MyOrders = () => {
   const [myOrders, setMyOrders] = useState([]);
-  const { currency, makeRequest, user } = useAppContext();
+  const { user } = useAuthContext();
+  const { currency, makeRequest } = useCoreContext();
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggleAccordion = (index) => {

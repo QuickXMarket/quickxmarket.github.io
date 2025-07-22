@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 import DeliveryCodeModal from "./DeliveryCodeModal";
+import { useCoreContext } from "../../context/CoreContext";
 
 const RiderOrderCard = ({ order, riderId, fetchOrders }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { makeRequest } = useAppContext();
+  const { makeRequest } = useCoreContext();
   const [showCodeModal, setShowCodeModal] = useState(false);
 
   const toggleAccordion = () => setIsOpen(!isOpen);

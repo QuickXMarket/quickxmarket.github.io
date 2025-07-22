@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
-const ChatMessage = ({ message, isSender }) => {
+const ChatMessage = ({ message, currentUser }) => {
   const [showImage, setShowImage] = useState(false);
+  const isSender = message.senderId === currentUser;
 
   const handleShow = () => setShowImage(true);
   const handleClose = () => setShowImage(false);
@@ -15,8 +16,8 @@ const ChatMessage = ({ message, isSender }) => {
   return (
     <div className={`flex mb-2 ${isSender ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-[60%] rounded-2xl shadow p-2 ${
-          isSender ? "bg-green-200 rounded-tr-none" : "bg-white rounded-tl-none"
+        className={`max-w-[85%] rounded-2xl shadow p-2 ${
+          isSender ? "bg-primary rounded-tr-none" : "bg-white rounded-tl-none"
         }`}
       >
         {/* Media Section */}
@@ -29,9 +30,7 @@ const ChatMessage = ({ message, isSender }) => {
                   className="w-full h-auto object-cover rounded-lg"
                   muted
                   preload="metadata"
-                >
-                  Your browser does not support the video tag.
-                </video>
+                />
                 <div className="absolute bottom-1 left-1 bg-black bg-opacity-50 text-white rounded-full w-8 h-8 flex items-center justify-center">
                   ▶
                 </div>
@@ -40,26 +39,37 @@ const ChatMessage = ({ message, isSender }) => {
               <img
                 src={message.media}
                 alt="sent"
-                className="w-full max-w-xs rounded-lg"
+                className="w-full max-w-xs rounded-lg h-50"
               />
             )}
           </div>
         )}
 
-        {/* Message Text */}
-        {message.message && (
-          <p className="text-gray-800 break-words whitespace-pre-wrap">
-            {message.message}
-          </p>
-        )}
+        {/* Text + Timestamp wrapper */}
+        <div
+          className={`${
+            !message.media ? "flex flex-wrap items-end gap-2" : "block"
+          }`}
+        >
+          {/* Message Text */}
+          {message.message && (
+            <p className="text-gray-800 break-words whitespace-pre-wrap">
+              {message.message}
+            </p>
+          )}
 
-        {/* Timestamp */}
-        <div className="text-right text-xs text-gray-500 mt-1">
-          {new Date(message.timestamp).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true,
-          })}
+          {/* Timestamp */}
+          <div
+            className={`text-xs text-gray-500 shrink-0 whitespace-nowrap ${
+              !message.media ? "ml-auto " : "text-right"
+            }`}
+          >
+            {new Date(message.timestamp).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            })}
+          </div>
         </div>
       </div>
 

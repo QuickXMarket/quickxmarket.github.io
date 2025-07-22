@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 import PullToRefresh from "pulltorefreshjs";
 import { useOutletContext } from "react-router-dom";
+import { useCoreContext } from "../../context/CoreContext";
+import { useAuthContext } from "../../context/AuthContext";
 
 const VendorWallet = () => {
-  const { makeRequest, user } = useAppContext();
+  const { makeRequest } = useCoreContext();
+  const { user } = useAuthContext();
   const { vendor } = useOutletContext();
 
   const [wallet, setWallet] = useState(null);

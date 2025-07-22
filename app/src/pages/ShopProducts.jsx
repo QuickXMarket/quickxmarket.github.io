@@ -1,11 +1,13 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useAppContext } from "../context/AppContext";
 import { useParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
+import { useProductContext } from "../context/ProductContext";
+import { useCoreContext } from "../context/CoreContext";
 
 const ShopProducts = () => {
-  const { products, makeRequest } = useAppContext();
+  const { products } = useProductContext();
+  const { makeRequest } = useCoreContext();
   const { vendorId } = useParams();
   const [vendor, setVendor] = useState(null);
 
@@ -17,7 +19,7 @@ const ShopProducts = () => {
   useEffect(() => {
     const fetchVendor = async () => {
       try {
-        const  data  = await makeRequest({
+        const data = await makeRequest({
           url: `/api/seller/vendor/${vendorId}`,
           method: "GET",
         });

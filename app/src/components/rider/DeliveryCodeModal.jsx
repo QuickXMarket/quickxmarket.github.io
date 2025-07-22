@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
-import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
+import { useCoreContext } from "../../context/CoreContext";
 
 const DeliveryCodeModal = ({ orderId, onClose, fetchOrders, riderId }) => {
   const [deliveryCode, setDeliveryCode] = useState(["", "", "", ""]);
   const inputsRef = [useRef(), useRef(), useRef(), useRef()];
-  const { makeRequest } = useAppContext();
+  const { makeRequest } = useCoreContext();
 
   const handleDeliveryCodeSubmit = async () => {
     const code = deliveryCode.join("");

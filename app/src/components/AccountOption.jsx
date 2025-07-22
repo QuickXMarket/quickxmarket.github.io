@@ -1,9 +1,9 @@
 import React from "react";
-import { useAppContext } from "../context/AppContext";
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
 
 const AccountOption = ({ to, label, onClick, icon }) => {
-  const { user } = useAppContext();
+  const { user } = useAuthContext();
   const isLoggedIn = !!user;
 
   const content = (

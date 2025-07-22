@@ -1,10 +1,12 @@
 import React from "react";
-import { useAppContext } from "../context/AppContext";
 import { Link } from "react-router-dom";
 import WishlistIcon from "../assets/heart-fill.svg?react";
+import { useProductContext } from "../context/ProductContext";
+import { useCoreContext } from "../context/CoreContext";
 
 const WishListCard = ({ product }) => {
-  const { currency, addToCart, updateWishList } = useAppContext();
+  const { currency } = useCoreContext();
+  const { addToCart, updateWishList } = useProductContext();
 
   return (
     <div className="flex items-center gap-4 border-b py-3 px-2">

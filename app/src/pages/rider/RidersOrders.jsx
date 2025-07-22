@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useAppContext } from "../../context/AppContext";
 import RiderOrderCard from "../../components/rider/RiderOrderCard";
 import { useOutletContext } from "react-router-dom";
 import toast from "react-hot-toast";
 import PullToRefresh from "pulltorefreshjs";
+import { useCoreContext } from "../../context/CoreContext";
 
 const RidersOrders = () => {
   const [activeTab, setActiveTab] = useState("pending");
-  const { makeRequest } = useAppContext();
+  const { makeRequest } = useCoreContext();
   const [orders, setOrders] = useState([]);
   const [ongoingOrders, setOngoingOrders] = useState([]);
   const [pendingOrders, setPendingOrders] = useState([]);

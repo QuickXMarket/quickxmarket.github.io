@@ -1,24 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
-import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
+import { useCoreContext } from "../context/CoreContext";
+import { useProductContext } from "../context/ProductContext";
 
 const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
 
-  const {
-    user,
-    setUser,
-    setShowUserLogin,
-    navigate,
-    setSearchQuery,
-    searchQuery,
-    getCartCount,
-    makeRequest,
-  } = useAppContext();
-
+  const { user, setUser, setShowUserLogin } = useAuthContext();
+  const { navigate } = useCoreContext();
+  const { searchQuery, setSearchQuery, getCartCount } = useProductContext();
 
   useEffect(() => {
     if (searchQuery.length > 0) {

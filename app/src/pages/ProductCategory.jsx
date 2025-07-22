@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useAppContext } from "../context/AppContext";
 import { useParams } from "react-router-dom";
 import { categories } from "../assets/assets";
 import ProductCard from "../components/ProductCard";
 import VendorCard from "../components/VendorCard";
+import { useProductContext } from "../context/ProductContext";
+import { useCoreContext } from "../context/CoreContext";
 
 const ProductCategory = () => {
-  const { products, makeRequest } = useAppContext();
+  const { products } = useProductContext;
+  const { makeRequest } = useCoreContext();
   const { category } = useParams();
 
   const [vendors, setVendors] = useState([]);
@@ -30,7 +32,10 @@ const ProductCategory = () => {
           ];
           const vendorsData = [];
           for (const vendorId of uniqueVendorIds) {
-            const data = await makeRequest({ method: "GET", url: `/api/seller/vendor/${vendorId}` });
+            const data = await makeRequest({
+              method: "GET",
+              url: `/api/seller/vendor/${vendorId}`,
+            });
             if (!data.success) continue;
             vendorsData.push(data.vendor);
           }

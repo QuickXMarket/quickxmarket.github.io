@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useAppContext } from "../context/AppContext";
 import VendorCard from "../components/VendorCard";
+import { useCoreContext } from "../context/CoreContext";
 
 const ShopList = () => {
-  const { makeRequest } = useAppContext();
+  const { makeRequest } = useCoreContext();
 
   const [vendors, setVendors] = useState([]);
   const [loadingVendors, setLoadingVendors] = useState(false);

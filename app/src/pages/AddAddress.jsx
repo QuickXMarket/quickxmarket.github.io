@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { assets } from "../assets/assets";
-import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
+import { useAuthContext } from "../context/AuthContext";
+import { useCoreContext } from "../context/CoreContext";
 
 // Input Field Component
 const InputField = ({ type, placeholder, name, handleChange, address }) => (
@@ -17,7 +18,8 @@ const InputField = ({ type, placeholder, name, handleChange, address }) => (
 );
 
 const AddAddress = () => {
-  const { makeRequest, user, navigate, fuse } = useAppContext();
+  const { user } = useAuthContext();
+  const { makeRequest, navigate, fuse } = useCoreContext();
 
   const [address, setAddress] = useState({
     firstName: "",

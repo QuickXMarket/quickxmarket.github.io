@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAppContext } from "../context/AppContext";
 import { assets } from "../assets/assets";
 import toast from "react-hot-toast";
 import AccountOption from "../components/AccountOption";
+import { useAuthContext } from "../context/AuthContext";
 
 const Account = () => {
   const {
@@ -12,9 +12,8 @@ const Account = () => {
     setShowSellerLogin,
     setShowUserLogin,
     setShowRiderLogin,
-    makeRequest,
     logout,
-  } = useAppContext();
+  } = useAuthContext();
 
   return (
     <div className="max-w-xl mx-auto">

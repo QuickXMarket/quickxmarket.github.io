@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { assets, categories } from "../../assets/assets";
-import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
+import { useCoreContext } from "../../context/CoreContext";
 
 const AddProduct = () => {
   const [files, setFiles] = useState([]);
@@ -11,7 +11,7 @@ const AddProduct = () => {
   const [price, setPrice] = useState("");
   const [offerPrice, setOfferPrice] = useState("");
 
-  const { makeRequest, fileToBase64 } = useAppContext();
+  const { makeRequest, fileToBase64 } = useCoreContext();
 
   const onSubmitHandler = async (event) => {
     try {

@@ -10,6 +10,7 @@ export const getDeliveryFee = async (req, res) => {
     if (!latitude || !longitude || !Array.isArray(vendorIds)) {
       return res.status(400).json({ success: false, message: "Invalid data" });
     }
+    
     const totalDeliveryFee = await calculateTotalDeliveryFee(
       latitude,
       longitude,

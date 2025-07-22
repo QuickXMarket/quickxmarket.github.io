@@ -1,13 +1,14 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { assets } from "../../assets/assets";
-import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 import React, { useEffect, useState } from "react";
 import RiderLogin from "../../components/rider/RiderLogin";
+import { useCoreContext } from "../../context/CoreContext";
+import { useAuthContext } from "../../context/AuthContext";
 
 const RiderLayout = () => {
-  const { user, makeRequest, navigation, location, keyboardVisible } =
-    useAppContext();
+  const { user } = useAuthContext();
+  const { makeRequest, location, keyboardVisible } = useCoreContext();
 
   const [showLogin, setShowLogin] = useState(false);
   const [riderName, setRiderName] = useState("");
@@ -46,7 +47,6 @@ const RiderLayout = () => {
     { name: "Wallet", path: "/rider/wallet", icon: assets.wallet_outline },
     { name: "Profile", path: "/rider/profile", icon: assets.profile_outline },
   ];
-  
 
   if (showLogin) return <RiderLogin setShowUserLogin={setShowLogin} />;
 

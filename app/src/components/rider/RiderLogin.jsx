@@ -1,16 +1,11 @@
 import React, { useState } from "react";
-import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
+import { useAuthContext } from "../../context/AuthContext";
+import { useCoreContext } from "../../context/CoreContext";
 
 const RiderLogin = () => {
-  const {
-    setShowRiderLogin,
-    navigate,
-    user,
-    makeRequest,
-    location,
-    setIsRider,
-  } = useAppContext();
+  const { setShowRiderLogin, user, setIsRider } = useAuthContext();
+  const { navigate, makeRequest, location } = useCoreContext();
 
   const [fullName, setFullName] = useState("");
   const [number, setNumber] = useState("");

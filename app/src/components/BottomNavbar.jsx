@@ -1,10 +1,10 @@
 import React from "react";
-import { useAppContext } from "../context/AppContext";
 import { assets } from "../assets/assets";
 import HomeIcon from "../assets/house-door-fill.svg?react";
 import WishlistIcon from "../assets/heart-fill.svg?react";
 import AccountIcon from "../assets/person-circle.svg?react";
 import ShopIcon from "../assets/shop.svg?react";
+import { useCoreContext } from "../context/CoreContext";
 
 const navItems = [
   { name: "Home", path: "/", icon: HomeIcon },
@@ -14,7 +14,7 @@ const navItems = [
 ];
 
 const BottomNavbar = () => {
-  const { navigate, location } = useAppContext();
+  const { navigate, location } = useCoreContext();
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-sm flex justify-around py-2 lg:hidden">

@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
-import { useAppContext } from "../context/AppContext";
 import { assets } from "../assets/assets";
 import toast from "react-hot-toast";
+import { useProductContext } from "../context/ProductContext";
+import { useCoreContext } from "../context/CoreContext";
+import { useAuthContext } from "../context/AuthContext";
 
 const Cart = () => {
   const {
     products,
-    currency,
     cartItems,
     removeFromCart,
     getCartCount,
     updateCartItem,
-    navigate,
     getCartAmount,
-    makeRequest,
-    user,
-    Browser,
-  } = useAppContext();
+  } = useProductContext();
+  const { currency, navigate, makeRequest, Browser } = useCoreContext();
+  const { user } = useAuthContext();
+
   const [cartArray, setCartArray] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [showAddress, setShowAddress] = useState(false);
@@ -56,6 +56,7 @@ const Cart = () => {
   };
 
   const fetchDeliveryFee = async (latitude, longitude, vendorIds) => {
+    console.log(latitude)
     try {
       const data = await makeRequest({
         method: "POST",
@@ -67,6 +68,7 @@ const Cart = () => {
         },
       });
       if (data.success) {
+        console.log(data.totalDeliveryFee)
         setDeliveryFee(data.totalDeliveryFee);
       } else {
         setDeliveryFee(0);

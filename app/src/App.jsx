@@ -3,8 +3,6 @@ import Navbar from "./components/Navbar";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import { Toaster } from "react-hot-toast";
-import Footer from "./components/Footer";
-import { useAppContext } from "./context/AppContext";
 import Login from "./components/Login";
 import AllProducts from "./pages/AllProducts";
 import ProductCategory from "./pages/ProductCategory";
@@ -32,6 +30,8 @@ import RidersOrders from "./pages/rider/RidersOrders";
 import RiderWallet from "./pages/rider/RiderWallet";
 import RiderProfile from "./pages/rider/RiderProfile";
 import VendorWallet from "./pages/seller/Wallet";
+import { useAuthContext } from "./context/AuthContext";
+import { useCoreContext } from "./context/CoreContext";
 
 const App = () => {
   const {
@@ -41,12 +41,13 @@ const App = () => {
     showSellerLogin,
     showRiderLogin,
     user,
-    loading,
-    keyboardVisible,
-    location,
-  } = useAppContext();
+    authLoading,
+  } = useAuthContext();
+  const { keyboardVisible, location } = useCoreContext();
+
   const isSellerPath = location.pathname.includes("seller");
   const isRiderPath = location.pathname.includes("rider");
+  const isContactPath = location.pathname.includes("contact");
 
   const showBottomNav =
     ["/", "/shops", "/wishlist", "/account"].includes(location.pathname) &&
@@ -61,14 +62,18 @@ const App = () => {
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-white ">
-      {!(isSellerPath || isRiderPath) && <Navbar />}
+      {!(isSellerPath || isRiderPath || isContactPath) && <Navbar />}
       {showUserLogin && <Login />}
       {showSellerLogin && <SellerLogin />}
       {showRiderLogin && <RiderLogin />}
       <Toaster />
       <div
         className={
-          isSellerPath || isRiderPath ? "" : "px-6 md:px-16 lg:px-24 xl:px-32"
+          isSellerPath || isRiderPath
+            ? ""
+            : isContactPath
+            ? "px-2 md:px-16 lg:px-24 xl:px-32 h-screen"
+            : "px-6 md:px-16 lg:px-24 xl:px-32"
         }
       >
         <Routes>
@@ -96,7 +101,7 @@ const App = () => {
           <Route
             path="/seller"
             element={
-              loading ? (
+              authLoading ? (
                 <Loading />
               ) : !user ? (
                 <Login />
@@ -115,7 +120,7 @@ const App = () => {
           <Route
             path="/rider"
             element={
-              loading ? (
+              authLoading ? (
                 <Loading />
               ) : !user ? (
                 <Login />

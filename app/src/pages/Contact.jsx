@@ -1,147 +1,186 @@
-import React, { useState, useRef } from "react";
-import { toast } from "react-hot-toast";
-import { useAppContext } from "../context/AppContext";
+import React, { useState, useEffect, useRef } from "react";
+import SendIcon from "../assets/send.svg?react";
+import PaperClipIcon from "../assets/paperclip.svg?react";
+import ChatMessage from "../components/ChatMessage";
+import { useCoreContext } from "../context/CoreContext";
+import { useChatContext } from "../context/ChatContext";
+import { useAuthContext } from "../context/AuthContext";
+import { Link } from "react-router";
+import { assets } from "../assets/assets";
 
-const Contact = () => {
-  const { makeRequest, navigate, fileToBase64, user } = useAppContext();
-  const fileInputRef = useRef(null);
+export default function ChatLayout({}) {
+  const { fileToBase64 } = useCoreContext();
+  const { messages, sendMessage } = useChatContext();
+  const { user } = useAuthContext();
+  const [groupedMessages, setGroupedMessages] = useState([]);
+  const messagesEndRef = useRef(null);
+  const [newMessage, setNewMessage] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [sendingMessage, setSendingMessage] = useState(false);
 
-  const [subject, setSubject] = useState("");
-  const [attachment, setAttachment] = useState(null);
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const groupMessagesByDate = (messages) => {
+    return messages.reduce((acc, msg) => {
+      const date = new Date(msg.timestamp).toLocaleDateString();
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(msg);
+      return acc;
+    }, {});
+  };
 
-  const onSubmitHandler = async (e) => {
+  const isVideo = (file) => {
+    const videoFormats = ["video/mp4", "video/webm", "video/ogg", "video/mov"];
+    const fileExtension = file.type;
+
+    return videoFormats.some((format) => format.includes(fileExtension));
+  };
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView();
+    }
+    setGroupedMessages(groupMessagesByDate(messages));
+  }, [messages]);
+
+  const handleSendMessage = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
+    if ((!newMessage.trim() && !selectedFile) || sendingMessage) return;
+
+    setSendingMessage(true);
 
     try {
-      const name = user.name;
-      const email = user.email;
-      let attachmentName = null;
-      let attachmentBase64 = null;
-
-      if (attachment) {
-        attachmentBase64 = await fileToBase64(attachment);
-        attachmentName = attachment.name;
+      let fileBase64 = null;
+      if (selectedFile) {
+        fileBase64 = await fileToBase64(selectedFile); // await is important
       }
 
-      const formData = {
-        name,
-        email,
-        subject,
-        message,
-        attachment: { base64: attachmentBase64, name: attachmentName },
-      };
-
-      const data = await makeRequest({
-        method: "POST",
-        url: "/api/mail/contact",
-        data: formData,
-      });
-
-      if (data.success) {
-        toast.success("Message sent successfully.");
-        setSubject("");
-        setAttachment(null);
-        setMessage("");
-        navigate("/");
-      } else {
-        toast.error(data.message || "Failed to send message.");
-      }
-    } catch (error) {
-      toast.error(error.message || "Failed to send message.");
+      await sendMessage(newMessage.trim(), fileBase64);
+      setNewMessage("");
+      setSelectedFile(null);
+    } catch (err) {
+      console.error(err);
     } finally {
-      setLoading(false);
+      setSendingMessage(false);
     }
   };
 
-  const onAttachmentChange = (e) => {
-    setAttachment(e.target.files[0]);
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-4">
-      <form
-        onSubmit={onSubmitHandler}
-        className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow p-5 sm:p-6 md:p-8 space-y-4"
-      >
-        <p className="text-xl sm:text-2xl font-medium text-center mb-2">
-          <span className="text-primary">Contact</span> Us
-        </p>
-
-        {/* Subject */}
-        <div>
-          <label htmlFor="subject" className="block text-sm mb-1">
-            Subject
-          </label>
-          <input
-            id="subject"
-            type="text"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-            placeholder="Subject"
-            className="w-full border border-gray-200 rounded px-3 py-2 text-sm outline-primary"
-            required
-            disabled={loading}
+    <div className="flex flex-col h-full w-full bg-gray-100 ">
+      <div className="flex items-center justify-between px-4 md:px-8 border-b border-gray-300 py-3 bg-white">
+        <Link to="/">
+          <img
+            src={assets.QuickXMarket_Logo_Transparent}
+            alt="logo"
+            className="cursor-pointer w-34 md:w-38"
           />
-        </div>
+        </Link>
+        <div className="text-gray-500 text-sm truncate">Hi! {user?.name}</div>
+      </div>
 
-        {/* Custom Attachment Button */}
-        <div>
-          <label className="block text-sm mb-1">Attachment (optional)</label>
+      {/* Header */}
+      <div className="flex items-center px-4 py-2 bg-white"></div>
+
+      {/* Body */}
+      <div className="flex flex-col flex-grow overflow-y-auto h-100">
+        <div className="flex-grow px-4 py-2 bg-white overflow-y-auto">
+          {groupedMessages &&
+            Object.entries(groupedMessages).map(([date, msgs]) => (
+              <div key={date}>
+                <div className="text-center my-3 text-sm font-semibold">
+                  {date}
+                </div>
+                {msgs.map((msg) => (
+                  <ChatMessage
+                    key={msg.id}
+                    message={msg}
+                    currentUser={user?._id}
+                  />
+                ))}
+              </div>
+            ))}
+
+          <div ref={messagesEndRef} />
+        </div>
+      </div>
+
+      {/* Footer */}
+      <form
+        onSubmit={handleSendMessage}
+        className="flex items-center py-2 bg-white border-t"
+      >
+        <div className="flex items-center flex-grow bg-white border rounded-full px-3 py-2 shadow">
+          <input
+            type="text"
+            className="flex-grow outline-none"
+            placeholder="Type a message..."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            onPaste={(e) => {
+              const items = e.clipboardData.items;
+              for (let i = 0; i < items.length; i++) {
+                if (
+                  items[i].type.includes("image") ||
+                  items[i].type.includes("video")
+                ) {
+                  const file = items[i].getAsFile();
+                  if (file) setSelectedFile(file);
+                  break;
+                }
+              }
+            }}
+            disabled={sendingMessage}
+          />
+
+          {selectedFile && (
+            <div className="relative ml-2">
+              {selectedFile.type.startsWith("image") ? (
+                <img
+                  src={URL.createObjectURL(selectedFile)}
+                  className="w-10 h-10 object-cover rounded"
+                  alt="preview"
+                />
+              ) : (
+                <video
+                  src={URL.createObjectURL(selectedFile)}
+                  className="w-10 h-10 object-cover rounded"
+                  muted
+                />
+              )}
+              <button
+                type="button"
+                className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 text-xs"
+                onClick={() => setSelectedFile(null)}
+              >
+                &times;
+              </button>
+            </div>
+          )}
+
+          <label htmlFor="file-upload" className="ml-3 cursor-pointer">
+            <PaperClipIcon className="text-xl" />
+          </label>
           <input
             type="file"
-            ref={fileInputRef}
-            onChange={onAttachmentChange}
+            id="file-upload"
+            accept="image/*,video/*"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) setSelectedFile(file);
+            }}
             className="hidden"
-            disabled={loading}
+            disabled={sendingMessage}
           />
           <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={loading}
-            className="text-sm px-4 py-2 border rounded bg-white hover:bg-gray-100 transition"
+            type="submit"
+            disabled={sendingMessage}
+            className="ml-2 bg-primary hover:bg-green-700 text-white w-10 h-10 rounded-full flex items-center justify-center p-0 shadow-md"
           >
-            {attachment ? "Change File" : "Attach File"}
+            <SendIcon className="w-5 h-5" />
           </button>
-          {attachment && (
-            <p className="mt-1 text-sm text-gray-600 truncate">
-              {attachment.name}
-            </p>
-          )}
         </div>
-
-        {/* Message */}
-        <div>
-          <label htmlFor="message" className="block text-sm mb-1">
-            Message
-          </label>
-          <textarea
-            id="message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Your message"
-            className="w-full border border-gray-200 rounded px-3 py-2 text-sm outline-primary resize-y"
-            rows={5}
-            required
-            disabled={loading}
-          />
-        </div>
-
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={loading}
-          className={`w-full py-2 text-sm font-medium rounded-md text-white bg-primary transition ${
-            loading ? "opacity-50 cursor-not-allowed" : "hover:bg-primary-dull"
-          }`}
-        >
-          {loading ? "Sending..." : "Send Message"}
-        </button>
       </form>
     </div>
   );
-};
-
-export default Contact;
+}
