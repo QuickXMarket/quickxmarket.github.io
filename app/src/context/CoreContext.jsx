@@ -17,7 +17,7 @@ export const CoreProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const baseUrl = "https://quickxmarket-server.vercel.app";
+  const baseUrl = "http://192.168.0.101:4000";
 
   const makeRequest = async ({ method, url, data }) => {
     try {
