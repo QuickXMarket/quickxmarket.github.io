@@ -35,6 +35,11 @@ const Login = () => {
 
       if (data.success) {
         await Preferences.set({ key: "authToken", value: data.token });
+        await Preferences.set({
+          key: "authTokenExpiry",
+          value: Date.now() + 30 * 86400000,
+        });
+
         setUser(data.user);
         setShowUserLogin(false);
         if (cartItems && Object.keys(cartItems).length > 0) {

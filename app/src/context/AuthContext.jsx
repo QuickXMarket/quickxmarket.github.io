@@ -15,6 +15,13 @@ export const AuthProvider = ({ children }) => {
   const [authLoading, setAuthLoading] = useState(true);
 
   const fetchUser = async () => {
+    const tokenExpiry = (await Preferences.get({ key: "authTokenExpiry" }))
+      .value;
+    if (Date.now() >= Number(tokenExpiry)) {
+      await Preferences.remove({ key: "authToken" });
+      await Preferences.remove({ key: "authTokenExpiry" });
+    }
+
     const token = (await Preferences.get({ key: "authToken" })).value;
     if (!token) return;
 
