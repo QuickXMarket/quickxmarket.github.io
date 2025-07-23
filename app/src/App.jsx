@@ -32,6 +32,8 @@ import RiderProfile from "./pages/rider/RiderProfile";
 import VendorWallet from "./pages/seller/Wallet";
 import { useAuthContext } from "./context/AuthContext";
 import { useCoreContext } from "./context/CoreContext";
+import Dispatch from "./pages/Dispatch";
+import DispatchRequest from "./pages/DispatchRequest";
 
 const App = () => {
   const {
@@ -50,8 +52,9 @@ const App = () => {
   const isContactPath = location.pathname.includes("contact");
 
   const showBottomNav =
-    ["/", "/shops", "/wishlist", "/account"].includes(location.pathname) &&
-    !keyboardVisible;
+    ["/", "/shops", "/dispatch", "/wishlist", "/account"].includes(
+      location.pathname
+    ) && !keyboardVisible;
 
   useEffect(() => {
     const hideSplashScreen = async () => {
@@ -98,6 +101,8 @@ const App = () => {
           <Route path="/loader" element={<Loading />} />
           <Route path="/account" element={<Account />} />
           <Route path="/wishlist" element={<WishList />} />
+          <Route path="/dispatch" element={<Dispatch />} />
+          <Route path="/dispatch-request" element={<DispatchRequest />} />
           <Route
             path="/seller"
             element={

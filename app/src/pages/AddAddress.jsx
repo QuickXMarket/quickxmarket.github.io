@@ -144,7 +144,7 @@ const AddAddress = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate("/cart");
+      navigate(-1);
     }
   }, []);
 

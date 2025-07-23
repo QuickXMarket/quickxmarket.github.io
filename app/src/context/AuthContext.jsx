@@ -15,13 +15,6 @@ export const AuthProvider = ({ children }) => {
   const [authLoading, setAuthLoading] = useState(true);
 
   const fetchUser = async () => {
-    const tokenExpiry = (await Preferences.get({ key: "authTokenExpiry" }))
-      .value;
-    if (Date.now() >= Number(tokenExpiry)) {
-      await Preferences.remove({ key: "authToken" });
-      await Preferences.remove({ key: "authTokenExpiry" });
-    }
-
     const token = (await Preferences.get({ key: "authToken" })).value;
     if (!token) return;
 
@@ -75,6 +68,14 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const loadInitialUser = async () => {
       try {
+        const tokenExpiry = (await Preferences.get({ key: "authTokenExpiry" }))
+          .value;
+
+        if (!tokenExpiry || Date.now() >= Number(tokenExpiry)) {
+          await Preferences.remove({ key: "authToken" });
+          await Preferences.remove({ key: "authTokenExpiry" });
+          await Preferences.remove({ key: "user" });
+        }
         const storedUser = await Preferences.get({ key: "user" });
         if (storedUser.value) {
           const parsedUser = JSON.parse(storedUser.value);

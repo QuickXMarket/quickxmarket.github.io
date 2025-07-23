@@ -104,10 +104,10 @@ export const ProductProvider = ({ children }) => {
           setCartItems(parsedUser.cartItems || {});
           setWishList(parsedUser.wishList || []);
         }
-        
+
         await fetchProducts();
       } catch (err) {
-      console.error("Error loading initial data:", err);
+        console.error("Error loading initial data:", err);
       } finally {
         setLoading(false);
       }
@@ -118,6 +118,8 @@ export const ProductProvider = ({ children }) => {
   // Update Database Cart Items
   useEffect(() => {
     const updateCart = async () => {
+      const token = (await Preferences.get({ key: "authToken" })).value;
+      if (!token) return;
       try {
         const data = await makeRequest({
           method: "POST",
@@ -135,6 +137,8 @@ export const ProductProvider = ({ children }) => {
 
   useEffect(() => {
     const updateWishListDb = async () => {
+      const token = (await Preferences.get({ key: "authToken" })).value;
+      if (!token) return;
       try {
         const data = await makeRequest({
           method: "POST",

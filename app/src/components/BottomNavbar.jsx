@@ -4,11 +4,13 @@ import HomeIcon from "../assets/house-door-fill.svg?react";
 import WishlistIcon from "../assets/heart-fill.svg?react";
 import AccountIcon from "../assets/person-circle.svg?react";
 import ShopIcon from "../assets/shop.svg?react";
+import TruckIcon from "../assets/delivery-van.svg?react";
 import { useCoreContext } from "../context/CoreContext";
 
 const navItems = [
   { name: "Home", path: "/", icon: HomeIcon },
   { name: "Shops", path: "/shops", icon: ShopIcon },
+  { name: "Dispatch", path: "/dispatch", icon: TruckIcon },
   { name: "Wishlist", path: "/wishlist", icon: WishlistIcon },
   { name: "Account", path: "/account", icon: AccountIcon },
 ];

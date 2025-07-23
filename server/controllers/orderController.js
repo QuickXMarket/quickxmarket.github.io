@@ -209,7 +209,7 @@ export const addRiderToOrder = async (req, res) => {
 export const confirmDelivery = async (req, res) => {
   try {
     const { orderId, code, riderId } = req.body;
-    console.log("Confirming delivery for order:", orderId, "with code:", code);
+    
     const order = await Order.findById(orderId);
     if (!order) {
       return res

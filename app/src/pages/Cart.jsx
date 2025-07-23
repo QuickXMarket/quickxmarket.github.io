@@ -56,7 +56,6 @@ const Cart = () => {
   };
 
   const fetchDeliveryFee = async (latitude, longitude, vendorIds) => {
-    console.log(latitude)
     try {
       const data = await makeRequest({
         method: "POST",
@@ -68,7 +67,6 @@ const Cart = () => {
         },
       });
       if (data.success) {
-        console.log(data.totalDeliveryFee)
         setDeliveryFee(data.totalDeliveryFee);
       } else {
         setDeliveryFee(0);
@@ -181,7 +179,7 @@ const Cart = () => {
       });
 
       if (data.success) {
-        if (Capacitor.isNativePlatform()) {
+        if (isNativeApp) {
           await Browser.open({ url: data.url });
         } else {
           window.location.replace(data.url);

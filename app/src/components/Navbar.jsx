@@ -23,13 +23,13 @@ const Navbar = () => {
   return (
     <div>
       <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
-        <NavLink to="/" onClick={() => setOpen(false)}>
+        <div onClick={() => navigate("/")}>
           <img
             className="h-6 sm:h-7 lg:h-9"
             src={assets.QuickXMarket_Logo_Transparent}
             alt="logo"
           />
-        </NavLink>
+        </div>
 
         <div className="hidden sm:flex items-center gap-8">
           {/* Search bar on large screens */}

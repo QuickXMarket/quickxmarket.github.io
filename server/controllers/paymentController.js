@@ -1,10 +1,18 @@
 import axios from "axios";
-import { sendOrderNotification } from "./mailController.js";
+import {
+  sendDispatchDeliveryCode,
+  sendOrderNotification,
+} from "./mailController.js";
 import { sendPushNotification } from "../utils/fcmService.js";
 import Rider from "../models/Rider.js";
 import Order from "../models/Order.js";
 import User from "../models/User.js";
 import Vendor from "../models/Vendor.js";
+import Address from "../models/Address.js";
+import {
+  calculateDeliveryFee,
+  calculateServiceFee,
+} from "../utils/deliveryService.js";
 
 export const placeOrderPaystack = async (req, res) => {
   try {
@@ -72,6 +80,87 @@ export const placeOrderPaystack = async (req, res) => {
   }
 };
 
+export const placeDispatchPaystack = async (req, res) => {
+  try {
+    const {
+      userId,
+      pickupAddress,
+      dropoff,
+      deliveryNote,
+      isExpress,
+      email,
+      isNativeApp,
+    } = req.body;
+
+    const { origin } = req.headers;
+
+    const deliveryCode = Math.floor(1000 + Math.random() * 9000).toString();
+    const pickupAddressDetails = await Address.findById(pickupAddress);
+
+    const deliveryFee =
+      (await calculateDeliveryFee(
+        pickupAddressDetails.latitude,
+        pickupAddressDetails.longitude,
+        dropoff.latitude,
+        dropoff.longitude
+      )) * (isExpress ? 1.5 : 1);
+    const serviceFee = await calculateServiceFee(deliveryFee);
+    const totalFee = deliveryFee + serviceFee;
+
+    const dispatchData = {
+      userId,
+      pickupAddress,
+      dropoff,
+      deliveryNote,
+      isExpress,
+      deliveryFee,
+      serviceFee,
+      totalFee,
+      paymentType: "online",
+      deliveryCode,
+    };
+
+    const callback_url = isNativeApp
+      ? "quickxmarket://dispatch"
+      : `${origin}/loader?next=dispatch`;
+
+    const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
+
+    const paystackResponse = await axios.post(
+      "https://api.paystack.co/transaction/initialize",
+      {
+        email,
+        amount: totalFee * 100,
+        metadata: {
+          dispatchData,
+          userId,
+        },
+        callback_url,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${paystackSecretKey}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (paystackResponse.data.status) {
+      return res.json({
+        success: true,
+        url: paystackResponse.data.data.authorization_url,
+      });
+    } else {
+      return res.json({
+        success: false,
+        message: "Failed to initialize Paystack transaction",
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 // Paystack Webhooks to Verify Payments Action : /paystack-webhook
 export const paystackWebhooks = async (req, res) => {
   const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
@@ -88,11 +177,15 @@ export const paystackWebhooks = async (req, res) => {
   }
 
   const event = req.body;
+  if (event.event !== "charge.success") {
+    return res.status(200).json({ received: true });
+  }
+  const reference = event.data.reference;
+  const metadata = event.data.metadata || {};
+  const { userId } = metadata;
 
-  if (event.event === "charge.success") {
-    const { orderData, userId } = event.data.metadata;
-    const reference = event.data.reference;
-
+  if (metadata.orderData) {
+    const orderData = metadata.orderData;
     const existingOrder = await Order.findOne({ paystackReference: reference });
     if (existingOrder) {
       return res.status(200).json({ received: true });
@@ -197,7 +290,44 @@ export const paystackWebhooks = async (req, res) => {
         );
       }
     }
-  }
 
-  res.json({ received: true });
+    res.json({ received: true });
+  }
+  if (metadata.dispatchData) {
+    const dispatchData = metadata.dispatchData;
+    const existing = await Dispatch.findOne({ paystackReference: reference });
+    if (existing) return res.status(200).json({ received: true });
+
+    const dispatch = await Dispatch.create({
+      ...dispatchData,
+      isPaid: true,
+      paystackReference: reference,
+    });
+
+    // Notify Riders
+    const riders = await Rider.find().populate("userId");
+    const riderFcmTokens = riders
+      .map((r) => r.userId?.fcmToken)
+      .filter(Boolean);
+
+    for (const token of riderFcmTokens) {
+      await sendPushNotification(
+        token,
+        "New Dispatch Request",
+        "A new dispatch request has been submitted.",
+        {
+          route: "/rider/dispatches",
+        }
+      );
+    }
+
+    await sendDispatchDeliveryCode(dispatch._id, dispatchData.deliveryCode, {
+      email: dispatchData.dropoff.email,
+      phone: dispatchData.dropoff.phone,
+      firstName: dispatchData.dropoff.firstName,
+      address: dispatchData.dropoff.address,
+    });
+
+    res.json({ received: true });
+  }
 };

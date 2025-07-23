@@ -17,10 +17,17 @@ export const CoreProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const baseUrl = "https://quickxmarket-server.onrender.com";
+  const baseUrl = "http://192.168.0.101:4000";
 
   const makeRequest = async ({ method, url, data }) => {
     try {
+      const tokenExpiry = await Preferences.get({ key: "authTokenExpiry" });
+      
+      if (!tokenExpiry || Date.now() >= Number(tokenExpiry)) {
+        await Preferences.remove({ key: "authToken" });
+        await Preferences.remove({ key: "authTokenExpiry" });
+        await Preferences.remove({ key: "user" });
+      }
       const token = (await Preferences.get({ key: "authToken" })).value;
 
       const response = await CapacitorHttp.request({

@@ -2,6 +2,7 @@ import React from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
 import { useProductContext } from "../context/ProductContext";
+import { useCoreContext } from "../context/CoreContext";
 
 const Login = () => {
   const { setShowUserLogin, setUser, setIsSeller, setIsRider } =
@@ -35,10 +36,11 @@ const Login = () => {
 
       if (data.success) {
         await Preferences.set({ key: "authToken", value: data.token });
-        await Preferences.set({
-          key: "authTokenExpiry",
-          value: Date.now() + 30 * 86400000,
-        });
+      await Preferences.set({
+        key: "authTokenExpiry",
+        value: String(Date.now() + 30 * 86400000), 
+      });
+        const tokenExpiry = await Preferences.get({ key: "authTokenExpiry" });
 
         setUser(data.user);
         setShowUserLogin(false);

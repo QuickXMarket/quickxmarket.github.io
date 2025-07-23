@@ -19,6 +19,7 @@ import addressRouter from "./routes/addressRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import { paystackWebhooks } from "./controllers/paymentController.js";
 import chatRouter from "./routes/chatRoute.js";
+import dispatchRouter from "./routes/dispatchRoute.js";
 
 await connectDB();
 await connectCloudinary();
@@ -46,6 +47,7 @@ app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/order", orderRouter);
+app.use("/api/dispatch", dispatchRouter);
 app.use("/api/geocoding", connectGeo);
 app.use("/api/mail", mailRouter);
 app.use("/api/sms", smsRouter);
