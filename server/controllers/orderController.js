@@ -3,8 +3,8 @@ import Rider from "../models/Rider.js";
 import Vendor from "../models/Vendor.js";
 import User from "../models/User.js";
 import { calculateTotalDeliveryFee } from "../utils/deliveryService.js";
-import { sendOrderNotification } from "../utils/sendOrderNotification.js";
-import { sendPushNotification } from "../utils/sendPushNotification.js";
+import { sendOrderNotification } from "./mailController.js";
+import { sendPushNotification } from "../utils/fcmService.js";
 
 export const createNewOrder = async (res, userId, reference, orderData) => {
   try {
