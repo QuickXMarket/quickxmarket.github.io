@@ -1,18 +1,11 @@
 import axios from "axios";
-import {
-  sendDispatchDeliveryCode,
-  sendOrderNotification,
-} from "./mailController.js";
-import { sendPushNotification } from "../utils/fcmService.js";
-import Rider from "../models/Rider.js";
-import Order from "../models/Order.js";
-import User from "../models/User.js";
-import Vendor from "../models/Vendor.js";
 import Address from "../models/Address.js";
 import {
   calculateDeliveryFee,
   calculateServiceFee,
 } from "../utils/deliveryService.js";
+import { createNewOrder } from "./orderController.js";
+import { createNewDispatch } from "./dispatchController.js";
 
 export const placeOrderPaystack = async (req, res) => {
   try {
@@ -186,148 +179,52 @@ export const paystackWebhooks = async (req, res) => {
 
   if (metadata.orderData) {
     const orderData = metadata.orderData;
-    const existingOrder = await Order.findOne({ paystackReference: reference });
-    if (existingOrder) {
-      return res.status(200).json({ received: true });
-    }
-
-    // If not, proceed to create
-    const order = await Order.create({
-      ...orderData,
-      isPaid: true,
-      paystackReference: reference,
-    });
-
-    // Clear user cart
-    await User.findByIdAndUpdate(userId, { cartItems: {} });
-    const websiteDomain = process.env.WEBSITE_URL;
-
-    // Fetch order details for email
-    const populatedOrder = await Order.populate(order, {
-      path: "items.product address",
-    });
-
-    if (populatedOrder) {
-      const productDetails = populatedOrder.items.map((item) => ({
-        name: item.product.name,
-        quantity: item.quantity,
-        totalPrice: item.product.offerPrice * item.quantity,
-        imageUrl: item.product.imageUrl || "",
-        productLink: `${websiteDomain}/products/${item.product.category}/${item.product._id}`,
-        vendorId: item.product.vendorId,
-      }));
-
-      const vendorIds = [
-        ...new Set(
-          productDetails.map((product) => product.vendorId.toString())
-        ),
-      ];
-
-      const vendorEmails = [];
-      const vendorFcmTokens = [];
-
-      for (const vendorId of vendorIds) {
-        const vendor = await Vendor.findById(vendorId).populate("userId");
-
-        if (vendor?.userId) {
-          const { email, fcmToken } = vendor.userId;
-
-          if (email) vendorEmails.push(email);
-          if (fcmToken) vendorFcmTokens.push(fcmToken);
-        }
-
-        await Vendor.findByIdAndUpdate(
-          vendorId,
-          { $push: { orders: order._id } },
-          { new: true }
-        );
-      }
-
-      const riders = await Rider.find().populate("userId");
-
-      const riderEmails = [];
-      const riderFcmTokens = [];
-
-      for (const rider of riders) {
-        if (rider?.userId) {
-          const { email, fcmToken } = rider.userId;
-
-          if (email) riderEmails.push(email);
-          if (fcmToken) riderFcmTokens.push(fcmToken);
-        }
-      }
-
-      const customerAddress = populatedOrder.address || {};
-
-      await sendOrderNotification({
-        orderId: populatedOrder._id.toString(),
-        products: productDetails,
-        customerEmail: customerAddress.email,
-        customerAddress,
-        vendorEmails,
-        riderEmails,
-      });
-
-      for (const token of vendorFcmTokens) {
-        await sendPushNotification(
-          token,
-          "New Order Received",
-          "You have a new order. Check your seller dashboard.",
-          {
-            route: `/seller/orders/`,
-          }
-        );
-      }
-
-      for (const token of riderFcmTokens) {
-        await sendPushNotification(
-          token,
-          "New Delivery Request",
-          "A new order has been placed. Check your rider dashboard.",
-          {
-            route: `/rider/`,
-          }
-        );
-      }
-    }
-
-    res.json({ received: true });
+    await createNewOrder(res, userId, reference, orderData);
   }
   if (metadata.dispatchData) {
     const dispatchData = metadata.dispatchData;
-    const existing = await Dispatch.findOne({ paystackReference: reference });
-    if (existing) return res.status(200).json({ received: true });
+    await createNewDispatch(res, userId, reference, dispatchData);
+  }
+};
 
-    const dispatch = await Dispatch.create({
-      ...dispatchData,
-      isPaid: true,
-      paystackReference: reference,
-    });
+export const verifyPaystackTransaction = async (req, res) => {
+  const { reference } = req.params;
 
-    // Notify Riders
-    const riders = await Rider.find().populate("userId");
-    const riderFcmTokens = riders
-      .map((r) => r.userId?.fcmToken)
-      .filter(Boolean);
+  try {
+    const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
 
-    for (const token of riderFcmTokens) {
-      await sendPushNotification(
-        token,
-        "New Dispatch Request",
-        "A new dispatch request has been submitted.",
-        {
-          route: "/rider/dispatches",
-        }
-      );
+    const response = await axios.get(
+      `https://api.paystack.co/transaction/verify/${reference}`,
+      {
+        headers: {
+          Authorization: `Bearer ${paystackSecretKey}`,
+        },
+      }
+    );
+
+    const { data } = response.data;
+
+    if (data.status !== "success") {
+      return res
+        .status(400)
+        .json({ received: false, message: "Payment not successful" });
     }
 
-    await sendDispatchDeliveryCode(dispatch._id, dispatchData.deliveryCode, {
-      email: dispatchData.dropoff.email,
-      phone: dispatchData.dropoff.phone,
-      firstName: dispatchData.dropoff.firstName,
-      address: dispatchData.dropoff.address,
-    });
+    const metadata = data.metadata || {};
 
-    res.json({ received: true });
+    const { userId } = metadata;
+
+    if (metadata.orderData) {
+      const orderData = metadata.orderData;
+      await createNewOrder(res, userId, reference, orderData);
+    }
+    if (metadata.dispatchData) {
+      const dispatchData = metadata.dispatchData;
+      await createNewDispatch(res, userId, reference, dispatchData);
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ received: false, message: "Verification failed", error });
   }
 };

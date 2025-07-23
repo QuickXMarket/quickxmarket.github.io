@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { Capacitor, CapacitorHttp } from "@capacitor/core";
+import { App as CapacitorApp } from "@capacitor/app";
 import { Keyboard } from "@capacitor/keyboard";
 import { Browser } from "@capacitor/browser";
 import Fuse from "fuse.js";
@@ -17,12 +18,12 @@ export const CoreProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const baseUrl = "http://192.168.0.101:4000";
+  const baseUrl = "https://quickxmarket-server.onrender.com";
 
   const makeRequest = async ({ method, url, data }) => {
     try {
       const tokenExpiry = await Preferences.get({ key: "authTokenExpiry" });
-      
+
       if (!tokenExpiry || Date.now() >= Number(tokenExpiry)) {
         await Preferences.remove({ key: "authToken" });
         await Preferences.remove({ key: "authTokenExpiry" });
@@ -87,6 +88,52 @@ export const CoreProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    let removeListener;
+
+    const setupBackHandler = async () => {
+      const handler = await CapacitorApp.addListener("backButton", () => {
+        const currentPath = location.pathname;
+        const exitPaths = ["/", "/home"];
+        if (exitPaths.includes(currentPath)) {
+          CapacitorApp.exitApp();
+        } else {
+          navigate(-1);
+        }
+      });
+
+      removeListener = handler.remove;
+    };
+
+    const setupPaystackCallback = async () => {
+      CapacitorApp.addListener("appUrlOpen", async (event) => {
+        const url = new URL(event.url);
+        const reference = url.searchParams.get("reference");
+
+        if (reference) {
+          try {
+            const data = await makeRequest({
+              method: "GET",
+              url: `/api/payment/verify/${reference}`,
+            });
+
+            if (data.received) {
+              if (url?.href?.startsWith("quickxmarket://")) {
+                await Browser.close();
+                const route = url.href.replace("quickxmarket://", "");
+                navigate("/" + route);
+              }
+            } else {
+              console.warn("Transaction not received.");
+            }
+          } catch (err) {
+            console.error("Error verifying transaction", err);
+          }
+        }
+      });
+    };
+
+    setupBackHandler();
+    setupPaystackCallback();
     const configureStatusBar = async () => {
       if (!Capacitor.isNativePlatform()) return;
       try {
@@ -101,7 +148,11 @@ export const CoreProvider = ({ children }) => {
 
     configureStatusBar();
     keyboardListeners();
-  }, []);
+
+    return () => {
+      if (removeListener) removeListener();
+    };
+  }, [location]);
 
   const value = {
     currency,
