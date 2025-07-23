@@ -8,6 +8,7 @@ import { EdgeToEdge } from "@capawesome/capacitor-android-edge-to-edge-support";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { useLocation, useNavigate } from "react-router";
 import { Preferences } from "@capacitor/preferences";
+import toast from "react-hot-toast";
 
 const CoreContext = createContext();
 
@@ -78,6 +79,37 @@ export const CoreProvider = ({ children }) => {
     }
   };
 
+  const setupPaystackCallback = async () => {
+    CapacitorApp.addListener("appUrlOpen", async (event) => {
+      toast("Thank God");
+      if (!event?.url) return;
+      const url = new URL(event.url);
+      const reference = url.searchParams.get("reference");
+      console.log(url, reference, url.href);
+
+      if (reference) {
+        try {
+          const data = await makeRequest({
+            method: "GET",
+            url: `/api/payment/verify/${reference}`,
+          });
+
+          if (data.received) {
+            if (url?.href?.startsWith("quickxmarket://")) {
+              await Browser.close();
+              const route = url.href.replace("quickxmarket://", "");
+              navigate("/" + route);
+            }
+          } else {
+            console.warn("Transaction not received.");
+          }
+        } catch (err) {
+          console.error("Error verifying transaction", err);
+        }
+      }
+    });
+  };
+
   const keyboardListeners = () => {
     Keyboard.addListener("keyboardWillShow", () => {
       setKeyboardVisible(true);
@@ -85,6 +117,18 @@ export const CoreProvider = ({ children }) => {
     Keyboard.addListener("keyboardWillHide", () => {
       setKeyboardVisible(false);
     });
+  };
+
+  const configureStatusBar = async () => {
+    if (!Capacitor.isNativePlatform()) return;
+    try {
+      await fetchAddresses();
+      await StatusBar.setOverlaysWebView({ overlay: false });
+      await StatusBar.setStyle({ style: Style.Light });
+      await EdgeToEdge.enable();
+    } catch (error) {
+      console.warn("StatusBar config failed:", error);
+    }
   };
 
   useEffect(() => {
@@ -104,55 +148,18 @@ export const CoreProvider = ({ children }) => {
       removeListener = handler.remove;
     };
 
-    const setupPaystackCallback = async () => {
-      CapacitorApp.addListener("appUrlOpen", async (event) => {
-        const url = new URL(event.url);
-        const reference = url.searchParams.get("reference");
-
-        if (reference) {
-          try {
-            const data = await makeRequest({
-              method: "GET",
-              url: `/api/payment/verify/${reference}`,
-            });
-
-            if (data.received) {
-              if (url?.href?.startsWith("quickxmarket://")) {
-                await Browser.close();
-                const route = url.href.replace("quickxmarket://", "");
-                navigate("/" + route);
-              }
-            } else {
-              console.warn("Transaction not received.");
-            }
-          } catch (err) {
-            console.error("Error verifying transaction", err);
-          }
-        }
-      });
-    };
-
     setupBackHandler();
-    setupPaystackCallback();
-    const configureStatusBar = async () => {
-      if (!Capacitor.isNativePlatform()) return;
-      try {
-        await fetchAddresses();
-        await StatusBar.setOverlaysWebView({ overlay: false });
-        await StatusBar.setStyle({ style: Style.Light });
-        await EdgeToEdge.enable();
-      } catch (error) {
-        console.warn("StatusBar config failed:", error);
-      }
-    };
-
-    configureStatusBar();
-    keyboardListeners();
 
     return () => {
       if (removeListener) removeListener();
     };
   }, [location]);
+
+  useEffect(() => {
+    setupPaystackCallback();
+    configureStatusBar();
+    keyboardListeners();
+  }, []);
 
   const value = {
     currency,

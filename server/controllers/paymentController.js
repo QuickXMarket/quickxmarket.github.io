@@ -116,7 +116,7 @@ export const placeDispatchPaystack = async (req, res) => {
     const callback_url = isNativeApp
       ? "quickxmarket://dispatch"
       : `${origin}/loader?next=dispatch`;
-
+    console.log(callback_url);
     const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
 
     const paystackResponse = await axios.post(
