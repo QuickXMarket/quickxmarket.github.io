@@ -109,13 +109,15 @@ export const CoreProvider = ({ children }) => {
 
   const setupDeepLinkListener = async () => {
     CapacitorApp.addListener("appUrlOpen", async (event) => {
+      toast("close");
+      console.log(event);
       if (!event?.url) return;
       const url = new URL(event.url);
 
       if (url?.href?.startsWith("quickxmarket://")) {
-        await Browser.close();
+        // await Browser.close();
         const route = url.href.replace("quickxmarket://", "");
-        navigate("/" + route);
+        // navigate("/" + route);
       }
     });
   };
@@ -166,7 +168,6 @@ export const CoreProvider = ({ children }) => {
   }, [location]);
 
   useEffect(() => {
-    setupDeepLinkListener();
     configureStatusBar();
     keyboardListeners();
     // paystackAppResume();

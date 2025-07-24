@@ -159,7 +159,6 @@ export const placeDispatchPaystack = async (req, res) => {
 // Paystack Webhooks to Verify Payments Action : /paystack-webhook
 export const paystackWebhooks = async (req, res) => {
   try {
-    console.log("web-hook");
     const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
     const hash = req.headers["x-paystack-signature"];
     const crypto = await import("crypto");
@@ -181,8 +180,7 @@ export const paystackWebhooks = async (req, res) => {
     const reference = event.data.reference;
     const metadata = event.data.metadata || {};
     const { userId } = metadata;
-    console.log(metadata);
-
+    
     if (metadata.orderData) {
       const orderData = metadata.orderData;
       await createNewOrder(res, userId, reference, orderData);
