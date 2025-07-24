@@ -34,7 +34,6 @@ import { useAuthContext } from "./context/AuthContext";
 import { useCoreContext } from "./context/CoreContext";
 import Dispatch from "./pages/Dispatch";
 import DispatchRequest from "./pages/DispatchRequest";
-import DeepLinkHandler from "./components/DeepLinkHandler";
 
 const App = () => {
   const {
@@ -66,7 +65,6 @@ const App = () => {
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-white ">
-      <DeepLinkHandler/>
       {!(isSellerPath || isRiderPath || isContactPath) && <Navbar />}
       {showUserLogin && <Login />}
       {showSellerLogin && <SellerLogin />}
