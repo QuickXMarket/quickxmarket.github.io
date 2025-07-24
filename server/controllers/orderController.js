@@ -81,21 +81,37 @@ export const createNewOrder = async (res, userId, reference, orderData) => {
     });
 
     for (const token of vendorFcmTokens) {
-      await sendPushNotification(
-        token,
-        "New Order Received",
-        "You have a new order. Check your seller dashboard.",
-        { route: `/seller/orders/` }
-      );
+      try {
+        await sendPushNotification(
+          token,
+          "New Order Received",
+          "You have a new order. Check your seller dashboard.",
+          { route: `/seller/orders/` }
+        );
+      } catch (error) {
+        console.error(
+          "Error sending notification to token:",
+          token,
+          error.message
+        );
+      }
     }
 
     for (const token of riderFcmTokens) {
-      await sendPushNotification(
-        token,
-        "New Delivery Request",
-        "A new order has been placed. Check your rider dashboard.",
-        { route: `/rider/` }
-      );
+      try {
+        await sendPushNotification(
+          token,
+          "New Delivery Request",
+          "A new order has been placed. Check your rider dashboard.",
+          { route: `/rider/` }
+        );
+      } catch (error) {
+        console.error(
+          "Error sending notification to token:",
+          token,
+          error.message
+        );
+      }
     }
 
     return res.status(200).json({ received: true });

@@ -41,6 +41,16 @@ export const sendPushNotification = async (
     const response = await admin.messaging().send(message);
     console.log("Notification sent:", response);
   } catch (error) {
-    console.error("Notification error:", error.message);
+    console.error("Notification error:");
+    console.error("Code:", error.code);
+    console.error("Message:", error.message);
+    console.error("Details:", error.errorInfo);
+
+    if (
+      error.code === "messaging/invalid-argument" ||
+      error.code === "messaging/registration-token-not-registered"
+    ) {
+      console.warn("Invalid or unregistered FCM token:", fcmToken);
+    }
   }
 };

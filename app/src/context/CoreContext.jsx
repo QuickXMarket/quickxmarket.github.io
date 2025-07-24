@@ -169,7 +169,7 @@ export const CoreProvider = ({ children }) => {
     setupDeepLinkListener();
     configureStatusBar();
     keyboardListeners();
-    paystackAppResume();
+    // paystackAppResume();
   }, []);
 
   const value = {
