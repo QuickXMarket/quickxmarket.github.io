@@ -45,7 +45,8 @@ export const createNewDispatch = async (
     });
 
     res.json({ received: true });
-  } catch {
+  } catch (err) {
+    console.error("Error in createNewDispatch:", err);
     return res.status(500).json({ received: false });
   }
 };

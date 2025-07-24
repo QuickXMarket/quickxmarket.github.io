@@ -158,35 +158,43 @@ export const placeDispatchPaystack = async (req, res) => {
 
 // Paystack Webhooks to Verify Payments Action : /paystack-webhook
 export const paystackWebhooks = async (req, res) => {
-  console.log("web-hook");
-  const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
-  const hash = req.headers["x-paystack-signature"];
-  const crypto = await import("crypto");
+  try {
+    console.log("web-hook");
+    const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
+    const hash = req.headers["x-paystack-signature"];
+    const crypto = await import("crypto");
 
-  const body = JSON.stringify(req.body);
-  const hmac = crypto.createHmac("sha512", paystackSecretKey);
-  hmac.update(body);
-  const digest = hmac.digest("hex");
+    const body = JSON.stringify(req.body);
+    const hmac = crypto.createHmac("sha512", paystackSecretKey);
+    hmac.update(body);
+    const digest = hmac.digest("hex");
 
-  if (digest !== hash) {
-    return res.status(401).send("Unauthorized");
-  }
+    if (digest !== hash) {
+      return res.status(401).send("Unauthorized");
+    }
 
-  const event = req.body;
-  if (event.event !== "charge.success") {
-    return res.status(200).json({ received: true });
-  }
-  const reference = event.data.reference;
-  const metadata = event.data.metadata || {};
-  const { userId } = metadata;
+    const event = req.body;
+    if (event.event !== "charge.success") {
+      return res.status(200).json({ received: true });
+    }
 
-  if (metadata.orderData) {
-    const orderData = metadata.orderData;
-    await createNewOrder(res, userId, reference, orderData);
-  }
-  if (metadata.dispatchData) {
-    const dispatchData = metadata.dispatchData;
-    await createNewDispatch(res, userId, reference, dispatchData);
+    const reference = event.data.reference;
+    const metadata = event.data.metadata || {};
+    const { userId } = metadata;
+    console.log(metadata);
+
+    if (metadata.orderData) {
+      const orderData = metadata.orderData;
+      await createNewOrder(res, userId, reference, orderData);
+    } else if (metadata.dispatchData) {
+      const dispatchData = metadata.dispatchData;
+      await createNewDispatch(res, userId, reference, dispatchData);
+    } else {
+      res.status(200).json({ received: true });
+    }
+  } catch (err) {
+    console.error("Error handling Paystack webhook:", err);
+    res.status(500).json({ received: false, error: "Internal server error" });
   }
 };
 
@@ -215,6 +223,7 @@ export const verifyPaystackTransaction = async (req, res) => {
     const metadata = data.metadata || {};
 
     const { userId } = metadata;
+    console.log(metadata.dispatchData);
 
     if (metadata.orderData) {
       const orderData = metadata.orderData;
