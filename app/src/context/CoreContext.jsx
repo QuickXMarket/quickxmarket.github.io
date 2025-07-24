@@ -3,6 +3,7 @@ import { Capacitor, CapacitorHttp } from "@capacitor/core";
 import { App as CapacitorApp } from "@capacitor/app";
 import { Keyboard } from "@capacitor/keyboard";
 import { Browser } from "@capacitor/browser";
+import { InAppBrowser, DefaultWebViewOptions } from "@capacitor/inappbrowser";
 import Fuse from "fuse.js";
 import { EdgeToEdge } from "@capawesome/capacitor-android-edge-to-edge-support";
 import { StatusBar, Style } from "@capacitor/status-bar";
@@ -79,15 +80,12 @@ export const CoreProvider = ({ children }) => {
     }
   };
 
-  const setupPaystackCallback = async () => {
-    CapacitorApp.addListener("appUrlOpen", async (event) => {
-      toast("Thank God");
-      if (!event?.url) return;
-      const url = new URL(event.url);
-      const reference = url.searchParams.get("reference");
-      console.log(url, reference, url.href);
-
+  const paystackAppResume = async () => {
+    CapacitorApp.addListener("resume", async () => {
+      const reference = (await Preferences.get({ key: "reference" })).value;
+      toast.success(reference);
       if (reference) {
+        navigate("/loader");
         try {
           const data = await makeRequest({
             method: "GET",
@@ -96,7 +94,7 @@ export const CoreProvider = ({ children }) => {
 
           if (data.received) {
             if (url?.href?.startsWith("quickxmarket://")) {
-              await Browser.close();
+              await Preferences.remove({ key: "reference" });
               const route = url.href.replace("quickxmarket://", "");
               navigate("/" + route);
             }
@@ -106,6 +104,19 @@ export const CoreProvider = ({ children }) => {
         } catch (err) {
           console.error("Error verifying transaction", err);
         }
+      }
+    });
+  };
+
+  const setupDeepLinkListener = async () => {
+    CapacitorApp.addListener("appUrlOpen", async (event) => {
+      if (!event?.url) return;
+      const url = new URL(event.url);
+
+      if (url?.href?.startsWith("quickxmarket://")) {
+        await Browser.close();
+        const route = url.href.replace("quickxmarket://", "");
+        navigate("/" + route);
       }
     });
   };
@@ -156,9 +167,10 @@ export const CoreProvider = ({ children }) => {
   }, [location]);
 
   useEffect(() => {
-    setupPaystackCallback();
+    setupDeepLinkListener();
     configureStatusBar();
     keyboardListeners();
+    paystackAppResume();
   }, []);
 
   const value = {
@@ -173,6 +185,8 @@ export const CoreProvider = ({ children }) => {
     location,
     Preferences,
     baseUrl,
+    InAppBrowser,
+    DefaultWebViewOptions,
   };
 
   return <CoreContext.Provider value={value}>{children}</CoreContext.Provider>;

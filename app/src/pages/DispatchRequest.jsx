@@ -16,7 +16,14 @@ const InputField = ({ type, placeholder, name, handleChange, address }) => (
 );
 
 const DispatchRequest = () => {
-  const { navigate, makeRequest, fuse, Browser } = useCoreContext();
+  const {
+    navigate,
+    makeRequest,
+    fuse,
+    Preferences,
+    DefaultWebViewOptions,
+    InAppBrowser,
+  } = useCoreContext();
   const { user } = useAuthContext();
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showAddress, setShowAddress] = useState(false);
@@ -191,7 +198,18 @@ const DispatchRequest = () => {
 
     if (data.success) {
       if (isNativeApp) {
-        await Browser.open({ url: data.url });
+        await Preferences.set({
+          key: "reference",
+          value: data.reference,
+        });
+        await InAppBrowser.openInWebView({
+          url: data.url,
+          options: {
+            ...DefaultWebViewOptions,
+            toolbarTop: false,
+            hideUrlBar: true,
+          },
+        });
       } else {
         window.location.replace(data.url);
       }

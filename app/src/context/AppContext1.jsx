@@ -365,6 +365,7 @@ export const AppContextProvider = ({ children }) => {
         toast.success(data.message);
         await Preferences.remove({ key: "user" });
         await Preferences.remove({ key: "authToken" });
+        await Preferences.remove({ key: "authTokenExpiry" });
         setUser(null);
         navigate("/");
       } else {

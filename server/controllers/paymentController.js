@@ -61,6 +61,7 @@ export const placeOrderPaystack = async (req, res) => {
       return res.json({
         success: true,
         url: paystackResponse.data.data.authorization_url,
+        reference: paystackResponse.data.data.reference,
       });
     } else {
       return res.json({
@@ -142,6 +143,7 @@ export const placeDispatchPaystack = async (req, res) => {
       return res.json({
         success: true,
         url: paystackResponse.data.data.authorization_url,
+        reference: paystackResponse.data.data.reference,
       });
     } else {
       return res.json({
