@@ -20,7 +20,7 @@ export const CoreProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const baseUrl = "https://quickxmarket-server.onrender.com";
+  const baseUrl = "http://192.168.0.100:4000";
 
   const makeRequest = async ({ method, url, data }) => {
     try {
@@ -85,7 +85,6 @@ export const CoreProvider = ({ children }) => {
       const reference = (await Preferences.get({ key: "reference" })).value;
       toast.success(reference);
       if (reference) {
-        navigate("/loader");
         try {
           const data = await makeRequest({
             method: "GET",

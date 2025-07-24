@@ -117,7 +117,7 @@ export const placeDispatchPaystack = async (req, res) => {
     const callback_url = isNativeApp
       ? "quickxmarket://dispatch"
       : `${origin}/loader?next=dispatch`;
-    console.log(callback_url);
+
     const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
 
     const paystackResponse = await axios.post(
@@ -158,6 +158,7 @@ export const placeDispatchPaystack = async (req, res) => {
 
 // Paystack Webhooks to Verify Payments Action : /paystack-webhook
 export const paystackWebhooks = async (req, res) => {
+  console.log("web-hook");
   const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
   const hash = req.headers["x-paystack-signature"];
   const crypto = await import("crypto");
@@ -191,7 +192,6 @@ export const paystackWebhooks = async (req, res) => {
 
 export const verifyPaystackTransaction = async (req, res) => {
   const { reference } = req.params;
-
   try {
     const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
 
