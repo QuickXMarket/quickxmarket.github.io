@@ -150,7 +150,7 @@ export const sendOrderNotification = async ({
 export const sendDispatchDeliveryCode = async (
   dispatchId,
   deliveryCode,
-  dropoff
+  dropoff,
 ) => {
   try {
     await transporter.sendMail({

@@ -296,7 +296,6 @@ const dispatchRecipientNotification = (
   deliveryCode,
   customerAddress = {}
 ) => {
-  let total = 0;
 
   return `
   <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
@@ -322,18 +321,10 @@ const dispatchRecipientNotification = (
       </div>
 
       <!-- Products -->
-   
-
-      <!-- Total -->
-      <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
-      <div style="text-align: right; font-size: 16px; font-weight: bold; color: #333;">
-        Total Order Value: ₦${total.toLocaleString()}
-      </div>
-
       <!-- Delivery Code -->
       <div style="margin-top: 30px; text-align: center;">
         <div style="font-size: 15px; color: #555; margin-bottom: 8px;">To receive your package, please provide this code:</div>
-        <div style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: #fff; font-size: 20px; font-weight: bold; border-radius: 6px; letter-spacing: 1.5px;">
+        <div style="display: inline-block; padding: 12px 24px; background-color: #4fbf8b; color: #fff; font-size: 32px; font-weight: bold; border-radius: 6px; letter-spacing: 1.5px;">
           ${deliveryCode}
         </div>
       </div>

@@ -26,25 +26,24 @@ export const createNewDispatch = async (
       .map((r) => r.userId?.fcmToken)
       .filter(Boolean);
 
-    for (const token of riderFcmTokens) {
-      try {
-        await sendPushNotification(
-          token,
-          "New Dispatch Request",
-          "A new dispatch request has been submitted.",
-          {
-            route: "/rider/dispatches",
-          }
-        );
-      } catch (error) {
-        console.error(
-          "Error sending notification to token:",
-          token,
-          error.message
-        );
-      }
-    }
-
+    // for (const token of riderFcmTokens) {
+    //   try {
+    //     await sendPushNotification(
+    //       token,
+    //       "New Dispatch Request",
+    //       "A new dispatch request has been submitted.",
+    //       {
+    //         route: "/rider/dispatches",
+    //       }
+    //     );
+    //   } catch (error) {
+    //     console.error(
+    //       "Error sending notification to token:",
+    //       token,
+    //       error.message
+    //     );
+    //   }
+    // }
 
     await sendDispatchDeliveryCode(dispatch._id, dispatchData.deliveryCode, {
       email: dispatchData.dropoff.email,

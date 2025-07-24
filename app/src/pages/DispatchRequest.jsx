@@ -23,6 +23,7 @@ const DispatchRequest = () => {
     Preferences,
     DefaultWebViewOptions,
     InAppBrowser,
+    Browser,
   } = useCoreContext();
   const { user } = useAuthContext();
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -202,14 +203,15 @@ const DispatchRequest = () => {
           key: "reference",
           value: data.reference,
         });
-        await InAppBrowser.openInWebView({
-          url: data.url,
-          options: {
-            ...DefaultWebViewOptions,
-            toolbarTop: false,
-            hideUrlBar: true,
-          },
-        });
+        // await InAppBrowser.openInWebView({
+        //   url: data.url,
+        //   options: {
+        //     ...DefaultWebViewOptions,
+        //     toolbarTop: false,
+        //     hideUrlBar: true,
+        //   },
+        // });
+        await Browser.open({ url: data.url });
       } else {
         window.location.replace(data.url);
       }
