@@ -115,7 +115,7 @@ export const placeDispatchPaystack = async (req, res) => {
     };
 
     const callback_url = isNativeApp
-      ? "quickmarket://dispatch"
+      ? "quickxmarket://dispatch"
       : `${origin}/loader?next=dispatch`;
 
     const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;

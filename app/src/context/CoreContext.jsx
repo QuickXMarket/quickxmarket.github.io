@@ -109,7 +109,7 @@ export const CoreProvider = ({ children }) => {
 
   const setupDeepLinkListener = async () => {
     CapacitorApp.addListener("appUrlOpen", async (event) => {
-      toast("close");
+      toast.success("close");
       console.log(event);
       if (!event?.url) return;
       const url = new URL(event.url);
@@ -168,6 +168,7 @@ export const CoreProvider = ({ children }) => {
   }, [location]);
 
   useEffect(() => {
+    setupDeepLinkListener();
     configureStatusBar();
     keyboardListeners();
     // paystackAppResume();
