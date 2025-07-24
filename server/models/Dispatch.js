@@ -29,7 +29,7 @@ const dispatchSchema = new mongoose.Schema(
       default: "pending",
     },
     isPaid: { type: Boolean, default: false },
-    paymentType: { type: String, enum: ["cash", "card"], required: true },
+    paymentType: { type: String, required: true },
     paystackReference: { type: String, unique: true, sparse: true },
     deliveryCode: { type: String, required: true },
   },
