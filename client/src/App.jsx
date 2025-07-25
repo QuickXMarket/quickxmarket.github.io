@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import { Toaster } from "react-hot-toast";
+import ChatDotIcon from "./assets/chat-dots.svg?react";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
 import AllProducts from "./pages/AllProducts";
@@ -25,16 +26,19 @@ import WishList from "./pages/WishList";
 import { useAuthContext } from "./context/AuthContext";
 import Dispatch from "./pages/Dispatch";
 import DispatchRequest from "./pages/DispatchRequest";
+import { useCoreContext } from "./context/CoreContext";
 
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller");
   const isRiderPath = useLocation().pathname.includes("rider");
+  const isContactPath = location.pathname.includes("Contact");
   const { showUserLogin, isSeller, showSellerLogin, user, loading } =
     useAuthContext();
+  const { navigate } = useCoreContext();
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-white">
-      {isSellerPath || isRiderPath ? null : <Navbar />}
+      {isSellerPath || isRiderPath || isContactPath ? null : <Navbar />}
       {showUserLogin ? <Login /> : null}
       {showSellerLogin ? <SellerLogin /> : null}
 
@@ -42,7 +46,11 @@ const App = () => {
 
       <div
         className={`${
-          isSellerPath || isRiderPath ? "" : "px-6 md:px-16 lg:px-24 xl:px-32"
+          isSellerPath || isRiderPath
+            ? ""
+            : isContactPath
+            ? "flex flex-col h-screen"
+            : "px-6 md:px-16 lg:px-24 xl:px-32"
         }`}
       >
         <Routes>
@@ -88,7 +96,17 @@ const App = () => {
           </Route>
         </Routes>
       </div>
-      {!(isSellerPath || isRiderPath) && <Footer />}
+      {!isContactPath && (
+        <div className="fixed bottom-6 right-6 sm:right-10 lg:right-14 z-50">
+          <button
+            onClick={() => navigate("/Contact")}
+            className="bg-primary hover:bg-primary/90 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl"
+          >
+            <ChatDotIcon className={"w-8 h-8"} />
+          </button>
+        </div>
+      )}
+      {!(isSellerPath || isRiderPath || isContactPath) && <Footer />}
     </div>
   );
 };

@@ -18,7 +18,6 @@ const Navbar = () => {
       const { data } = await axios.get("/api/user/logout");
       if (data.success) {
         toast.success(data.message);
-        console.log("logout");
         setUser(null);
         navigate("/");
       } else {
@@ -66,7 +65,7 @@ const Navbar = () => {
             ) : null)}
 
           <NavLink to="/">Home</NavLink>
-          <NavLink to="/products">All Product</NavLink>
+          <NavLink to="/dispatch">Dispatch Delivery</NavLink>
           {/* <NavLink to="/">Contact</NavLink> */}
 
           <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
@@ -128,6 +127,15 @@ const Navbar = () => {
 
                 {/* Links */}
                 <ul className="flex flex-col gap-2">
+                  <li
+                    onClick={() => {
+                      setOpen(false);
+                      navigate("/products");
+                    }}
+                    className="hover:bg-gray-100 rounded px-2 py-1 cursor-pointer"
+                  >
+                    All Product
+                  </li>
                   <li
                     onClick={() => {
                       setOpen(false);
@@ -221,20 +229,23 @@ const Navbar = () => {
         </div>
 
         {open && (
-          <div class="absolute z-50 top-14.5 left-0 w-full bg-white shadow-md py-4 flex flex-col items-start gap-4 px-5 md:hidden">
-            <div class="flex flex-col gap-4 md:hidden">
+          <div className="absolute z-50 top-14.5 left-0 w-full bg-white shadow-md py-4 flex flex-col items-start gap-4 px-5 md:hidden">
+            <div className="flex flex-col gap-4 md:hidden">
               <NavLink
                 aria-current="page"
-                class="active"
+                className="active"
                 to="/"
                 data-discover="true"
               >
                 Home
               </NavLink>
-              <NavLink class="" to="/products" data-discover="true">
+              <NavLink className="" to="/dispatch" data-discover="true">
+                Dispatch Delivery
+              </NavLink>
+              <NavLink className="" to="/products" data-discover="true">
                 All Product
               </NavLink>
-              <NavLink class="" to="/shops" data-discover="true">
+              <NavLink className="" to="/shops" data-discover="true">
                 Visit Shops
               </NavLink>
               {/* Accordion: Personal */}

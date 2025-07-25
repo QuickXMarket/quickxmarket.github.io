@@ -46,15 +46,15 @@ export const ChatProvider = ({ children }) => {
 
   const sendMessage = async (content, media = "") => {
     try {
-      const { response } = await axios.post("/api/chat/send", {
+      const { data } = await axios.post("/api/chat/send", {
         message: content,
         attachment: { base64: media },
         chatId: user.chatId,
       });
 
-      if (response.success) {
-        const newMessage = response.chat.messages.slice(-1)[0];
-        const newChatId = response.chat._id;
+      if (data.success) {
+        const newMessage = data.chat.messages.slice(-1)[0];
+        const newChatId = data.chat._id;
 
         if (!user.chatId) {
           setUser((user) => ({

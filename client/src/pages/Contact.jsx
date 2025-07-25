@@ -1,160 +1,179 @@
-import React, { useState } from "react";
-import { toast } from "react-hot-toast";
+import React, { useState, useEffect, useRef } from "react";
+import SendIcon from "../assets/send.svg?react";
+import PaperClipIcon from "../assets/paperclip.svg?react";
+import ChatMessage from "../components/ChatMessage";
 import { useCoreContext } from "../context/CoreContext";
+import { useChatContext } from "../context/ChatContext";
+import { useAuthContext } from "../context/AuthContext";
+import { Link } from "react-router";
+import { assets } from "../assets/assets";
+import Navbar from "../components/Navbar";
 
 const Contact = () => {
-  const { axios, navigate } = useCoreContext();
+  const { messages, sendMessage } = useChatContext();
+  const { user } = useAuthContext();
+  const [groupedMessages, setGroupedMessages] = useState([]);
+  const messagesEndRef = useRef(null);
+  const [newMessage, setNewMessage] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [sendingMessage, setSendingMessage] = useState(false);
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [subject, setSubject] = useState("");
-  const [attachment, setAttachment] = useState(null);
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const groupMessagesByDate = (messages) => {
+    return messages.reduce((acc, msg) => {
+      const date = new Date(msg.timestamp).toLocaleDateString();
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(msg);
+      return acc;
+    }, {});
+  };
 
-  const onSubmitHandler = async (e) => {
+  const isVideo = (file) => {
+    const videoFormats = ["video/mp4", "video/webm", "video/ogg", "video/mov"];
+    const fileExtension = file.type;
+
+    return videoFormats.some((format) => format.includes(fileExtension));
+  };
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView();
+    }
+    setGroupedMessages(groupMessagesByDate(messages));
+  }, [messages]);
+
+  const handleSendMessage = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
+    if ((!newMessage.trim() && !selectedFile) || sendingMessage) return;
+
+    setSendingMessage(true);
 
     try {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("email", email);
-      formData.append("subject", subject);
-      formData.append("message", message);
-      if (attachment) {
-        formData.append("attachment", attachment);
+      let fileBase64 = null;
+      if (selectedFile) {
+        fileBase64 = await fileToBase64(selectedFile); // await is important
       }
 
-      const { data } = await axios.post("/api/mail/contact", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      if (data.success) {
-        toast.success("Message sent successfully.");
-        setName("");
-        setEmail("");
-        setSubject("");
-        setAttachment(null);
-        setMessage("");
-        navigate("/");
-      } else {
-        toast.error(data.message || "Failed to send message.");
-      }
-    } catch (error) {
-      toast.error(error.message || "Failed to send message.");
+      await sendMessage(newMessage.trim(), fileBase64);
+      setNewMessage("");
+      setSelectedFile(null);
+    } catch (err) {
+      console.error(err);
     } finally {
-      setLoading(false);
+      setSendingMessage(false);
     }
   };
 
-  const onAttachmentChange = (e) => {
-    setAttachment(e.target.files[0]);
-  };
-
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50 p-4">
-      <form
-        onSubmit={onSubmitHandler}
-        className="flex flex-col gap-4 w-full max-w-md p-8 rounded-lg shadow-xl border border-gray-200 bg-white"
-      >
-        <p className="text-2xl font-medium text-center mb-4">
-          <span className="text-primary">Contact</span> Us
-        </p>
+    <>
+      <Navbar />
+      <div className="flex-1 h-full flex flex-col  w-full bg-gray-100 ">
+        {/* Header */}
+        <div className=" flex items-center px-4 py-2 bg-white"></div>
 
-        <div className="w-full">
-          <label htmlFor="name" className="block mb-1">
-            Name
-          </label>
-          <input
-            id="name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Your full name"
-            className="border border-gray-200 rounded w-full p-2 outline-primary"
-            required
-            disabled={loading}
-          />
+        {/* Body */}
+        <div className="flex flex-col flex-grow overflow-y-auto h-100">
+          <div className="flex-grow px-4 py-2 bg-white overflow-y-auto">
+            {groupedMessages &&
+              Object.entries(groupedMessages).map(([date, msgs]) => (
+                <div key={date}>
+                  <div className="text-center my-3 text-sm font-semibold">
+                    {date}
+                  </div>
+                  {msgs.map((msg) => (
+                    <ChatMessage
+                      key={msg.id}
+                      message={msg}
+                      currentUser={user?._id}
+                    />
+                  ))}
+                </div>
+              ))}
+
+            <div ref={messagesEndRef} />
+          </div>
         </div>
 
-        <div className="w-full">
-          <label htmlFor="email" className="block mb-1">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Your email address"
-            className="border border-gray-200 rounded w-full p-2 outline-primary"
-            required
-            disabled={loading}
-          />
-        </div>
-
-        <div className="w-full">
-          <label htmlFor="subject" className="block mb-1">
-            Subject
-          </label>
-          <input
-            id="subject"
-            type="text"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-            placeholder="Subject"
-            className="border border-gray-200 rounded w-full p-2 outline-primary"
-            required
-            disabled={loading}
-          />
-        </div>
-
-        <div className="w-full">
-          <label htmlFor="attachment" className="block mb-1">
-            Attachment (optional)
-          </label>
-          <input
-            id="attachment"
-            type="file"
-            onChange={onAttachmentChange}
-            className="w-full border border-gray-200 rounded cursor-pointer"
-            disabled={loading}
-          />
-          {attachment && (
-            <p className="mt-1 text-sm text-gray-600">{attachment.name}</p>
-          )}
-        </div>
-
-        <div className="w-full">
-          <label htmlFor="message" className="block mb-1">
-            Message
-          </label>
-          <textarea
-            id="message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Your message"
-            className="border border-gray-200 rounded w-full p-2 outline-primary resize-y"
-            rows={5}
-            required
-            disabled={loading}
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className={`bg-primary transition-all text-white w-full py-2 rounded-md cursor-pointer ${
-            loading ? "opacity-50 cursor-not-allowed" : "hover:bg-primary-dull"
-          }`}
+        {/* Footer */}
+        <form
+          onSubmit={handleSendMessage}
+          className="flex items-center py-2 bg-white border-t px-1 sm:px-4"
         >
-          {loading ? "Sending..." : "Send Message"}
-        </button>
-      </form>
-    </div>
+          <div className="flex items-center flex-grow bg-white border rounded-full px-3 py-2 shadow">
+            <input
+              type="text"
+              className="flex-grow outline-none"
+              placeholder="Type a message..."
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onPaste={(e) => {
+                const items = e.clipboardData.items;
+                for (let i = 0; i < items.length; i++) {
+                  if (
+                    items[i].type.includes("image") ||
+                    items[i].type.includes("video")
+                  ) {
+                    const file = items[i].getAsFile();
+                    if (file) setSelectedFile(file);
+                    break;
+                  }
+                }
+              }}
+              disabled={sendingMessage}
+            />
+
+            {selectedFile && (
+              <div className="relative ml-2">
+                {selectedFile.type.startsWith("image") ? (
+                  <img
+                    src={URL.createObjectURL(selectedFile)}
+                    className="w-10 h-10 object-cover rounded"
+                    alt="preview"
+                  />
+                ) : (
+                  <video
+                    src={URL.createObjectURL(selectedFile)}
+                    className="w-10 h-10 object-cover rounded"
+                    muted
+                  />
+                )}
+                <button
+                  type="button"
+                  className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 text-xs"
+                  onClick={() => setSelectedFile(null)}
+                >
+                  &times;
+                </button>
+              </div>
+            )}
+
+            <label htmlFor="file-upload" className="ml-3 cursor-pointer">
+              <PaperClipIcon className="text-xl" />
+            </label>
+            <input
+              type="file"
+              id="file-upload"
+              accept="image/*,video/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) setSelectedFile(file);
+              }}
+              className="hidden"
+              disabled={sendingMessage}
+            />
+            <button
+              type="submit"
+              disabled={sendingMessage}
+              className="ml-2 bg-primary hover:bg-green-700 text-white w-10 h-10 rounded-full flex items-center justify-center p-0 shadow-md"
+            >
+              <SendIcon className="w-5 h-5" />
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 };
 
