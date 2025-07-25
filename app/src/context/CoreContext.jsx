@@ -20,7 +20,7 @@ export const CoreProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const baseUrl = "https://quickxmarket-server.onrender.com";
+  const baseUrl = "http://192.168.0.101:4000";
 
   const makeRequest = async ({ method, url, data }) => {
     try {
@@ -109,15 +109,13 @@ export const CoreProvider = ({ children }) => {
 
   const setupDeepLinkListener = async () => {
     CapacitorApp.addListener("appUrlOpen", async (event) => {
-      toast.success("close");
-      console.log(event);
       if (!event?.url) return;
       const url = new URL(event.url);
 
       if (url?.href?.startsWith("quickxmarket://")) {
-        // await Browser.close();
+        await Browser.close();
         const route = url.href.replace("quickxmarket://", "");
-        // navigate("/" + route);
+        navigate("/" + route);
       }
     });
   };

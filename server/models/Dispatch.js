@@ -25,8 +25,14 @@ const dispatchSchema = new mongoose.Schema(
     riderId: { type: String, ref: "rider", default: null },
     status: {
       type: String,
-      enum: ["pending", "assigned", "picked", "delivered", "cancelled"],
-      default: "pending",
+      enum: [
+        "Order Placed",
+        "Order Assigned",
+        "Order Picked",
+        "Order Delivered",
+        "Order Cancelled",
+      ],
+      default: "Order Placed",
     },
     isPaid: { type: Boolean, default: false },
     paymentType: { type: String, required: true },

@@ -26,24 +26,24 @@ export const createNewDispatch = async (
       .map((r) => r.userId?.fcmToken)
       .filter(Boolean);
 
-    // for (const token of riderFcmTokens) {
-    //   try {
-    //     await sendPushNotification(
-    //       token,
-    //       "New Dispatch Request",
-    //       "A new dispatch request has been submitted.",
-    //       {
-    //         route: "/rider/dispatches",
-    //       }
-    //     );
-    //   } catch (error) {
-    //     console.error(
-    //       "Error sending notification to token:",
-    //       token,
-    //       error.message
-    //     );
-    //   }
-    // }
+    for (const token of riderFcmTokens) {
+      try {
+        await sendPushNotification(
+          token,
+          "New Dispatch Request",
+          "A new dispatch request has been submitted.",
+          {
+            route: "/rider/dispatches",
+          }
+        );
+      } catch (error) {
+        console.error(
+          "Error sending notification to token:",
+          token,
+          error.message
+        );
+      }
+    }
 
     await sendDispatchDeliveryCode(dispatch._id, dispatchData.deliveryCode, {
       email: dispatchData.dropoff.email,
@@ -90,5 +90,114 @@ export const getUserDispatch = async (req, res) => {
     res.json({ success: true, orders });
   } catch (error) {
     res.json({ success: false, message: error.message });
+  }
+};
+
+export const getRiderDispatch = async (req, res) => {
+  try {
+    const { riderId } = req.params;
+
+    const orders = await Dispatch.find({
+      isPaid: true,
+      $or: [{ riderId: null }, { riderId }],
+      "items.status": { $nin: ["Order Delivered"] },
+    })
+      .populate("pickupAddress")
+      .sort({ createdAt: -1 });
+
+    res.json({ success: true, orders });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export const updateDispatchStatus = async (req, res) => {
+  try {
+    const { dispatchId, status } = req.body;
+
+    const dispatch = await Dispatch.findById(dispatchId);
+    if (!dispatch) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
+    }
+
+    // Update item statuses conditionally
+    dispatch.status = status;
+
+    await dispatch.save();
+    res.json({
+      success: true,
+      message: "Dispatch status updated successfully",
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const assignRiderToDispatch = async (req, res) => {
+  try {
+    const { dispatchId, riderId } = req.body;
+
+    const dispatch = await Dispatch.findById(dispatchId);
+    if (!dispatch) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
+    }
+
+    const rider = await Rider.findById(riderId);
+    if (!rider) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Rider not found" });
+    }
+
+    if (dispatch.riderId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Order already assigned to a rider" });
+    }
+
+    dispatch.status = "Order Assigned";
+    dispatch.riderId = riderId;
+    await dispatch.save();
+
+    rider.orders.push(dispatchId);
+    await rider.save();
+    res.json({ success: true, message: "Rider added to order successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const confirmDelivery = async (req, res) => {
+  try {
+    const { dispatchId, code, riderId } = req.body;
+
+    const dispatch = await Dispatch.findById(dispatchId);
+    if (!dispatch) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
+    }
+    if (dispatch.riderId.toString() !== riderId) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Unauthorized rider" });
+    }
+
+    if (dispatch.deliveryCode !== code) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid delivery code" });
+    }
+
+    dispatch.status = "Order Delivered";
+
+    await dispatch.save();
+    res.json({ success: true, message: "Delivery confirmed successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

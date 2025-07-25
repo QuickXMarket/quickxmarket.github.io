@@ -23,7 +23,7 @@ export const haversineDistance = (lat1, lon1, lat2, lon2) => {
 export const calculateDeliveryFee = async (lat1, lon1, lat2, lon2) => {
   const distance = haversineDistance(lat1, lon1, lat2, lon2);
 
-  let deliveryFee = 100;
+  let deliveryFee = 500;
 
   if (distance >= 0.6 && distance < 1) deliveryFee = 600;
   else if (distance >= 1 && distance < 2) deliveryFee = 750;

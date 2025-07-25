@@ -182,7 +182,7 @@ const DispatchRequest = () => {
     }
 
     const isNativeApp = Capacitor.isNativePlatform();
-
+    setLoading(true);
     const data = await makeRequest({
       method: "POST",
       url: "/api/payment/paystack-dispatch",
@@ -199,10 +199,10 @@ const DispatchRequest = () => {
 
     if (data.success) {
       if (isNativeApp) {
-        await Preferences.set({
-          key: "reference",
-          value: data.reference,
-        });
+        // await Preferences.set({
+        //   key: "reference",
+        //   value: data.reference,
+        // });
         // await InAppBrowser.openInWebView({
         //   url: data.url,
         //   options: {
@@ -211,6 +211,20 @@ const DispatchRequest = () => {
         //     hideUrlBar: true,
         //   },
         // });
+        setAddress({
+          firstName: "",
+          lastName: "",
+          email: "",
+          address: "",
+          phone: "",
+          latitude: null,
+          longitude: null,
+        });
+        setIsExpress(false);
+        setServiceFee(0);
+        setDeliveryNote("");
+        setDeliveryFee(0);
+        setLoading(false);
         await Browser.open({ url: data.url });
       } else {
         window.location.replace(data.url);
@@ -409,6 +423,7 @@ const DispatchRequest = () => {
       {/* SUBMIT BUTTON */}
       <button
         onClick={submitDispatchRequest}
+        disabled={loading}
         className="w-full py-3 mt-4 bg-primary hover:bg-primary-dull text-white rounded uppercase transition"
       >
         Submit Dispatch Request

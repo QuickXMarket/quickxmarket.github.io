@@ -2,7 +2,13 @@ import React, { useState, useRef } from "react";
 import toast from "react-hot-toast";
 import { useCoreContext } from "../../context/CoreContext";
 
-const DeliveryCodeModal = ({ orderId, onClose, fetchOrders, riderId }) => {
+const DeliveryCodeModal = ({
+  orderId,
+  onClose,
+  fetchOrders,
+  riderId,
+  type,
+}) => {
   const [deliveryCode, setDeliveryCode] = useState(["", "", "", ""]);
   const inputsRef = [useRef(), useRef(), useRef(), useRef()];
   const { makeRequest } = useCoreContext();
@@ -11,7 +17,10 @@ const DeliveryCodeModal = ({ orderId, onClose, fetchOrders, riderId }) => {
     const code = deliveryCode.join("");
     try {
       const data = makeRequest({
-        url: "/api/order/confirm-delivery",
+        url:
+          type === "normal"
+            ? "/api/order/confirm-delivery"
+            : "/api/dispatch/confirm-delivery",
         method: "POST",
         data: { code, orderId, riderId },
       });

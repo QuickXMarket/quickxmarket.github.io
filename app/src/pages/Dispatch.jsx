@@ -1,27 +1,73 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import PlusIcon from "../assets/plus.svg?react";
 import { useCoreContext } from "../context/CoreContext";
+import { useAuthContext } from "../context/AuthContext";
+import DispatchCard from "../components/DispatchCard";
+import toast from "react-hot-toast";
+import PullToRefresh from "pulltorefreshjs";
 
 const Dispatch = () => {
-  const [activeTab, setActiveTab] = useState("pending");
+  const { navigate, makeRequest } = useCoreContext();
+  const { user } = useAuthContext();
+  const [activeTab, setActiveTab] = useState("ongoing");
   const containerRef = useRef();
-  const { navigate } = useCoreContext();
+  const [orders, setOrders] = useState([]);
+  const [ongoingOrders, setOngoingOrders] = useState([]);
+  const [completedOrders, setCompletedOrders] = useState([]);
+
+  const fetchOrders = async () => {
+    try {
+      const data = await makeRequest({
+        url: `/api/dispatch/user`,
+        method: "GET",
+      });
+
+      if (data.success) {
+        const Orders = data.orders;
+        setOrders(Orders);
+
+        const ongoing = Orders.filter(
+          (order) => order.status !== "Order Delivered"
+        );
+
+        const completed = Orders.filter(
+          (order) =>
+            order.status === "Order Delivered" ||
+            order.status === "Order Cancelled"
+        );
+        setCompletedOrders(completed);
+        setOngoingOrders(ongoing);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (user && user._id) fetchOrders();
+  }, [user]);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    PullToRefresh.init({
+      mainElement: containerRef.current,
+      onRefresh() {
+        return fetchOrders();
+      },
+    });
+
+    return () => PullToRefresh.destroyAll();
+  }, []);
 
   return (
     <>
       <div className="py-2 w-full max-w-2xl mx-auto">
         {/* Top Tabs */}
         <div className="flex justify-between border-b border-gray-300 mb-4">
-          <button
-            className={`flex-1 text-center py-2 font-medium ${
-              activeTab === "pending"
-                ? "border-b-2 border-primary text-primary"
-                : "text-gray-500"
-            }`}
-            onClick={() => setActiveTab("pending")}
-          >
-            Pending Orders
-          </button>
           <button
             className={`flex-1 text-center py-2 font-medium ${
               activeTab === "ongoing"
@@ -32,39 +78,39 @@ const Dispatch = () => {
           >
             Ongoing Orders
           </button>
+          <button
+            className={`flex-1 text-center py-2 font-medium ${
+              activeTab === "completed"
+                ? "border-b-2 border-primary text-primary"
+                : "text-gray-500"
+            }`}
+            onClick={() => setActiveTab("completed")}
+          >
+            Completed Orders
+          </button>
         </div>
 
         {/* Orders List */}
         <div className="space-y-4" ref={containerRef}>
-          {/* {activeTab === "pending" ? (
-          pendingOrders?.length > 0 ? (
-            pendingOrders.map((order, index) => (
-              <RiderOrderCard
-                order={order}
-                riderId={rider._id}
-                fetchOrders={fetchOrders}
-                key={index}
-              />
+          {activeTab === "completed" ? (
+            completedOrders?.length > 0 ? (
+              completedOrders.map((order, index) => (
+                <DispatchCard dispatch={order} key={index} />
+              ))
+            ) : (
+              <div className="text-gray-500 text-center">
+                No completed orders yet.
+              </div>
+            )
+          ) : ongoingOrders?.length > 0 ? (
+            ongoingOrders.map((order, index) => (
+              <DispatchCard dispatch={order} key={index} />
             ))
           ) : (
             <div className="text-gray-500 text-center">
-              No pending orders yet.
+              No ongoing orders yet.
             </div>
-          )
-        ) : ongoingOrders?.length > 0 ? (
-          ongoingOrders.map((order, index) => (
-            <RiderOrderCard
-              order={order}
-              riderId={rider._id}
-              fetchOrders={fetchOrders}
-              key={index}
-            />
-          ))
-        ) : (
-          <div className="text-gray-500 text-center">
-            No ongoing orders yet.
-          </div>
-        )} */}
+          )}
         </div>
       </div>
       {/* Floating Action Button */}

@@ -7,7 +7,18 @@ const orderSchema = new mongoose.Schema(
       {
         product: { type: String, required: true, ref: "product" },
         quantity: { type: Number, required: true },
-        status: { type: String, default: "Order Placed" },
+        status: {
+          type: String,
+          enum: [
+            "Order Placed",
+            "Order Confirmed",
+            "Order Assigned",
+            "Order Picked",
+            "Order Delivered",
+            "Order Cancelled",
+          ],
+          default: "Order Placed",
+        },
       },
     ],
     amount: { type: Number, required: true },
