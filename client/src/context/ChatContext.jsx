@@ -32,7 +32,7 @@ export const ChatProvider = ({ children }) => {
       socket.current.emit("join-room", user.chatId);
 
       socket.current.on("receive-message", (newMessage) => {
-        if (newMessage.message.senderId === user._id) return;
+        // if (newMessage.message.senderId === user._id) return;
         setMessages((prev) => [...prev, newMessage.message]);
       });
 
@@ -69,8 +69,6 @@ export const ChatProvider = ({ children }) => {
           roomId: user.chatId || newChatId,
           message: newMessage,
         });
-
-        setMessages((prev) => [...prev, newMessage]);
       }
     } catch (error) {
       console.error("Failed to send message:", error);
