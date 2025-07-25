@@ -69,7 +69,7 @@ const Contact = () => {
   return (
     <>
       <Navbar />
-      <div className="flex-1 h-full flex flex-col  w-full bg-gray-100 px-6 md:px-16 lg:px-24 xl:px-32">
+      <div className="flex-1 h-full flex flex-col w-full max-w-screen bg-gray-100 ">
         {/* Header */}
         <div className=" flex items-center px-4 py-2 bg-white"></div>
 

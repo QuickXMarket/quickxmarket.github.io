@@ -38,6 +38,9 @@ app.use(cookieParser());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 app.get("/", (req, res) => res.send("API is Working"));
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
 
 app.use("/api/user", userRouter);
 app.use("/api/seller", sellerRouter);
