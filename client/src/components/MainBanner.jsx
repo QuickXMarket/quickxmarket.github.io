@@ -15,93 +15,139 @@ const MainBanner = () => {
       large: assets.second_banner_image,
       small: assets.second_banner_image,
       color: "#2f855a",
-      buttonText: "Visit Shops",
-      buttonLink: "/shops",
+      buttonText: "Shop Now",
+      buttonLink: "/shop",
     },
   ];
 
-  const [slides, setSlides] = useState([slidesData[0], slidesData[1]]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [animating, setAnimating] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const startXRef = useRef(null);
+  const isDraggingRef = useRef(false);
   const containerRef = useRef(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (animating) return;
-      setAnimating(true);
-
-      if (containerRef.current) {
-        containerRef.current.style.transition = "transform 1s linear";
-        containerRef.current.style.transform = "translateX(-50%)";
-      }
-
-      setTimeout(() => {
-        setSlides((prevSlides) => {
-          const nextIndex = (currentIndex + 2) % slidesData.length;
-          const newSlides = [...prevSlides.slice(1), slidesData[nextIndex]];
-          return newSlides;
-        });
-        setCurrentIndex((prev) => (prev + 1) % slidesData.length);
-
-        if (containerRef.current) {
-          containerRef.current.style.transition = "none";
-          containerRef.current.style.transform = "translateX(0)";
-        }
-        setAnimating(false);
-      }, 1000);
-    }, 6000);
+      setCurrentSlide((prev) => (prev + 1) % slidesData.length);
+    }, 3000);
 
     return () => clearInterval(interval);
-  }, [animating, currentIndex, slidesData]);
+  }, [slidesData.length]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleTouchStart = (e) => {
+      startXRef.current = e.touches[0].clientX;
+    };
+
+    const handleTouchMove = (e) => {
+      if (startXRef.current === null) return;
+      const diffX = e.touches[0].clientX - startXRef.current;
+
+      if (Math.abs(diffX) > 50) {
+        if (diffX > 0 && currentSlide > 0) {
+          setCurrentSlide((prev) => prev - 1);
+        } else if (diffX < 0 && currentSlide < slidesData.length - 1) {
+          setCurrentSlide((prev) => prev + 1);
+        }
+        startXRef.current = null;
+      }
+    };
+
+    const handleMouseDown = (e) => {
+      isDraggingRef.current = true;
+      startXRef.current = e.clientX;
+    };
+
+    const handleMouseMove = (e) => {
+      if (!isDraggingRef.current || startXRef.current === null) return;
+
+      const diffX = e.clientX - startXRef.current;
+
+      if (Math.abs(diffX) > 50) {
+        if (diffX > 0 && currentSlide > 0) {
+          setCurrentSlide((prev) => prev - 1);
+        } else if (diffX < 0 && currentSlide < slidesData.length - 1) {
+          setCurrentSlide((prev) => prev + 1);
+        }
+        startXRef.current = null;
+        isDraggingRef.current = false;
+      }
+    };
+
+    const handleMouseUp = () => {
+      isDraggingRef.current = false;
+      startXRef.current = null;
+    };
+
+    // Touch events
+    container.addEventListener("touchstart", handleTouchStart);
+    container.addEventListener("touchmove", handleTouchMove);
+
+    // Mouse events
+    container.addEventListener("mousedown", handleMouseDown);
+    container.addEventListener("mousemove", handleMouseMove);
+    container.addEventListener("mouseup", handleMouseUp);
+    container.addEventListener("mouseleave", handleMouseUp);
+
+    return () => {
+      container.removeEventListener("touchstart", handleTouchStart);
+      container.removeEventListener("touchmove", handleTouchMove);
+      container.removeEventListener("mousedown", handleMouseDown);
+      container.removeEventListener("mousemove", handleMouseMove);
+      container.removeEventListener("mouseup", handleMouseUp);
+      container.removeEventListener("mouseleave", handleMouseUp);
+    };
+  }, [currentSlide, slidesData.length]);
 
   return (
-    <div className="relative overflow-hidden">
+    <div
+      ref={containerRef}
+      className="overflow-hidden relative w-full cursor-grab"
+    >
       <div
-        className="flex"
-        style={{ width: `${slides.length * 100}%` }}
-        ref={containerRef}
+        className="flex transition-transform duration-500 ease-in-out"
+        style={{ transform: `translateX(-${currentSlide * 100}%)` }}
       >
-        {slides.map((slide, idx) => (
+        {slidesData.map((slide, index) => (
           <div
-            key={idx}
-            className="relative flex-shrink-0"
-            style={{ width: `${100 / slides.length}%` }}
+            key={index}
+            className="min-w-full h-[300px] sm:h-[400px] md:h-[500px] relative"
           >
             <img
               src={slide.large}
-              alt={`banner large ${idx}`}
-              className="hidden md:block w-full h-full object-cover"
+              alt="slide"
+              className="w-full h-full object-cover"
             />
-            <img
-              src={slide.small}
-              alt={`banner small ${idx}`}
-              className="md:hidden w-full h-[400px] object-cover"
-            />
+            <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center p-4">
+              <h2
+                className="text-xl sm:text-2xl md:text-3xl font-bold mb-4"
+                style={{ color: slide.color }}
+              >
+                Experience the art of easy shopping!
+              </h2>
+              <Link
+                to={slide.buttonLink}
+                className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg text-sm sm:text-base"
+              >
+                {slide.buttonText}
+              </Link>
+            </div>
           </div>
         ))}
       </div>
 
-      <div className="absolute inset-0 flex flex-col items-center md:items-start justify-end md:justify-center pb-24 md:pb-0 px-4 md:pl-18 lg:pl-24">
-        <h1
-          className="text-3xl md:text-4xl lg:text-5xl font-bold text-center md:text-left max-w-72 md:max-w-80 lg:max-w-105 leading-tight lg:leading-15 transition-colors duration-500"
-          style={{ color: slides[0].color }}
-        >
-          Experience the art of easy shopping!{" "}
-        </h1>
-
-        <div className="flex items-center mt-6 font-medium md:mt-12 ">
-          <Link
-            to={slides[0].buttonLink}
-            className="group flex items-center gap-2 px-7 md:px-9 py-3 bg-primary hover:bg-primary-dull transition rounded text-white cursor-pointer"
-          >
-            {slides[0].buttonText}
-            <img
-              className="md:hidden transition group-focus:translate-x-1"
-              src={assets.white_arrow_icon}
-              alt="arrow"
-            />
-          </Link>
-        </div>
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+        {slidesData.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentSlide(index)}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              index === currentSlide ? "bg-primary" : "bg-gray-300"
+            }`}
+          ></button>
+        ))}
       </div>
     </div>
   );
