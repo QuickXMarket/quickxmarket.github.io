@@ -13,6 +13,19 @@ const ChatMessage = ({ message, currentUser }) => {
     return `video/${ext}`;
   };
 
+  const MessageText = ({ messageText }) => {
+    if (!messageText) return null;
+    const urlRegex =
+      /((https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.[a-z]{2,}(\.[a-z]{2,})?(\/\S*)?)/gi;
+
+    const processedText = messageText.replace(urlRegex, (match) => {
+      const url = match.startsWith("http") ? match : `https://${match}`;
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600  hover:text-blue-800">${match}</a>`;
+    });
+
+    return <p dangerouslySetInnerHTML={{ __html: processedText }} />;
+  };
+
   return (
     <div className={`flex mb-2 ${isSender ? "justify-end" : "justify-start"}`}>
       <div
@@ -20,6 +33,11 @@ const ChatMessage = ({ message, currentUser }) => {
           isSender ? "bg-primary rounded-tr-none" : "bg-white rounded-tl-none"
         }`}
       >
+        {!isSender && (
+          <p className="font-bold mb-[5px] text-[#555] whitespace-nowrap overflow-hidden text-ellipsis no-underline">
+            {message.senderName}
+          </p>
+        )}
         {/* Media Section */}
         {message.media && (
           <div onClick={handleShow} className="cursor-pointer mb-2">
@@ -54,7 +72,7 @@ const ChatMessage = ({ message, currentUser }) => {
           {/* Message Text */}
           {message.message && (
             <p className="text-gray-800 break-words whitespace-pre-wrap">
-              {message.message}
+              <MessageText messageText={message.message} />
             </p>
           )}
 

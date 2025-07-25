@@ -22,6 +22,13 @@ io.on("connection", (socket) => {
     const { roomId } = data;
     io.to(roomId).emit("receive-message", data);
   });
+  socket.on("typing", ({ chatId, userId, name }) => {
+    io.to(chatId).emit("typing", { userId, name });
+  });
+
+  socket.on("stop-typing", ({ chatId, userId }) => {
+    io.to(chatId).emit("stop-typing", { userId });
+  });
 
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);

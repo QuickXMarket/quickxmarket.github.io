@@ -8,6 +8,8 @@ const ChatContext = createContext();
 export const ChatProvider = ({ children }) => {
   const { baseURL, axios } = useCoreContext();
   const { user, updateUser } = useAuthContext();
+  const [typingUsers, setTypingUsers] = useState({});
+  const [isTyping, setIsTyping] = useState(false);
 
   const socket = useRef(null);
   const [messages, setMessages] = useState([]);
@@ -35,6 +37,19 @@ export const ChatProvider = ({ children }) => {
         if (newMessage.message.senderId === user._id) return;
         setMessages((prev) => [...prev, newMessage.message]);
       });
+      socket.current.on("typing", ({ userId, name }) => {
+      
+          setTypingUsers((prev) => ({ ...prev, [userId]: name }));
+        
+      });
+
+      socket.current.on("stop-typing", ({ userId }) => {
+        setTypingUsers((prev) => {
+          const updated = { ...prev };
+          delete updated[userId];
+          return updated;
+        });
+      });
 
       retrieveMessages();
 
@@ -43,6 +58,30 @@ export const ChatProvider = ({ children }) => {
       };
     }
   }, [user, baseURL]);
+
+  useEffect(() => {
+   
+    if (
+      !socket.current ||
+      !socket.current.connected ||
+      !user ||
+      !user.chatId ||
+      !user._id
+    )
+      return;
+    if (isTyping) {
+      socket.current.emit("typing", {
+        chatId: user.chatId,
+        userId: user._id,
+        name: user.name,
+      });
+    } else {
+      socket.current.emit("stop-typing", {
+        chatId: user.chatId,
+        userId: user._id,
+      });
+    }
+  }, [isTyping]);
 
   const sendMessage = async (content, media = "") => {
     try {
@@ -80,6 +119,9 @@ export const ChatProvider = ({ children }) => {
     messages,
     sendMessage,
     retrieveMessages,
+    typingUsers,
+    isTyping,
+    setIsTyping,
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;

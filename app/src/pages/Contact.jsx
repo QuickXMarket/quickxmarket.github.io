@@ -10,13 +10,14 @@ import { assets } from "../assets/assets";
 
 export default function ChatLayout({}) {
   const { fileToBase64 } = useCoreContext();
-  const { messages, sendMessage } = useChatContext();
+  const { messages, sendMessage, isTyping, setIsTyping } = useChatContext();
   const { user } = useAuthContext();
   const [groupedMessages, setGroupedMessages] = useState([]);
   const messagesEndRef = useRef(null);
   const [newMessage, setNewMessage] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [sendingMessage, setSendingMessage] = useState(false);
+  const typingTimeoutRef = useRef(null);
 
   const groupMessagesByDate = (messages) => {
     return messages.reduce((acc, msg) => {
@@ -27,6 +28,17 @@ export default function ChatLayout({}) {
       acc[date].push(msg);
       return acc;
     }, {});
+  };
+
+  const onMessageInputChange = (value) => {
+    setNewMessage(value);
+    if (!isTyping) setIsTyping(true);
+
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+
+    typingTimeoutRef.current = setTimeout(() => {
+      setIsTyping(false);
+    }, 2000);
   };
 
   const isVideo = (file) => {
@@ -116,7 +128,7 @@ export default function ChatLayout({}) {
             className="flex-grow outline-none"
             placeholder="Type a message..."
             value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
+            onChange={(e) => onMessageInputChange(e.target.value)}
             onPaste={(e) => {
               const items = e.clipboardData.items;
               for (let i = 0; i < items.length; i++) {

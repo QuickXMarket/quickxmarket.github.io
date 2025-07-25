@@ -10,13 +10,15 @@ import { assets } from "../assets/assets";
 import Navbar from "../components/Navbar";
 
 const Contact = () => {
-  const { messages, sendMessage } = useChatContext();
+  const { messages, sendMessage, isTyping, setIsTyping, typingUsers } =
+    useChatContext();
   const { user } = useAuthContext();
   const [groupedMessages, setGroupedMessages] = useState([]);
   const messagesEndRef = useRef(null);
   const [newMessage, setNewMessage] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [sendingMessage, setSendingMessage] = useState(false);
+  const typingTimeoutRef = useRef(null);
 
   const groupMessagesByDate = (messages) => {
     return messages.reduce((acc, msg) => {
@@ -34,6 +36,17 @@ const Contact = () => {
     const fileExtension = file.type;
 
     return videoFormats.some((format) => format.includes(fileExtension));
+  };
+
+  const onMessageInputChange = (value) => {
+    setNewMessage(value);
+    if (!isTyping) setIsTyping(true);
+
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+
+    typingTimeoutRef.current = setTimeout(() => {
+      setIsTyping(false);
+    }, 2000);
   };
 
   useEffect(() => {
@@ -87,6 +100,12 @@ const Contact = () => {
         {/* Body */}
         <div className="flex flex-col flex-grow overflow-y-auto h-100  no-scrollbar">
           <div className="flex-grow px-4 py-2 bg-white overflow-y-auto flex flex-col-reverse">
+            {Object.values(typingUsers).length > 0 && (
+              <p className="text-sm text-gray-400 italic">
+                {Object.values(typingUsers).join(", ")}{" "}
+                {Object.values(typingUsers).length > 1 ? "are" : "is"} typing...
+              </p>
+            )}
             {groupedMessages &&
               Object.entries(groupedMessages)
                 .reverse()
@@ -120,7 +139,7 @@ const Contact = () => {
               className="flex-grow outline-none"
               placeholder="Type a message..."
               value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
+              onChange={(e) => onMessageInputChange(e.target.value)}
               onPaste={(e) => {
                 const items = e.clipboardData.items;
                 for (let i = 0; i < items.length; i++) {
