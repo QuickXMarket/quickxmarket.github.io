@@ -7,11 +7,11 @@ import { useCoreContext } from "../../context/CoreContext";
 const Orders = () => {
   const { currency, axios } = useCoreContext();
   const [orders, setOrders] = useState([]);
-  const { vendorId } = useOutletContext();
+  const { vendor } = useOutletContext();
 
   const fetchOrders = async () => {
     try {
-      const { data } = await axios.get(`/api/order/seller${vendorId}`);
+      const { data } = await axios.get(`/api/order/seller${vendor._id}`);
       if (data.success) {
         setOrders(data.orders);
       } else {

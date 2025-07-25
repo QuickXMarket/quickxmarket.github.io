@@ -68,29 +68,42 @@ const Contact = () => {
 
   return (
     <>
-      <Navbar />
+      <div className="flex items-center justify-between px-4 md:px-8 border-b border-gray-300 py-3 bg-white">
+        <Link to="/">
+          <img
+            src={assets.QuickXMarket_Logo_Transparent}
+            alt="log"
+            className="cursor-pointer w-34 md:w-38"
+          />
+        </Link>
+        <div className="flex items-center gap-5 text-gray-500">
+          {user && <p className="truncate w-20 sm:w-full">Hi! {user.name}</p>}
+        </div>
+      </div>
       <div className="flex-1 h-full flex flex-col w-full max-w-screen bg-gray-100 ">
         {/* Header */}
         <div className=" flex items-center px-4 py-2 bg-white"></div>
 
         {/* Body */}
-        <div className="flex flex-col flex-grow overflow-y-auto h-100">
-          <div className="flex-grow px-4 py-2 bg-white overflow-y-auto">
+        <div className="flex flex-col flex-grow overflow-y-auto h-100  no-scrollbar">
+          <div className="flex-grow px-4 py-2 bg-white overflow-y-auto flex flex-col-reverse">
             {groupedMessages &&
-              Object.entries(groupedMessages).map(([date, msgs]) => (
-                <div key={date}>
-                  <div className="text-center my-3 text-sm font-semibold">
-                    {date}
+              Object.entries(groupedMessages)
+                .reverse()
+                .map(([date, msgs]) => (
+                  <div key={date}>
+                    <div className="text-center my-3 text-sm font-semibold">
+                      {date}
+                    </div>
+                    {msgs.map((msg) => (
+                      <ChatMessage
+                        key={msg.id}
+                        message={msg}
+                        currentUser={user?._id}
+                      />
+                    ))}
                   </div>
-                  {msgs.map((msg) => (
-                    <ChatMessage
-                      key={msg.id}
-                      message={msg}
-                      currentUser={user?._id}
-                    />
-                  ))}
-                </div>
-              ))}
+                ))}
 
             <div ref={messagesEndRef} />
           </div>

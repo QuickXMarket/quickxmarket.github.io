@@ -32,7 +32,7 @@ export const ChatProvider = ({ children }) => {
       socket.current.emit("join-room", user.chatId);
 
       socket.current.on("receive-message", (newMessage) => {
-        // if (newMessage.message.senderId === user._id) return;
+        if (newMessage.message.senderId === user._id) return;
         setMessages((prev) => [...prev, newMessage.message]);
       });
 
@@ -65,6 +65,7 @@ export const ChatProvider = ({ children }) => {
           socket.current.emit("join-room", newChatId);
         }
 
+        setMessages((prev) => [...prev, newMessage]);
         socket.current.emit("send-message", {
           roomId: user.chatId || newChatId,
           message: newMessage,

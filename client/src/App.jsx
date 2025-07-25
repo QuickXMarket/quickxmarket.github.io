@@ -27,12 +27,18 @@ import { useAuthContext } from "./context/AuthContext";
 import Dispatch from "./pages/Dispatch";
 import DispatchRequest from "./pages/DispatchRequest";
 import { useCoreContext } from "./context/CoreContext";
+import VendorWallet from "./pages/seller/Wallet";
+import RiderLogin from "./components/rider/RiderLogin";
+import RiderLayout from "./pages/rider/RiderLayout";
+import RiderWallet from "./pages/rider/RiderWallet";
+import RidersOrders from "./pages/rider/RidersOrders";
+import RiderProfile from "./pages/rider/RiderProfile";
 
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller");
   const isRiderPath = useLocation().pathname.includes("rider");
   const isContactPath = location.pathname.includes("Contact");
-  const { showUserLogin, isSeller, showSellerLogin, user, loading } =
+  const { showUserLogin, isSeller, isRider, showSellerLogin, user, loading } =
     useAuthContext();
   const { navigate } = useCoreContext();
 
@@ -93,6 +99,25 @@ const App = () => {
             <Route index element={isSeller ? <AddProduct /> : null} />
             <Route path="product-list" element={<ProductList />} />
             <Route path="orders" element={<Orders />} />
+            <Route path="wallet" element={<VendorWallet />} />
+          </Route>
+          <Route
+            path="/rider"
+            element={
+              loading ? (
+                <Loading />
+              ) : !user ? (
+                <Login />
+              ) : isRider ? (
+                <RiderLayout />
+              ) : (
+                <RiderLogin />
+              )
+            }
+          >
+            <Route index element={isRider ? <RidersOrders /> : null} />
+            <Route path="wallet" element={<RiderWallet />} />
+            <Route path="profile" element={<RiderProfile />} />
           </Route>
         </Routes>
       </div>

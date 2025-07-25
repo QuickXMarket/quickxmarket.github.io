@@ -2,60 +2,39 @@ import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { assets } from "../../assets/assets";
 import toast from "react-hot-toast";
 import React, { useEffect } from "react";
-import SellerLogin from "../../components/seller/SellerLogin";
 import { useAuthContext } from "../../context/AuthContext";
 import { useCoreContext } from "../../context/CoreContext";
 
-const SellerLayout = () => {
+const RiderLayout = () => {
   const { user } = useAuthContext();
   const { axios } = useCoreContext();
-  const navigate = useNavigate();
-  const [isVendor, setIsVendor] = React.useState(null);
-  const [showSellerLogin, setShowSellerLogin] = React.useState(false);
-  const [businessName, setBusinessName] = React.useState("");
-  const [vendor, setVendor] = React.useState("");
+  const [riderName, setRiderName] = React.useState("");
+  const [rider, setRider] = React.useState("");
 
   useEffect(() => {
     const checkVendorStatus = async () => {
-      if (!user || !user.isSeller) {
-        // Not a vendor role, redirect or show login
-        setShowSellerLogin(true);
+      if (!user || !user.isRider) {
         return;
       }
       try {
-        const { data } = await axios.get(`/api/seller/user/${user._id}`);
+        const { data } = await axios.get(`/api/rider/user/${user._id}`);
         if (data.success) {
-          setBusinessName(data.vendor.businessName);
-          setIsVendor(true);
-          setShowSellerLogin(false);
-          setVendor(data.vendor);
+          setRiderName(data.rider.name);
+          setRider(data.rider);
         } else {
-          setIsVendor(false);
-          setShowSellerLogin(true);
         }
       } catch (error) {
-        toast.error("Failed to verify vendor status");
-        setIsVendor(false);
-        setShowSellerLogin(true);
+        toast.error("Failed to verify rider status");
       }
     };
     checkVendorStatus();
   }, [user, axios]);
 
   const sidebarLinks = [
-    { name: "Add Product", path: "/seller", icon: assets.add_icon },
-    {
-      name: "Product List",
-      path: "/seller/product-list",
-      icon: assets.product_list_icon,
-    },
-    { name: "Orders", path: "/seller/orders", icon: assets.order_icon },
-    { name: "Wallet", path: "/seller/wallet", icon: assets.wallet_outline },
+    { name: "Home", path: "/rider", icon: assets.home_outline },
+    { name: "Wallet", path: "/rider/wallet", icon: assets.wallet_outline },
+    { name: "Profile", path: "/rider/profile", icon: assets.profile_outline },
   ];
-
-  if (showSellerLogin) {
-    return <SellerLogin setShowUserLogin={setShowSellerLogin} />;
-  }
 
   return (
     <>
@@ -68,7 +47,7 @@ const SellerLayout = () => {
           />
         </Link>
         <div className="flex items-center gap-5 text-gray-500">
-          <p className="truncate w-20 sm:w-full">Hi! {businessName}</p>
+          <p className="truncate w-20 sm:w-full">Hi! {riderName}</p>
 
           {/* <button
             onClick={logout}
@@ -84,7 +63,7 @@ const SellerLayout = () => {
             <NavLink
               to={item.path}
               key={item.name}
-              end={item.path === "/seller"}
+              end={item.path === "/rider"}
               className={({ isActive }) =>
                 `flex items-center py-3 px-4 gap-3 
                             ${
@@ -99,10 +78,10 @@ const SellerLayout = () => {
             </NavLink>
           ))}
         </div>
-        <Outlet context={{ vendor }} />
+        <Outlet context={{ rider }} />
       </div>
     </>
   );
 };
 
-export default SellerLayout;
+export default RiderLayout;

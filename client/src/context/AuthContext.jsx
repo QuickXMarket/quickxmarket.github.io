@@ -11,6 +11,7 @@ export const AuthContextProvider = ({ children }) => {
   const [isRider, setIsRider] = useState(false);
   const [showUserLogin, setShowUserLogin] = useState(false);
   const [showSellerLogin, setShowSellerLogin] = useState(false);
+  const [showRiderLogin, setShowRiderLogin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // Fetch Seller Status
@@ -50,6 +51,8 @@ export const AuthContextProvider = ({ children }) => {
     setIsRider,
     showUserLogin,
     setShowUserLogin,
+    showRiderLogin,
+    setShowRiderLogin,
     showSellerLogin,
     setShowSellerLogin,
 

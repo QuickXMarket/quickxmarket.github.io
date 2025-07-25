@@ -35,10 +35,14 @@ import first_banner_image from "./1st_banner_image.jpg";
 import second_banner_image from "./2nd_banner_image.jpg";
 import QuickXMarket_Logo_Transparent from "./QuickXMarket_Logo_Transparent.png";
 import Favicon_rounded from "./Favicon2-rounded.png";
+import home_outline from "./house_outline.svg";
+import profile_outline from "./person_outline.svg";
 import Slideshow_1 from "./Slideshow_1.jpg";
 import Slideshow_2 from "./Slideshow_2.jpg";
 import Slideshow_3 from "./Slideshow_3.jpg";
 import Slideshow_4 from "./Slideshow_4.jpg";
+import wallet_icon from "./wallet_icon.svg";
+import wallet_outline from "./wallet_outline.svg";
 
 export const assets = {
   logo,
@@ -71,6 +75,10 @@ export const assets = {
   Favicon_rounded,
   first_banner_image,
   second_banner_image,
+  wallet_icon,
+  wallet_outline,
+  home_outline,
+  profile_outline,
   QuickXMarket_Logo_Transparent,
   Slideshow_1,
   Slideshow_2,
