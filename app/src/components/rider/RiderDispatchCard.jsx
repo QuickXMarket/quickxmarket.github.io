@@ -84,7 +84,7 @@ const RiderDispatchCard = ({ dispatch, riderId, fetchOrders }) => {
           </span>
           <span
             className={`text-xs font-semibold ${
-              dispatch.isExpress ? "text-red-500" : "text-gray-400"
+              dispatch.isExpress ? "text-primary" : "text-gray-400"
             }`}
           >
             {dispatch.isExpress ? "Express" : "Standard"}
@@ -166,6 +166,15 @@ const RiderDispatchCard = ({ dispatch, riderId, fetchOrders }) => {
             </div>
           )}
         </div>
+      )}
+      {showCodeModal && (
+        <DeliveryCodeModal
+          orderId={dispatch._id}
+          onClose={() => setShowCodeModal(false)}
+          fetchOrders={fetchOrders}
+          riderId={riderId}
+          type={"dispatch"}
+        />
       )}
     </div>
   );

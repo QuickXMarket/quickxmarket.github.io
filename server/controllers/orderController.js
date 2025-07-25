@@ -250,7 +250,6 @@ export const getRiderOrders = async (req, res) => {
         vendors: vendorGroups,
       });
     }
-
     res.json({ success: true, orders: modifiedOrders });
   } catch (error) {
     res.json({ success: false, message: error.message });
@@ -333,6 +332,7 @@ export const confirmDelivery = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Order not found" });
     }
+
     if (order.riderId.toString() !== riderId) {
       return res
         .status(403)
@@ -352,6 +352,7 @@ export const confirmDelivery = async (req, res) => {
     await order.save();
     res.json({ success: true, message: "Delivery confirmed successfully" });
   } catch (error) {
+    console.log("fail");
     res.status(500).json({ success: false, message: error.message });
   }
 };

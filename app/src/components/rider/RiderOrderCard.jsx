@@ -177,6 +177,7 @@ const RiderOrderCard = ({ order, riderId, fetchOrders }) => {
           onClose={() => setShowCodeModal(false)}
           fetchOrders={fetchOrders}
           riderId={riderId}
+          type={"normal"}
         />
       )}
     </div>

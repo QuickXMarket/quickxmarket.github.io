@@ -38,13 +38,11 @@ const DispatchCard = ({ dispatch }) => {
         <div className="flex justify-between mt-1 text-xs text-gray-400">
           <span>{new Date(dispatch.createdAt).toLocaleDateString()}</span>
           <span
-            className={
-              dispatch.isExpress
-                ? "text-red-500 font-semibold"
-                : "text-gray-500"
-            }
+            className={`text-xs font-semibold ${
+              dispatch.isExpress ? "text-primary" : "text-gray-400"
+            }`}
           >
-            Express: {dispatch.isExpress ? "Yes" : "No"}
+            {dispatch.isExpress ? "Express" : "Standard"}
           </span>
         </div>
       </div>
