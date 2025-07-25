@@ -1,24 +1,12 @@
 import React from "react";
 import ProductCard from "./ProductCard";
-import { useAppContext } from "../context/AppContext";
+import { useCoreContext } from "../context/CoreContext";
+import { useProductContext } from "../context/ProductContext";
 
 const BestSeller = () => {
-  const { products, axios } = useAppContext();
-  // const sendMessage = async () => {
-  //   try {
-  //     const { data } = await axios.post("/api/sms/send", {
-  //       to: "+2348140338531", // Replace with the recipient's phone number
-  //       message: "Hello from QuickXMarket!",
-  //     });
-  //     if (data.success) {
-  //       console.log(data.message);
-  //     } else {
-  //       console.log(data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error sending message:", error);
-  //   }
-  // };
+  const { axios } = useCoreContext();
+  const { products } = useProductContext();
+
   return (
     <div className="mt-16">
       <p className="text-2xl md:text-3xl font-medium">Best Sellers</p>

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import { useAppContext } from "../context/AppContext";
+import { useCoreContext } from "../context/CoreContext";
 
 const Contact = () => {
-  const { axios, navigate } = useAppContext();
+  const { axios, navigate } = useCoreContext();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

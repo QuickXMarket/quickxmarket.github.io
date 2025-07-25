@@ -1,23 +1,18 @@
 import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
-import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
+import { useAuthContext } from "../context/AuthContext";
+import { useCoreContext } from "../context/CoreContext";
+import { useProductContext } from "../context/ProductContext";
 
 const Navbar = () => {
   const [open, setOpen] = React.useState(false);
   const [searchOpen, setSearchOpen] = React.useState(false);
-  const {
-    user,
-    setUser,
-    setShowUserLogin,
-    setShowSellerLogin,
-    navigate,
-    setSearchQuery,
-    searchQuery,
-    getCartCount,
-    axios,
-  } = useAppContext();
+  const { axios, navigate } = useCoreContext();
+  const { user, setUser, setShowUserLogin, setShowSellerLogin } =
+    useAuthContext();
+  const { setSearchQuery, getCartCount, searchQuery } = useProductContext();
   const logout = async () => {
     try {
       const { data } = await axios.get("/api/user/logout");

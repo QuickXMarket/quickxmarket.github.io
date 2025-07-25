@@ -1,20 +1,14 @@
 import { useEffect, useState } from "react";
-import { useAppContext } from "../context/AppContext";
 import { Link, useParams } from "react-router-dom";
 import { assets } from "../assets/assets";
 import ProductCard from "../components/ProductCard";
 import WishlistIcon from "../assets/heart-fill.svg?react";
+import { useProductContext } from "../context/ProductContext";
+import { useCoreContext } from "../context/CoreContext";
 
 const ProductDetails = () => {
-  const {
-    products,
-    navigate,
-    currency,
-    addToCart,
-    axios,
-    updateWishList,
-    wishList,
-  } = useAppContext();
+  const { navigate, currency, axios } = useCoreContext();
+  const { products, addToCart, updateWishList, wishList } = useProductContext();
   const { id } = useParams();
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [otherProductsFromVendor, setOtherProductsFromVendor] = useState([]);

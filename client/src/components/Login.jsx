@@ -1,20 +1,14 @@
 import React from "react";
-import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
+import { useAuthContext } from "../context/AuthContext";
+import { useCoreContext } from "../context/CoreContext";
+import { useProductContext } from "../context/ProductContext";
 
 const Login = () => {
-  const {
-    setShowUserLogin,
-    setUser,
-    axios,
-    navigate,
-    location,
-    setCartItems,
-    setWishList,
-    wishList,
-    cartItems,
-    setIsSeller,
-  } = useAppContext();
+  const { setShowUserLogin, setUser, setIsSeller } = useAuthContext();
+  const { axios, navigate, location } = useCoreContext();
+  const { setCartItems, setWishList, wishList, cartItems } =
+    useProductContext();
 
   const [state, setState] = React.useState("login");
   const [name, setName] = React.useState("");

@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useAppContext } from "../context/AppContext";
-import { useParams } from "react-router-dom";
-import { categories } from "../assets/assets";
-import ProductCard from "../components/ProductCard";
 import VendorCard from "../components/VendorCard";
+import { useCoreContext } from "../context/CoreContext";
 
 const ShopList = () => {
-  const { axios } = useAppContext();
+  const { axios } = useCoreContext();
 
   const [vendors, setVendors] = useState([]);
   const [loadingVendors, setLoadingVendors] = useState(false);

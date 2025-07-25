@@ -1,11 +1,13 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useAppContext } from "../context/AppContext";
 import { useParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
+import { useCoreContext } from "../context/CoreContext";
+import { useProductContext } from "../context/ProductContext";
 
 const ShopProducts = () => {
-  const { products, axios } = useAppContext();
+  const { axios } = useCoreContext();
+  const { products } = useProductContext();
   const { vendorId } = useParams();
   const [vendor, setVendor] = useState(null);
 

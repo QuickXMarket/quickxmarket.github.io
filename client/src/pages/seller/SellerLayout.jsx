@@ -1,12 +1,14 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { assets } from "../../assets/assets";
-import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 import React, { useEffect } from "react";
 import SellerLogin from "../../components/seller/SellerLogin";
+import { useAuthContext } from "../../context/AuthContext";
+import { useCoreContext } from "../../context/CoreContext";
 
 const SellerLayout = () => {
-  const { axios, user } = useAppContext();
+  const { user } = useAuthContext();
+  const { axios } = useCoreContext();
   const navigate = useNavigate();
 
   const [isVendor, setIsVendor] = React.useState(null);

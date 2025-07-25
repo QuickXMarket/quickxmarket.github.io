@@ -4,7 +4,6 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import { Toaster } from "react-hot-toast";
 import Footer from "./components/Footer";
-import { useAppContext } from "./context/AppContext";
 import Login from "./components/Login";
 import AllProducts from "./pages/AllProducts";
 import ProductCategory from "./pages/ProductCategory";
@@ -23,12 +22,13 @@ import FoodVendorProducts from "./pages/FoodVendorProducts";
 import ShopList from "./pages/ShopList";
 import ShopProducts from "./pages/ShopProducts";
 import WishList from "./pages/WishList";
+import { useAuthContext } from "./context/AuthContext";
 
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller");
   const isRiderPath = useLocation().pathname.includes("rider");
   const { showUserLogin, isSeller, showSellerLogin, user, loading } =
-    useAppContext();
+    useAuthContext();
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-white">

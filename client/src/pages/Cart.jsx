@@ -1,27 +1,26 @@
 import { useEffect, useState } from "react";
-import { useAppContext } from "../context/AppContext";
 import { assets } from "../assets/assets";
 import toast from "react-hot-toast";
+import { useProductContext } from "../context/ProductContext";
+import { useCoreContext } from "../context/CoreContext";
+import { useAuthContext } from "../context/AuthContext";
 
 const Cart = () => {
+  const { user } = useAuthContext();
+  const { axios, currency, navigate } = useCoreContext();
   const {
     products,
-    currency,
     cartItems,
     removeFromCart,
     getCartCount,
     updateCartItem,
-    navigate,
     getCartAmount,
-    axios,
-    user,
     setCartItems,
-  } = useAppContext();
+  } = useProductContext();
   const [cartArray, setCartArray] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [showAddress, setShowAddress] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  // const [paymentOption, setPaymentOption] = useState("COD");
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [serviceFee, setServiceFee] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -129,27 +128,6 @@ const Cart = () => {
         return toast.error("Please select an address");
       }
 
-      // Place Order with COD
-      /*
-      if (paymentOption === "COD") {
-        const { data } = await axios.post("/api/order/cod", {
-          userId: user._id,
-          items: cartArray.map((item) => ({
-            product: item._id,
-            quantity: item.quantity,
-          })),
-          address: selectedAddress._id,
-        });
-
-        if (data.success) {
-          toast.success(data.message);
-          setCartItems({});
-          navigate("/my-orders");
-        } else {
-          toast.error(data.message);
-        }
-      } else {
-      */
       // Place Order with Paystack
       const { data } = await axios.post("/api/payment/paystack", {
         userId: user._id,

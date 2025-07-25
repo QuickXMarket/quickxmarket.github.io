@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 import { assets } from "../../assets/assets";
+import { useCoreContext } from "../../context/CoreContext";
+import { useAuthContext } from "../../context/AuthContext";
 
 const SellerLogin = () => {
-  const { setShowSellerLogin, axios, navigate, user, fuse, location } =
-    useAppContext();
+  const { axios, navigate, fuse, location } = useCoreContext();
+  const { setShowSellerLogin, user } = useAuthContext();
 
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [businessName, setBusinessName] = useState("");

@@ -1,9 +1,9 @@
 import React from "react";
-import { useAppContext } from "../context/AppContext";
 import WishListCard from "../components/WishListCard";
+import { useProductContext } from "../context/ProductContext";
 
 const WishList = () => {
-  const { wishList, products } = useAppContext();
+  const { wishList, products } = useProductContext();
 
   const wishListProducts = products.filter((p) => wishList.includes(p._id));
 

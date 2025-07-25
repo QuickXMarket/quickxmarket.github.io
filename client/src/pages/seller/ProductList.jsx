@@ -1,11 +1,11 @@
 import React from "react";
-import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 
 import { useEffect, useState } from "react";
+import { useCoreContext } from "../../context/CoreContext";
 
 const ProductList = () => {
-  const { currency, axios } = useAppContext();
+  const { currency, axios } = useCoreContext();
   const [products, setProducts] = useState([]);
 
   const fetchProducts = async () => {

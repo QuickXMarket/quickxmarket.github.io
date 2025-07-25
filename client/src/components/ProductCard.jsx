@@ -1,10 +1,11 @@
 import React from "react";
 import { assets } from "../assets/assets";
-import { useAppContext } from "../context/AppContext";
+import { useCoreContext } from "../context/CoreContext";
+import { useProductContext } from "../context/ProductContext";
 
 const ProductCard = ({ product }) => {
-  const { currency, addToCart, removeFromCart, cartItems, navigate } =
-    useAppContext();
+  const { currency, navigate } = useCoreContext();
+  const { addToCart, removeFromCart, cartItems } = useProductContext();
 
   return (
     product && (
