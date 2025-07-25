@@ -7,7 +7,7 @@ const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
   const { baseURL, axios } = useCoreContext();
-  const { user, updateUser } = useAuthContext();
+  const { user, setUser } = useAuthContext();
   const [typingUsers, setTypingUsers] = useState({});
   const [isTyping, setIsTyping] = useState(false);
 
@@ -38,9 +38,7 @@ export const ChatProvider = ({ children }) => {
         setMessages((prev) => [...prev, newMessage.message]);
       });
       socket.current.on("typing", ({ userId, name }) => {
-      
-          setTypingUsers((prev) => ({ ...prev, [userId]: name }));
-        
+        setTypingUsers((prev) => ({ ...prev, [userId]: name }));
       });
 
       socket.current.on("stop-typing", ({ userId }) => {
@@ -60,7 +58,6 @@ export const ChatProvider = ({ children }) => {
   }, [user, baseURL]);
 
   useEffect(() => {
-   
     if (
       !socket.current ||
       !socket.current.connected ||

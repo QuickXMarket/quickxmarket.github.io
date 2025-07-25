@@ -10,7 +10,8 @@ import { assets } from "../assets/assets";
 
 export default function ChatLayout({}) {
   const { fileToBase64 } = useCoreContext();
-  const { messages, sendMessage, isTyping, setIsTyping } = useChatContext();
+  const { messages, sendMessage, isTyping, setIsTyping, typingUsers } =
+    useChatContext();
   const { user } = useAuthContext();
   const [groupedMessages, setGroupedMessages] = useState([]);
   const messagesEndRef = useRef(null);
@@ -95,23 +96,31 @@ export default function ChatLayout({}) {
       <div className="flex items-center px-4 py-2 bg-white"></div>
 
       {/* Body */}
-      <div className="flex flex-col flex-grow overflow-y-auto h-100">
-        <div className="flex-grow px-4 py-2 bg-white overflow-y-auto">
+      <div className="flex flex-col flex-grow overflow-y-auto h-100  no-scrollbar">
+        <div className="flex-grow px-4 py-2 bg-white overflow-y-auto flex flex-col-reverse">
+          {Object.values(typingUsers).length > 0 && (
+            <p className="text-sm text-gray-400 italic">
+              {Object.values(typingUsers).join(", ")}{" "}
+              {Object.values(typingUsers).length > 1 ? "are" : "is"} typing...
+            </p>
+          )}
           {groupedMessages &&
-            Object.entries(groupedMessages).map(([date, msgs]) => (
-              <div key={date}>
-                <div className="text-center my-3 text-sm font-semibold">
-                  {date}
+            Object.entries(groupedMessages)
+              .reverse()
+              .map(([date, msgs]) => (
+                <div key={date}>
+                  <div className="text-center my-3 text-sm font-semibold">
+                    {date}
+                  </div>
+                  {msgs.map((msg) => (
+                    <ChatMessage
+                      key={msg.id}
+                      message={msg}
+                      currentUser={user?._id}
+                    />
+                  ))}
                 </div>
-                {msgs.map((msg) => (
-                  <ChatMessage
-                    key={msg.id}
-                    message={msg}
-                    currentUser={user?._id}
-                  />
-                ))}
-              </div>
-            ))}
+              ))}
 
           <div ref={messagesEndRef} />
         </div>

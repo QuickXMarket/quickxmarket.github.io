@@ -8,9 +8,10 @@ const ChatContext = createContext();
 export const ChatProvider = ({ children }) => {
   const { baseUrl, makeRequest } = useCoreContext();
   const { user, updateUser } = useAuthContext();
-
   const socket = useRef(null);
   const [messages, setMessages] = useState([]);
+  const [typingUsers, setTypingUsers] = useState({});
+  const [isTyping, setIsTyping] = useState(false);
 
   const retrieveMessages = async () => {
     try {
@@ -30,6 +31,29 @@ export const ChatProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    if (
+      !socket.current ||
+      !socket.current.connected ||
+      !user ||
+      !user.chatId ||
+      !user._id
+    )
+      return;
+    if (isTyping) {
+      socket.current.emit("typing", {
+        chatId: user.chatId,
+        userId: user._id,
+        name: user.name,
+      });
+    } else {
+      socket.current.emit("stop-typing", {
+        chatId: user.chatId,
+        userId: user._id,
+      });
+    }
+  }, [isTyping]);
+
+  useEffect(() => {
     if (baseUrl) socket.current = io(baseUrl);
     if (user && user.chatId) {
       socket.current.emit("join-room", user.chatId);
@@ -37,6 +61,17 @@ export const ChatProvider = ({ children }) => {
       socket.current.on("receive-message", (newMessage) => {
         if (newMessage.message.senderId === user._id) return;
         setMessages((prev) => [...prev, newMessage.message]);
+      });
+      socket.current.on("typing", ({ userId, name }) => {
+        setTypingUsers((prev) => ({ ...prev, [userId]: name }));
+      });
+
+      socket.current.on("stop-typing", ({ userId }) => {
+        setTypingUsers((prev) => {
+          const updated = { ...prev };
+          delete updated[userId];
+          return updated;
+        });
       });
 
       retrieveMessages();
@@ -72,7 +107,7 @@ export const ChatProvider = ({ children }) => {
           roomId: user.chatId || newChatId,
           message: newMessage,
         });
-        
+
         setMessages((prev) => [...prev, newMessage]);
       }
     } catch (error) {
@@ -84,6 +119,9 @@ export const ChatProvider = ({ children }) => {
     messages,
     sendMessage,
     retrieveMessages,
+    typingUsers,
+    isTyping,
+    setIsTyping,
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
