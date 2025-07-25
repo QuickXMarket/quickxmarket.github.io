@@ -12,6 +12,7 @@ export const CoreContext = createContext();
 
 export const CoreContextProvider = ({ children }) => {
   const currency = import.meta.env.VITE_CURRENCY;
+  const baseURL = import.meta.env.VITE_BACKEND_URL;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -44,6 +45,7 @@ export const CoreContextProvider = ({ children }) => {
         // Optional: log or toast error
       }
     };
+
     loadInitialData();
   }, []);
 

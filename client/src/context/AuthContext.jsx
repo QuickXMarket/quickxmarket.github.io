@@ -19,12 +19,11 @@ export const AuthContextProvider = ({ children }) => {
       const { data } = await axios.get("api/user/is-auth");
       if (data.success) {
         setUser(data.user);
-        setCartItems(data.user.cartItems || {});
-        setWishList(data.user.wishList || []);
         setIsSeller(data.user.isSeller || data.role === "vendor");
         setIsRider(data.user.isRider || false);
       }
-    } catch {
+    } catch (error) {
+      console.log(error);
       setUser(null);
     }
   };

@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
-  const { baseUrl, axios } = useCoreContext();
+  const { baseURL, axios } = useCoreContext();
   const { user, updateUser } = useAuthContext();
 
   const socket = useRef(null);
@@ -27,8 +27,8 @@ export const ChatProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (baseUrl) socket.current = io(baseUrl);
-    if (user && user.chatId) {
+    if (baseURL) socket.current = io(baseURL);
+    if (user && user.chatId && baseURL) {
       socket.current.emit("join-room", user.chatId);
 
       socket.current.on("receive-message", (newMessage) => {
@@ -42,7 +42,7 @@ export const ChatProvider = ({ children }) => {
         socket.current.disconnect();
       };
     }
-  }, [user, baseUrl]);
+  }, [user, baseURL]);
 
   const sendMessage = async (content, media = "") => {
     try {

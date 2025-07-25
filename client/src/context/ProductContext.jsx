@@ -95,6 +95,13 @@ export const ProductContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    if (user) {
+      setCartItems(user.cartItems || {});
+      setWishList(user.wishList || []);
+    }
+  }, [user]);
+
+  useEffect(() => {
     const loadInitialData = async () => {
       try {
         fetchProducts();

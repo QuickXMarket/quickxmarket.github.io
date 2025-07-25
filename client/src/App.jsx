@@ -23,6 +23,8 @@ import ShopList from "./pages/ShopList";
 import ShopProducts from "./pages/ShopProducts";
 import WishList from "./pages/WishList";
 import { useAuthContext } from "./context/AuthContext";
+import Dispatch from "./pages/Dispatch";
+import DispatchRequest from "./pages/DispatchRequest";
 
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller");
@@ -58,6 +60,8 @@ const App = () => {
           <Route path="/products/:category/:id" element={<ProductDetails />} />
           <Route path="/shops" element={<ShopList />} />
           <Route path="/shops/:vendorId" element={<ShopProducts />} />
+          <Route path="/dispatch" element={<Dispatch />} />
+          <Route path="/dispatch-request" element={<DispatchRequest />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/add-address" element={<AddAddress />} />
           <Route path="/my-orders" element={<MyOrders />} />
