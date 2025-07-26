@@ -20,7 +20,7 @@ export const CoreProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const baseUrl = "https://quickxmarket-server.onrender.com/";
+  const baseUrl = "https://quickxmarket-server.onrender.com";
 
   const makeRequest = async ({ method, url, data }) => {
     try {

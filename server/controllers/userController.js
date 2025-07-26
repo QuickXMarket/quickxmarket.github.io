@@ -226,3 +226,16 @@ export const updateUserFcmToken = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const toggleOnlineStatus = async (userId, status) => {
+  try {
+    await User.findByIdAndUpdate(userId, {
+      isOnline: status,
+      ...(status === false && { lastSeen: new Date() }),
+    });
+
+    console.log(`User ${userId} is now ${status ? "online" : "offline"}`);
+  } catch (error) {
+    console.error("Failed to toggle online status:", error.message);
+  }
+};

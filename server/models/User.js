@@ -14,6 +14,8 @@ const userSchema = new mongoose.Schema(
     isSeller: { type: Boolean, default: false },
     isRider: { type: Boolean, default: false },
     chatId: { type: mongoose.Schema.Types.ObjectId, ref: "chat" },
+    isOnline: { type: Boolean, default: false },
+    lastSeen: { type: Date, default: Date.now },
   },
   { minimize: false }
 );

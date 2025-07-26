@@ -47,14 +47,15 @@ export const NotificationProvider = ({ children }) => {
     PushNotifications.addListener(
       "pushNotificationReceived",
       async (notification) => {
-        const route = notification.notification.data?.route;
+        const route = notification.data?.route;
         await LocalNotifications.schedule({
           notifications: [
             {
-              title: notification.title || "New Notification",
-              body: notification.body || "",
-              id: Date.now(),
+              title: notification?.title || "New Notification",
+              body: notification?.body || "",
+              id: Math.floor(Math.random() * 1000000),
               ...(route && { extra: { route } }),
+              smallIcon: "ic_stat_notify",
             },
           ],
         });

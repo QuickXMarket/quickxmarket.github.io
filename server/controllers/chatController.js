@@ -1,6 +1,8 @@
 import { v2 as cloudinary } from "cloudinary";
 import Chat from "../models/Chat.js";
 import User from "../models/User.js";
+import { sendPushNotification } from "../utils/fcmService.js";
+import { sendNewMessageNotification } from "./mailController.js";
 
 async function uploadBase64Image(base64String, folder, publicId) {
   try {
@@ -116,5 +118,44 @@ export const getAllAdminChat = async (req, res) => {
     res
       .status(500)
       .json({ success: false, message: "Failed to retrieve chats." });
+  }
+};
+
+export const notifyParticipants = async (chatId, senderId) => {
+  try {
+    const chat = await Chat.findById(chatId);
+    const message = chat.messages[chat.messages.length - 1];
+    const participants = [];
+    if (senderId === chat.userId) {
+    } else {
+      const user = await User.findOne({ chatId, _id: { $ne: senderId } });
+      if (user) {
+        participants.push(user);
+      }
+    }
+    for (const participant of participants) {
+      if (participant.isOnline || participant.fcmToken) {
+        if (participant.fcmToken) {
+          await sendPushNotification(
+            participant.fcmToken,
+            "New Message",
+            message?.text || "You have a new message",
+            {
+              chatId: chatId,
+              senderId: senderId,
+            }
+          );
+        }
+      } else {
+        await sendNewMessageNotification({
+          recipientEmail: participant.email,
+          senderName: participant.name,
+          messageText: message.message,
+          mediaUrl: message.media,
+        });
+      }
+    }
+  } catch (error) {
+    console.log(error);
   }
 };

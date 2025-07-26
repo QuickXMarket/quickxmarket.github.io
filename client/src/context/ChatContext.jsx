@@ -31,7 +31,10 @@ export const ChatProvider = ({ children }) => {
   useEffect(() => {
     if (baseURL) socket.current = io(baseURL);
     if (user && user.chatId && baseURL) {
-      socket.current.emit("join-room", user.chatId);
+      socket.current.emit("join-room", {
+        roomId: user.chatId,
+        userId: user._id,
+      });
 
       socket.current.on("receive-message", (newMessage) => {
         if (newMessage.message.senderId === user._id) return;

@@ -8,7 +8,10 @@
   "android": {
     "scheme": "quickxmarket"
   },
-
+  "server": {
+    "url": "http://192.168.164.148:5173",
+    "cleartext": true
+  },
   "plugins": {
     "CapacitorHttp": {
       "enabled": true

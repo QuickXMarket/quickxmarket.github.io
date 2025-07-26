@@ -7,6 +7,7 @@ import {
   vendorProductUploadConfirmation,
   riderOrderNotification,
   dispatchRecipientNotification,
+  newMessageNotification,
 } from "../utils/mailTemplates.js";
 
 // Ensure admin email is set
@@ -150,7 +151,7 @@ export const sendOrderNotification = async ({
 export const sendDispatchDeliveryCode = async (
   dispatchId,
   deliveryCode,
-  dropoff,
+  dropoff
 ) => {
   try {
     await transporter.sendMail({
@@ -161,5 +162,23 @@ export const sendDispatchDeliveryCode = async (
     });
   } catch (error) {
     console.error("❌ Error sending dispatch delivery code email:", error);
+  }
+};
+
+export const sendNewMessageNotification = async ({
+  recipientEmail,
+  senderName,
+  messageText,
+  mediaUrl,
+}) => {
+  try {
+    await transporter.sendMail({
+      from: `"QuickXMarket Chat" <${process.env.SMTP_USER}>`,
+      to: recipientEmail,
+      subject: `New Message from ${senderName}`,
+      html: newMessageNotification({ senderName, messageText, mediaUrl }),
+    });
+  } catch (error) {
+    console.error("❌ Error sending new message notification email:", error);
   }
 };
