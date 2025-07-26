@@ -10,6 +10,7 @@ export const ChatProvider = ({ children }) => {
   const { user, setUser } = useAuthContext();
   const [typingUsers, setTypingUsers] = useState({});
   const [isTyping, setIsTyping] = useState(false);
+  const [showChatModal, setShowChatModal] = useState(false);
 
   const socket = useRef(null);
   const [messages, setMessages] = useState([]);
@@ -41,6 +42,7 @@ export const ChatProvider = ({ children }) => {
         setMessages((prev) => [...prev, newMessage.message]);
       });
       socket.current.on("typing", ({ userId, name }) => {
+        if (userId === user._id) return;
         setTypingUsers((prev) => ({ ...prev, [userId]: name }));
       });
 
@@ -122,6 +124,8 @@ export const ChatProvider = ({ children }) => {
     typingUsers,
     isTyping,
     setIsTyping,
+    showChatModal,
+    setShowChatModal,
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;

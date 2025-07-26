@@ -340,7 +340,7 @@ const dispatchRecipientNotification = (
 
 const newMessageNotification = ({ senderName, messageText, mediaUrl }) => {
   const websiteDomain = process.env.WEBSITE_URL;
-  const chatLink = `https://${websiteDomain}/Contact`;
+  const chatLink = `https://${websiteDomain}?contact=true`;
   return `
   <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
     <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">

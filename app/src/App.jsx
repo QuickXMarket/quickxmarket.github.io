@@ -45,7 +45,7 @@ const App = () => {
     user,
     authLoading,
   } = useAuthContext();
-  const { keyboardVisible, location } = useCoreContext();
+  const { keyboardVisible, location, navigate } = useCoreContext();
 
   const isSellerPath = location.pathname.includes("seller");
   const isRiderPath = location.pathname.includes("rider");
@@ -62,6 +62,15 @@ const App = () => {
     };
     hideSplashScreen();
   }, []);
+
+  const params = new URLSearchParams(location.search);
+  const contactParam = params.get("contact");
+
+  useEffect(() => {
+    if (contactParam === "true") {
+     navigate("/contact")
+    }
+  }, [contactParam]);
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-white ">

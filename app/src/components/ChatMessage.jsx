@@ -20,10 +20,15 @@ const ChatMessage = ({ message, currentUser }) => {
 
     const processedText = messageText.replace(urlRegex, (match) => {
       const url = match.startsWith("http") ? match : `https://${match}`;
-      return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600  hover:text-blue-800">${match}</a>`;
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">${match}</a>`;
     });
 
-    return <p dangerouslySetInnerHTML={{ __html: processedText }} />;
+    return (
+      <p
+        class="break-words whitespace-pre-wrap text-gray-800 max-w-[100%]"
+        dangerouslySetInnerHTML={{ __html: processedText }}
+      />
+    );
   };
 
   return (
@@ -70,11 +75,7 @@ const ChatMessage = ({ message, currentUser }) => {
           }`}
         >
           {/* Message Text */}
-          {message.message && (
-            <p className="text-gray-800 break-words whitespace-pre-wrap">
-              <MessageText messageText={message.message} />
-            </p>
-          )}
+          {message.message && <MessageText messageText={message.message} />}
 
           {/* Timestamp */}
           <div

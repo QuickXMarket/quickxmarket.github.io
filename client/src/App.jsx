@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "./components/Navbar";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import { Toaster } from "react-hot-toast";
 import ChatDotIcon from "./assets/chat-dots.svg?react";
@@ -33,18 +33,38 @@ import RiderLayout from "./pages/rider/RiderLayout";
 import RiderWallet from "./pages/rider/RiderWallet";
 import RidersOrders from "./pages/rider/RidersOrders";
 import RiderProfile from "./pages/rider/RiderProfile";
+import ChatLayout from "./pages/ChatLayout";
+import { useChatContext } from "./context/ChatContext";
 
 const App = () => {
-  const isSellerPath = useLocation().pathname.includes("seller");
-  const isRiderPath = useLocation().pathname.includes("rider");
-  const isContactPath = location.pathname.includes("Contact");
+  const { navigate, location } = useCoreContext();
+  const isSellerPath = location.pathname.includes("seller");
+  const isRiderPath = location.pathname.includes("rider");
+  const isContactPath = location.pathname.includes("contact");
   const { showUserLogin, isSeller, isRider, showSellerLogin, user, loading } =
     useAuthContext();
-  const { navigate } = useCoreContext();
+  const { showChatModal, setShowChatModal } = useChatContext();
+  const params = new URLSearchParams(location.search);
+  const contactParam = params.get("contact");
+
+  useEffect(() => {
+    if (contactParam === "true") {
+      setShowChatModal(true);
+      const timeout = setTimeout(() => {
+        const newParams = new URLSearchParams(location.search);
+        newParams.delete("contact");
+        navigate(`${location.pathname}?${newParams.toString()}`, {
+          replace: true,
+        });
+      }, 500);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [contactParam]);
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-white">
-      {isSellerPath || isRiderPath || isContactPath ? null : <Navbar />}
+      {isSellerPath || isRiderPath ? null : <Navbar />}
       {showUserLogin ? <Login /> : null}
       {showSellerLogin ? <SellerLogin /> : null}
 
@@ -124,14 +144,21 @@ const App = () => {
       {!isContactPath && (
         <div className="fixed bottom-6 right-6 sm:right-10 lg:right-14 z-50">
           <button
-            onClick={() => navigate("/Contact")}
+            onClick={() => {
+              if (user) {
+                setShowChatModal(true);
+              } else {
+                navigate("/contact");
+              }
+            }}
             className="bg-primary hover:bg-primary/90 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl"
           >
             <ChatDotIcon className={"w-8 h-8"} />
           </button>
         </div>
       )}
-      {!(isSellerPath || isRiderPath || isContactPath) && <Footer />}
+      {user && showChatModal && <ChatLayout />}
+      {!(isSellerPath || isRiderPath) && <Footer />}
     </div>
   );
 };

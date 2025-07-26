@@ -63,6 +63,7 @@ export const ChatProvider = ({ children }) => {
         setMessages((prev) => [...prev, newMessage.message]);
       });
       socket.current.on("typing", ({ userId, name }) => {
+        if (userId === user._id) return;
         setTypingUsers((prev) => ({ ...prev, [userId]: name }));
       });
 
