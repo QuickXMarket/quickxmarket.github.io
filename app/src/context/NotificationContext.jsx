@@ -48,6 +48,7 @@ export const NotificationProvider = ({ children }) => {
       "pushNotificationReceived",
       async (notification) => {
         const route = notification.data?.route;
+        console.log(notification);
         await LocalNotifications.schedule({
           notifications: [
             {

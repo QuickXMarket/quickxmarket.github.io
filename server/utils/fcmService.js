@@ -31,7 +31,6 @@ export const sendPushNotification = async (
       title,
       body,
     },
-    icon: "ic_stat_notify",
     data: {
       ...data,
     },
