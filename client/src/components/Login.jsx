@@ -3,6 +3,8 @@ import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
 import { useCoreContext } from "../context/CoreContext";
 import { useProductContext } from "../context/ProductContext";
+import { useRef } from "react";
+import { useEffect } from "react";
 
 const Login = () => {
   const { setShowUserLogin, setUser, setIsSeller } = useAuthContext();
@@ -16,6 +18,7 @@ const Login = () => {
   const [password, setPassword] = React.useState("");
   const [passwordErrors, setPasswordErrors] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const googleButtonRef = useRef();
 
   const onSubmitHandler = async (event) => {
     try {
@@ -50,24 +53,7 @@ const Login = () => {
 
       const { data } = await axios.post(`/api/user/${state}`, payload);
       if (data.success) {
-        setUser(data.user);
-        setShowUserLogin(false);
-        if (cartItems && Object.keys(cartItems).length > 0) {
-          setCartItems({
-            ...data.user.cartItems,
-            ...cartItems,
-          });
-        }
-
-        if (wishList && wishList.length > 0) {
-          const wishListData = Array.from(
-            new Set([...data.user.wishList, ...wishList])
-          );
-
-          setWishList(wishListData);
-        }
-        setIsSeller(data.user.isSeller);
-        if (location.pathname !== "/seller") navigate("/");
+        handleLoginSuccess(data);
       } else {
         toast.error(data.message);
       }
@@ -98,6 +84,62 @@ const Login = () => {
       }
     } catch (error) {
       toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (window.google && googleButtonRef.current) {
+      window.google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        callback: handleCredentialResponse,
+      });
+
+      window.google.accounts.id.renderButton(googleButtonRef.current, {
+        theme: "outline",
+        size: "large",
+      });
+    }
+  }, []);
+
+  const handleCredentialResponse = async (response) => {
+    const { credential } = response;
+    try {
+      const { data } = await axios.post("/api/user/google-signin", {
+        token: credential,
+      });
+
+      if (data.success) {
+        handleLoginSuccess(data);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (err) {
+      console.error("Login failed:", err.response?.data || err.message);
+    }
+  };
+
+  const handleLoginSuccess = (data) => {
+    setUser(data.user);
+    setShowUserLogin(false);
+
+    if (cartItems && Object.keys(cartItems).length > 0) {
+      setCartItems({
+        ...data.user.cartItems,
+        ...cartItems,
+      });
+    }
+
+    if (wishList && wishList.length > 0) {
+      const wishListData = Array.from(
+        new Set([...data.user.wishList, ...wishList])
+      );
+      setWishList(wishListData);
+    }
+
+    setIsSeller(data.user.isSeller);
+
+    if (location.pathname !== "/seller") {
+      navigate("/");
     }
   };
 
@@ -208,6 +250,7 @@ const Login = () => {
             ? "Login"
             : "Send Reset Email"}
         </button>
+        <div ref={googleButtonRef}></div>
       </form>
     </div>
   );

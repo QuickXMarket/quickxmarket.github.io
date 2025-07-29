@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { isEmailDomainValid } from "../utils/emailValidation.js";
+import { OAuth2Client } from "google-auth-library";
 
 // Register User : /api/user/register
 export const register = async (req, res) => {
@@ -56,6 +57,56 @@ export const register = async (req, res) => {
   } catch (error) {
     console.log(error.message);
     res.json({ success: false, message: error.message });
+  }
+};
+
+export const googleSignIn = async (req, res) => {
+  try {
+    const { token } = req.body;
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    const { sub: googleId, email, name, picture } = payload;
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      const hashedPassword = await bcrypt.hash(googleId, 10);
+      user = await User.create({
+        name,
+        email,
+        password: hashedPassword,
+      });
+    }
+
+    const JWTtoken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "30d",
+    });
+
+    res.cookie("token", JWTtoken, {
+      httpOnly: true, // Prevent JavaScript to access cookie
+      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", // CSRF protection
+      maxAge: 30 * 24 * 60 * 60 * 1000, // Cookie expiration time
+    });
+
+    return res.json({
+      success: true,
+      token: JWTtoken,
+      user: {
+        email: user.email,
+        name: user.name,
+        _id: user._id,
+      },
+    });
+  } catch (err) {
+    console.error("Token verification failed", err);
+    res.status(401).json({ message: "Invalid token" });
   }
 };
 
