@@ -8,10 +8,8 @@ export const AuthContextProvider = ({ children }) => {
   const { axios } = useCoreContext();
   const [user, setUser] = useState(null);
   const [isSeller, setIsSeller] = useState(false);
-  const [isRider, setIsRider] = useState(false);
   const [showUserLogin, setShowUserLogin] = useState(false);
   const [showSellerLogin, setShowSellerLogin] = useState(false);
-  const [showRiderLogin, setShowRiderLogin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // Fetch Seller Status
@@ -21,7 +19,6 @@ export const AuthContextProvider = ({ children }) => {
       if (data.success) {
         setUser(data.user);
         setIsSeller(data.user.isSeller || data.role === "vendor");
-        setIsRider(data.user.isRider || false);
       }
     } catch (error) {
       console.log(error);
@@ -47,12 +44,8 @@ export const AuthContextProvider = ({ children }) => {
     setUser,
     setIsSeller,
     isSeller,
-    isRider,
-    setIsRider,
     showUserLogin,
     setShowUserLogin,
-    showRiderLogin,
-    setShowRiderLogin,
     showSellerLogin,
     setShowSellerLogin,
 

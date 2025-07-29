@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import { useCoreContext } from "../../context/CoreContext";
 import { useAuthContext } from "../../context/AuthContext";
 
-const VendorWallet = () => {
+const Wallet = () => {
   const { axios } = useCoreContext();
   const { user } = useAuthContext();
   const { vendor } = useOutletContext();
@@ -177,4 +177,4 @@ const VendorWallet = () => {
   );
 };
 
-export default VendorWallet;
+export default Wallet;
