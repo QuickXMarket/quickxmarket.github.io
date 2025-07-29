@@ -48,8 +48,7 @@ export const sendPasswordResetEmail = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
   try {
-    const { token, id } = req.query;
-    const { newPassword } = req.body;
+    const { token, id, newPassword } = req.body;
 
     if (!token || !id || !newPassword) {
       return res.status(400).json({

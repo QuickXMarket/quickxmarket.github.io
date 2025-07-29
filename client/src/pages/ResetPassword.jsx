@@ -44,12 +44,11 @@ const ResetPassword = () => {
       setErrors(validationErrors);
 
       if (Object.keys(validationErrors).length === 0) {
-        const { data } = await axios.post(
-          `/api/user/resetPassword/token=${token}&id=${id}`,
-          {
-            newPassword,
-          }
-        );
+        const { data } = await axios.post(`/api/user/resetPassword`, {
+          id,
+          token,
+          newPassword,
+        });
         if (data.success) {
           toast.success(data.message);
           setNewPassword("");
