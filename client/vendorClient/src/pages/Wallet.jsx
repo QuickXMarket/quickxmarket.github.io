@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import toast from "react-hot-toast";
 import { useOutletContext } from "react-router-dom";
-import { useCoreContext } from "../../context/CoreContext";
-import { useAuthContext } from "../../context/AuthContext";
+import { useCoreContext } from "../context/CoreContext";
+import { useAuthContext } from "../context/AuthContext";
 
 const Wallet = () => {
   const { axios } = useCoreContext();

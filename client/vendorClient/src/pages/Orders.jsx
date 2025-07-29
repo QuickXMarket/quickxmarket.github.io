@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { assets } from "../../assets/assets";
+import { assets } from "../assets/assets";
 import toast from "react-hot-toast";
 import { useOutletContext } from "react-router-dom";
-import { useCoreContext } from "../../context/CoreContext";
+import { useCoreContext } from "../context/CoreContext";
 
 const Orders = () => {
   const { currency, axios } = useCoreContext();
@@ -11,7 +11,7 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-      const { data } = await axios.get(`/api/order/seller${vendor._id}`);
+      const { data } = await axios.get(`/api/order/seller/${vendor._id}`);
       if (data.success) {
         setOrders(data.orders);
       } else {

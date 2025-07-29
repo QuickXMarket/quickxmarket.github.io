@@ -2,7 +2,7 @@ import React from "react";
 import toast from "react-hot-toast";
 
 import { useEffect, useState } from "react";
-import { useCoreContext } from "../../context/CoreContext";
+import { useCoreContext } from "../context/CoreContext";
 
 const ProductList = () => {
   const { currency, axios } = useCoreContext();

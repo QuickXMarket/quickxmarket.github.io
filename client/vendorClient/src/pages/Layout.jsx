@@ -1,10 +1,10 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import { assets } from "../../assets/assets";
+import { assets } from "../assets/assets";
 import toast from "react-hot-toast";
 import React, { useEffect } from "react";
-import SellerLogin from "../../components/seller/SellerLogin";
-import { useAuthContext } from "../../context/AuthContext";
-import { useCoreContext } from "../../context/CoreContext";
+import SellerLogin from "../components/SellerLogin";
+import { useAuthContext } from "../context/AuthContext";
+import { useCoreContext } from "../context/CoreContext";
 import Navbar from "../components/Navbar";
 
 const Layout = () => {
@@ -43,14 +43,14 @@ const Layout = () => {
   }, [user, axios]);
 
   const sidebarLinks = [
-    { name: "Add Product", path: "/seller", icon: assets.add_icon },
+    { name: "Add Product", path: "/", icon: assets.add_icon },
     {
       name: "Product List",
-      path: "/seller/product-list",
+      path: "/product-list",
       icon: assets.product_list_icon,
     },
-    { name: "Orders", path: "/seller/orders", icon: assets.order_icon },
-    { name: "Wallet", path: "/seller/wallet", icon: assets.wallet_outline },
+    { name: "Orders", path: "/orders", icon: assets.order_icon },
+    { name: "Wallet", path: "/wallet", icon: assets.wallet_outline },
   ];
 
   if (showSellerLogin) {
@@ -66,7 +66,7 @@ const Layout = () => {
             <NavLink
               to={item.path}
               key={item.name}
-              end={item.path === "/seller"}
+              end={item.path === "/"}
               className={({ isActive }) =>
                 `flex items-center py-3 px-4 gap-3 
                             ${

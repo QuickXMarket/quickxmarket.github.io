@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
-import { assets } from "../../assets/assets";
-import { useCoreContext } from "../../context/CoreContext";
-import { useAuthContext } from "../../context/AuthContext";
+import { assets } from "../assets/assets";
+import { useCoreContext } from "../context/CoreContext";
+import { useAuthContext } from "../context/AuthContext";
 
 const SellerLogin = () => {
   const { axios, navigate, fuse, location } = useCoreContext();
