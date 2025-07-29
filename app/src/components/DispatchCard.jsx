@@ -49,7 +49,7 @@ const DispatchCard = ({ dispatch }) => {
 
       {/* Accordion Body */}
       {isOpen && (
-        <div className="bg-white px-5 py-4 space-y-4 border-t border-gray-200 text-sm text-gray-700">
+        <div className="bg-background px-5 py-4 space-y-4 border-t border-gray-200 text-sm text-gray-700">
           {/* Dropoff Details */}
           <div className="space-y-1">
             <p>

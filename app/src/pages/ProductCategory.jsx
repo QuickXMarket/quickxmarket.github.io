@@ -7,22 +7,28 @@ import { useProductContext } from "../context/ProductContext";
 import { useCoreContext } from "../context/CoreContext";
 
 const ProductCategory = () => {
-  const { products } = useProductContext;
+  const { products } = useProductContext();
   const { makeRequest } = useCoreContext();
   const { category } = useParams();
-
+  const [searchCategory, setSearchCategory] = useState(null);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [loadingVendors, setLoadingVendors] = useState(false);
 
-  const searchCategory = categories.find(
-    (item) => item.path.toLowerCase() === category
-  );
-
-  const filteredProducts = products.filter(
-    (product) => product.category.toLowerCase() === category
-  );
-
   useEffect(() => {
+    if (!products) return;
+    const searchCategory = categories.find(
+      (item) => item.path.toLowerCase() === category
+    );
+
+    const filteredProducts = products.filter(
+      (product) => product.category.toLowerCase() === category
+    );
+
+    console.log(category, filteredProducts);
+    setSearchCategory(searchCategory);
+    setFilteredProducts(filteredProducts);
+
     const fetchVendors = async () => {
       if (category === "food") {
         setLoadingVendors(true);

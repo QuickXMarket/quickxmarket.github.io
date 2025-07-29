@@ -19,6 +19,7 @@ export const CoreProvider = ({ children }) => {
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const [theme, setTheme] = useState(null);
 
   const baseUrl = "https://quickxmarket-server.onrender.com";
 
@@ -129,12 +130,20 @@ export const CoreProvider = ({ children }) => {
     });
   };
 
-  const configureStatusBar = async () => {
+  const configureStatusBar = async (theme) => {
     if (!Capacitor.isNativePlatform()) return;
+
     try {
-      await fetchAddresses();
       await StatusBar.setOverlaysWebView({ overlay: false });
-      await StatusBar.setStyle({ style: Style.Light });
+
+      if (theme === "dark") {
+        await StatusBar.setStyle({ style: Style.Dark });
+        await StatusBar.setBackgroundColor({ color: "#1e1e1e" });
+      } else {
+        await StatusBar.setStyle({ style: Style.Light });
+        await StatusBar.setBackgroundColor({ color: "#ffffff" });
+      }
+
       await EdgeToEdge.enable();
     } catch (error) {
       console.warn("StatusBar config failed:", error);
@@ -165,11 +174,45 @@ export const CoreProvider = ({ children }) => {
     };
   }, [location]);
 
+  const toggleTheme = async () => {
+    const isDark = document.body.classList.toggle("dark");
+    await Preferences.set({ key: "theme", value: isDark ? "dark" : "light" });
+    await applySavedTheme();
+  };
+
+  const applySavedTheme = async () => {
+    const { value } = await Preferences.get({ key: "theme" });
+    let savedTheme = value;
+
+    if (!savedTheme || savedTheme === "system") {
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      savedTheme = prefersDark ? "dark" : "light";
+    }
+
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    setTheme(savedTheme);
+    await configureStatusBar(savedTheme);
+  };
+
   useEffect(() => {
-    setupDeepLinkListener();
-    configureStatusBar();
-    keyboardListeners();
-    // paystackAppResume();
+    const initialConfig = async () => {
+      await applySavedTheme();
+      setupDeepLinkListener();
+      keyboardListeners();
+      // paystackAppResume();
+      await fetchAddresses();
+    };
+
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = async () => {
+      await applySavedTheme();
+    };
+
+    media.addEventListener("change", handleChange);
+    initialConfig();
+    return () => media.removeEventListener("change", handleChange);
   }, []);
 
   const value = {
@@ -186,6 +229,8 @@ export const CoreProvider = ({ children }) => {
     baseUrl,
     InAppBrowser,
     DefaultWebViewOptions,
+    theme,
+    toggleTheme,
   };
 
   return <CoreContext.Provider value={value}>{children}</CoreContext.Provider>;

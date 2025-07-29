@@ -60,7 +60,9 @@ const App = () => {
     const hideSplashScreen = async () => {
       await SplashScreen.hide();
     };
-    hideSplashScreen();
+    setTimeout(() => {
+      hideSplashScreen();
+    }, 1000);
   }, []);
 
   const params = new URLSearchParams(location.search);
@@ -68,12 +70,12 @@ const App = () => {
 
   useEffect(() => {
     if (contactParam === "true") {
-     navigate("/contact")
+      navigate("/contact");
     }
   }, [contactParam]);
 
   return (
-    <div className="text-default min-h-screen text-gray-700 bg-white ">
+    <div className="text-default min-h-screen text-gray-700 bg-background ">
       {!(isSellerPath || isRiderPath || isContactPath) && <Navbar />}
       {showUserLogin && <Login />}
       {showSellerLogin && <SellerLogin />}

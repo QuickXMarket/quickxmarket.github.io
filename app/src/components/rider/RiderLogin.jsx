@@ -94,64 +94,84 @@ const RiderLogin = () => {
   return (
     <div
       onClick={handleClose}
-      className="fixed inset-0 z-30 flex items-center justify-center bg-black/50"
+      className="fixed inset-0 z-30 flex items-center justify-center bg-black/60"
     >
       <form
         onSubmit={onSubmitHandler}
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col gap-4 bg-white w-80 sm:w-[352px] p-8 py-12 rounded-lg shadow-xl border border-gray-200 text-sm text-gray-600"
+        className="flex flex-col gap-5 w-[90%] max-w-sm p-8 rounded-2xl shadow-2xl border border-gray-200 bg-background transition-all"
       >
+        <p className="text-xl font-semibold text-center text-gray-800 dark:text-white">
+          Rider Registration
+        </p>
+
+        {/* Full Name */}
         <div className="w-full">
-          <p>Full Name</p>
+          <label className="text-sm font-medium text-gray-700 ">
+            Full Name
+          </label>
           <input
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             placeholder="Enter your name"
-            className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary"
             required
+            className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
           />
         </div>
 
+        {/* Phone Number */}
         <div className="w-full">
-          <p>Phone Number</p>
+          <label className="text-sm font-medium text-gray-700 ">
+            Phone Number
+          </label>
           <input
-            type="text"
+            type="tel"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
             placeholder="Enter phone number"
-            className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary"
             required
+            className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
           />
         </div>
 
+        {/* Date of Birth */}
         <div className="w-full">
-          <p>Date of Birth</p>
+          <label className="text-sm font-medium text-gray-700 ">
+            Date of Birth
+          </label>
           <input
             type="date"
             value={dob}
             onChange={(e) => setDob(e.target.value)}
-            className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary"
             required
+            className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
           />
         </div>
 
+        {/* Vehicle Type */}
         <div className="w-full">
-          <p>Vehicle Type</p>
+          <label className="text-sm font-medium text-gray-700 ">
+            Vehicle Type
+          </label>
           <select
             value={vehicle}
             onChange={(e) => setVehicle(e.target.value)}
-            className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary"
             required
+            className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
           >
+            <option value="" disabled>
+              Select vehicle type
+            </option>
             <option value="Bicycle">Bicycle</option>
             <option value="Motorcycle">Motorcycle</option>
           </select>
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className="cursor-pointer bg-primary text-white w-full py-2 rounded-md hover:bg-primary-dull transition"
+          className="w-full py-2 text-sm font-medium text-white bg-primary rounded-md hover:bg-primary-dull transition-all"
         >
           Register as Rider
         </button>

@@ -19,7 +19,7 @@ const BottomNavbar = () => {
   const { navigate, location } = useCoreContext();
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-sm flex justify-around py-2 lg:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border shadow-sm flex justify-around py-2 lg:hidden">
       {/* <ShopIcon /> */}
       {navItems.map((item) => {
         const isActive = location.pathname === item.path;
@@ -28,12 +28,12 @@ const BottomNavbar = () => {
             key={item.name}
             onClick={() => navigate(item.path)}
             className={`flex flex-col items-center text-xs ${
-              isActive ? "text-primary" : "text-gray-500"
+              isActive ? "text-primary" : "text-gray-500	"
             }`}
           >
             <item.icon
               className={`w-6 h-6  ${
-                isActive ? "text-primary" : "text-gray-500"
+                isActive ? "text-primary" : "text-gray-500 "
               }`}
             />
             <span className="text-[11px]">{item.name}</span>

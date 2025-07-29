@@ -8,6 +8,7 @@ import {
   riderOrderNotification,
   dispatchRecipientNotification,
   newMessageNotification,
+  resetPasswordEmail,
 } from "../utils/mailTemplates.js";
 
 // Ensure admin email is set
@@ -173,12 +174,25 @@ export const sendNewMessageNotification = async ({
 }) => {
   try {
     await transporter.sendMail({
-      from: `"QuickXMarket Chat" <${process.env.SMTP_USER}>`,
+      from: `"QuickXMarket" <${process.env.SMTP_USER}>`,
       to: recipientEmail,
       subject: `New Message from ${senderName}`,
       html: newMessageNotification({ senderName, messageText, mediaUrl }),
     });
   } catch (error) {
     console.error("❌ Error sending new message notification email:", error);
+  }
+};
+
+export const sendResetPasswordEmail = async (userEmail, resetLink) => {
+  try {
+    await transporter.sendMail({
+      from: `"QuickXMarket Support" <${process.env.SMTP_USER}>`,
+      to: userEmail,
+      subject: "Reset Your QuickXMarket Password",
+      html: resetPasswordEmail(resetLink),
+    });
+  } catch (error) {
+    console.error("❌ Error sending reset password email:", error);
   }
 };

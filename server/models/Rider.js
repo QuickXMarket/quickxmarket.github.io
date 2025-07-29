@@ -7,6 +7,7 @@ const riderSchema = new mongoose.Schema(
       ref: "user",
       required: true,
       unique: true,
+      immutable: true,
     },
     name: { type: String, required: true },
     number: { type: String, required: true },

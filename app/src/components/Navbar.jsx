@@ -11,7 +11,7 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
 
   const { user, setUser, setShowUserLogin } = useAuthContext();
-  const { navigate } = useCoreContext();
+  const { navigate, theme } = useCoreContext();
   const { searchQuery, setSearchQuery, getCartCount } = useProductContext();
 
   useEffect(() => {
@@ -22,11 +22,15 @@ const Navbar = () => {
 
   return (
     <div>
-      <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
+      <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-border bg-background relative transition-all">
         <div onClick={() => navigate("/")}>
           <img
             className="h-6 sm:h-7 lg:h-9"
-            src={assets.QuickXMarket_Logo_Transparent}
+            src={
+              theme === "dark"
+                ? assets.QuickXMarket_Logo_Transparent_2
+                : assets.QuickXMarket_Logo_Transparent_1
+            }
             alt="logo"
           />
         </div>

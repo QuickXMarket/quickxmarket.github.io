@@ -7,6 +7,7 @@ const dispatchSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "address",
       required: true,
+      immutable: true,
     },
     dropoff: {
       firstName: { type: String, required: true },

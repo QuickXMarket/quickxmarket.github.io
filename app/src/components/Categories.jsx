@@ -12,8 +12,14 @@ const Categories = () => {
         {categories.map((category, index) => (
           <div
             key={index}
-            className="group cursor-pointer py-5 px-3 gap-2 rounded-lg flex flex-col justify-center items-center"
-            style={{ backgroundColor: category.bgColor }}
+            className={`group cursor-pointer py-5 px-3 gap-2 rounded-lg flex flex-col justify-center items-center `}
+            style={{
+              backgroundColor: category.bgColor,
+
+              ...(document?.documentElement?.dataset?.theme === "dark" && {
+                backgroundColor: category.darkBgColor,
+              }),
+            }}
             onClick={() => {
               navigate(`/products/${category.path.toLowerCase()}`);
               scrollTo(0, 0);
@@ -22,8 +28,9 @@ const Categories = () => {
             <img
               src={category.image}
               alt={category.text}
-              className="group-hover:scale-108 transition max-w-28 h-28"
+              className="group-hover:scale-108 transition max-w-28 h-28 dark:brightness-80"
             />
+
             <p className="text-sm font-medium">{category.text}</p>
           </div>
         ))}

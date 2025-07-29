@@ -39,7 +39,7 @@ const ChatMessage = ({ message, currentUser }) => {
         }`}
       >
         {!isSender && (
-          <p className="font-bold mb-[5px] text-[#555] whitespace-nowrap overflow-hidden text-ellipsis no-underline">
+          <p className="font-bold mb-[5px] text-text whitespace-nowrap overflow-hidden text-ellipsis no-underline">
             {message.senderName}
           </p>
         )}

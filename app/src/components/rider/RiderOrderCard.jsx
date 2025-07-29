@@ -124,7 +124,7 @@ const RiderOrderCard = ({ order, riderId, fetchOrders }) => {
 
       {/* Accordion Body */}
       {isOpen && (
-        <div className="bg-white px-4 py-3 space-y-4">
+        <div className="bg-background px-4 py-3 space-y-4">
           {order.vendors.map((vendor, index) => (
             <div key={index} className="border-t border-gray-200 pt-4">
               {/* Vendor Info */}

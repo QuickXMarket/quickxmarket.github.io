@@ -2,7 +2,12 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
-    userId: { type: String, required: true, ref: "user" },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "user",
+      immutable: true,
+    },
     items: [
       {
         product: { type: String, required: true, ref: "product" },
@@ -22,14 +27,18 @@ const orderSchema = new mongoose.Schema(
       },
     ],
     amount: { type: Number, required: true },
-    // deliveryFee: { type: Number, required: true },
-    // serviceFee: { type: Number, required: true },
-    // totalFee: { type: Number, required: true },
+    deliveryFee: { type: Number, required: true },
+    serviceFee: { type: Number, required: true },
+    totalFee: { type: Number, required: true },
     address: { type: String, required: true, ref: "address" },
     paymentType: { type: String, required: true },
     deliveryCode: { type: String },
     isPaid: { type: Boolean, required: true, default: false },
-    riderId: { type: String, default: null, ref: "rider" },
+    riderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "rider",
+      default: null,
+    },
     paystackReference: { type: String, unique: true, sparse: true },
   },
   { timestamps: true }

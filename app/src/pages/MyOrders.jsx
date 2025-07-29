@@ -98,7 +98,7 @@ const MyOrders = () => {
 
           {/* Accordion Body */}
           {openIndex === index && (
-            <div className="bg-white px-5 py-4 space-y-4 border-t border-gray-200">
+            <div className="bg-background px-5 py-4 space-y-4 border-t border-gray-200">
               {order.items.map((item, idx) => (
                 <div
                   key={idx}

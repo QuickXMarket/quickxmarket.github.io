@@ -35,6 +35,7 @@ import RidersOrders from "./pages/rider/RidersOrders";
 import RiderProfile from "./pages/rider/RiderProfile";
 import ChatLayout from "./pages/ChatLayout";
 import { useChatContext } from "./context/ChatContext";
+import ResetPassword from "./pages/ResetPassword";
 
 const App = () => {
   const { navigate, location } = useCoreContext();
@@ -102,6 +103,7 @@ const App = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/loader" element={<Loading />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route
             path="/seller"
             element={

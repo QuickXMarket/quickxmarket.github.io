@@ -70,7 +70,7 @@ const MainBanner = () => {
             <img
               src={slide.large}
               alt="slide"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover  dark:brightness-90"
             />
             <div className="absolute inset-0  flex flex-col justify-center items-center text-white text-center p-4">
               <h2

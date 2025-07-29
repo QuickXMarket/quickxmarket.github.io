@@ -134,10 +134,10 @@ const Cart = () => {
         items: cartArray.map((item) => ({
           product: item._id,
           quantity: item.quantity,
+          vendorId: item.vendorId,
         })),
         address: selectedAddress._id,
         email: user.email,
-        amount: totalAmount,
       });
 
       if (data.success) {

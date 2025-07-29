@@ -6,17 +6,20 @@ import {
   vendorList,
 } from "../controllers/vendorController.js";
 import { upload } from "../configs/multer.js";
+import authUser from "../middlewares/authUser.js";
 
 const sellerRouter = express.Router();
 
-// Route to create vendor document after SellerLogin form submission
-sellerRouter.post("/register", upload.single("profilePhoto"), createVendor);
+sellerRouter.post(
+  "/register",
+  upload.single("profilePhoto"),
+  authUser,
+  createVendor
+);
+sellerRouter.get("/user/:userId", authUser, getVendorByUserId);
 
-// Route to get vendor by userId
-sellerRouter.get("/user/:userId", getVendorByUserId);
+sellerRouter.get("/vendor/:vendorId", authUser, getVendorById);
 
-sellerRouter.get("/vendor/:vendorId", getVendorById);
-
-sellerRouter.get("/list", vendorList);
+sellerRouter.get("/list", authUser, vendorList);
 
 export default sellerRouter;

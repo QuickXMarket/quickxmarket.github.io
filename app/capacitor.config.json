@@ -9,7 +9,7 @@
     "scheme": "quickxmarket"
   },
   "server": {
-    "url": "http://192.168.164.148:5173",
+    "url": "http://192.168.0.101:5173",
     "cleartext": true
   },
   "plugins": {
@@ -18,15 +18,13 @@
     },
     "StatusBar": {
       "overlaysWebView": false,
-      "style": "DARK",
-      "backgroundColor": "#ffffffff"
+      "visible": true
     },
     "SplashScreen": {
       "launchAutoHide": false,
       "showSpinner": false,
       "androidSplashResourceName": "splash",
-      "androidScaleType": "CENTER_CROP",
-      "backgroundColor": "#ffffffff"
+      "androidScaleType": "CENTER_CROP"
     }
   }
 }

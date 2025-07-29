@@ -33,7 +33,8 @@ import food_image from "./food_image.jpg";
 import hair_accessories_image from "./hair_accessories_image.jpg";
 import first_banner_image from "./1st_banner_image.jpg";
 import second_banner_image from "./2nd_banner_image.jpg";
-import QuickXMarket_Logo_Transparent from "./QuickXMarket_Logo_Transparent.png";
+import QuickXMarket_Logo_Transparent_1 from "./QuickXMarket_Logo_Transparent-1.png";
+import QuickXMarket_Logo_Transparent_2 from "./QuickXMarket_Logo_Transparent-2.png";
 import Favicon_rounded from "./Favicon2-rounded.png";
 import Favicon from "./Favicon.png";
 import login from "./login.svg";
@@ -90,7 +91,8 @@ export const assets = {
   wallet_icon,
   first_banner_image,
   second_banner_image,
-  QuickXMarket_Logo_Transparent,
+  QuickXMarket_Logo_Transparent_1,
+  QuickXMarket_Logo_Transparent_2,
   Slideshow_1,
   Slideshow_2,
   Slideshow_3,
@@ -106,36 +108,42 @@ export const categories = [
     path: "PhoneAccessories",
     image: phone_accessories_image,
     bgColor: "#E0F7FA",
+    darkBgColor: "#12343a", // muted cyan-dark
   },
   {
     text: "Hair Accessories",
     path: "HairAccessories",
     image: hair_accessories_image,
     bgColor: "#F1F8E9",
+    darkBgColor: "#1d2b1e", // soft moss-dark
   },
   {
     text: "Fashion and Accessories",
     path: "Fashion&Accessories",
     image: clothing_image,
     bgColor: "#FCE4EC",
+    darkBgColor: "#3a2029", // dusty rose-dark
   },
   {
     text: "Shoes",
     path: "Shoes",
     image: shoes_image,
     bgColor: "#FFF3E0",
+    darkBgColor: "#3a2b1c", // brown-tan-dark
   },
   {
     text: "Cosmetics",
     path: "Cosmetics",
     image: cosmetics_image,
     bgColor: "#F3E5F5",
+    darkBgColor: "#2e2333", // muted violet-dark
   },
   {
     text: "Food",
     path: "Food",
     image: food_image,
     bgColor: "#E8F5E9",
+    darkBgColor: "#1f2a21", // green-tint dark
   },
 ];
 

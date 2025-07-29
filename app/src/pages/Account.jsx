@@ -4,6 +4,8 @@ import { assets } from "../assets/assets";
 import toast from "react-hot-toast";
 import AccountOption from "../components/AccountOption";
 import { useAuthContext } from "../context/AuthContext";
+import ProfileIcon from "../assets/person-circle.svg?react";
+import ArrowIcon from "../assets/black_arrow_icon.svg?react";
 
 const Account = () => {
   const {
@@ -19,11 +21,7 @@ const Account = () => {
     <div className="max-w-xl mx-auto">
       {/* Greeting */}
       <div className="px-4 py-6 sm:px-6 md:px-10 lg:px-16 text-center mb-6">
-        <img
-          src={assets.account_icon}
-          alt="Profile"
-          className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
-        />
+        <ProfileIcon className="w-20 h-20 rounded-full mx-auto mb-4 object-cover" />
         <h1 className="text-2xl font-semibold">
           {user ? `Welcome, ${user.name}` : "Welcome, Guest"}
         </h1>

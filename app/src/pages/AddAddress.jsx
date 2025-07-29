@@ -192,7 +192,7 @@ const AddAddress = () => {
                 autoComplete="off"
               />
               {suggestions.length > 0 && (
-                <ul className="absolute z-50 bg-white border border-gray-300 rounded w-full max-h-40 overflow-auto mt-1">
+                <ul className="absolute z-50 bg-card border border-gray-300 rounded w-full max-h-40 overflow-auto mt-1">
                   {suggestions.map((suggestion) => (
                     <li
                       key={suggestion.place_id}

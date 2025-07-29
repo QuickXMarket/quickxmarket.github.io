@@ -9,6 +9,10 @@ import {
   updateWishList,
 } from "../controllers/userController.js";
 import authUser from "../middlewares/authUser.js";
+import {
+  resetPassword,
+  sendPasswordResetEmail,
+} from "../controllers/PasswordResetController.js";
 
 const userRouter = express.Router();
 
@@ -19,5 +23,7 @@ userRouter.get("/logout", authUser, logout);
 userRouter.patch("/update-role", authUser, updateUserRole);
 userRouter.patch("/update-fcm-token", authUser, updateUserFcmToken);
 userRouter.post("/wishListUpdate", authUser, updateWishList);
+userRouter.post("/sendPasswordResetEmail", sendPasswordResetEmail);
+userRouter.post("/resetPassword", resetPassword);
 
 export default userRouter;

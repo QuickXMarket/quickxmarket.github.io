@@ -8,7 +8,7 @@ import { useAuthContext } from "../../context/AuthContext";
 
 const RiderLayout = () => {
   const { user } = useAuthContext();
-  const { makeRequest, location, keyboardVisible } = useCoreContext();
+  const { makeRequest, location, keyboardVisible, theme } = useCoreContext();
 
   const [showLogin, setShowLogin] = useState(false);
   const [riderName, setRiderName] = useState("");
@@ -53,10 +53,14 @@ const RiderLayout = () => {
   return (
     <>
       {/* Top Bar */}
-      <div className="flex items-center justify-between px-4 md:px-8 border-b border-gray-300 py-3 bg-white">
+      <div className="flex items-center justify-between px-4 md:px-8 border-b border-border py-3 bg-background">
         <Link to="/">
           <img
-            src={assets.QuickXMarket_Logo_Transparent}
+            src={
+              theme === "dark"
+                ? assets.QuickXMarket_Logo_Transparent_2
+                : assets.QuickXMarket_Logo_Transparent_1
+            }
             alt="logo"
             className="cursor-pointer w-34 md:w-38"
           />
@@ -95,7 +99,7 @@ const RiderLayout = () => {
 
       {/* Bottom Navigation for mobile */}
       {!keyboardVisible && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-sm flex justify-around py-2 lg:hidden">
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border shadow-sm flex justify-around py-2 lg:hidden">
           {navLinks.map((item) => {
             const isActive = location.pathname === item.path;
             return (

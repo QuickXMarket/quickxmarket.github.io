@@ -134,7 +134,7 @@ const RiderDispatchCard = ({ dispatch, riderId, fetchOrders }) => {
 
       {/* Accordion Body */}
       {isOpen && (
-        <div className="bg-white px-4 py-3 space-y-4 border-t border-gray-200 text-sm text-gray-700">
+        <div className="bg-background px-4 py-3 space-y-4 border-t border-gray-200 text-sm text-gray-700">
           {/* Dropoff Details */}
           <h3 className="mb-1">Dropoff Details</h3>
           <div className=" flex justify-between items-center gap-4 text-sm">

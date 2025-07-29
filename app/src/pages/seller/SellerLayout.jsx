@@ -8,7 +8,7 @@ import { useAuthContext } from "../../context/AuthContext";
 
 const SellerLayout = () => {
   const { user } = useAuthContext();
-  const { makeRequest, location } = useCoreContext();
+  const { makeRequest, location, theme } = useCoreContext();
 
   const [isVendor, setIsVendor] = React.useState(null);
   const [showSellerLogin, setShowSellerLogin] = React.useState(false);
@@ -63,10 +63,14 @@ const SellerLayout = () => {
   return (
     <>
       {/* Header */}
-      <div className="flex items-center justify-between px-4 md:px-8 border-b border-gray-300 py-3 bg-white">
+      <div className="flex items-center justify-between px-4 md:px-8 border-b border-border py-3 bg-background">
         <Link to="/">
           <img
-            src={assets.QuickXMarket_Logo_Transparent}
+            src={
+              theme === "dark"
+                ? assets.QuickXMarket_Logo_Transparent_2
+                : assets.QuickXMarket_Logo_Transparent_1
+            }
             alt="log"
             className="cursor-pointer w-34 md:w-38"
           />
@@ -107,7 +111,7 @@ const SellerLayout = () => {
       </div>
 
       {/* Bottom Nav for mobile - visible only on < lg */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-sm flex justify-around py-2 lg:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border shadow-sm flex justify-around py-2 lg:hidden">
         {sidebarLinks.map((item) => {
           const isActive = location.pathname === item.path;
           return (

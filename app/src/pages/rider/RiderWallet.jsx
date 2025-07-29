@@ -102,7 +102,7 @@ const RiderWallet = () => {
   return (
     <div className="p-4 max-w-3xl mx-auto " ref={containerRef}>
       {/* Wallet Summary Card */}
-      <div className="bg-white rounded-2xl shadow-md px-6 py-4 mb-6 flex flex-col gap-4">
+      <div className="bg-card rounded-2xl shadow-md px-6 py-4 mb-6 flex flex-col gap-4">
         <div>
           <p className="text-gray-500 text-sm">Available Balance</p>
           <h2 className="text-2xl font-bold text-gray-800">
@@ -129,7 +129,7 @@ const RiderWallet = () => {
           wallet.transactions.toReversed().map((tx, idx) => (
             <div
               key={idx}
-              className="bg-white shadow-sm rounded-lg px-4 py-3 border border-gray-200"
+              className="bg-card shadow-sm rounded-lg px-4 py-3 border border-gray-200"
             >
               <div className="flex justify-between items-center mb-1">
                 <h3 className="font-medium text-sm text-gray-800">
@@ -161,7 +161,7 @@ const RiderWallet = () => {
       {/* Withdraw Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-white w-70 max-w-sm rounded-lg p-6 space-y-4 shadow-xl">
+          <div className="bg-background w-70 max-w-sm rounded-lg p-6 space-y-4 shadow-xl">
             <h2 className="text-lg font-bold text-gray-800">
               Request Withdrawal
             </h2>

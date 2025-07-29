@@ -60,35 +60,42 @@ export const register = async (req, res) => {
 };
 
 // Login User : /api/user/login
-
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password)
-      return res.json({
+    if (!email || !password) {
+      return res.status(400).json({
         success: false,
         message: "Email and password are required",
       });
-
-    // Validate email domain MX record
-    const isValidDomain = await isEmailDomainValid(email);
-    if (!isValidDomain) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid email domain." });
     }
 
-    const user = await User.findOne({ email });
+    const isValidDomain = await isEmailDomainValid(email);
+    if (!isValidDomain) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email domain.",
+      });
+    }
+
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
-      return res.json({ success: false, message: "Invalid email or password" });
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials",
+      });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
-    if (!isMatch)
-      return res.json({ success: false, message: "Invalid email or password" });
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials",
+      });
+    }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "30d",
@@ -98,10 +105,10 @@ export const login = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       token,
       user: {
@@ -113,8 +120,11 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error.message);
-    res.json({ success: false, message: error.message });
+    console.error(error.message);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
 };
 

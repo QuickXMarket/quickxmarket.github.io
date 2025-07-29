@@ -3,19 +3,49 @@ import Address from "../models/Address.js";
 import {
   calculateDeliveryFee,
   calculateServiceFee,
+  calculateTotalDeliveryFee,
 } from "../utils/deliveryService.js";
 import { createNewOrder } from "./orderController.js";
 import { createNewDispatch } from "./dispatchController.js";
+import Product from "../models/Product.js";
 
 export const placeOrderPaystack = async (req, res) => {
   try {
-    const { userId, items, address, amount, isNativeApp } = req.body;
+    const { userId, items, address, isNativeApp } = req.body;
     const { origin } = req.headers;
 
     if (!address || items.length === 0) {
       return res.json({ success: false, message: "Invalid data" });
     }
     const deliveryCode = Math.floor(1000 + Math.random() * 9000).toString();
+    const customerAddress = await Address.findById(address);
+    if (!customerAddress) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Address not found" });
+    }
+
+    const vendorIdsSet = new Set();
+    items.forEach((product) => {
+      if (product.vendorId) {
+        vendorIdsSet.add(product.vendorId);
+      }
+    });
+    const vendorIds = Array.from(vendorIdsSet);
+
+    let totalAmount = 0;
+    for (const item of items) {
+      const product = await Product.findById(item.product);
+      totalAmount += item.quantity * product.offerPrice;
+    }
+
+    const deliveryFee = await calculateTotalDeliveryFee(
+      customerAddress.latitude,
+      customerAddress.longitude,
+      vendorIds
+    );
+    const serviceFee = await calculateServiceFee(deliveryFee + totalAmount);
+    const totalFee = deliveryFee + serviceFee;
 
     const orderData = {
       userId,
@@ -25,7 +55,10 @@ export const placeOrderPaystack = async (req, res) => {
         quantity: item.quantity,
         status: "Order Placed",
       })),
-      amount,
+      amount: totalAmount,
+      deliveryFee,
+      serviceFee,
+      totalFee,
       address,
       paymentType: "Online",
     };
@@ -42,7 +75,7 @@ export const placeOrderPaystack = async (req, res) => {
       "https://api.paystack.co/transaction/initialize",
       {
         email: req.body.email,
-        amount: amount * 100, // amount in kobo
+        amount: totalFee * 100, // amount in kobo
         metadata: {
           orderData,
           userId,
@@ -180,7 +213,7 @@ export const paystackWebhooks = async (req, res) => {
     const reference = event.data.reference;
     const metadata = event.data.metadata || {};
     const { userId } = metadata;
-    
+
     if (metadata.orderData) {
       const orderData = metadata.orderData;
       await createNewOrder(res, userId, reference, orderData);

@@ -7,6 +7,7 @@ const vendorSchema = new mongoose.Schema(
       ref: "user",
       required: true,
       unique: true,
+      immutable: true,
     },
     profilePhoto: { type: String },
     businessName: { type: String, required: true },

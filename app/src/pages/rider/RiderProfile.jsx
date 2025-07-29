@@ -7,7 +7,7 @@ const RiderProfile = () => {
   return (
     <div className="p-4 max-w-3xl mx-auto space-y-6">
       {/* Rider Profile Card */}
-      <div className="bg-white rounded-2xl shadow-md px-6 py-4 relative">
+      <div className="bg-card rounded-2xl shadow-md px-6 py-4 relative">
         {/* Edit Button */}
         <button className="absolute top-4 right-4 text-primary text-sm font-medium hover:underline">
           Edit Details

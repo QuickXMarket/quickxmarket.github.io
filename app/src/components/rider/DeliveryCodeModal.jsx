@@ -39,7 +39,7 @@ const DeliveryCodeModal = ({
 
   return (
     <div className="fixed inset-0  bg-black/60 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-md w-80">
+      <div className="bg-background p-6 rounded-lg shadow-md w-80">
         <h2 className="text-lg font-semibold mb-4 text-center">
           Enter Delivery Code
         </h2>

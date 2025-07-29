@@ -107,7 +107,7 @@ const Orders = () => {
 
             {/* Accordion Body */}
             {activeIndex === index && (
-              <div className="bg-white px-4 py-3 space-y-4">
+              <div className="bg-background px-4 py-3 space-y-4">
                 <div>
                   <h3 className="text-sm font-semibold mb-2">Items</h3>
                   {order.items.map((item, idx) => (
@@ -127,7 +127,7 @@ const Orders = () => {
 
                 <div>
                   <h3 className="text-sm font-semibold mb-2">Shipping Info</h3>
-                  <p className="text-sm text-black/70">
+                  <p className="text-sm text-text">
                     {order.address.address}, {order.address.phone}
                   </p>
                 </div>

@@ -149,15 +149,19 @@ const SellerLogin = () => {
 
   return (
     <div
-      onClick={() => handleSellerLoginCLose()}
-      className="fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center text-sm text-gray-600 bg-black/50"
+      onClick={handleSellerLoginCLose}
+      className="fixed inset-0 z-30 flex items-center justify-center bg-black/60"
     >
       <form
         onSubmit={onSubmitHandler}
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col gap-4 m-auto items-center p-8 py-12 w-80 sm:w-[352px] rounded-lg shadow-xl border border-gray-200 bg-white"
+        className="flex flex-col gap-5 w-[90%] max-w-sm p-8 rounded-2xl shadow-2xl border border-gray-200 bg-background  transition-all"
       >
-        <label htmlFor="profilePhoto" className="cursor-pointer">
+        {/* Profile Upload */}
+        <label
+          htmlFor="profilePhoto"
+          className="relative w-24 h-24 mx-auto cursor-pointer group"
+        >
           <input
             type="file"
             id="profilePhoto"
@@ -167,69 +171,87 @@ const SellerLogin = () => {
           />
           <img
             src={uploadPreview || assets.upload_area}
-            alt="Upload Area"
-            width={100}
-            height={100}
-            className="rounded-full object-cover"
+            alt="Upload"
+            className="rounded-full object-cover w-full h-full border border-gray-300 shadow-inner group-hover:brightness-90"
           />
+          <div className="absolute inset-0 flex items-center justify-center text-xs text-white bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+            Change
+          </div>
         </label>
+
+        {/* Business Name */}
         <div className="w-full">
-          <p>Business Name</p>
+          <label className="text-sm font-medium text-gray-700 ">
+            Business Name
+          </label>
           <input
             type="text"
             value={businessName}
             onChange={(e) => setBusinessName(e.target.value)}
             placeholder="Enter business name"
-            className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary"
+            disabled={loading}
+            className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
             required
           />
         </div>
+
+        {/* Contact Number */}
         <div className="w-full">
-          <p>Number</p>
+          <label className="text-sm font-medium text-gray-700 ">
+            Phone Number
+          </label>
           <input
             type="text"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
             placeholder="Enter contact number"
-            className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary"
+            disabled={loading}
+            className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
             required
           />
         </div>
+
+        {/* Address with Suggestions */}
         <div className="w-full relative">
-          <p>Address</p>
+          <label className="text-sm font-medium text-gray-700 ">
+            Address
+          </label>
           <input
             type="text"
             value={address}
             onChange={onAddressChange}
             placeholder="Enter business address"
-            className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary"
-            required
             autoComplete="off"
+            disabled={loading}
+            className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
+            required
           />
           {suggestions.length > 0 && (
-            <ul className="absolute z-50 bg-white border border-gray-300 rounded w-full max-h-40 overflow-auto mt-1">
+            <ul className="absolute z-50 bg-gray-50 border border-gray-300 dark:border-gray-700 rounded w-full max-h-40 overflow-auto mt-1 shadow-md">
               {suggestions.map((suggestion) => (
                 <li
                   key={suggestion.place_id}
                   onClick={() => onSuggestionClick(suggestion)}
-                  className="p-2 cursor-pointer hover:bg-gray-200"
+                  className="p-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white"
                 >
-                  {`${suggestion.display_name} ${suggestion.street || ""}`}
+                  {suggestion.display_name}
                 </li>
               ))}
             </ul>
           )}
         </div>
+
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={loading || latitude === null || longitude === null}
-          className={`cursor-pointer bg-primary text-white w-full py-2 rounded-md transition-all ${
+          className={`w-full py-2 text-sm font-medium text-white rounded-md transition-all ${
             loading || latitude === null || longitude === null
               ? "bg-gray-400 cursor-not-allowed"
-              : "hover:bg-primary-dull"
+              : "bg-primary hover:bg-primary-dull"
           }`}
         >
-          Register Business
+          {loading ? "Registering..." : "Register Business"}
         </button>
       </form>
     </div>

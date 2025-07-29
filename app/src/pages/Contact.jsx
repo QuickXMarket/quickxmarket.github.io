@@ -9,7 +9,7 @@ import { Link } from "react-router";
 import { assets } from "../assets/assets";
 
 export default function ChatLayout({}) {
-  const { fileToBase64 } = useCoreContext();
+  const { fileToBase64, theme } = useCoreContext();
   const { messages, sendMessage, isTyping, setIsTyping, typingUsers } =
     useChatContext();
   const { user } = useAuthContext();
@@ -80,11 +80,15 @@ export default function ChatLayout({}) {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-gray-100 ">
-      <div className="flex items-center justify-between px-4 md:px-8 border-b border-gray-300 py-3 bg-white">
+    <div className="flex flex-col h-full w-full bg-background ">
+      <div className="flex items-center justify-between px-4 md:px-8 border-b border-border py-3 bg-background">
         <Link to="/">
           <img
-            src={assets.QuickXMarket_Logo_Transparent}
+            src={
+              theme === "dark"
+                ? assets.QuickXMarket_Logo_Transparent_2
+                : assets.QuickXMarket_Logo_Transparent_1
+            }
             alt="logo"
             className="cursor-pointer w-34 md:w-38"
           />
@@ -93,11 +97,11 @@ export default function ChatLayout({}) {
       </div>
 
       {/* Header */}
-      <div className="flex items-center px-4 py-2 bg-white"></div>
+      <div className="flex items-center px-4 py-2 bg-background"></div>
 
       {/* Body */}
       <div className="flex flex-col flex-grow overflow-y-auto h-100  no-scrollbar">
-        <div className="flex-grow px-4 py-2 bg-white overflow-y-auto flex flex-col-reverse">
+        <div className="flex-grow px-4 py-2 bg-background overflow-y-auto flex flex-col-reverse">
           {Object.values(typingUsers).length > 0 && (
             <p className="text-sm text-gray-400 italic">
               {Object.values(typingUsers).join(", ")}{" "}
@@ -129,9 +133,9 @@ export default function ChatLayout({}) {
       {/* Footer */}
       <form
         onSubmit={handleSendMessage}
-        className="flex items-center py-2 bg-white border-t"
+        className="flex items-center py-2 bg-background border-t"
       >
-        <div className="flex items-center flex-grow bg-white border rounded-full px-3 py-2 shadow">
+        <div className="flex items-center flex-grow bg-background border rounded-full px-3 py-2 shadow">
           <input
             type="text"
             className="flex-grow outline-none"
