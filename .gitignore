@@ -1,3 +1,7 @@
 node_modules
 .env
 package.json
+!vendor-client/package.json
+!app/Customer/package.json
+!app/Rider/package.json
+!app/Vendor/package.json
