@@ -1,0 +1,65 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+
+@import "tailwindcss";
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+:root {
+  --color-primary: hsl(153, 51%, 53%); /* #4fbf8b */
+  --color-primary-dull: hsl(153, 44%, 47%); /* #44ae7c */
+  --color-background: hsl(0, 0%, 100%); /* #ffffff */
+  --color-text: hsl(0, 0%, 7%); /* #111111 */
+  --color-card: hsl(0, 0%, 97.25%); /* #f8f8f8 */
+  --color-border: hsl(0, 0%, 87.84%); /* #e0e0e0 */
+  --color-gray-50: hsl(210 24% 98%);
+  --color-gray-100: hsl(220 15% 96%);
+  --color-gray-200: hsl(220 14.000000000000002% 91%);
+  --color-gray-300: hsl(216 13% 84%);
+  --color-gray-400: hsl(217.9 12% 64%);
+  --color-gray-500: hsl(220.03 10% 46%);
+  --color-gray-600: hsl(214.99 16% 34%);
+  --color-gray-700: hsl(216.94 21% 27%);
+  --color-gray-800: hsl(214.99 31% 17%);
+  --color-gray-900: hsl(221 42% 11%);
+}
+
+[data-theme="dark"] {
+  --color-primary: hsl(153, 48%, 38%); /* #317e61 */
+  --color-primary-dull: hsl(153, 40%, 32%); /* #296a53 */
+
+  --color-background: hsl(0, 0%, 11.76%); /* #1e1e1e */
+  --color-text: hsl(0, 0%, 94.51%); /* #f1f1f1 */
+  --color-card: hsl(0, 0%, 16.47%); /* #2a2a2a */
+  --color-border: hsl(0, 0%, 22.75%); /* #3a3a3a */
+  --color-gray-50: hsl(0, 0%, 16.47%); /* reverse of gray-900 */
+  --color-gray-100: hsl(215, 31%, 17%); /* reverse of gray-800 */
+  --color-gray-200: hsl(217, 21%, 27%); /* reverse of gray-700 */
+  --color-gray-300: hsl(215, 16%, 34%); /* reverse of gray-600 */
+  --color-gray-400: hsl(220, 10%, 46%); /* reverse of gray-500 */
+  --color-gray-500: hsl(217.9, 12%, 64%);
+  --color-gray-600: hsl(220, 14%, 74%);
+  --color-gray-700: hsl(220, 15%, 84%);
+  --color-gray-800: hsl(210, 24%, 92%);
+  --color-gray-900: hsl(210, 24%, 98%); /* inverse gray-50 */
+}
+
+@theme {
+  --color-primary: #111;
+  --color-primary-dull: #57c495;
+  --color-background: #1e1e1e;
+  --color-text: #f1f1f1;
+  --color-card: #2a2a2a;
+  --color-border: #3a3a3a;
+}
+
+* {
+  font-family: "Outfit", sans-serif;
+}
+
+body,
+html {
+  background-color: var(--color-background);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

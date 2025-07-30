@@ -17,6 +17,7 @@ const Navbar = () => {
     try {
       const { data } = await axios.get("/api/user/logout");
       if (data.success) {
+        window.google.accounts.id.disableAutoSelect();
         toast.success(data.message);
         setUser(null);
         navigate("/");
