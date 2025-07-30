@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useAuthContext } from "../context/AuthContext";
 import Footer from "../components/Footer";
+import FAQ from "../components/FAQ";
 
 const Home = () => {
   const { user } = useAuthContext();
@@ -52,6 +53,7 @@ const Home = () => {
       </div>
       <div className="mt-10">
         <MainBanner />
+        <FAQ />
         {/* <Categories />
       <BestSeller />
       <BottomBanner/>
