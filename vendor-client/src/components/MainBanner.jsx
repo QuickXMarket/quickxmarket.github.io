@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { assets } from "../assets/assets";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
 
 const MainBanner = () => {
   const slidesData = [
@@ -15,6 +16,7 @@ const MainBanner = () => {
   const startXRef = useRef(null);
   const isDraggingRef = useRef(false);
   const containerRef = useRef(null);
+  const { user, setShowSellerLogin, setShowUserLogin } = useAuthContext();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -115,9 +117,34 @@ const MainBanner = () => {
               >
                 Sell smarter. Grow faster. Stress less.
               </h2>
-              <div className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg text-sm sm:text-base">
-                Dashboard
-              </div>
+
+              {user ? (
+                user.isSeller ? (
+                  <NavLink to="/dashboard">
+                    <div className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg text-sm sm:text-base cursor-pointer">
+                      Dashboard
+                    </div>
+                  </NavLink>
+                ) : !user.isSeller ? (
+                  <div
+                    className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg text-sm sm:text-base cursor-pointer"
+                    onClick={() => {
+                      setShowSellerLogin(true);
+                    }}
+                  >
+                    Register as a Vendor
+                  </div>
+                ) : null
+              ) : (
+                <div
+                  className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg text-sm sm:text-base cursor-pointer"
+                  onClick={() => {
+                    setShowUserLogin(true);
+                  }}
+                >
+                  Sign In/Up
+                </div>
+              )}
             </div>
           </div>
         ))}

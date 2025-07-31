@@ -10,24 +10,9 @@ const Navbar = () => {
   const [open, setOpen] = React.useState(false);
   const [searchOpen, setSearchOpen] = React.useState(false);
   const { axios, navigate } = useCoreContext();
-  const { user, setUser, setShowUserLogin, setShowSellerLogin } =
+  const { user, logout, setShowUserLogin, setShowSellerLogin } =
     useAuthContext();
   const { setSearchQuery, getCartCount, searchQuery } = useProductContext();
-  const logout = async () => {
-    try {
-      const { data } = await axios.get("/api/user/logout");
-      if (data.success) {
-        window.google.accounts.id.disableAutoSelect();
-        toast.success(data.message);
-        setUser(null);
-        navigate("/");
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
 
   useEffect(() => {
     if (searchQuery.length > 0) {

@@ -43,14 +43,14 @@ const Layout = () => {
   }, [user, axios]);
 
   const sidebarLinks = [
-    { name: "Add Product", path: "/", icon: assets.add_icon },
+    { name: "Add Product", path: "/dashboard", icon: assets.add_icon },
     {
       name: "Product List",
-      path: "/product-list",
+      path: "/dashboard/product-list",
       icon: assets.product_list_icon,
     },
-    { name: "Orders", path: "/orders", icon: assets.order_icon },
-    { name: "Wallet", path: "/wallet", icon: assets.wallet_outline },
+    { name: "Orders", path: "/dashboard/orders", icon: assets.order_icon },
+    { name: "Wallet", path: "/dashboard/wallet", icon: assets.wallet_outline },
   ];
 
   if (showSellerLogin) {

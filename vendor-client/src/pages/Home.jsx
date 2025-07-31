@@ -7,7 +7,8 @@ import Footer from "../components/Footer";
 import FAQ from "../components/FAQ";
 
 const Home = () => {
-  const { user } = useAuthContext();
+  const { user, logout, setShowSellerLogin, setShowUserLogin } =
+    useAuthContext();
   return (
     <>
       <div>
@@ -20,34 +21,39 @@ const Home = () => {
             />
           </NavLink>
 
-          <div className="flex sm:hidden items-center gap-8">
-            {user &&
-              (user.isSeller ? (
-                <NavLink to="/seller">
-                  <button className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80">
-                    Dashboard
+          <div className="flex gap-5">
+            <div className="hidden sm:flex items-center gap-8">
+              {user &&
+                (user.isSeller ? (
+                  <NavLink to="/dashboard">
+                    <button className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80">
+                      Dashboard
+                    </button>
+                  </NavLink>
+                ) : !user.isSeller ? (
+                  <button
+                    className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80"
+                    onClick={() => {
+                      setShowSellerLogin(true);
+                    }}
+                  >
+                    Register as a Vendor
                   </button>
-                </NavLink>
-              ) : !user.isSeller ? (
-                <button
-                  className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80"
-                  onClick={() => {
-                    setShowSellerLogin(true);
-                  }}
-                >
-                  Register as a Vendor
-                </button>
-              ) : null)}
-          </div>
-          <div className="hidden sm:flex  gap-3">
-            <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-primary  text-sm font-bold leading-normal tracking-[0.015em]">
-              <span class="truncate">{`${user ? "Sign Out" : "Sign In"}`}</span>
+                ) : null)}
+            </div>
+            <button
+              onClick={() => {
+                if (!user) setShowUserLogin(true);
+                else {
+                  logout();
+                }
+              }}
+              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-primary  text-sm font-bold leading-normal tracking-[0.015em]"
+            >
+              <span class="truncate">{`${
+                user ? "Sign Out" : "Sign In/Up"
+              }`}</span>
             </button>
-            {!user && (
-              <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-gray-200  text-sm font-bold leading-normal tracking-[0.015em]">
-                <span class="truncate">Sign Up</span>
-              </button>
-            )}
           </div>
         </nav>
       </div>

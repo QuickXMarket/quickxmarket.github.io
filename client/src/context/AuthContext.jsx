@@ -5,7 +5,7 @@ import { useCoreContext } from "./CoreContext";
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const { axios } = useCoreContext();
+  const { axios, navigate } = useCoreContext();
   const [user, setUser] = useState(null);
   const [isSeller, setIsSeller] = useState(false);
   const [isRider, setIsRider] = useState(false);
@@ -26,6 +26,22 @@ export const AuthContextProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
       setUser(null);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      const { data } = await axios.get("/api/user/logout");
+      if (data.success) {
+        window.google.accounts.id.disableAutoSelect();
+        toast.success(data.message);
+        setUser(null);
+        navigate("/");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
     }
   };
 
@@ -55,7 +71,7 @@ export const AuthContextProvider = ({ children }) => {
     setShowRiderLogin,
     showSellerLogin,
     setShowSellerLogin,
-
+    logout,
     loading,
   };
 
