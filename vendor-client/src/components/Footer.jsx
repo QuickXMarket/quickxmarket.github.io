@@ -15,6 +15,7 @@ const Footer = () => {
             support, we're committed to making your selling experience smooth,
             efficient, and rewarding.
           </p>
+          
         </div>
         <div className="flex flex-wrap justify-between w-full md:w-[45%] gap-5">
           {/* {footerLinks.map((section, index) => (

@@ -10,6 +10,11 @@ const MainBanner = () => {
       small: assets.first_banner_image,
       color: "white",
     },
+    {
+      large: assets.second_banner_image,
+      small: assets.second_banner_image,
+      color: "white",
+    },
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -21,7 +26,7 @@ const MainBanner = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slidesData.length);
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [slidesData.length]);
@@ -150,7 +155,7 @@ const MainBanner = () => {
         ))}
       </div>
 
-      {/* <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
         {slidesData.map((_, index) => (
           <button
             key={index}
@@ -160,7 +165,7 @@ const MainBanner = () => {
             }`}
           ></button>
         ))}
-      </div> */}
+      </div>
     </div>
   );
 };

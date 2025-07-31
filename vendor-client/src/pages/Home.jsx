@@ -48,7 +48,7 @@ const Home = () => {
                   logout();
                 }
               }}
-              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-primary  text-sm font-bold leading-normal tracking-[0.015em]"
+              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]"
             >
               <span class="truncate">{`${
                 user ? "Sign Out" : "Sign In/Up"
