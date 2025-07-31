@@ -114,6 +114,7 @@ const Orders = () => {
                   order={order}
                   activeIndex={activeIndex}
                   toggleAccordion={toggleAccordion}
+                  handleOrderStatusUpdate={handleOrderStatusUpdate}
                 />
               ))
             ) : (
@@ -129,6 +130,7 @@ const Orders = () => {
                 order={order}
                 toggleAccordion={toggleAccordion}
                 activeIndex={activeIndex}
+                handleOrderStatusUpdate={handleOrderStatusUpdate}
               />
             ))
           ) : (

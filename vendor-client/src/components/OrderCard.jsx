@@ -76,25 +76,23 @@ const OrderCard = ({
             </p>
           </div>
           {order.items.every((item) => item.status === "Order Placed") && (
-            <>
-              <div className="flex gap-3 mt-3">
-                <button
-                  className="flex-1 px-3 py-2 rounded bg-primary text-white text-sm"
-                  onClick={() =>
-                    handleOrderStatusUpdate(order._id, "Order Confirmed")
-                  }
-                >
-                  Available
-                </button>
-                <button className="flex-1 px-3 py-2 rounded bg-red-500 text-white text-sm">
-                  Unavailable
-                </button>
-              </div>
-              <span className="text-xs text-gray-500">
-                *Please confirm that the above Products are available is ordered
-              </span>
-            </>
+            <div className="flex gap-3 mt-3">
+              <button
+                className="flex-1 px-3 py-2 rounded bg-primary text-white text-sm"
+                onClick={() =>
+                  handleOrderStatusUpdate(order._id, "Order Confirmed")
+                }
+              >
+                Available
+              </button>
+              <button className="flex-1 px-3 py-2 rounded bg-red-500 text-white text-sm">
+                Unavailable
+              </button>
+            </div>
           )}
+          <span className="text-xs text-gray-500">
+            *Please confirm that the above Products are available is ordered
+          </span>
         </div>
       )}
     </div>

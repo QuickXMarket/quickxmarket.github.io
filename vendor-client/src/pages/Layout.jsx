@@ -67,7 +67,7 @@ const Layout = () => {
             <NavLink
               to={item.path}
               key={item.name}
-              end={item.path === "/"}
+              end={item.path === "/dashboard"}
               className={({ isActive }) =>
                 `flex items-center py-3 px-4 gap-3 
             ${

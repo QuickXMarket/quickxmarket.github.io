@@ -7,6 +7,11 @@ import { useCoreContext } from "../context/CoreContext";
 const ProductList = () => {
   const { currency, axios } = useCoreContext();
   const [products, setProducts] = useState([]);
+  const [openProductId, setOpenProductId] = useState(null);
+
+  const toggleAccordion = (productId) => {
+    setOpenProductId(openProductId === productId ? null : productId);
+  };
 
   const fetchProducts = async () => {
     try {
@@ -64,7 +69,7 @@ const ProductList = () => {
                       <img
                         src={product.image[0]}
                         alt="Product"
-                        className="w-16"
+                        className="w-16 h-16"
                       />
                     </div>
                     <span className="truncate">{product.name}</span>
@@ -95,45 +100,58 @@ const ProductList = () => {
 
           {/* Mobile Cards */}
           <div className="sm:hidden w-full">
-            {products.map((product) => (
-              <div
-                key={product._id}
-                className="border-t border-gray-300 px-4 py-4 flex flex-col gap-2"
-              >
-                <div className="flex items-center gap-3">
-                  <img
-                    src={product.image[0]}
-                    alt="Product"
-                    className="w-16 h-16 rounded border"
-                  />
-                  <div className="font-semibold text-gray-800">
-                    {product.name}
-                  </div>
-                </div>
-                <div className="text-sm text-gray-600">
-                  Category: {product.category}
-                </div>
-                <div className="text-sm text-gray-600">
-                  Price: {currency}
-                  {product.offerPrice}
-                </div>
-                <div className="text-sm text-gray-600 flex items-center">
-                  In Stock:
-                  <label className="relative inline-flex items-center cursor-pointer ml-2">
-                    <input
-                      onChange={() =>
-                        toggleStock(product._id, !product.inStock)
-                      }
-                      checked={product.inStock}
-                      type="checkbox"
-                      className="sr-only peer"
+            {products.map((product) => {
+              const isOpen = openProductId === product._id;
+
+              return (
+                <div
+                  key={product._id}
+                  className="border-t border-gray-300 px-4 py-4 mb-4"
+                >
+                  {/* Accordion Header */}
+                  <div
+                    className="flex items-center gap-3 cursor-pointer"
+                    onClick={() => toggleAccordion(product._id)}
+                  >
+                    <img
+                      src={product.image[0]}
+                      alt="Product"
+                      className="w-16 h-16 rounded border"
                     />
-                    <div className="w-10 h-6 bg-slate-300 rounded-full peer peer-checked:bg-blue-600 transition-colors duration-200"></div>
-                    <span className="dot absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-4"></span>
-                  </label>
+                    <div className="font-semibold text-gray-800">
+                      {product.name}
+                    </div>
+                    <div className="ml-auto">
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          onChange={() =>
+                            toggleStock(product._id, !product.inStock)
+                          }
+                          checked={product.inStock}
+                          type="checkbox"
+                          className="sr-only peer"
+                        />
+                        <div className="w-10 h-6 bg-slate-300 rounded-full peer peer-checked:bg-primary peer-not-checked:bg-red-500 transition-colors duration-200"></div>
+                        <span className="dot absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-4"></span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Accordion Content */}
+                  {isOpen && (
+                    <div className="mt-3 flex flex-col gap-2">
+                      <div className="text-sm text-gray-600">
+                        Category: {product.category}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        Price: {currency}
+                        {product.offerPrice}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
