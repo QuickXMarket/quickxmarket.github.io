@@ -1,28 +1,58 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { assets } from "../assets/assets";
-import { useCoreContext } from "../context/CoreContext";
+import { NavLink } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
 
-const Navbar = ({ businessName }) => {
+const Navbar = () => {
+  const { user, logout, setShowSellerLogin, setShowUserLogin } =
+    useAuthContext();
   return (
-    <div className="flex items-center justify-between px-4 md:px-8 border-b border-gray-300 py-3 bg-white">
-      <Link to="/">
-        <img
-          src={assets.QuickXMarket_Logo_Transparent}
-          alt="log"
-          className="cursor-pointer w-34 md:w-38"
-        />
-      </Link>
-      <div className="flex items-center gap-5 text-gray-500">
-        <p className="truncate w-20 sm:w-full">Hi! {businessName}</p>
+    <div>
+      <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
+        <NavLink to="/">
+          <img
+            className="h-6 sm:h-7 lg:h-9"
+            src={assets.QuickXMarket_Logo_Transparent}
+            alt="logo"
+          />
+        </NavLink>
 
-        {/* <button
-            onClick={logout}
-            className="border rounded-full text-sm px-4 py-1"
+        <div className="flex gap-5">
+          <div className="hidden sm:flex items-center gap-8">
+            {user &&
+              (user.isSeller ? (
+                <NavLink to="/dashboard">
+                  <button className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80">
+                    Dashboard
+                  </button>
+                </NavLink>
+              ) : !user.isSeller ? (
+                <button
+                  className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80"
+                  onClick={() => {
+                    setShowSellerLogin(true);
+                  }}
+                >
+                  Register as a Vendor
+                </button>
+              ) : null)}
+          </div>
+          <button
+            onClick={() => {
+              if (!user) setShowUserLogin(true);
+              else {
+                logout();
+              }
+            }}
+            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]"
           >
-            Logout
-          </button> */}
-      </div>
+            <span class="truncate">{`${
+              user ? "Sign Out" : "Sign In/Up"
+            }`}</span>
+          </button>
+        </div>
+      </nav>
     </div>
   );
 };

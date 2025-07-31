@@ -12,11 +12,6 @@ import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import AddAddress from "./pages/AddAddress";
 import MyOrders from "./pages/MyOrders";
-import SellerLogin from "./components/seller/SellerLogin";
-import SellerLayout from "./pages/seller/SellerLayout";
-import AddProduct from "./pages/seller/AddProduct";
-import ProductList from "./pages/seller/ProductList";
-import Orders from "./pages/seller/Orders";
 import Loading from "./components/Loading";
 import Contact from "./pages/Contact";
 import FoodVendorProducts from "./pages/FoodVendorProducts";
@@ -27,23 +22,17 @@ import { useAuthContext } from "./context/AuthContext";
 import Dispatch from "./pages/Dispatch";
 import DispatchRequest from "./pages/DispatchRequest";
 import { useCoreContext } from "./context/CoreContext";
-import VendorWallet from "./pages/seller/Wallet";
-import RiderLogin from "./components/rider/RiderLogin";
-import RiderLayout from "./pages/rider/RiderLayout";
-import RiderWallet from "./pages/rider/RiderWallet";
-import RidersOrders from "./pages/rider/RidersOrders";
-import RiderProfile from "./pages/rider/RiderProfile";
 import ChatLayout from "./pages/ChatLayout";
 import { useChatContext } from "./context/ChatContext";
 import ResetPassword from "./pages/ResetPassword";
+import FAQ from "./pages/FAQ";
+import CustomerTerms from "./pages/CustomerTerms";
+import RiderTerms from "./pages/RiderTerms";
 
 const App = () => {
   const { navigate, location } = useCoreContext();
-  const isSellerPath = location.pathname.includes("seller");
-  const isRiderPath = location.pathname.includes("rider");
   const isContactPath = location.pathname.includes("contact");
-  const { showUserLogin, isSeller, isRider, showSellerLogin, user, loading } =
-    useAuthContext();
+  const { showUserLogin, user, loading } = useAuthContext();
   const { showChatModal, setShowChatModal } = useChatContext();
   const params = new URLSearchParams(location.search);
   const contactParam = params.get("contact");
@@ -65,17 +54,14 @@ const App = () => {
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-white">
-      {isSellerPath || isRiderPath ? null : <Navbar />}
+      {<Navbar />}
       {showUserLogin ? <Login /> : null}
-      {showSellerLogin ? <SellerLogin /> : null}
 
       <Toaster />
 
       <div
         className={`${
-          isSellerPath || isRiderPath
-            ? ""
-            : isContactPath
+          isContactPath
             ? "flex flex-col h-screen"
             : "px-6 md:px-16 lg:px-24 xl:px-32"
         }`}
@@ -98,49 +84,15 @@ const App = () => {
           <Route path="/dispatch" element={<Dispatch />} />
           <Route path="/dispatch-request" element={<DispatchRequest />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/customer-terms" element={<CustomerTerms />} />
+          <Route path="/rider-terms" element={<RiderTerms />} />
           <Route path="/add-address" element={<AddAddress />} />
           <Route path="/my-orders" element={<MyOrders />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/loader" element={<Loading />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route
-            path="/seller"
-            element={
-              loading ? (
-                <Loading />
-              ) : !user ? (
-                <Login />
-              ) : isSeller ? (
-                <SellerLayout />
-              ) : (
-                <SellerLogin />
-              )
-            }
-          >
-            <Route index element={isSeller ? <AddProduct /> : null} />
-            <Route path="product-list" element={<ProductList />} />
-            <Route path="orders" element={<Orders />} />
-            <Route path="wallet" element={<VendorWallet />} />
-          </Route>
-          <Route
-            path="/rider"
-            element={
-              loading ? (
-                <Loading />
-              ) : !user ? (
-                <Login />
-              ) : isRider ? (
-                <RiderLayout />
-              ) : (
-                <RiderLogin />
-              )
-            }
-          >
-            <Route index element={isRider ? <RidersOrders /> : null} />
-            <Route path="wallet" element={<RiderWallet />} />
-            <Route path="profile" element={<RiderProfile />} />
-          </Route>
         </Routes>
       </div>
       {!isContactPath && (
@@ -160,7 +112,7 @@ const App = () => {
         </div>
       )}
       {user && showChatModal && <ChatLayout />}
-      {!(isSellerPath || isRiderPath) && <Footer />}
+      {<Footer />}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { useCoreContext } from "../context/CoreContext";
 import { useProductContext } from "../context/ProductContext";
 import { useRef } from "react";
 import { useEffect } from "react";
+import { NavLink } from "react-router-dom";
 
 const Login = () => {
   const { setShowUserLogin, setUser, setIsSeller } = useAuthContext();
@@ -18,6 +19,7 @@ const Login = () => {
   const [password, setPassword] = React.useState("");
   const [passwordErrors, setPasswordErrors] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [termsAccepted, setTermsAccepted] = React.useState(false);
   const googleButtonRef = useRef();
 
   const onSubmitHandler = async (event) => {
@@ -49,6 +51,7 @@ const Login = () => {
         setPasswordErrors(errors);
         return;
       }
+
       const payload = { name, email: email.toLowerCase(), password };
 
       const { data } = await axios.post(`/api/user/${state}`, payload);
@@ -243,6 +246,27 @@ const Login = () => {
             </span>
           </p>
         )}
+        {state === "register" && (
+          <label className="flex items-start text-sm gap-2 text-gray-700">
+            <input
+              type="checkbox"
+              required
+              className="mt-1 accent-primary"
+              onChange={() => setTermsAccepted(!termsAccepted)}
+            />
+            <span>
+              I agree to the{" "}
+              <NavLink
+                href="/customer-terms"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary underline hover:text-primary-dull"
+              >
+                Terms and Conditions
+              </NavLink>
+            </span>
+          </label>
+        )}
         <button className="bg-primary hover:bg-primary-dull transition-all text-white w-full py-2 rounded-md cursor-pointer">
           {state === "register"
             ? "Create Account"
@@ -250,6 +274,7 @@ const Login = () => {
             ? "Login"
             : "Send Reset Email"}
         </button>
+
         <div ref={googleButtonRef}></div>
       </form>
     </div>

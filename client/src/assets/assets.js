@@ -133,6 +133,7 @@ export const footerLinks = [
       // { text: "Best Sellers", url: "#" },
       // { text: "Offers & Deals", url: "#" },
       { text: "Contact Us", url: "/contact" },
+      { text: "Terms and Conditions", url: "/customer-terms" },
       // { text: "FAQs", url: "#" },
     ],
   },
@@ -144,6 +145,7 @@ export const footerLinks = [
       // { text: "Payment Methods", url: "#" },
       { text: "Track your Order", url: "/my-orders" },
       { text: "Contact Us", url: "/contact" },
+      { text: "FAQ", url: "/faq" },
     ],
   },
   // {

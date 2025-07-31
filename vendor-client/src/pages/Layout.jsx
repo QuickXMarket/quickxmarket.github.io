@@ -59,7 +59,18 @@ const Layout = () => {
 
   return (
     <>
-      <Navbar businessName={businessName} />
+      <div className="flex items-center justify-between px-4 md:px-8 border-b border-gray-300 py-3 bg-white">
+        <Link to="/">
+          <img
+            src={assets.QuickXMarket_Logo_Transparent}
+            alt="log"
+            className="cursor-pointer w-34 md:w-38"
+          />
+        </Link>
+        <div className="flex items-center gap-5 text-gray-500">
+          <p className="truncate w-20 sm:w-full">Hi! {businessName}</p>
+        </div>
+      </div>
       <div className="flex">
         {/* Sidebar for md and up */}
         <div className="md:w-64 w-0 hidden md:flex border-r h-[95vh] text-base border-gray-300 pt-4 flex-col">

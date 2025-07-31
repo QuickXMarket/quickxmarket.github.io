@@ -208,6 +208,20 @@ const SellerLogin = () => {
             </ul>
           )}
         </div>
+        <label className="flex items-start text-sm gap-2 text-gray-700">
+          <input type="checkbox" required className="mt-1 accent-primary" />
+          <span>
+            I agree to the{" "}
+            <NavLink
+              href="/customer-terms"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline hover:text-primary-dull"
+            >
+              Terms and Conditions
+            </NavLink>
+          </span>
+        </label>
         <button
           type="submit"
           disabled={loading || latitude === null || longitude === null}

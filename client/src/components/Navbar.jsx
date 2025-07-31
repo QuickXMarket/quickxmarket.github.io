@@ -10,8 +10,7 @@ const Navbar = () => {
   const [open, setOpen] = React.useState(false);
   const [searchOpen, setSearchOpen] = React.useState(false);
   const { axios, navigate } = useCoreContext();
-  const { user, logout, setShowUserLogin, setShowSellerLogin } =
-    useAuthContext();
+  const { user, logout, setShowUserLogin } = useAuthContext();
   const { setSearchQuery, getCartCount, searchQuery } = useProductContext();
 
   useEffect(() => {
@@ -32,24 +31,6 @@ const Navbar = () => {
         </NavLink>
 
         <div className="hidden sm:flex items-center gap-8">
-          {user &&
-            (user.isSeller ? (
-              <NavLink to="/seller">
-                <button className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80">
-                  Seller Dashboard
-                </button>
-              </NavLink>
-            ) : !user.isSeller ? (
-              <button
-                className="border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80"
-                onClick={() => {
-                  setShowSellerLogin(true);
-                }}
-              >
-                Register as a Vendor
-              </button>
-            ) : null)}
-
           <NavLink to="/">Home</NavLink>
           <NavLink to="/dispatch">Dispatch Delivery</NavLink>
           {/* <NavLink to="/">Contact</NavLink> */}
@@ -252,23 +233,6 @@ const Navbar = () => {
                   </div>
                 </details>
               )}
-              {user &&
-                (user.isSeller ? (
-                  <NavLink className="" to="/seller" data-discover="true">
-                    Seller Dashboard
-                  </NavLink>
-                ) : !user.isSeller ? (
-                  <NavLink
-                    className=""
-                    data-discover="true"
-                    onClick={() => {
-                      setOpen(false);
-                      setShowSellerLogin(true);
-                    }}
-                  >
-                    Register as a Vendor
-                  </NavLink>
-                ) : null)}
             </div>
 
             {!user ? (

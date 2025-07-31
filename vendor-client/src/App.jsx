@@ -16,6 +16,7 @@ import Wallet from "./pages/Wallet";
 import ChatLayout from "./pages/ChatLayout";
 import { useChatContext } from "./context/ChatContext";
 import Home from "./pages/Home";
+import TermsandConditions from "./pages/TermsandConditions";
 
 const App = () => {
   const { navigate, location } = useCoreContext();
@@ -35,6 +36,11 @@ const App = () => {
       <div>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route
+            path="/terms-and-conditions"
+            element={<TermsandConditions />}
+          />
+          <Route path="/contact" element={<Contact />} />
           <Route
             path="/dashboard"
             element={
