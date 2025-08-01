@@ -30,7 +30,6 @@ const App = () => {
     <div className="text-default min-h-screen text-gray-700 bg-white">
       {showUserLogin ? <Login /> : null}
       {showSellerLogin ? <SellerLogin /> : null}
-
       <Toaster />
 
       <div>

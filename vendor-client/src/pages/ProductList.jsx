@@ -54,6 +54,8 @@ const ProductList = () => {
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setDeleteProduct(null);
     }
   };
 
@@ -62,7 +64,7 @@ const ProductList = () => {
   }, []);
 
   useEffect(() => {
-    if (deleteProduct) showConfirmModal(true);
+    if (deleteProduct) setShowConfirmModal(true);
   }, [deleteProduct]);
 
   return (
@@ -214,13 +216,18 @@ const ProductList = () => {
               );
             })}
           </div>
-          <ConfirmationModal
-            isOpen={showConfirmModal}
-            onClose={() => setShowConfirmModal(false)}
-            onConfirm={() => handleDelete(deleteProduct._id)}
-            title="Confirm Delete"
-            message={`Are you sure you want to delete "${deleteProduct.name}"?`}
-          />
+          {deleteProduct && showConfirmModal && (
+            <ConfirmationModal
+              isOpen={showConfirmModal}
+              onClose={() => {
+                setShowConfirmModal(false);
+                setDeleteProduct(null);
+              }}
+              onConfirm={() => handleDelete(deleteProduct._id)}
+              title="Confirm Delete"
+              message={`Are you sure you want to delete "${deleteProduct.name}"?`}
+            />
+          )}
         </div>
       </div>
     </div>

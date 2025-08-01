@@ -45,7 +45,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        fetchUser();
+        await fetchUser();
       } catch (err) {
         // Optional: log or toast error
       } finally {
