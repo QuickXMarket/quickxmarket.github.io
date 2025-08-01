@@ -15,11 +15,10 @@ const ProductDetails = () => {
   const [thumbnail, setThumbnail] = useState(null);
   const [vendor, setVendor] = useState(null);
   const [isWishListed, setIsWishListed] = useState(false);
-
-  const product = products.find((item) => item._id === id);
+  const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    if (products.length > 0) {
+    if (products.length > 0 && product) {
       let productsCopy = products.slice();
       productsCopy = productsCopy.filter(
         (item) => product.category === item.category
@@ -30,29 +29,31 @@ const ProductDetails = () => {
         (item) => item.vendorId === product.vendorId && item._id !== product._id
       );
       setOtherProductsFromVendor(vendorProducts.slice(0, 5));
-    }
-    const fetchVendor = async () => {
-      if (!product || !product.vendorId) return;
-      try {
-        const { data } = await axios.get(
-          `/api/seller/vendor/${product.vendorId}`
-        );
-        if (data.success) {
-          setVendor(data.vendor.businessName);
-        } else {
-          console.log(data.message);
+      setThumbnail(product?.image[0] ? product.image[0] : null);
+      setIsWishListed(wishList.includes(product._id));
+
+      const fetchVendor = async () => {
+        if (!product || !product.vendorId) return;
+        try {
+          const { data } = await axios.get(
+            `/api/seller/vendor/${product.vendorId}`
+          );
+          if (data.success) {
+            setVendor(data.vendor.businessName);
+          } else {
+            console.log(data.message);
+          }
+        } catch (error) {
+          console.log("Failed to fetch vendor details.");
         }
-      } catch (error) {
-        console.log("Failed to fetch vendor details.");
-      }
-    };
-    fetchVendor();
-  }, [products]);
+      };
+      fetchVendor();
+    }
+  }, [products, product]);
 
   useEffect(() => {
-    setThumbnail(product?.image[0] ? product.image[0] : null);
-    setIsWishListed(wishList.includes(product._id));
-  }, [product]);
+    setProduct(products.find((item) => item._id === id));
+  }, [products]);
 
   return (
     product && (
@@ -185,31 +186,33 @@ const ProductDetails = () => {
         </div>
 
         {/* ---------- other products from vendor -------------- */}
-        <div className="flex flex-col items-center mt-20">
-          <div className="flex flex-col items-center w-full max-w-[90%]">
-            <p className="w-full text-3xl font-medium break-words text-center">
-              Other Products From Vendor
-            </p>
+        {otherProductsFromVendor > 0 && (
+          <div className="flex flex-col items-center mt-20">
+            <div className="flex flex-col items-center w-full max-w-[90%]">
+              <p className="w-full text-3xl font-medium break-words text-center">
+                Other Products From Vendor
+              </p>
 
-            <div className="w-20 h-0.5 bg-primary rounded-full mt-2"></div>
+              <div className="w-20 h-0.5 bg-primary rounded-full mt-2"></div>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-6 lg:grid-cols-5 mt-6 w-full">
+              {otherProductsFromVendor
+                .filter((product) => product.inStock)
+                .map((product, index) => (
+                  <ProductCard key={index} product={product} />
+                ))}
+            </div>
+            <button
+              onClick={() => {
+                navigate(`/shops/${product.vendorId}`);
+                scrollTo(0, 0);
+              }}
+              className="mx-auto cursor-pointer px-12 my-16 py-2.5 border rounded text-primary hover:bg-primary/10 transition"
+            >
+              See more
+            </button>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-6 lg:grid-cols-5 mt-6 w-full">
-            {otherProductsFromVendor
-              .filter((product) => product.inStock)
-              .map((product, index) => (
-                <ProductCard key={index} product={product} />
-              ))}
-          </div>
-          <button
-            onClick={() => {
-              navigate(`/shops/${product.vendorId}`);
-              scrollTo(0, 0);
-            }}
-            className="mx-auto cursor-pointer px-12 my-16 py-2.5 border rounded text-primary hover:bg-primary/10 transition"
-          >
-            See more
-          </button>
-        </div>
+        )}
       </div>
     )
   );

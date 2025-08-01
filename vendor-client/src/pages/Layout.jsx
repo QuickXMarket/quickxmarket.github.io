@@ -89,7 +89,7 @@ const Layout = () => {
               }
             >
               <img src={item.icon} alt="" className="w-7 h-7" />
-              <p className="md:block hidden text-center">{item.name}</p>
+              <p className="md:block hidden ">{item.name}</p>
             </NavLink>
           ))}
         </div>
@@ -107,7 +107,7 @@ const Layout = () => {
               <NavLink
                 to={item.path}
                 key={item.name}
-                className={`flex flex-col items-center text-xs ${
+                className={`flex flex-1 flex-col items-center text-xs ${
                   isActive ? "text-primary" : "text-gray-500"
                 }`}
               >

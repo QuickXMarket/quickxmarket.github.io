@@ -63,7 +63,7 @@ const App = () => {
         </Routes>
       </div>
       {!isContactPath && (
-        <div className="fixed bottom-6 right-6 sm:right-10 lg:right-14 z-50">
+        <div className="fixed bottom-20 md:bottom-6 right-6 sm:right-10 lg:right-14 z-50">
           <button
             onClick={() => {
               if (user) {

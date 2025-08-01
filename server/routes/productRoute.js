@@ -4,6 +4,7 @@ import authUser from "../middlewares/authUser.js";
 import {
   addProduct,
   changeStock,
+  deleteProduct,
   productById,
   productList,
   productListByVendor,
@@ -14,6 +15,7 @@ const productRouter = express.Router();
 productRouter.post("/add", upload.array(["images"]), authUser, addProduct);
 productRouter.get("/list", productList);
 productRouter.get("/list/vendor", authUser, productListByVendor);
+productRouter.post("/delete", authUser, deleteProduct);
 productRouter.get("/id", productById);
 productRouter.post("/stock", authUser, changeStock);
 

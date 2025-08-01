@@ -1,16 +1,33 @@
 import React from "react";
 import toast from "react-hot-toast";
-
 import { useEffect, useState } from "react";
 import { useCoreContext } from "../context/CoreContext";
+import { assets } from "../assets/assets";
+import ConfirmationModal from "../components/ConfirmationModal";
+import { useOutletContext } from "react-router-dom";
 
 const ProductList = () => {
   const { currency, axios } = useCoreContext();
+  const { vendor } = useOutletContext();
   const [products, setProducts] = useState([]);
-  const [openProductId, setOpenProductId] = useState(null);
+  const [openMenuId, setOpenMenuId] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [deleteProduct, setDeleteProduct] = useState(null);
 
-  const toggleAccordion = (productId) => {
-    setOpenProductId(openProductId === productId ? null : productId);
+  const handleDelete = async (productId) => {
+    try {
+      const { data } = await axios.post("/api/product/delete", {
+        productId,
+        vendorId: vendor._id,
+      });
+      if (data.success) {
+        fetchProducts();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const fetchProducts = async () => {
@@ -44,11 +61,15 @@ const ProductList = () => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    if (deleteProduct) showConfirmModal(true);
+  }, [deleteProduct]);
+
   return (
     <div className="no-scrollbar flex-1 h-[95vh] overflow-y-scroll flex flex-col justify-between">
       <div className="w-full md:p-10 p-4">
         <h2 className="pb-4 text-lg font-medium">My Products</h2>
-        <div className="flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20">
+        <div className="flex overflow-visible flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20">
           {/* Desktop Table */}
           <table className="w-full hidden sm:table">
             <thead className="text-gray-900 text-sm text-left">
@@ -89,9 +110,35 @@ const ProductList = () => {
                         type="checkbox"
                         className="sr-only peer"
                       />
-                      <div className="w-12 h-7 bg-slate-300 rounded-full peer peer-checked:bg-blue-600 transition-colors duration-200"></div>
+                      <div className="w-12 h-7 bg-slate-300 rounded-full peer peer-checked:bg-primary transition-colors duration-200"></div>
                       <span className="dot absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-5"></span>
                     </label>
+                  </td>{" "}
+                  <td className="px-4 py-3 relative">
+                    <img
+                      src={assets.menu_dot_icon}
+                      alt="Menu"
+                      className="w-6 h-6 min-w-[1.5rem] min-h-[1.5rem] cursor-pointer shrink-0 "
+                      onClick={() =>
+                        setOpenMenuId(
+                          openMenuId === product._id ? null : product._id
+                        )
+                      }
+                    />
+
+                    {openMenuId === product._id && (
+                      <div className="absolute z-50 top-15 right-8 w-40 bg-white shadow-md border rounded z-20">
+                        <button className="w-full text-left px-4 py-2 text-gray-800 text-sm ">
+                          Edit
+                        </button>
+                        <button
+                          className="w-full text-left px-4 py-2 text-red-500  text-sm cursor-pointer"
+                          onClick={() => setDeleteProduct(product)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -101,58 +148,79 @@ const ProductList = () => {
           {/* Mobile Cards */}
           <div className="sm:hidden w-full">
             {products.map((product) => {
-              const isOpen = openProductId === product._id;
-
               return (
                 <div
+                  className="flex  gap-3 cursor-pointer border-t border-gray-300 px-4 py-4 "
                   key={product._id}
-                  className="border-t border-gray-300 px-4 py-4 mb-4"
                 >
-                  {/* Accordion Header */}
-                  <div
-                    className="flex items-center gap-3 cursor-pointer"
-                    onClick={() => toggleAccordion(product._id)}
-                  >
-                    <img
-                      src={product.image[0]}
-                      alt="Product"
-                      className="w-16 h-16 rounded border"
-                    />
-                    <div className="font-semibold text-gray-800">
+                  <img
+                    src={product.image[0]}
+                    alt="Product"
+                    className="w-16 h-16 rounded border"
+                  />
+                  <div className=" flex flex-col ">
+                    <div className="text-sm font-medium text-gray-800 truncate">
                       {product.name}
                     </div>
-                    <div className="ml-auto">
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          onChange={() =>
-                            toggleStock(product._id, !product.inStock)
-                          }
-                          checked={product.inStock}
-                          type="checkbox"
-                          className="sr-only peer"
-                        />
-                        <div className="w-10 h-6 bg-slate-300 rounded-full peer peer-checked:bg-primary peer-not-checked:bg-red-500 transition-colors duration-200"></div>
-                        <span className="dot absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-4"></span>
-                      </label>
+                    <div className="text-xs text-gray-600 truncate">
+                      {product.category}
+                    </div>
+                    <div className="text-xs text-gray-600 mt-1">
+                      {currency}
+                      {product.offerPrice}
                     </div>
                   </div>
 
-                  {/* Accordion Content */}
-                  {isOpen && (
-                    <div className="mt-3 flex flex-col gap-2">
-                      <div className="text-sm text-gray-600">
-                        Category: {product.category}
+                  <div className="ml-auto flex flex-col items-end gap-7 relative">
+                    <img
+                      src={assets.menu_dot_icon}
+                      alt="Menu"
+                      className="cursor-pointer"
+                      onClick={() =>
+                        setOpenMenuId(
+                          openMenuId === product._id ? null : product._id
+                        )
+                      }
+                    />
+
+                    {openMenuId === product._id && (
+                      <div className="absolute top-4 right-0 w-40 bg-white shadow-md border rounded z-20">
+                        <button className="w-full text-left px-4 py-2 text-gray-800 text-sm cursor-pointer">
+                          Edit
+                        </button>
+                        <button
+                          className="w-full text-left px-4 py-2 text-red-500  text-sm cursor-pointer"
+                          onClick={() => setDeleteProduct(product)}
+                        >
+                          Delete
+                        </button>
                       </div>
-                      <div className="text-sm text-gray-600">
-                        Price: {currency}
-                        {product.offerPrice}
-                      </div>
-                    </div>
-                  )}
+                    )}
+
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        onChange={() =>
+                          toggleStock(product._id, !product.inStock)
+                        }
+                        checked={product.inStock}
+                        type="checkbox"
+                        className="sr-only peer"
+                      />
+                      <div className="w-10 h-6 bg-slate-300 rounded-full peer peer-checked:bg-primary transition-colors duration-200"></div>
+                      <span className="dot absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-4"></span>
+                    </label>
+                  </div>
                 </div>
               );
             })}
           </div>
+          <ConfirmationModal
+            isOpen={showConfirmModal}
+            onClose={() => setShowConfirmModal(false)}
+            onConfirm={() => handleDelete(deleteProduct._id)}
+            title="Confirm Delete"
+            message={`Are you sure you want to delete "${deleteProduct.name}"?`}
+          />
         </div>
       </div>
     </div>

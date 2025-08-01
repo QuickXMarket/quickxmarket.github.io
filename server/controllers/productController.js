@@ -86,6 +86,48 @@ export const addProduct = async (req, res) => {
   }
 };
 
+export const deleteProduct = async (req, res) => {
+  try {
+    const { productId, vendorId } = req.body;
+
+    if (!productId || !vendorId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing productId or vendorId" });
+    }
+
+    // Find vendor by authenticated vendorId
+    const vendor = await Vendor.findById(vendorId);
+    if (!vendor) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Vendor not found" });
+    }
+
+    const product = await Product.findOne({
+      _id: productId,
+      vendorId: vendor._id,
+    });
+    if (!product) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found or unauthorized" });
+    }
+
+    await Product.deleteOne({ _id: productId });
+
+    vendor.products = vendor.products.filter(
+      (id) => id.toString() !== productId.toString()
+    );
+    await vendor.save();
+
+    res.json({ success: true, message: "Product deleted successfully" });
+  } catch (error) {
+    console.error("Delete product error:", error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // Get Product : /api/product/list
 export const productList = async (req, res) => {
   try {

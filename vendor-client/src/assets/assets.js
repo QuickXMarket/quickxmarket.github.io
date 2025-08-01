@@ -16,6 +16,7 @@ import leaf_icon from "./leaf_icon.svg";
 import coin_icon from "./coin_icon.svg";
 import box_icon from "./box_icon.svg";
 import trust_icon from "./trust_icon.svg";
+import menu_dot_icon from "./three-dots-vertical.svg";
 import black_arrow_icon from "./black_arrow_icon.svg";
 import white_arrow_icon from "./white_arrow_icon.svg";
 import first_banner_image from "./1st_banner_image.jpg";
@@ -48,6 +49,7 @@ export const assets = {
   black_arrow_icon,
   white_arrow_icon,
   box_icon,
+  menu_dot_icon,
   Favicon_rounded,
   first_banner_image,
   second_banner_image,
