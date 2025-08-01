@@ -43,13 +43,12 @@ const Layout = () => {
   }, [user, axios]);
 
   const sidebarLinks = [
-    { name: "Add Product", path: "/dashboard", icon: assets.add_icon },
+    { name: "Orders", path: "/dashboard", icon: assets.order_icon },
     {
       name: "Product List",
       path: "/dashboard/product-list",
       icon: assets.product_list_icon,
     },
-    { name: "Orders", path: "/dashboard/orders", icon: assets.order_icon },
     { name: "Wallet", path: "/dashboard/wallet", icon: assets.wallet_outline },
   ];
 

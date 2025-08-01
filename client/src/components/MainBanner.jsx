@@ -16,7 +16,7 @@ const MainBanner = () => {
       small: assets.second_banner_image,
       color: "#2f855a",
       buttonText: "Shop Now",
-      buttonLink: "/shop",
+      buttonLink: "/shops",
     },
   ];
 

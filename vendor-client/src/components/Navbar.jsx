@@ -45,9 +45,9 @@ const Navbar = () => {
                 logout();
               }
             }}
-            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]"
+            className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]"
           >
-            <span class="truncate">{`${
+            <span className="truncate">{`${
               user ? "Sign Out" : "Sign In/Up"
             }`}</span>
           </button>

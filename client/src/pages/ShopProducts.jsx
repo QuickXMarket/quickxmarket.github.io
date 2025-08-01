@@ -10,11 +10,7 @@ const ShopProducts = () => {
   const { products } = useProductContext();
   const { vendorId } = useParams();
   const [vendor, setVendor] = useState(null);
-
-  const filteredProducts = products.filter(
-    (product) =>
-      product.vendorId === vendorId && product.category.toLowerCase() !== "food"
-  );
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
     const fetchVendor = async () => {
@@ -31,6 +27,18 @@ const ShopProducts = () => {
     };
     fetchVendor();
   }, [vendorId, axios]);
+
+  useState(() => {
+    if (products.length > 0) {
+      setFilteredProducts(
+        products.filter(
+          (product) =>
+            product.vendorId === vendorId &&
+            product.category.toLowerCase() !== "food"
+        )
+      );
+    }
+  }, [products]);
 
   return (
     <div className="mt-16">

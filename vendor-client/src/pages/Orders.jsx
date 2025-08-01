@@ -17,7 +17,6 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-      console.log(vendor);
       const { data } = await axios.get(`/api/order/seller/${vendor._id}`);
       if (data.success) {
         setOrders(data.orders);

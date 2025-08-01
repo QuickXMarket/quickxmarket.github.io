@@ -5,6 +5,7 @@ import {
   addProduct,
   changeStock,
   deleteProduct,
+  editProduct,
   productById,
   productList,
   productListByVendor,
@@ -13,6 +14,7 @@ import {
 const productRouter = express.Router();
 
 productRouter.post("/add", upload.array(["images"]), authUser, addProduct);
+productRouter.post("/edit", upload.array(["images"]), authUser, editProduct);
 productRouter.get("/list", productList);
 productRouter.get("/list/vendor", authUser, productListByVendor);
 productRouter.post("/delete", authUser, deleteProduct);

@@ -5,7 +5,6 @@ import ChatDotIcon from "./assets/chat-dots.svg?react";
 import Login from "./components/Login";
 import SellerLogin from "./components/SellerLogin";
 import Layout from "./pages/Layout";
-import AddProduct from "./pages/AddProduct";
 import ProductList from "./pages/ProductList";
 import Orders from "./pages/Orders";
 import Loading from "./components/Loading";
@@ -54,9 +53,8 @@ const App = () => {
               )
             }
           >
-            <Route index element={isSeller ? <AddProduct /> : null} />
+            <Route index element={isSeller ? <Orders /> : null} />
             <Route path="product-list" element={<ProductList />} />
-            <Route path="orders" element={<Orders />} />
             <Route path="wallet" element={<Wallet />} />
           </Route>
         </Routes>

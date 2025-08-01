@@ -86,6 +86,81 @@ export const addProduct = async (req, res) => {
   }
 };
 
+export const editProduct = async (req, res) => {
+  try {
+    const { productId, vendorId } = req.body;
+    let productData =
+      typeof req.body.productData === "string"
+        ? JSON.parse(req.body.productData)
+        : req.body.productData;
+
+    const vendor = await Vendor.findById(vendorId);
+    if (!vendor) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Vendor not found" });
+    }
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
+    }
+
+    if (product.vendorId.toString() !== vendor._id.toString()) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Unauthorized to edit this product" });
+    }
+
+    let imagesUrl = product.image;
+
+    if (req.files && req.files.length > 0) {
+      imagesUrl = await Promise.all(
+        req.files.map(async (item, index) => {
+          const result = await cloudinary.uploader.upload(item.path, {
+            resource_type: "image",
+            folder: `/Product Images/${vendor._id}`,
+            public_id: `${productData.name
+              .replace(/\s+/g, "_")
+              .toLowerCase()}_${index + 1}`,
+            overwrite: true,
+          });
+          return result.secure_url;
+        })
+      );
+    } else if (req.body.images && Array.isArray(req.body.images)) {
+      imagesUrl = await Promise.all(
+        req.body.images.map(async (base64String, index) => {
+          const publicId = `${productData.name
+            .replace(/\s+/g, "_")
+            .toLowerCase()}_${index + 1}`;
+          return await uploadBase64Image(
+            base64String,
+            `/Product Images/${vendor._id}`,
+            publicId
+          );
+        })
+      );
+    }
+
+    product.name = productData.name;
+    product.description = productData.description;
+    product.category = productData.category;
+    product.price = productData.price;
+    product.offerPrice = productData.offerPrice;
+    product.image = imagesUrl;
+
+    await product.save();
+
+    res.json({ success: true, message: "Product updated" });
+  } catch (error) {
+    console.log("Edit Product Error:", error.message);
+    res.json({ success: false, message: error.message });
+  }
+};
+
 export const deleteProduct = async (req, res) => {
   try {
     const { productId, vendorId } = req.body;
@@ -113,7 +188,24 @@ export const deleteProduct = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Product not found or unauthorized" });
     }
+    if (product.image && Array.isArray(product.image)) {
+      await Promise.all(
+        product.image.map(async (url) => {
+          try {
+            const parts = url.split("/");
+            const publicIdWithExtension = parts.slice(-1)[0];
+            const folder = parts
+              .slice(parts.indexOf("Product Images"))
+              .join("/");
 
+            const publicId = folder.replace(/\.[^/.]+$/, "");
+            await cloudinary.uploader.destroy(publicId);
+          } catch (err) {
+            console.warn("Cloudinary delete error:", err.message);
+          }
+        })
+      );
+    }
     await Product.deleteOne({ _id: productId });
 
     vendor.products = vendor.products.filter(
