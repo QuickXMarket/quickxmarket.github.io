@@ -71,7 +71,7 @@ const Orders = () => {
   };
 
   return (
-    <div className="no-scrollbar flex-1 h-[95vh] overflow-y-scroll">
+    <div className="no-scrollbar flex-1 h-[92vh] overflow-y-scroll max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto">
       <div className="md:p-10 p-4 space-y-4">
         <h2 className="text-lg font-medium">Orders List</h2>
         <div className="flex justify-between border-b border-gray-300 mb-4 text-sm sm:text-base">

@@ -5,42 +5,12 @@ import React, { useEffect } from "react";
 import SellerLogin from "../components/SellerLogin";
 import { useAuthContext } from "../context/AuthContext";
 import { useCoreContext } from "../context/CoreContext";
-import Navbar from "../components/Navbar";
 
 const Layout = () => {
-  const { user } = useAuthContext();
-  const { axios } = useCoreContext();
-  const [isVendor, setIsVendor] = React.useState(null);
+  const { user, businessName, vendor, setShowUserLogin, logout } =
+    useAuthContext();
+  const [open, setOpen] = React.useState(false);
   const [showSellerLogin, setShowSellerLogin] = React.useState(false);
-  const [businessName, setBusinessName] = React.useState("");
-  const [vendor, setVendor] = React.useState("");
-
-  useEffect(() => {
-    const checkVendorStatus = async () => {
-      if (!user || !user.isSeller) {
-        // Not a vendor role, redirect or show login
-        setShowSellerLogin(true);
-        return;
-      }
-      try {
-        const { data } = await axios.get(`/api/seller/user/${user._id}`);
-        if (data.success) {
-          setBusinessName(data.vendor.businessName);
-          setIsVendor(true);
-          setShowSellerLogin(false);
-          setVendor(data.vendor);
-        } else {
-          setIsVendor(false);
-          setShowSellerLogin(true);
-        }
-      } catch (error) {
-        toast.error("Failed to verify vendor status");
-        setIsVendor(false);
-        setShowSellerLogin(true);
-      }
-    };
-    checkVendorStatus();
-  }, [user, axios]);
 
   const sidebarLinks = [
     { name: "Orders", path: "/dashboard", icon: assets.order_icon },
@@ -58,7 +28,7 @@ const Layout = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between px-4 md:px-8 border-b border-gray-300 py-3 bg-white">
+      <div className="flex items-center justify-between px-4 md:px-8 border-b border-gray-300 py-3 bg-white h-[8vh]">
         <Link to="/">
           <img
             src={assets.QuickXMarket_Logo_Transparent}
@@ -66,31 +36,112 @@ const Layout = () => {
             className="cursor-pointer w-34 md:w-38"
           />
         </Link>
-        <div className="flex items-center gap-5 text-gray-500">
+        {/* <div className="flex items-center gap-5 text-gray-500">
           <p className="truncate w-20 sm:w-full">Hi! {businessName}</p>
+        </div> */}
+        <div className="block relative">
+          <button
+            onClick={() => setOpen(!open)}
+            aria-label="Menu"
+            className="flex items-center gap-2"
+          >
+            <img src={assets.menu_icon} alt="menu" className="w-6 h-6" />
+          </button>
+
+          {open && (
+            <div className="absolute right-0 top-full mt-2 bg-white w-60 shadow-lg border rounded-md text-sm z-50 px-4 py-3">
+              {/* Header */}
+              <div className="flex items-center gap-3 mb-3">
+                <img
+                  src={vendor.profilePhoto || assets.profile_icon}
+                  className="w-10 h-10 rounded-full"
+                  alt="Profile"
+                />
+                <div>
+                  <p className="text-xs text-gray-500">Welcome</p>
+                  <p className="font-semibold text-gray-700">
+                    {businessName ? businessName : "Guest"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Links */}
+              <ul className="flex flex-col gap-2">
+                <li
+                  onClick={() => {
+                    setOpen(false);
+                    navigate("/my-orders");
+                  }}
+                  className="hover:bg-gray-100 rounded px-2 py-1 cursor-pointer"
+                >
+                  Business Details
+                </li>
+                <li
+                  onClick={() => {
+                    setOpen(false);
+                    navigate("/profile");
+                  }}
+                  className="hover:bg-gray-100 rounded px-2 py-1 cursor-pointer"
+                >
+                  Profile Details
+                </li>
+                {!user ? (
+                  <li
+                    onClick={() => {
+                      setOpen(false);
+                      setShowUserLogin(true);
+                    }}
+                    className="hover:bg-primary/10 rounded px-2 py-1 cursor-pointer text-primary"
+                  >
+                    Login
+                  </li>
+                ) : (
+                  <li
+                    onClick={() => {
+                      setOpen(false);
+                      logout();
+                    }}
+                    className="hover:bg-red-50 rounded px-2 py-1 cursor-pointer text-red-500"
+                  >
+                    Logout
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
       <div className="flex">
         {/* Sidebar for md and up */}
-        <div className="md:w-64 w-0 hidden md:flex border-r h-[95vh] text-base border-gray-300 pt-4 flex-col">
-          {sidebarLinks.map((item) => (
-            <NavLink
-              to={item.path}
-              key={item.name}
-              end={item.path === "/dashboard"}
-              className={({ isActive }) =>
-                `flex items-center py-3 px-4 gap-3 
-            ${
-              isActive
-                ? "border-r-4 md:border-r-[6px] bg-primary/10 border-primary text-primary"
-                : "hover:bg-gray-100/90 border-white"
-            }`
-              }
-            >
-              <img src={item.icon} alt="" className="w-7 h-7" />
-              <p className="md:block hidden ">{item.name}</p>
-            </NavLink>
-          ))}
+        <div className="md:w-64 w-0 hidden md:flex border-r h-[92vh] text-base border-gray-300 pt-4 flex-col justify-between">
+          <div>
+            {sidebarLinks.map((item) => (
+              <NavLink
+                to={item.path}
+                key={item.name}
+                end={item.path === "/dashboard"}
+                className={({ isActive }) =>
+                  `flex items-center py-3 px-4 gap-3 
+          ${
+            isActive
+              ? "border-r-4 md:border-r-[6px] bg-primary/10 border-primary text-primary"
+              : "hover:bg-gray-100/90 border-white"
+          }`
+                }
+              >
+                <img src={item.icon} alt="" className="w-7 h-7" />
+                <p className="md:block hidden">{item.name}</p>
+              </NavLink>
+            ))}
+          </div>
+
+          {/* Welcome message at the bottom */}
+          <div className="px-4 py-3 text-sm text-gray-600 border-t border-gray-200">
+            <p className="font-medium text-primary">Welcome back!</p>
+            <p className="text-xs mt-1">
+              Manage your store and track performance with ease.
+            </p>
+          </div>
         </div>
 
         {/* Main content */}

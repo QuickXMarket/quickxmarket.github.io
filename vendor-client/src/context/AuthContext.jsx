@@ -11,18 +11,39 @@ export const AuthContextProvider = ({ children }) => {
   const [showUserLogin, setShowUserLogin] = useState(false);
   const [showSellerLogin, setShowSellerLogin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [businessName, setBusinessName] = useState("");
+  const [vendor, setVendor] = useState("");
 
   // Fetch Seller Status
   const fetchUser = async () => {
+    let user = null;
     try {
       const { data } = await axios.get("api/user/is-auth");
       if (data.success) {
         setUser(data.user);
+        user = data.user;
         setIsSeller(data.user.isSeller || data.role === "vendor");
       }
     } catch (error) {
       console.log(error);
       setUser(null);
+    } finally {
+      return user;
+    }
+  };
+
+  const checkVendorStatus = async (user) => {
+    try {
+      const { data } = await axios.get(`/api/seller/user/${user._id}`);
+      if (data.success) {
+        setBusinessName(data.vendor.businessName);
+        console.log(data.vendor);
+        setVendor(data.vendor);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error("Failed to verify vendor status");
     }
   };
 
@@ -45,7 +66,8 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        await fetchUser();
+        const fetchedUser = await fetchUser();
+        if (fetchedUser) await checkVendorStatus(fetchedUser);
       } catch (err) {
         // Optional: log or toast error
       } finally {
@@ -66,6 +88,8 @@ export const AuthContextProvider = ({ children }) => {
     setShowSellerLogin,
     logout,
     loading,
+    vendor,
+    businessName,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

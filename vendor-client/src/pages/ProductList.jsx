@@ -117,7 +117,7 @@ const ProductList = () => {
   }, [deleteProduct]);
 
   return (
-    <div className="no-scrollbar flex-1 h-[95vh] overflow-y-scroll flex flex-col justify-between">
+    <div className="no-scrollbar flex-1 h-[92vh] overflow-y-scroll flex flex-col justify-between max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto">
       <div className="w-full md:p-10 p-4">
         <h2 className="pb-4 text-lg font-medium">My Products</h2>
         <div
