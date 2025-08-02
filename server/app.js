@@ -4,6 +4,8 @@ import cors from "cors";
 import connectDB from "./configs/db.js";
 import "dotenv/config";
 import connectCloudinary from "./configs/cloudinary.js";
+import helmet from "helmet";
+import { rateLimit } from "express-rate-limit";
 
 import userRouter from "./routes/userRoute.js";
 import sellerRouter from "./routes/sellerRoute.js";
@@ -33,9 +35,17 @@ app.post(
   paystackWebhooks
 );
 
+app.use(helmet());
+
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+  })
+);
 
 app.get("/", (req, res) => res.send("API is Working"));
 app.get("/health", (req, res) => {

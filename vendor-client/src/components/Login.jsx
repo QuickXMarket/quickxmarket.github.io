@@ -6,7 +6,8 @@ import { useRef } from "react";
 import { useEffect } from "react";
 
 const Login = () => {
-  const { setShowUserLogin, setUser, setIsSeller } = useAuthContext();
+  const { setShowUserLogin, setUser, setIsSeller, checkVendorStatus } =
+    useAuthContext();
   const { axios, navigate, location } = useCoreContext();
 
   const [state, setState] = React.useState("login");
@@ -117,6 +118,7 @@ const Login = () => {
 
   const handleLoginSuccess = (data) => {
     setUser(data.user);
+    checkVendorStatus(data.user);
     setShowUserLogin(false);
     setIsSeller(data.user.isSeller);
 

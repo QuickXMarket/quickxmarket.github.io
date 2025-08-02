@@ -90,6 +90,8 @@ export const AuthContextProvider = ({ children }) => {
     loading,
     vendor,
     businessName,
+    checkVendorStatus,
+    setVendor,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

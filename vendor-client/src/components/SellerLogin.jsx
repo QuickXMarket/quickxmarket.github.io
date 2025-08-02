@@ -6,7 +6,7 @@ import { useAuthContext } from "../context/AuthContext";
 
 const SellerLogin = () => {
   const { axios, navigate, fuse, location } = useCoreContext();
-  const { setShowSellerLogin, user } = useAuthContext();
+  const { setShowSellerLogin, user, checkVendorStatus } = useAuthContext();
 
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [businessName, setBusinessName] = useState("");
@@ -110,7 +110,8 @@ const SellerLogin = () => {
           if (updateRoleRes.data.success) {
             toast.success("Vendor registered successfully and role updated");
             setShowSellerLogin(false);
-            navigate("/seller");
+            checkVendorStatus(user);
+            navigate("/dashboard");
           } else {
             toast.error(
               "Vendor registered but failed to update role: " +
