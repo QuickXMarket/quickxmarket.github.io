@@ -49,14 +49,14 @@ const ProductDetails = () => {
         }
       };
       fetchVendor();
+      if (product?.options && product.options.length > 0) {
+        setSelectedOption(product.options[0]);
+      }
     }
   }, [products, product]);
 
   useEffect(() => {
     setProduct(products.find((item) => item._id === id));
-    if (product?.options && product.options.length > 0) {
-      setSelectedOption(product.options[0]);
-    }
   }, [products]);
 
   return (
@@ -150,11 +150,11 @@ const ProductDetails = () => {
             <div className="mt-6">
               <p className="text-gray-500/70 line-through">
                 MRP: {currency}
-                {selectedOption?.price }
+                {selectedOption?.price}
               </p>
               <p className="text-2xl font-medium">
                 MRP: {currency}
-                {selectedOption?.offerPrice }
+                {selectedOption?.offerPrice}
               </p>
 
               <span className="text-gray-500/70">(inclusive of all taxes)</span>
@@ -169,14 +169,16 @@ const ProductDetails = () => {
 
             <div className="flex items-center mt-10 gap-4 text-base">
               <button
-                onClick={() => addToCart(product._id)}
+                onClick={() =>
+                  addToCart(product._id, toString(selectedOption._id))
+                }
                 className="w-full py-3.5 cursor-pointer font-medium bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition"
               >
                 Add to Cart
               </button>
               <button
                 onClick={() => {
-                  addToCart(product._id);
+                  addToCart(product._id, toString(selectedOption._id));
                   navigate("/cart");
                 }}
                 className="w-full py-3.5 cursor-pointer font-medium bg-primary text-white hover:bg-primary-dull transition"

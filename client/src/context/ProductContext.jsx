@@ -28,22 +28,29 @@ export const ProductContextProvider = ({ children }) => {
   };
 
   // Add Product to Cart
-  const addToCart = (itemId) => {
-    let cartData = structuredClone(cartItems);
+  const addToCart = (productId, optionId) => {
+    const cartData = structuredClone(cartItems);
 
-    if (cartData[itemId]) {
-      cartData[itemId] += 1;
-    } else {
-      cartData[itemId] = 1;
+    if (!cartData[productId]) {
+      cartData[productId] = {};
     }
+
+    if (cartData[productId][optionId]) {
+      cartData[productId][optionId] += 1;
+    } else {
+      cartData[productId][optionId] = 1;
+    }
+
     setCartItems(cartData);
     toast.success("Added to Cart");
   };
 
   // Update Cart Item Quantity
-  const updateCartItem = (itemId, quantity) => {
-    let cartData = structuredClone(cartItems);
-    cartData[itemId] = quantity;
+  const updateCartItem = (productId, optionId, quantity) => {
+    const cartData = structuredClone(cartItems);
+    if (!cartData[productId]) return;
+
+    cartData[productId][optionId] = quantity;
     setCartItems(cartData);
     toast.success("Cart Updated");
   };
@@ -61,23 +68,29 @@ export const ProductContextProvider = ({ children }) => {
   };
 
   // Remove Product from Cart
-  const removeFromCart = (itemId) => {
-    let cartData = structuredClone(cartItems);
-    if (cartData[itemId]) {
-      cartData[itemId] -= 1;
-      if (cartData[itemId] === 0) {
-        delete cartData[itemId];
+  const removeFromCart = (productId, optionId) => {
+    const cartData = structuredClone(cartItems);
+    if (!cartData[productId] || !cartData[productId][optionId]) return;
+
+    cartData[productId][optionId] -= 1;
+    if (cartData[productId][optionId] <= 0) {
+      delete cartData[productId][optionId];
+      if (Object.keys(cartData[productId]).length === 0) {
+        delete cartData[productId];
       }
     }
-    toast.success("Removed from Cart");
+
     setCartItems(cartData);
+    toast.success("Removed from Cart");
   };
 
   // Get Cart Item Count
   const getCartCount = () => {
     let totalCount = 0;
-    for (const item in cartItems) {
-      totalCount += cartItems[item];
+    for (const productId in cartItems) {
+      for (const optionId in cartItems[productId]) {
+        totalCount += cartItems[productId][optionId];
+      }
     }
     return totalCount;
   };
@@ -85,12 +98,20 @@ export const ProductContextProvider = ({ children }) => {
   // Get Cart Total Amount
   const getCartAmount = () => {
     let totalAmount = 0;
-    for (const items in cartItems) {
-      let itemInfo = products.find((product) => product._id === items);
-      if (cartItems[items] > 0 && itemInfo) {
-        totalAmount += itemInfo.offerPrice * cartItems[items];
+
+    for (const productId in cartItems) {
+      const product = products.find((p) => p._id === productId);
+      if (!product) continue;
+
+      for (const optionId in cartItems[productId]) {
+        const option = product.options?.find((o) => o._id === optionId);
+        if (option) {
+          const offerPrice = option.offerPrice || option.price;
+          totalAmount += offerPrice * cartItems[productId][optionId];
+        }
       }
     }
+
     return Math.floor(totalAmount * 100) / 100;
   };
 
