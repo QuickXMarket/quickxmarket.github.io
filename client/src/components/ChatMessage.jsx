@@ -74,11 +74,7 @@ const ChatMessage = ({ message, currentUser }) => {
           </div>
         )}
         {/* Text + Timestamp wrapper */}
-        <div
-          className={`${
-            !message.media ? "flex flex-wrap items-end gap-2" : "block"
-          }`}
-        >
+        <div className={`${" flex flex-wrap items-end gap-2"}`}>
           {/* Message Text */}
           {message.message && <MessageText messageText={message.message} />}
 

@@ -25,6 +25,7 @@ const Contact = () => {
       if (attachment) {
         formData.append("attachment", attachment);
       }
+      console.log(formData)
 
       const { data } = await axios.post("/api/mail/contact", formData, {
         headers: {

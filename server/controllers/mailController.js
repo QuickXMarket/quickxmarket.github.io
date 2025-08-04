@@ -13,6 +13,7 @@ import {
 
 // Ensure admin email is set
 const adminEmail = process.env.ADMIN_EMAIL;
+const supportEmail = process.env.SUPPORT_EMAIL;
 if (!adminEmail) {
   console.error("❌ ADMIN_EMAIL is not set in environment variables.");
 }
@@ -32,11 +33,12 @@ const transporter = nodemailer.createTransport({
 export const sendContactEmail = async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
+
     let attachment = null;
     if (req.file) attachment = req.file;
     else if (
-      req.body.attachment.base64 &&
-      req.body.attachment.base64.startsWith("data:")
+      req.body.attachment?.base64 &&
+      req.body.attachment?.base64.startsWith("data:")
     ) {
       const base64Data = req.body.attachment.base64.split(",")[1];
       const buffer = Buffer.from(base64Data, "base64");
@@ -55,7 +57,7 @@ export const sendContactEmail = async (req, res) => {
 
     const mailOptions = {
       from: `"${name}" <${process.env.SMTP_USER}>`,
-      to: adminEmail,
+      to: supportEmail,
       subject,
       text: message,
       html: `<p>${message}</p><p><strong>From:</strong> ${name} (${email})</p>`,
