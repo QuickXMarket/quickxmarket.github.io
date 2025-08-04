@@ -25,10 +25,10 @@ const WishListCard = ({ product }) => {
 
         <div className="mt-1 text-primary font-semibold text-base">
           {currency}
-          {product.offerPrice}
+          {product.options[0].offerPrice}
           <span className="ml-2 text-gray-500 line-through font-normal text-sm">
             {currency}
-            {product.price}
+            {product.options[0].price}
           </span>
         </div>
 

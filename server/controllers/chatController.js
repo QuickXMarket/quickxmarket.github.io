@@ -22,13 +22,14 @@ export const sendNewMessage = async (req, res) => {
     const { userId, message, chatId } = req.body;
     let mediaUrl = "";
 
-    if (!userId || !message) {
+    if (!userId) {
       return res.status(400).json({
         success: false,
-        message: "Sender ID and Message are required.",
+        message: "Sender ID is required.",
       });
     }
-
+    console.log(req.file.buffer);
+    console.log(req.file);
     if (req.file) {
       mediaUrl = await uploadBase64Image(
         `data:${req.file.mimetype};base64,${req.file.buffer.toString(

@@ -18,12 +18,11 @@ const ProductList = () => {
   const [showFormModal, setShowFormModal] = useState(false);
   const [formState, setFormState] = useState(null);
   const [formDetails, setFormDetails] = useState({
-    files: [],
     name: "",
     description: "",
     category: "",
-    price: "",
-    offerPrice: "",
+    files: [],
+    options: [{ name: "Default Option", price: "", offerPrice: "" }],
   });
 
   const handleDelete = async (productId) => {
@@ -73,12 +72,11 @@ const ProductList = () => {
 
   const handleFormClose = () => {
     setFormDetails({
-      files: [],
       name: "",
       description: "",
       category: "",
-      price: "",
-      offerPrice: "",
+      files: [],
+      options: [{ name: "Default Option", price: "", offerPrice: "" }],
     });
 
     setFormState(null);
@@ -99,8 +97,7 @@ const ProductList = () => {
         name: product.name,
         description: descriptionString,
         category: product.category,
-        price: product.price,
-        offerPrice: product.offerPrice,
+        options: product.options,
       });
     }
     setFormState(product ? "edit" : "add");
@@ -164,7 +161,7 @@ const ProductList = () => {
                       <td className="px-4 py-3">{product.category}</td>
                       <td className="px-4 py-3">
                         {currency}
-                        {product.offerPrice}
+                        {product.options[0].offerPrice}
                       </td>
                       <td className="px-4 py-3">
                         <label className="relative inline-flex items-center cursor-pointer text-gray-900 gap-3">
@@ -235,7 +232,7 @@ const ProductList = () => {
                         </div>
                         <div className="text-xs text-gray-600 mt-1">
                           {currency}
-                          {product.offerPrice}
+                          {product.options[0].offerPrice}
                         </div>
                       </div>
 

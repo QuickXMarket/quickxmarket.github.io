@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <div className="mt-10 px-6 md:px-16 lg:px-24 xl:px-32">
+      <div>
         <MainBanner />
         <FAQ />
         {/* <Categories />

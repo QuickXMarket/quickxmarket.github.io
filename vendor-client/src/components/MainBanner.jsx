@@ -100,71 +100,73 @@ const MainBanner = () => {
   }, [currentSlide, slidesData.length]);
 
   return (
-    <div ref={containerRef} className="overflow-hidden relative w-full ">
-      <div
-        className="flex transition-transform duration-500 ease-in-out"
-        style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-      >
-        {slidesData.map((slide, index) => (
-          <div
-            key={index}
-            className="min-w-full h-[300px] sm:h-[400px] md:h-[500px] relative"
-          >
-            <img
-              src={slide.large}
-              alt="slide"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center p-4">
-              <h2
-                className="text-xl sm:text-2xl md:text-3xl font-bold mb-4"
-                style={{ color: slide.color }}
-              >
-                Sell smarter. Grow faster. Stress less.
-              </h2>
+    <div className="mt-10 px-6 md:px-16 lg:px-24 xl:px-32">
+      <div ref={containerRef} className="overflow-hidden relative w-full ">
+        <div
+          className="flex transition-transform duration-500 ease-in-out"
+          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+        >
+          {slidesData.map((slide, index) => (
+            <div
+              key={index}
+              className="min-w-full h-[300px] sm:h-[400px] md:h-[500px] relative"
+            >
+              <img
+                src={slide.large}
+                alt="slide"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center p-4">
+                <h2
+                  className="text-xl sm:text-2xl md:text-3xl font-bold mb-4"
+                  style={{ color: slide.color }}
+                >
+                  Sell smarter. Grow faster. Stress less.
+                </h2>
 
-              {user ? (
-                user.isSeller ? (
-                  <NavLink to="/dashboard">
-                    <div className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg text-sm sm:text-base cursor-pointer">
-                      Dashboard
+                {user ? (
+                  user.isSeller ? (
+                    <NavLink to="/dashboard">
+                      <div className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg text-sm sm:text-base cursor-pointer">
+                        Dashboard
+                      </div>
+                    </NavLink>
+                  ) : !user.isSeller ? (
+                    <div
+                      className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg text-sm sm:text-base cursor-pointer"
+                      onClick={() => {
+                        setShowSellerLogin(true);
+                      }}
+                    >
+                      Register as a Vendor
                     </div>
-                  </NavLink>
-                ) : !user.isSeller ? (
+                  ) : null
+                ) : (
                   <div
                     className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg text-sm sm:text-base cursor-pointer"
                     onClick={() => {
-                      setShowSellerLogin(true);
+                      setShowUserLogin(true);
                     }}
                   >
-                    Register as a Vendor
+                    Sign In/Up
                   </div>
-                ) : null
-              ) : (
-                <div
-                  className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg text-sm sm:text-base cursor-pointer"
-                  onClick={() => {
-                    setShowUserLogin(true);
-                  }}
-                >
-                  Sign In/Up
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-        {slidesData.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentSlide ? "bg-primary" : "bg-gray-300"
-            }`}
-          ></button>
-        ))}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+          {slidesData.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index === currentSlide ? "bg-primary" : "bg-gray-300"
+              }`}
+            ></button>
+          ))}
+        </div>
       </div>
     </div>
   );

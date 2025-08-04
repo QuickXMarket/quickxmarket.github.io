@@ -82,7 +82,7 @@ const ProductList = () => {
                   <td className="px-4 py-3">{product.category}</td>
                   <td className="px-4 py-3">
                     {currency}
-                    {product.offerPrice}
+                    {product.options[0].offerPrice}
                   </td>
                   <td className="px-4 py-3">
                     <label className="relative inline-flex items-center cursor-pointer text-grey-900 gap-3">
@@ -154,7 +154,7 @@ const ProductList = () => {
                       </div>
                       <div className="text-sm text-gray-600">
                         Price: {currency}
-                        {product.offerPrice}
+                        {product.options[0].offerPrice}
                       </div>
                     </div>
                   )}

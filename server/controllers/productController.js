@@ -148,8 +148,7 @@ export const editProduct = async (req, res) => {
     product.name = productData.name;
     product.description = productData.description;
     product.category = productData.category;
-    product.price = productData.price;
-    product.offerPrice = productData.offerPrice;
+    product.options = productData.options;
     product.image = imagesUrl;
 
     await product.save();

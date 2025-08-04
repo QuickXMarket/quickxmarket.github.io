@@ -28,8 +28,7 @@ const ProductForm = ({
         name: formDetails.name,
         description: formDetails.description.split("\n"),
         category: formDetails.category,
-        price: formDetails.price,
-        offerPrice: formDetails.offerPrice,
+        options: formDetails.options,
       };
 
       const formData = new FormData();
@@ -188,51 +187,41 @@ const ProductForm = ({
                 </select>
               </div>
 
-              <div className="flex items-center gap-4 flex-wrap">
-                <div className="flex-1 flex flex-col gap-1 min-w-[120px]">
-                  <label
-                    className="text-sm font-medium"
-                    htmlFor="product-price"
-                  >
-                    Product Price
-                  </label>
-                  <input
-                    onChange={(e) =>
-                      setFormDetails({
-                        ...formDetails,
-                        price: e.target.value,
-                      })
-                    }
-                    value={formDetails.price}
-                    id="product-price"
-                    type="number"
-                    placeholder="0"
-                    className="outline-none py-2 px-3 rounded border border-gray-500/40 text-sm"
-                    required
-                    disabled={isSubmitting}
+              <div className="space-y-4">
+                {formDetails.options.map((option, index) => (
+                  <OptionInput
+                    key={index}
+                    index={index}
+                    option={option}
+                    isOnly={formDetails.options.length === 1}
+                    updateOption={(i, updatedOption) => {
+                      const newOptions = [...formDetails.options];
+                      newOptions[i] = updatedOption;
+                      setFormDetails({ ...formDetails, options: newOptions });
+                    }}
+                    removeOption={(i) => {
+                      const newOptions = [...formDetails.options];
+                      newOptions.splice(i, 1);
+                      setFormDetails({ ...formDetails, options: newOptions });
+                    }}
                   />
-                </div>
+                ))}
 
-                <div className="flex-1 flex flex-col gap-1 min-w-[120px]">
-                  <label className="text-sm font-medium" htmlFor="offer-price">
-                    Offer Price
-                  </label>
-                  <input
-                    onChange={(e) =>
-                      setFormDetails({
-                        ...formDetails,
-                        offerPrice: e.target.value,
-                      })
-                    }
-                    value={formDetails.offerPrice}
-                    id="offer-price"
-                    type="number"
-                    placeholder="0"
-                    className="outline-none py-2 px-3 rounded border border-gray-500/40 text-sm"
-                    required
-                    disabled={isSubmitting}
-                  />
-                </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormDetails({
+                      ...formDetails,
+                      options: [
+                        ...formDetails.options,
+                        { name: "", price: "", offerPrice: "" },
+                      ],
+                    })
+                  }
+                  className="text-primary text-sm mt-1"
+                >
+                  + Add Option
+                </button>
               </div>
 
               <button
@@ -251,3 +240,59 @@ const ProductForm = ({
 };
 
 export default ProductForm;
+
+const OptionInput = ({ option, index, updateOption, removeOption, isOnly }) => {
+  const handleChange = (field, value) => {
+    const newOption = {
+      ...option,
+      [field]: value,
+    };
+
+    if (field === "price") {
+      newOption.offerPrice = value;
+    }
+
+    updateOption(index, newOption);
+  };
+
+  return (
+    <div className="border p-4 rounded-lg space-y-2 relative bg-gray-50">
+      {!isOnly && (
+        <button
+          type="button"
+          className="absolute top-2 right-2 text-red-500"
+          onClick={() => removeOption(index)}
+        >
+          ✕
+        </button>
+      )}
+      <h3 className="font-medium text-sm">Option {index + 1}</h3>
+      <input
+        type="text"
+        value={option.name}
+        placeholder="Option Name"
+        onChange={(e) => handleChange("name", e.target.value)}
+        className="w-full outline-none py-2 px-3 rounded border border-gray-500/40 text-sm"
+        required
+      />
+      <div className="flex items-center gap-4">
+        <input
+          type="number"
+          value={option.price}
+          placeholder="Price"
+          onChange={(e) => handleChange("price", e.target.value)}
+          className="flex-1 outline-none py-2 px-3 rounded border border-gray-500/40 text-sm"
+          required
+        />
+        <input
+          type="number"
+          value={option.offerPrice}
+          placeholder="Offer Price"
+          onChange={(e) => handleChange("offerPrice", e.target.value)}
+          className="flex-1 outline-none py-2 px-3 rounded border border-gray-500/40 text-sm"
+          required
+        />
+      </div>
+    </div>
+  );
+};

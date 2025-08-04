@@ -16,6 +16,7 @@ const ProductDetails = () => {
   const [vendor, setVendor] = useState(null);
   const [isWishListed, setIsWishListed] = useState(false);
   const [product, setProduct] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
     if (products.length > 0 && product) {
@@ -53,6 +54,9 @@ const ProductDetails = () => {
 
   useEffect(() => {
     setProduct(products.find((item) => item._id === id));
+    if (product?.options && product.options.length > 0) {
+      setSelectedOption(product.options[0]);
+    }
   }, [products]);
 
   return (
@@ -88,6 +92,26 @@ const ProductDetails = () => {
 
           <div className="text-sm w-full md:w-1/2">
             <h1 className="text-3xl font-medium">{product.name}</h1>
+            {product.options &&
+              product.options.length > 1 &&
+              product.options.some((opt) => opt.name !== "Default Option") && (
+                <div className="flex flex-wrap gap-3 mt-2">
+                  {product.options.map((option, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedOption(option)}
+                      className={`px-3 py-1.5 text-sm border rounded transition ${
+                        selectedOption?.name === option.name
+                          ? "bg-primary text-white border-primary"
+                          : "text-gray-600 border-gray-300 hover:border-primary"
+                      }`}
+                    >
+                      {option.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+
             <WishlistIcon
               className={`w-5 h-5 sm:w-6 sm:h-6 ml-auto cursor-pointer hover:scale-110 transition  ${
                 isWishListed ? "text-primary" : "text-gray-500"
@@ -126,12 +150,13 @@ const ProductDetails = () => {
             <div className="mt-6">
               <p className="text-gray-500/70 line-through">
                 MRP: {currency}
-                {product.price}
+                {selectedOption?.price }
               </p>
               <p className="text-2xl font-medium">
                 MRP: {currency}
-                {product.offerPrice}
+                {selectedOption?.offerPrice }
               </p>
+
               <span className="text-gray-500/70">(inclusive of all taxes)</span>
             </div>
 

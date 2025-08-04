@@ -1,8 +1,13 @@
 import React, { useState } from "react";
+import { assets } from "../assets/assets";
 
 const ChatMessage = ({ message, currentUser }) => {
   const [showImage, setShowImage] = useState(false);
   const isSender = message.senderId === currentUser;
+  const mediaURL =
+    message.media instanceof File
+      ? URL.createObjectURL(message.media)
+      : message.media;
 
   const handleShow = () => setShowImage(true);
   const handleClose = () => setShowImage(false);
@@ -43,13 +48,14 @@ const ChatMessage = ({ message, currentUser }) => {
             {message.senderName}
           </p>
         )}
+
         {/* Media Section */}
         {message.media && (
           <div onClick={handleShow} className="cursor-pointer mb-2">
-            {isVideo(message.media) ? (
+            {isVideo(mediaURL) ? (
               <div className="relative">
                 <video
-                  src={message.media}
+                  src={mediaURL}
                   className="w-full h-auto object-cover rounded-lg"
                   muted
                   preload="metadata"
@@ -60,14 +66,13 @@ const ChatMessage = ({ message, currentUser }) => {
               </div>
             ) : (
               <img
-                src={message.media}
+                src={mediaURL}
                 alt="sent"
                 className="w-full max-w-xs rounded-lg h-50"
               />
             )}
           </div>
         )}
-
         {/* Text + Timestamp wrapper */}
         <div
           className={`${
@@ -79,7 +84,7 @@ const ChatMessage = ({ message, currentUser }) => {
 
           {/* Timestamp */}
           <div
-            className={`text-xs text-gray-500 shrink-0 whitespace-nowrap ${
+            className={`text-xs text-gray-500 shrink-0 whitespace-nowrap flex ${
               !message.media ? "ml-auto " : "text-right"
             }`}
           >
@@ -88,6 +93,10 @@ const ChatMessage = ({ message, currentUser }) => {
               minute: "2-digit",
               hour12: true,
             })}
+            <img
+              className="w-3 h-3 ml-1 self-end"
+              src={message.sent ? assets.check : assets.clock_history}
+            />
           </div>
         </div>
       </div>
@@ -102,17 +111,14 @@ const ChatMessage = ({ message, currentUser }) => {
             ✕
           </div>
           <div className="max-w-[90%] max-h-[90%]">
-            {isVideo(message.media) ? (
+            {isVideo(mediaURL) ? (
               <video controls className="w-full h-full object-contain">
-                <source
-                  src={message.media}
-                  type={getVideoType(message.media)}
-                />
+                <source src={mediaURL} type={getVideoType(mediaURL)} />
                 Your browser does not support the video tag.
               </video>
             ) : (
               <img
-                src={message.media}
+                src={mediaURL}
                 alt="full view"
                 className="w-full max-h-[90vh] object-contain rounded"
               />
