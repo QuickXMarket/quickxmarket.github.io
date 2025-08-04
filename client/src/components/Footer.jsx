@@ -36,7 +36,7 @@ const Footer = () => {
         </div>
       </div>
       <p className="py-4 text-center text-sm md:text-base text-gray-500/80">
-        Copyright {new Date().getFullYear()} © GreatStack.dev All Right
+        Copyright {new Date().getFullYear()} © QuickXMarket.com.ng All Right
         Reserved.
       </p>
     </div>
