@@ -28,20 +28,18 @@ export const sendNewMessage = async (req, res) => {
         message: "Sender ID is required.",
       });
     }
-    console.log(req.file.buffer);
-    console.log(req.file);
+
     if (req.file) {
-      mediaUrl = await uploadBase64Image(
-        `data:${req.file.mimetype};base64,${req.file.buffer.toString(
-          "base64"
-        )}`,
-        "chat_media",
-        `${Date.now()}-${userId}`
-      );
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        resource_type: "image",
+        folder: `/chat_media/${chatId}`,
+        public_id: `${Date.now()}-${userId}`,
+      });
+      mediaUrl = result.secure_url;
     } else if (req.body.attachment?.base64?.startsWith("data:")) {
       mediaUrl = await uploadBase64Image(
         req.body.attachment.base64,
-        "chat_media",
+        `/chat_media/${chatId}`,
         `${Date.now()}-${userId}`
       );
     }

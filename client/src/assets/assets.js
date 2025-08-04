@@ -10,6 +10,9 @@ import add_icon from "./add_icon.svg";
 import refresh_icon from "./refresh_icon.svg";
 import product_list_icon from "./product_list_icon.svg";
 import order_icon from "./order_icon.svg";
+import double_check from "./double-check.svg";
+import check from "./check.svg";
+import clock_history from "./clock-history.svg";
 import upload_area from "./upload_area.png";
 import profile_icon from "./profile_icon.png";
 import menu_icon from "./menu_icon.svg";
@@ -20,10 +23,6 @@ import box_icon from "./box_icon.svg";
 import trust_icon from "./trust_icon.svg";
 import black_arrow_icon from "./black_arrow_icon.svg";
 import white_arrow_icon from "./white_arrow_icon.svg";
-import main_banner_bg from "./main_banner_bg.png";
-import main_banner_bg_sm from "./main_banner_bg_sm.png";
-import bottom_banner_image from "./bottom_banner_image.png";
-import bottom_banner_image_sm from "./bottom_banner_image_sm.png";
 import add_address_iamge from "./add_address_image.svg";
 import clothing_image from "./clothing_image.jpg";
 import phone_accessories_image from "./phone_accessories_image.jpg";
@@ -59,6 +58,9 @@ export const assets = {
   order_icon,
   upload_area,
   profile_icon,
+  check,
+  double_check,
+  clock_history,
   menu_icon,
   delivery_truck_icon,
   leaf_icon,
@@ -66,10 +68,6 @@ export const assets = {
   trust_icon,
   black_arrow_icon,
   white_arrow_icon,
-  main_banner_bg,
-  main_banner_bg_sm,
-  bottom_banner_image,
-  bottom_banner_image_sm,
   add_address_iamge,
   box_icon,
   Favicon_rounded,

@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
-  const { baseURL, axios } = useCoreContext();
+  const { baseURL, axios, fileToBase64 } = useCoreContext();
   const { user, setUser } = useAuthContext();
   const [typingUsers, setTypingUsers] = useState({});
   const [isTyping, setIsTyping] = useState(false);
@@ -20,7 +20,7 @@ export const ChatProvider = ({ children }) => {
       const { data } = await axios.get("/api/chat/get-chat/");
 
       if (data.success && data.chat?.messages) {
-        setMessages(data.chat.messages);
+        setMessages(data.chat.messages.map((msg) => ({ ...msg, sent: true })));
       } else {
         console.error(data.message || "Failed to fetch messages");
       }
@@ -85,16 +85,39 @@ export const ChatProvider = ({ children }) => {
     }
   }, [isTyping]);
 
-  const sendMessage = async (content, media = "") => {
+  const sendMessage = async (content, media) => {
+    const tempId = `${Date.now()}-${Math.random()}`;
+    const optimisticMessage = {
+      _id: tempId,
+      senderId: user._id,
+      message: content,
+      media: media,
+      timestamp: new Date().toISOString(),
+      sent: false,
+    };
+
+    setMessages((prev) => [...prev, optimisticMessage]);
+
     try {
-      const { data } = await axios.post("/api/chat/send", {
-        message: content,
-        attachment: { base64: media },
-        chatId: user.chatId,
+      const formData = new FormData();
+      formData.append("message", content);
+      formData.append("chatId", user.chatId);
+      if (media) {
+        formData.append("attachment", media); 
+      }
+
+      const { data } = await axios.post("/api/chat/send", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       if (data.success) {
-        const newMessage = data.chat.messages.slice(-1)[0];
+        const newMessage = {
+          ...data.chat.messages.slice(-1)[0],
+          sent: true,
+        };
+
         const newChatId = data.chat._id;
 
         if (!user.chatId) {
@@ -106,7 +129,11 @@ export const ChatProvider = ({ children }) => {
           socket.current.emit("join-room", newChatId);
         }
 
-        setMessages((prev) => [...prev, newMessage]);
+        // Replace the temp message with the confirmed one
+        setMessages((prev) =>
+          prev.map((msg) => (msg._id === tempId ? newMessage : msg))
+        );
+
         socket.current.emit("send-message", {
           roomId: user.chatId || newChatId,
           message: newMessage,
@@ -114,6 +141,7 @@ export const ChatProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Failed to send message:", error);
+      // Optionally: mark the message as failed or remove it
     }
   };
 

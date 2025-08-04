@@ -66,14 +66,11 @@ const ChatLayout = () => {
     setSendingMessage(true);
 
     try {
-      let fileBase64 = null;
-      if (selectedFile) {
-        fileBase64 = await fileToBase64(selectedFile); // await is important
-      }
-
-      await sendMessage(newMessage.trim(), fileBase64);
+      const content = newMessage.trim();
+      const media = selectedFile;
       setNewMessage("");
       setSelectedFile(null);
+      await sendMessage(content, media);
     } catch (err) {
       console.error(err);
     } finally {
@@ -101,6 +98,7 @@ const ChatLayout = () => {
           <div className="flex flex-col flex-grow overflow-y-auto h-100  no-scrollbar">
             <div className="flex-grow px-4 py-2 bg-white overflow-y-auto flex flex-col-reverse">
               {" "}
+              <div ref={messagesEndRef} />
               {Object.values(typingUsers).length > 0 && (
                 <p className="text-sm text-gray-400 italic">
                   {Object.values(typingUsers).join(", ")}{" "}
@@ -125,7 +123,6 @@ const ChatLayout = () => {
                       ))}
                     </div>
                   ))}
-              <div ref={messagesEndRef} />
             </div>
           </div>
 
