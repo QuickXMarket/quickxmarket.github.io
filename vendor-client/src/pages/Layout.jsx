@@ -7,9 +7,10 @@ import { useAuthContext } from "../context/AuthContext";
 import { useCoreContext } from "../context/CoreContext";
 
 const Layout = () => {
-  const { user, businessName, vendor, setShowUserLogin, logout } =
+  const { user, businessName, vendor, setShowUserLogin, logout, setVendor } =
     useAuthContext();
   const [open, setOpen] = React.useState(false);
+  const { navigate, location, axios } = useCoreContext();
   const [showSellerLogin, setShowSellerLogin] = React.useState(false);
 
   const sidebarLinks = [
@@ -21,6 +22,25 @@ const Layout = () => {
     },
     { name: "Wallet", path: "/dashboard/wallet", icon: assets.wallet_outline },
   ];
+
+  const handleOpenToggle = async () => {
+    if (!vendor || !user) {
+      toast.error("Please login to toggle your status.");
+      return;
+    }
+    try {
+      const { data } = await axios.patch("/api/seller/toggle-status");
+      if (data.success) {
+        toast.success(`You are now ${!vendor.isOpen ? "open" : "closed"}`);
+        setVendor((prev) => ({ ...prev, isOpen: !prev.isOpen }));
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Error toggling vendor status:", error);
+      toast.error("Failed to toggle vendor status.");
+    }
+  };
 
   if (showSellerLogin) {
     return <SellerLogin setShowUserLogin={setShowSellerLogin} />;
@@ -62,11 +82,31 @@ const Layout = () => {
                   <p className="font-semibold text-gray-700">
                     {businessName ? businessName : "Guest"}
                   </p>
+                  {vendor?.openingTime && vendor?.closingTime && (
+                    <div className="text-xs text-gray-500">
+                      <span>Business Hours: </span>
+                      <span>{`${vendor?.openingTime} -${vendor?.closingTime}`}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
               {/* Links */}
               <ul className="flex flex-col gap-2">
+                <li className="hover:bg-gray-100 rounded px-2 py-1 cursor-pointer flex items-center gap-2">
+                  <span className="text-sm">Online</span>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={vendor?.isOpen}
+                      onChange={handleOpenToggle}
+                    />
+                    <div className="w-6 h-4 bg-slate-300 rounded-full peer peer-checked:bg-primary transition-colors duration-200"></div>
+                    <span className="dot absolute left-0.5 top-0.5 w-3 h-3 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-2.5"></span>
+                  </label>
+                </li>
+
                 <li
                   onClick={() => {
                     setOpen(false);
@@ -76,6 +116,7 @@ const Layout = () => {
                 >
                   Business Details
                 </li>
+
                 <li
                   onClick={() => {
                     setOpen(false);

@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { assets } from "../assets/assets";
 import { useCoreContext } from "../context/CoreContext";
 import { useAuthContext } from "../context/AuthContext";
+import { NavLink } from "react-router-dom";
 
 const SellerLogin = () => {
   const { axios, navigate, fuse, location } = useCoreContext();
@@ -17,6 +18,8 @@ const SellerLogin = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [uploadPreview, setUploadPreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [openingTime, setOpeningTime] = useState("");
+  const [closingTime, setClosingTime] = useState("");
 
   const onFileChange = (e) => {
     const file = e.target.files[0];
@@ -84,7 +87,11 @@ const SellerLogin = () => {
       toast.error("Please select a valid address from suggestions.");
       return;
     }
-
+    if (openingTime >= closingTime) {
+      toast.error("Closing time must be after opening time.");
+      return;
+    }
+    
     try {
       const formData = new FormData();
       formData.append("userId", user._id);
@@ -93,6 +100,9 @@ const SellerLogin = () => {
       formData.append("address", address);
       formData.append("latitude", latitude);
       formData.append("longitude", longitude);
+      formData.append("openingTime", openingTime);
+      formData.append("closingTime", closingTime);
+
       if (profilePhoto) {
         formData.append("profilePhoto", profilePhoto);
       }
@@ -144,24 +154,26 @@ const SellerLogin = () => {
       <form
         onSubmit={onSubmitHandler}
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col gap-4 m-auto items-center p-8 py-12 w-80 sm:w-[352px] rounded-lg shadow-xl border border-gray-200 bg-white"
+        className="flex flex-col gap-4 m-auto  p-8 py-12 w-80 sm:w-[352px] rounded-lg shadow-xl border border-gray-200 bg-white"
       >
-        <label htmlFor="profilePhoto" className="cursor-pointer">
-          <input
-            type="file"
-            id="profilePhoto"
-            accept="image/*"
-            onChange={onFileChange}
-            hidden
-          />
-          <img
-            src={uploadPreview || assets.upload_area}
-            alt="Upload Area"
-            width={100}
-            height={100}
-            className="rounded-full object-cover"
-          />
-        </label>
+        <div className="flex w-[100%] items-center justify-center">
+          <label htmlFor="profilePhoto" className="cursor-pointer">
+            <input
+              type="file"
+              id="profilePhoto"
+              accept="image/*"
+              onChange={onFileChange}
+              hidden
+            />
+            <img
+              src={uploadPreview || assets.upload_area}
+              alt="Upload Area"
+              width={100}
+              height={100}
+              className="rounded-full object-cover"
+            />
+          </label>
+        </div>
         <div className="w-full">
           <p>Business Name</p>
           <input
@@ -209,12 +221,34 @@ const SellerLogin = () => {
             </ul>
           )}
         </div>
+        <div className="flex gap-2">
+          <div className="w-full">
+            <p>Opening Time</p>
+            <input
+              type="time"
+              value={openingTime}
+              onChange={(e) => setOpeningTime(e.target.value)}
+              className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary"
+              required
+            />
+          </div>
+          <div className="w-full">
+            <p>Closing Time</p>
+            <input
+              type="time"
+              value={closingTime}
+              onChange={(e) => setClosingTime(e.target.value)}
+              className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary"
+              required
+            />
+          </div>
+        </div>
         <label className="flex items-start text-sm gap-2 text-gray-700">
           <input type="checkbox" required className="mt-1 accent-primary" />
           <span>
             I agree to the{" "}
             <NavLink
-              href="/customer-terms"
+              to="/terms-and-conditions"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary underline hover:text-primary-dull"

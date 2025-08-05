@@ -144,7 +144,7 @@ const ProductDetails = () => {
             {/* Price */}
             <div className="mt-4">
               <p className="text-sm text-gray-500 line-through">
-                MRP: {currency}
+               {currency}
                 {product.price}
               </p>
               <p className="text-xl font-semibold">

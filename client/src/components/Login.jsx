@@ -257,7 +257,7 @@ const Login = () => {
             <span>
               I agree to the{" "}
               <NavLink
-                href="/customer-terms"
+                to="/customer-terms"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary underline hover:text-primary-dull"

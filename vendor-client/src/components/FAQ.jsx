@@ -66,7 +66,7 @@ const faqData = {
   ],
 };
 
-const FAQ = () => {
+const FAQ = ({ ref }) => {
   const [activeIndex, setActiveIndex] = useState(null);
 
   const toggleAccordion = (index) => {
@@ -74,7 +74,7 @@ const FAQ = () => {
   };
 
   return (
-    <section className="bg-gray-50 mt-96">
+    <section className="bg-gray-50 mt-32" id="faq" ref={ref}>
       <div className="max-w-4xl mx-auto">
         <h2 className="text-3xl font-bold text-center text-primary mb-10">
           {faqData.title}

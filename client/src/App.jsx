@@ -13,7 +13,7 @@ import Cart from "./pages/Cart";
 import AddAddress from "./pages/AddAddress";
 import MyOrders from "./pages/MyOrders";
 import Loading from "./components/Loading";
-import Contact from "./pages/Contact";
+import Feedback from "./pages/Feedback";
 import FoodVendorProducts from "./pages/FoodVendorProducts";
 import ShopList from "./pages/ShopList";
 import ShopProducts from "./pages/ShopProducts";
@@ -89,13 +89,13 @@ const App = () => {
           <Route path="/rider-terms" element={<RiderTerms />} />
           <Route path="/add-address" element={<AddAddress />} />
           <Route path="/my-orders" element={<MyOrders />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/feedback" element={<Feedback />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/loader" element={<Loading />} />
           <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </div>
-      {!isContactPath && (
+      {!isContactPath && user && (
         <div className="fixed bottom-6 right-6 sm:right-10 lg:right-14 z-50">
           <button
             onClick={() => {

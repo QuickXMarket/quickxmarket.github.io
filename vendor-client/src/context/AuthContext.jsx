@@ -37,7 +37,7 @@ export const AuthContextProvider = ({ children }) => {
       const { data } = await axios.get(`/api/seller/user/${user._id}`);
       if (data.success) {
         setBusinessName(data.vendor.businessName);
-        console.log(data.vendor);
+        
         setVendor(data.vendor);
       } else {
         toast.error(data.message);

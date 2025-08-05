@@ -4,7 +4,7 @@ import { useCoreContext } from "../context/CoreContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-const Contact = () => {
+const Feedback = () => {
   const { axios, navigate } = useCoreContext();
 
   const [name, setName] = useState("");
@@ -66,7 +66,7 @@ const Contact = () => {
             className="flex flex-col gap-4 w-full max-w-md p-8 rounded-lg shadow-xl border border-gray-200 bg-white"
           >
             <p className="text-2xl font-medium text-center mb-4">
-              <span className="text-primary">Contact</span> Us
+              <span className="text-primary">Feedback</span> Form
             </p>
 
             <div className="w-full">
@@ -168,4 +168,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default Feedback;

@@ -8,7 +8,7 @@ import Layout from "./pages/Layout";
 import ProductList from "./pages/ProductList";
 import Orders from "./pages/Orders";
 import Loading from "./components/Loading";
-import Contact from "./pages/Contact";
+import Feedback from "./pages/Feedback";
 import { useAuthContext } from "./context/AuthContext";
 import { useCoreContext } from "./context/CoreContext";
 import Wallet from "./pages/Wallet";
@@ -38,7 +38,7 @@ const App = () => {
             path="/terms-and-conditions"
             element={<TermsandConditions />}
           />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/feedback" element={<Feedback />} />
           <Route
             path="/dashboard"
             element={
@@ -59,14 +59,12 @@ const App = () => {
           </Route>
         </Routes>
       </div>
-      {!isContactPath && (
+      {!isContactPath && user && (
         <div className="fixed bottom-20 md:bottom-6 right-6 sm:right-10 lg:right-14 z-50">
           <button
             onClick={() => {
               if (user) {
                 setShowChatModal(true);
-              } else {
-                navigate("/contact");
               }
             }}
             className="bg-primary hover:bg-primary/90 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl"

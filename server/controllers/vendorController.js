@@ -17,8 +17,16 @@ async function uploadBase64Image(base64String) {
 
 export const createVendor = async (req, res) => {
   try {
-    const { userId, businessName, number, address, latitude, longitude } =
-      req.body;
+    const {
+      userId,
+      businessName,
+      number,
+      address,
+      latitude,
+      longitude,
+      openingTime,
+      closingTime,
+    } = req.body;
 
     if (
       !userId ||
@@ -60,6 +68,8 @@ export const createVendor = async (req, res) => {
       orders: [],
       latitude,
       longitude,
+      openingTime,
+      closingTime,
     });
 
     const walletResult = await createWalletLogic(userId, "vendor");
@@ -68,6 +78,26 @@ export const createVendor = async (req, res) => {
     }
 
     return res.json({ success: true, vendor });
+  } catch (error) {
+    console.error(error.message);
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+// Toggle vendor status
+export const toggleVendorStatus = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const vendor = await Vendor.findOne({ userId });
+    if (!vendor) {
+      return res.json({ success: false, message: "Vendor not found" });
+    }
+    vendor.isOpen = !vendor.isOpen;
+    await vendor.save();
+    return res.json({
+      success: true,
+      message: `Vendor is now ${vendor.isOpen ? "open" : "closed"}`,
+    });
   } catch (error) {
     console.error(error.message);
     return res.json({ success: false, message: error.message });

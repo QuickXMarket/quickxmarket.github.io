@@ -3,6 +3,7 @@ import {
   createVendor,
   getVendorById,
   getVendorByUserId,
+  toggleVendorStatus,
   vendorList,
 } from "../controllers/vendorController.js";
 import { upload } from "../configs/multer.js";
@@ -21,5 +22,6 @@ sellerRouter.get("/user/:userId", authUser, getVendorByUserId);
 sellerRouter.get("/vendor/:vendorId", authUser, getVendorById);
 
 sellerRouter.get("/list", authUser, vendorList);
+sellerRouter.patch("/toggle-status", authUser, toggleVendorStatus);
 
 export default sellerRouter;
