@@ -84,6 +84,73 @@ export const createVendor = async (req, res) => {
   }
 };
 
+export const editVendor = async (req, res) => {
+  try {
+    const {
+      vendorId,
+      businessName,
+      number,
+      address,
+      latitude,
+      longitude,
+      openingTime,
+      closingTime,
+    } = req.body;
+
+    if (
+      !vendorId ||
+      !businessName ||
+      !number ||
+      !address ||
+      !latitude ||
+      !longitude
+    ) {
+      return res.json({ success: false, message: "Missing required fields" });
+    }
+
+    const vendor = await Vendor.findById(vendorId);
+    if (!vendor) {
+      return res.json({ success: false, message: "Vendor not found" });
+    }
+    if (vendor.userId.toString() !== req.body.userId.toString()) {
+      return res.json({
+        success: false,
+        message: "Unauthorized to edit this vendor",
+      });
+    }
+
+    let profilePhotoUrl = vendor.profilePhoto;
+
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        resource_type: "image",
+      });
+      profilePhotoUrl = result.secure_url;
+    } else if (
+      req.body.profilePhoto &&
+      req.body.profilePhoto.startsWith("data:image")
+    ) {
+      profilePhotoUrl = await uploadBase64Image(req.body.profilePhoto);
+    }
+
+    vendor.profilePhoto = profilePhotoUrl;
+    vendor.businessName = businessName;
+    vendor.number = number;
+    vendor.address = address;
+    vendor.latitude = latitude;
+    vendor.longitude = longitude;
+    vendor.openingTime = openingTime;
+    vendor.closingTime = closingTime;
+
+    await vendor.save();
+
+    return res.json({ success: true, vendor });
+  } catch (error) {
+    console.error(error.message);
+    return res.json({ success: false, message: error.message });
+  }
+};
+
 // Toggle vendor status
 export const toggleVendorStatus = async (req, res) => {
   try {
@@ -92,6 +159,7 @@ export const toggleVendorStatus = async (req, res) => {
     if (!vendor) {
       return res.json({ success: false, message: "Vendor not found" });
     }
+
     vendor.isOpen = !vendor.isOpen;
     await vendor.save();
     return res.json({
@@ -130,6 +198,12 @@ export const getVendorById = async (req, res) => {
     if (!vendor) {
       return res.json({ success: false, message: "Vendor not found" });
     }
+    if (vendor.userId.toString() !== req.body.userId.toString()) {
+      return res.json({
+        success: false,
+        message: "Unauthorized to view this vendor",
+      });
+    }
     return res.json({ success: true, vendor });
   } catch (error) {
     console.error(error.message);
@@ -139,11 +213,12 @@ export const getVendorById = async (req, res) => {
 
 export const vendorList = async (req, res) => {
   try {
-    const vendors = await Vendor.find({}, "businessName profilePhoto _id").sort(
-      {
-        businessName: 1,
-      }
-    );
+    const vendors = await Vendor.find(
+      {},
+      "businessName profilePhoto _id openingTime closingTime isOpen"
+    ).sort({
+      businessName: 1,
+    });
     if (!vendors || vendors.length === 0) {
       return res.json({ success: false, message: "No vendors found" });
     }

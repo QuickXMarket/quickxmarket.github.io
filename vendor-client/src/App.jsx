@@ -73,6 +73,7 @@ const App = () => {
           </button>
         </div>
       )}
+
       {user && showChatModal && <ChatLayout />}
     </div>
   );

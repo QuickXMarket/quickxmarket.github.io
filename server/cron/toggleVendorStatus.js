@@ -10,9 +10,9 @@ const toggleVendorOpenStatus = async () => {
   const currentTime = getCurrentTime();
 
   try {
-    await Vendor.updateMany({ openTime: currentTime }, { isOpen: true });
+    await Vendor.updateMany({ openingTime: currentTime }, { isOpen: true });
 
-    await Vendor.updateMany({ closeTime: currentTime }, { isOpen: false });
+    await Vendor.updateMany({ closingTime: currentTime }, { isOpen: false });
 
     console.log(`[CRON] Vendor open status updated at ${currentTime}`);
   } catch (err) {

@@ -1,17 +1,19 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import toast from "react-hot-toast";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SellerLogin from "../components/SellerLogin";
 import { useAuthContext } from "../context/AuthContext";
 import { useCoreContext } from "../context/CoreContext";
+import BusinessDetails from "../components/BusinessDetails";
 
 const Layout = () => {
   const { user, businessName, vendor, setShowUserLogin, logout, setVendor } =
     useAuthContext();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const { navigate, location, axios } = useCoreContext();
-  const [showSellerLogin, setShowSellerLogin] = React.useState(false);
+  const [showSellerLogin, setShowSellerLogin] = useState(false);
+  const [showVendorDetails, setShowVendorDetails] = useState(false);
 
   const sidebarLinks = [
     { name: "Orders", path: "/dashboard", icon: assets.order_icon },
@@ -84,13 +86,13 @@ const Layout = () => {
                   </p>
                   {vendor?.openingTime && vendor?.closingTime && (
                     <div className="text-xs text-gray-500">
-                      <span>Business Hours: </span>
+                      <span>Bus. Hours: </span>
                       <span>{`${vendor?.openingTime} -${vendor?.closingTime}`}</span>
                     </div>
                   )}
                 </div>
               </div>
-
+              {console.log(vendor.isOpen)}
               {/* Links */}
               <ul className="flex flex-col gap-2">
                 <li className="hover:bg-gray-100 rounded px-2 py-1 cursor-pointer flex items-center gap-2">
@@ -110,7 +112,7 @@ const Layout = () => {
                 <li
                   onClick={() => {
                     setOpen(false);
-                    navigate("/my-orders");
+                    setShowVendorDetails(true);
                   }}
                   className="hover:bg-gray-100 rounded px-2 py-1 cursor-pointer"
                 >
@@ -188,6 +190,12 @@ const Layout = () => {
         {/* Main content */}
         <div className="flex-1 pb-16 md:pb-0">
           <Outlet context={{ vendor }} />
+          {showVendorDetails && (
+            <BusinessDetails
+              data={vendor}
+              onClose={() => setShowVendorDetails(false)}
+            />
+          )}
         </div>
 
         {/* Mobile bottom nav */}

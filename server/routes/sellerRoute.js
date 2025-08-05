@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createVendor,
+  editVendor,
   getVendorById,
   getVendorByUserId,
   toggleVendorStatus,
@@ -18,6 +19,12 @@ sellerRouter.post(
   createVendor
 );
 sellerRouter.get("/user/:userId", authUser, getVendorByUserId);
+sellerRouter.patch(
+  "/edit",
+  upload.single("profilePhoto"),
+  authUser,
+  editVendor
+);
 
 sellerRouter.get("/vendor/:vendorId", authUser, getVendorById);
 
