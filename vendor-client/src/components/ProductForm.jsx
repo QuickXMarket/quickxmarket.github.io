@@ -275,13 +275,13 @@ const OptionInput = ({ option, index, updateOption, removeOption, isOnly }) => {
         className="w-full outline-none py-2 px-3 rounded border border-gray-500/40 text-sm"
         required
       />
-      <div className="flex items-center gap-4">
+      <div className="flex gap-4 w-full flex-nowrap">
         <input
           type="number"
           value={option.price}
           placeholder="Price"
           onChange={(e) => handleChange("price", e.target.value)}
-          className="flex-1 outline-none py-2 px-3 rounded border border-gray-500/40 text-sm"
+          className="w-1/2 min-w-0 outline-none py-2 px-3 rounded border border-gray-500/40 text-sm"
           required
         />
         <input
@@ -289,7 +289,7 @@ const OptionInput = ({ option, index, updateOption, removeOption, isOnly }) => {
           value={option.offerPrice}
           placeholder="Offer Price"
           onChange={(e) => handleChange("offerPrice", e.target.value)}
-          className="flex-1 outline-none py-2 px-3 rounded border border-gray-500/40 text-sm"
+          className="w-1/2 min-w-0 outline-none py-2 px-3 rounded border border-gray-500/40 text-sm"
           required
         />
       </div>
