@@ -23,7 +23,7 @@ export const sendNewMessage = async (req, res) => {
     let mediaUrl = "";
 
     if (!userId) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "Sender ID is required.",
       });
@@ -84,7 +84,7 @@ export const getChatHistory = async (req, res) => {
     const { userId } = req.body;
 
     if (!userId) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "User ID is required.",
       });

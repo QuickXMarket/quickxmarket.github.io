@@ -165,9 +165,10 @@ export const deleteProduct = async (req, res) => {
     const { productId, vendorId } = req.body;
 
     if (!productId || !vendorId) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Missing productId or vendorId" });
+      return res.json({
+        success: false,
+        message: "Missing productId or vendorId",
+      });
     }
 
     // Find vendor by authenticated vendorId

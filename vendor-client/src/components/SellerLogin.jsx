@@ -18,6 +18,7 @@ const SellerLogin = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [uploadPreview, setUploadPreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [registering, setRegistering] = useState(false);
   const [openingTime, setOpeningTime] = useState("");
   const [closingTime, setClosingTime] = useState("");
 
@@ -91,7 +92,7 @@ const SellerLogin = () => {
       toast.error("Closing time must be after opening time.");
       return;
     }
-    
+
     try {
       const formData = new FormData();
       formData.append("userId", user._id);
@@ -102,6 +103,7 @@ const SellerLogin = () => {
       formData.append("longitude", longitude);
       formData.append("openingTime", openingTime);
       formData.append("closingTime", closingTime);
+      setRegistering(true);
 
       if (profilePhoto) {
         formData.append("profilePhoto", profilePhoto);
@@ -138,6 +140,8 @@ const SellerLogin = () => {
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setRegistering(false);
     }
   };
 
@@ -259,14 +263,16 @@ const SellerLogin = () => {
         </label>
         <button
           type="submit"
-          disabled={loading || latitude === null || longitude === null}
+          disabled={
+            loading || latitude === null || longitude === null || registering
+          }
           className={`cursor-pointer bg-primary text-white w-full py-2 rounded-md transition-all ${
             loading || latitude === null || longitude === null
               ? "bg-gray-400 cursor-not-allowed"
               : "hover:bg-primary-dull"
           }`}
         >
-          Register Business
+          {!registering ? "Register Business" : "Registering Business..."}
         </button>
       </form>
     </div>

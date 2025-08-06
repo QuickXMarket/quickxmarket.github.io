@@ -51,7 +51,7 @@ export const resetPassword = async (req, res) => {
     const { token, id, newPassword } = req.body;
 
     if (!token || !id || !newPassword) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "Missing token, user ID, or new password.",
       });
@@ -66,9 +66,7 @@ export const resetPassword = async (req, res) => {
     });
 
     if (!tokenDoc) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid or expired token." });
+      return res.json({ success: false, message: "Invalid or expired token." });
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);

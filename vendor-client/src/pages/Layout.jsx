@@ -6,6 +6,7 @@ import SellerLogin from "../components/SellerLogin";
 import { useAuthContext } from "../context/AuthContext";
 import { useCoreContext } from "../context/CoreContext";
 import BusinessDetails from "../components/BusinessDetails";
+import UserProfileModal from "../components/UserProfileModal";
 
 const Layout = () => {
   const { user, businessName, vendor, setShowUserLogin, logout, setVendor } =
@@ -14,6 +15,7 @@ const Layout = () => {
   const { navigate, location, axios } = useCoreContext();
   const [showSellerLogin, setShowSellerLogin] = useState(false);
   const [showVendorDetails, setShowVendorDetails] = useState(false);
+  const [showUserDetails, setShowUserDetails] = useState(false);
 
   const sidebarLinks = [
     { name: "Orders", path: "/dashboard", icon: assets.order_icon },
@@ -92,7 +94,7 @@ const Layout = () => {
                   )}
                 </div>
               </div>
-              {console.log(vendor.isOpen)}
+
               {/* Links */}
               <ul className="flex flex-col gap-2">
                 <li className="hover:bg-gray-100 rounded px-2 py-1 cursor-pointer flex items-center gap-2">
@@ -122,7 +124,7 @@ const Layout = () => {
                 <li
                   onClick={() => {
                     setOpen(false);
-                    navigate("/profile");
+                    setShowUserDetails(true);
                   }}
                   className="hover:bg-gray-100 rounded px-2 py-1 cursor-pointer"
                 >
@@ -194,6 +196,12 @@ const Layout = () => {
             <BusinessDetails
               data={vendor}
               onClose={() => setShowVendorDetails(false)}
+            />
+          )}
+          {showUserDetails && (
+            <UserProfileModal
+              data={user}
+              onClose={() => setShowUserDetails(false)}
             />
           )}
         </div>

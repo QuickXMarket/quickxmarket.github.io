@@ -6,7 +6,7 @@ export const createWallet = async (req, res) => {
     const { userId, walletType } = req.body;
 
     if (!userId || !walletType) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "User ID and wallet type are required",
       });
@@ -14,7 +14,7 @@ export const createWallet = async (req, res) => {
 
     const existingWallet = await Wallet.findOne({ userId, walletType });
     if (existingWallet) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: `Wallet already exists for this ${walletType}`,
       });
@@ -78,9 +78,7 @@ export const getRiderWallet = async (req, res) => {
   try {
     const { userId } = req.body;
     if (!userId) {
-      return res
-        .status(400)
-        .json({ success: false, message: "User ID is required" });
+      return res.json({ success: false, message: "User ID is required" });
     }
 
     const wallet = await Wallet.findOne({ userId, walletType: "rider" });
@@ -108,9 +106,7 @@ export const getVendorWallet = async (req, res) => {
   try {
     const { userId } = req.body;
     if (!userId) {
-      return res
-        .status(400)
-        .json({ success: false, message: "User ID is required" });
+      return res.json({ success: false, message: "User ID is required" });
     }
 
     const wallet = await Wallet.findOne({ userId, walletType: "vendor" });
@@ -139,7 +135,7 @@ export const withdrawalRequest = async (req, res) => {
     const { userId, amount, description, walletType } = req.body;
 
     if (!userId || !amount || !walletType) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "User ID, amount, and wallet type are required",
       });
@@ -156,14 +152,14 @@ export const withdrawalRequest = async (req, res) => {
       (tx) => tx.type === "withdrawal" && tx.status === "pending"
     );
     if (hasPending) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "You already have a pending withdrawal request",
       });
     }
 
     if (wallet.balance < amount) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "Insufficient balance",
       });
@@ -197,14 +193,14 @@ export const creditWallet = async (req, res) => {
     const { userId, amount, walletType, description } = req.body;
 
     if (!userId || !amount || !walletType) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "User ID, amount, and wallet type are required",
       });
     }
 
     if (amount <= 0) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "Amount must be greater than 0",
       });

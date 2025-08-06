@@ -49,7 +49,7 @@ export const sendContactEmail = async (req, res) => {
     }
 
     if (!name || !email || !subject || !message) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "All fields (name, email, subject, message) are required.",
       });

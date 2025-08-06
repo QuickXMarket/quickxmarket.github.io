@@ -64,8 +64,8 @@ const BusinessDetails = ({ data = {}, onClose }) => {
   const { axios, navigate, fuse, location } = useCoreContext();
   const { setVendor } = useAuthContext();
   const [uploadPreview, setUploadPreview] = useState(null);
-
   const [isDirty, setIsDirty] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const handleToggleEdit = (field) => {
     setEditFields((prev) => ({ ...prev, [field]: !prev[field] }));
@@ -205,87 +205,101 @@ const BusinessDetails = ({ data = {}, onClose }) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-[90%] max-w-md bg-white rounded-lg shadow-xl p-6 space-y-6"
+        className="w-[90%] max-w-md bg-white rounded-lg shadow-xl p-1 space-y-6"
       >
-        <div className="flex justify-center">
-          <label htmlFor="profilePhoto" className="cursor-pointer">
-            <input
-              type="file"
-              id="profilePhoto"
-              accept="image/*"
-              onChange={onFileChange}
-              hidden
-            />
-            <img
-              src={uploadPreview || formData.profilePhoto || assets.upload_area}
-              alt="Upload Area"
-              className="w-24 h-24 rounded-full object-cover"
-            />
-          </label>
-        </div>
-
-        <div className="space-y-4">
-          <DetailRow
-            label="Business Name"
-            field="businessName"
-            editFields={editFields}
-            formData={formData}
-            handleChange={handleChange}
-            handleToggleEdit={handleToggleEdit}
-          />
-
-          <DetailRow
-            label="Phone Number"
-            field="number"
-            editFields={editFields}
-            formData={formData}
-            handleChange={handleChange}
-            handleToggleEdit={handleToggleEdit}
-          />
-
-          <DetailRow
-            label="Address"
-            field="address"
-            editFields={editFields}
-            formData={formData}
-            handleChange={handleChange}
-            handleToggleEdit={handleToggleEdit}
-            suggestions={suggestions}
-            onSuggestionClick={onSuggestionClick}
-            onChange={onAddressChange}
-          />
-
-          <div className="flex items-center gap-4 justify-between">
-            <DetailRow
-              label="Opening Time"
-              field="openingTime"
-              editFields={editFields}
-              formData={formData}
-              handleChange={handleChange}
-              handleToggleEdit={handleToggleEdit}
-            />
-            <DetailRow
-              label="Closing Time"
-              field="closingTime"
-              editFields={editFields}
-              formData={formData}
-              handleChange={handleChange}
-              handleToggleEdit={handleToggleEdit}
-            />
-          </div>
-        </div>
-        <div className="flex justify-end mt-6">
+        <div className="flex items-center justify-between px-4 py-2 bg-white border-b">
+          <div className="font-medium">Business Details</div>
           <button
-            onClick={handleSave}
-            disabled={!isDirty}
-            className={` p-2 rounded-md text-white transition-all ${
-              isDirty
-                ? "bg-primary hover:bg-primary-dull"
-                : "bg-gray-300 cursor-not-allowed"
-            }`}
+            onClick={() => onClose()}
+            className="text-gray-400 hover:text-black text-xl font-bold focus:outline-none"
+            aria-label="Close"
           >
-            Save
+            &times;
           </button>
+        </div>
+        <div className="px-5 pb-6">
+          <div className="flex justify-center">
+            <label htmlFor="profilePhoto" className="cursor-pointer">
+              <input
+                type="file"
+                id="profilePhoto"
+                accept="image/*"
+                onChange={onFileChange}
+                hidden
+              />
+              <img
+                src={
+                  uploadPreview || formData.profilePhoto || assets.upload_area
+                }
+                alt="Upload Area"
+                className="w-24 h-24 rounded-full object-cover"
+              />
+            </label>
+          </div>
+
+          <div className="space-y-4">
+            <DetailRow
+              label="Business Name"
+              field="businessName"
+              editFields={editFields}
+              formData={formData}
+              handleChange={handleChange}
+              handleToggleEdit={handleToggleEdit}
+            />
+
+            <DetailRow
+              label="Phone Number"
+              field="number"
+              editFields={editFields}
+              formData={formData}
+              handleChange={handleChange}
+              handleToggleEdit={handleToggleEdit}
+            />
+
+            <DetailRow
+              label="Address"
+              field="address"
+              editFields={editFields}
+              formData={formData}
+              handleChange={handleChange}
+              handleToggleEdit={handleToggleEdit}
+              suggestions={suggestions}
+              onSuggestionClick={onSuggestionClick}
+              onChange={onAddressChange}
+            />
+
+            <div className="flex items-center gap-4 justify-between">
+              <DetailRow
+                label="Opening Time"
+                field="openingTime"
+                editFields={editFields}
+                formData={formData}
+                handleChange={handleChange}
+                handleToggleEdit={handleToggleEdit}
+              />
+              <DetailRow
+                label="Closing Time"
+                field="closingTime"
+                editFields={editFields}
+                formData={formData}
+                handleChange={handleChange}
+                handleToggleEdit={handleToggleEdit}
+              />
+            </div>
+          </div>
+          <div className="flex justify-end mt-6">
+            <button
+              onClick={handleSave}
+              disabled={!isDirty || saving}
+              className={` p-2 rounded-md text-white transition-all ${
+                isDirty
+                  ? "bg-primary hover:bg-primary-dull"
+                  : "bg-gray-300 cursor-not-allowed"
+              }`}
+            >
+              {!saving ? "Save" : "Saving..."}
+            </button>
+          </div>
         </div>
       </div>
     </div>

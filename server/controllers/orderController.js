@@ -125,7 +125,7 @@ export const getDeliveryFee = async (req, res) => {
   try {
     const { latitude, longitude, vendorIds } = req.body;
     if (!latitude || !longitude || !Array.isArray(vendorIds)) {
-      return res.status(400).json({ success: false, message: "Invalid data" });
+      return res.json({ success: false, message: "Invalid data" });
     }
 
     const totalDeliveryFee = await calculateTotalDeliveryFee(
@@ -303,9 +303,10 @@ export const addRiderToOrder = async (req, res) => {
         .json({ success: false, message: "Rider not found" });
     }
     if (order.riderId) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Order already assigned to a rider" });
+      return res.json({
+        success: false,
+        message: "Order already assigned to a rider",
+      });
     }
     order.items.forEach((item) => {
       item.status = "Order Assigned";
@@ -340,9 +341,7 @@ export const confirmDelivery = async (req, res) => {
     }
 
     if (order.deliveryCode !== code) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid delivery code" });
+      return res.json({ success: false, message: "Invalid delivery code" });
     }
 
     order.items.forEach((item) => {

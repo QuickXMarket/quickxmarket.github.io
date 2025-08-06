@@ -229,7 +229,13 @@ const ProductForm = ({
                 className="w-full py-2.5 bg-primary text-white font-medium text-sm rounded cursor-pointer"
                 disabled={isSubmitting}
               >
-                {formState === "add" ? "ADD" : "SAVE EDIT"}
+                {formState === "add"
+                  ? !isSubmitting
+                    ? "ADD"
+                    : "ADDING..."
+                  : !isSubmitting
+                  ? "SAVE EDIT"
+                  : "SAVING EDIT..."}
               </button>
             </form>
           </div>
@@ -263,7 +269,7 @@ const OptionInput = ({ option, index, updateOption, removeOption, isOnly }) => {
           className="absolute top-2 right-2 text-red-500"
           onClick={() => removeOption(index)}
         >
-          ✕
+          &times;
         </button>
       )}
       <h3 className="font-medium text-sm">Option {index + 1}</h3>

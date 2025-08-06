@@ -246,9 +246,7 @@ export const verifyPaystackTransaction = async (req, res) => {
     const { data } = response.data;
 
     if (data.status !== "success") {
-      return res
-        .status(400)
-        .json({ received: false, message: "Payment not successful" });
+      return res.json({ received: false, message: "Payment not successful" });
     }
 
     const metadata = data.metadata || {};

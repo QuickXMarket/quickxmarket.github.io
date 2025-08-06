@@ -25,6 +25,7 @@ const Login = () => {
   const onSubmitHandler = async (event) => {
     try {
       event.preventDefault();
+      setLoading(true);
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const strongPasswordRegex =
@@ -62,6 +63,8 @@ const Login = () => {
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -87,6 +90,8 @@ const Login = () => {
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,6 +111,7 @@ const Login = () => {
 
   const handleCredentialResponse = async (response) => {
     const { credential } = response;
+    setLoading(true);
     try {
       const { data } = await axios.post("/api/user/google-signin", {
         token: credential,
@@ -118,6 +124,8 @@ const Login = () => {
       }
     } catch (err) {
       console.error("Login failed:", err.response?.data || err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -267,8 +275,17 @@ const Login = () => {
             </span>
           </label>
         )}
-        <button className="bg-primary hover:bg-primary-dull transition-all text-white w-full py-2 rounded-md cursor-pointer">
-          {state === "register"
+        <button
+          className="bg-primary hover:bg-primary-dull transition-all text-white w-full py-2 rounded-md cursor-pointer"
+          disabled={loading}
+        >
+          {loading
+            ? state === "register"
+              ? "Creating Account..."
+              : state === "login"
+              ? "Logging In..."
+              : "Sending Email..."
+            : state === "register"
             ? "Create Account"
             : state === "login"
             ? "Login"

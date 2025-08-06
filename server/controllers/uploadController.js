@@ -5,7 +5,7 @@ import fs from "fs";
 export const uploadProfilePhoto = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ success: false, message: "No file uploaded" });
+      return res.json({ success: false, message: "No file uploaded" });
     }
 
     const businessName = req.body.businessName || "business_photo";

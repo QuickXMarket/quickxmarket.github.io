@@ -63,7 +63,7 @@ export const getDeliveryFee = async (req, res) => {
   try {
     const { latitude1, longitude1, latitude2, longitude2 } = req.body;
     if (!latitude1 || !longitude1 || !latitude2 || !longitude2) {
-      return res.status(400).json({ success: false, message: "Invalid data" });
+      return res.json({ success: false, message: "Invalid data" });
     }
 
     const deliveryFee = await calculateDeliveryFee(
@@ -154,9 +154,10 @@ export const assignRiderToDispatch = async (req, res) => {
     }
 
     if (dispatch.riderId) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Order already assigned to a rider" });
+      return res.json({
+        success: false,
+        message: "Order already assigned to a rider",
+      });
     }
 
     dispatch.status = "Order Assigned";
@@ -188,9 +189,7 @@ export const confirmDelivery = async (req, res) => {
     }
 
     if (dispatch.deliveryCode !== code) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid delivery code" });
+      return res.json({ success: false, message: "Invalid delivery code" });
     }
 
     dispatch.status = "Order Delivered";

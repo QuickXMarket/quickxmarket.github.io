@@ -36,6 +36,7 @@ app.post(
 );
 
 app.use(helmet());
+app.set("trust proxy", 1);
 
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
@@ -67,6 +68,5 @@ app.use("/api/sms", smsRouter);
 app.use("/api/wallet", walletRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/chat", chatRouter);
-
 
 export default app;

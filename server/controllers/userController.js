@@ -16,9 +16,7 @@ export const register = async (req, res) => {
     // Validate email domain MX record
     const isValidDomain = await isEmailDomainValid(email);
     if (!isValidDomain) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid email domain." });
+      return res.json({ success: false, message: "Invalid email domain." });
     }
 
     const existingUser = await User.findOne({ email });
@@ -116,7 +114,7 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "Email and password are required",
       });
@@ -124,7 +122,7 @@ export const login = async (req, res) => {
 
     const isValidDomain = await isEmailDomainValid(email);
     if (!isValidDomain) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "Invalid email domain.",
       });
@@ -213,9 +211,7 @@ export const updateUserRole = async (req, res) => {
   try {
     const { userId, role } = req.body;
     if (!userId || !role) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Missing userId or role" });
+      return res.json({ success: false, message: "Missing userId or role" });
     }
     const user = await User.findById(userId);
     if (!user) {
@@ -247,6 +243,115 @@ export const updateUserRole = async (req, res) => {
   }
 };
 
+export const editProfileDetails = async (req, res) => {
+  try {
+    const { userId, name } = req.body;
+    console.log("Editing profile for user:", userId, name);
+
+    if (!userId || !name) {
+      return res.json({ success: false, message: "Missing userId or name" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    user.name = name;
+    await user.save();
+
+    return res.json({ success: true, message: "Profile updated", user });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const editEmail = async (req, res) => {
+  try {
+    const { userId, oldEmail, newEmail, password } = req.body;
+
+    if (!userId || !oldEmail || !newEmail || !password) {
+      return res.json({ success: false, message: "Missing details" });
+    }
+
+    const user = await User.findById(userId).select("+password");
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    if (user.email !== oldEmail) {
+      return res.json({ success: false, message: "Old email does not match" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.json({ success: false, message: "Invalid password" });
+    }
+
+    const emailTaken = await User.findOne({ email: newEmail });
+    if (emailTaken) {
+      return res.json({ success: false, message: "Email already in use" });
+    }
+
+    const isValidDomain = await isEmailDomainValid(newEmail);
+    if (!isValidDomain) {
+      return res.json({ success: false, message: "Invalid email domain." });
+    }
+
+    user.email = newEmail;
+    await user.save();
+
+    return res.json({ success: true, message: "Email updated", user });
+  } catch (error) {
+    console.log(error.message);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  try {
+    const { userId, oldPassword, newPassword, confirmPassword } = req.body;
+
+    if (!userId || !oldPassword || !newPassword || !confirmPassword) {
+      return res.json({ success: false, message: "Missing details" });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.json({ success: false, message: "Passwords do not match" });
+    }
+
+    const user = await User.findById(userId).select("+password");
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Old password is incorrect" });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    return res.json({
+      success: true,
+      message: "Password changed successfully",
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 export const updateWishList = async (req, res) => {
   try {
     const { userId, wishList } = req.body;
@@ -263,9 +368,10 @@ export const updateUserFcmToken = async (req, res) => {
     const { userId, fcmToken } = req.body;
 
     if (!userId || !fcmToken) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Missing userId or fcmToken" });
+      return res.json({
+        success: false,
+        message: "Missing userId or fcmToken",
+      });
     }
 
     const user = await User.findById(userId);

@@ -1,5 +1,8 @@
 import express from "express";
 import {
+  changePassword,
+  editEmail,
+  editProfileDetails,
   googleSignIn,
   isAuth,
   login,
@@ -21,6 +24,9 @@ userRouter.post("/register", register);
 userRouter.post("/login", login);
 userRouter.post("/google-signin", googleSignIn);
 userRouter.get("/is-auth", authUser, isAuth);
+userRouter.patch("/edit-profile", authUser, editProfileDetails);
+userRouter.patch("/edit-email", authUser, editEmail);
+userRouter.patch("/change-password", authUser, changePassword);
 userRouter.get("/logout", authUser, logout);
 userRouter.patch("/update-role", authUser, updateUserRole);
 userRouter.patch("/update-fcm-token", authUser, updateUserFcmToken);
