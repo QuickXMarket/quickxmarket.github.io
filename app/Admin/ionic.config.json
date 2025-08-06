@@ -1,0 +1,7 @@
+{
+  "name": "quickxmarket-admin",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

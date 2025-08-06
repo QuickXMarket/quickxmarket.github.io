@@ -1,0 +1,30 @@
+{
+  "appId": "io.ionic.quickxmarketadmin",
+  "appName": "QuickXMarket Admin",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "dist",
+  "cordova": {},
+  "android": {
+    "scheme": "quickxmarket-admin"
+  },
+  "server": {
+    "url": "http://192.168.0.100:5173",
+    "cleartext": true
+  },
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    },
+    "StatusBar": {
+      "overlaysWebView": false,
+      "visible": true
+    },
+    "SplashScreen": {
+      "launchAutoHide": false,
+      "showSpinner": false,
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP"
+    }
+  }
+}

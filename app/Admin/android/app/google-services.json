@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "204278904584",
+    "firebase_url": "https://quickmarkert-default-rtdb.firebaseio.com",
+    "project_id": "quickmarkert",
+    "storage_bucket": "quickmarkert.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:204278904584:android:8b757ff91d1f6cd6a4debd",
+        "android_client_info": {
+          "package_name": "io.ionic.quickxmarket"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFizhY4UYt6s1kbqiNzgCKvjXejRZr_w8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:204278904584:android:6c028c11dfdf0cf2a4debd",
+        "android_client_info": {
+          "package_name": "io.ionic.quickxmarketadmin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFizhY4UYt6s1kbqiNzgCKvjXejRZr_w8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:204278904584:android:de574a5eaf49a70fa4debd",
+        "android_client_info": {
+          "package_name": "io.ionic.quickxmarketadmin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFizhY4UYt6s1kbqiNzgCKvjXejRZr_w8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
