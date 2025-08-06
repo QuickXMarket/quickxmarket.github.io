@@ -22,6 +22,7 @@ import orderRouter from "./routes/orderRoute.js";
 import { paystackWebhooks } from "./controllers/paymentController.js";
 import chatRouter from "./routes/chatRoute.js";
 import dispatchRouter from "./routes/dispatchRoute.js";
+import adminRouter from "./routes/adminRoute.js";
 
 await connectDB();
 await connectCloudinary();
@@ -56,6 +57,7 @@ app.get("/health", (req, res) => {
 app.use("/api/user", userRouter);
 app.use("/api/seller", sellerRouter);
 app.use("/api/rider", riderRouter);
+app.use("/api/admin", adminRouter);
 app.use("/api/upload", (await import("./routes/uploadRoute.js")).default);
 app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);

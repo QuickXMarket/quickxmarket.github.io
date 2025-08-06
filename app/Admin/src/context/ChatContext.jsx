@@ -7,11 +7,13 @@ const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
   const { baseUrl, makeRequest } = useCoreContext();
-  const { user, updateUser } = useAuthContext();
+  const { admin, updateUser } = useAuthContext();
+  const [user, setUser] = useState(null);
   const socket = useRef(null);
   const [messages, setMessages] = useState([]);
   const [typingUsers, setTypingUsers] = useState({});
   const [isTyping, setIsTyping] = useState(false);
+  const [chatList, setChatList] = useState([]);
 
   const retrieveMessages = async () => {
     try {
@@ -27,6 +29,27 @@ export const ChatProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error fetching messages:", error);
+    }
+  };
+
+  const getChatList = async () => {
+    try {
+      console.log("Fetching chat list...");
+      const data = await makeRequest({
+        url: "/api/admin/chats",
+        method: "GET",
+      });
+
+      if (data.success) {
+        console.log("Chat list fetched successfully:", data.formattedChats);
+        setChatList(data.formattedChats);
+      } else {
+        console.error(data.message || "Failed to fetch chats");
+        setChatList([]);
+      }
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+      setChatList([]);
     }
   };
 
@@ -74,7 +97,7 @@ export const ChatProvider = ({ children }) => {
           return updated;
         });
       });
-
+      getChatList();
       retrieveMessages();
 
       return () => {
@@ -82,6 +105,11 @@ export const ChatProvider = ({ children }) => {
       };
     }
   }, [user, baseUrl]);
+
+  useEffect(() => {
+    if (!admin) return;
+    getChatList();
+  }, [admin]);
 
   const sendMessage = async (content, media = "") => {
     try {
@@ -123,6 +151,7 @@ export const ChatProvider = ({ children }) => {
     typingUsers,
     isTyping,
     setIsTyping,
+    chatList,
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;

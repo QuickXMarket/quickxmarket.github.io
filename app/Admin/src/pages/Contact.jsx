@@ -7,6 +7,7 @@ import { useChatContext } from "../context/ChatContext";
 import { useAuthContext } from "../context/AuthContext";
 import { Link } from "react-router";
 import { assets } from "../assets/assets";
+import ChatTopBar from "../components/ChatTopBar";
 
 export default function ChatLayout({}) {
   const { fileToBase64, theme } = useCoreContext();
@@ -81,21 +82,7 @@ export default function ChatLayout({}) {
 
   return (
     <div className="flex flex-col h-full w-full bg-background ">
-      <div className="flex items-center justify-between px-4 md:px-8 border-b border-border py-3 bg-background">
-        <Link to="/">
-          <img
-            src={
-              theme === "dark"
-                ? assets.QuickXMarket_Logo_Transparent_2
-                : assets.QuickXMarket_Logo_Transparent_1
-            }
-            alt="logo"
-            className="cursor-pointer w-34 md:w-38"
-          />
-        </Link>
-        {/* <div className="text-gray-500 text-sm truncate">Hi! {user?.name}</div> */}
-        <div className="text-gray-500 text-sm truncate">Customer Support</div>
-      </div>
+      <ChatTopBar />
 
       {/* Header */}
       <div className="flex items-center px-4 py-2 bg-background"></div>

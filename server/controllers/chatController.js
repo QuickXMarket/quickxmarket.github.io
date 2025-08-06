@@ -108,18 +108,6 @@ export const getChatHistory = async (req, res) => {
   }
 };
 
-export const getAllAdminChat = async (req, res) => {
-  try {
-    const allChats = await Chat.find().sort({ lastUpdated: -1 });
-    res.json({ success: true, chats: allChats });
-  } catch (error) {
-    console.error("Error fetching all admin chats:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Failed to retrieve chats." });
-  }
-};
-
 export const notifyParticipants = async (chatId, senderId) => {
   try {
     const chat = await Chat.findById(chatId);

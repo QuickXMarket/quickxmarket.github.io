@@ -6,10 +6,12 @@ import { Browser } from "@capacitor/browser";
 import { InAppBrowser, DefaultWebViewOptions } from "@capacitor/inappbrowser";
 import Fuse from "fuse.js";
 import { EdgeToEdge } from "@capawesome/capacitor-android-edge-to-edge-support";
+import { Preferences } from "@capacitor/preferences";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { useLocation, useNavigate } from "react-router";
-import { Preferences } from "@capacitor/preferences";
+import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
 import toast from "react-hot-toast";
+import SHA256 from "crypto-js/sha256";
 
 const CoreContext = createContext();
 
@@ -21,19 +23,19 @@ export const CoreProvider = ({ children }) => {
   const location = useLocation();
   const [theme, setTheme] = useState(null);
 
-  const baseUrl = "https://quickxmarket-server.onrender.com";
+  const baseUrl = "http://192.168.0.100:4000";
 
   const makeRequest = async ({ method, url, data }) => {
     try {
-      const tokenExpiry = await Preferences.get({ key: "authTokenExpiry" });
+      const tokenExpiry = await secureGet("authTokenExpiry");
 
       if (!tokenExpiry || Date.now() >= Number(tokenExpiry)) {
-        await Preferences.remove({ key: "authToken" });
-        await Preferences.remove({ key: "authTokenExpiry" });
-        await Preferences.remove({ key: "user" });
+        secureRemove("authToken");
+        secureRemove("authTokenExpiry");
+        secureRemove("admin");
       }
-      const token = (await Preferences.get({ key: "authToken" })).value;
 
+      const token = await secureGet("authToken");
       const response = await CapacitorHttp.request({
         method,
         url: `${baseUrl}${url}`,
@@ -81,19 +83,76 @@ export const CoreProvider = ({ children }) => {
     }
   };
 
-
-
   const setupDeepLinkListener = async () => {
     CapacitorApp.addListener("appUrlOpen", async (event) => {
       if (!event?.url) return;
       const url = new URL(event.url);
 
-      if (url?.href?.startsWith("quickxmarket-vendor://")) {
+      if (url?.href?.startsWith("quickxmarket-admin://")) {
         await Browser.close();
-        const route = url.href.replace("quickxmarket-vendor://", "");
+        const route = url.href.replace("quickxmarket-admin://", "");
         navigate("/" + route);
       }
     });
+  };
+
+  const getRelativeDayLabel = (timestamp) => {
+    const now = new Date();
+    const inputDate = new Date(timestamp);
+
+    const diffMs = now - inputDate;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHrs = Math.floor(diffMin / 60);
+    const diffDays = Math.floor(diffHrs / 24);
+
+    if (diffDays === 0) {
+      if (diffHrs >= 1) return `${diffHrs} hour${diffHrs > 1 ? "s" : ""} ago`;
+      if (diffMin >= 1) return `${diffMin} minute${diffMin > 1 ? "s" : ""} ago`;
+      return `${diffSec} second${diffSec !== 1 ? "s" : ""} ago`;
+    }
+
+    if (diffDays === 1) return "Yesterday";
+    if (diffDays <= 7) return `${diffDays} days ago`;
+
+    return inputDate.toLocaleDateString();
+  };
+
+  const secureSet = async (key, value) => {
+    try {
+      await SecureStoragePlugin.set({ key, value });
+    } catch (error) {
+      console.error(`Error setting ${key}:`, error);
+    }
+  };
+
+  const secureGet = async (key) => {
+    try {
+      const keysResult = await SecureStoragePlugin.keys();
+      const keys = keysResult.value || [];
+
+      if (keys.includes(key)) {
+        const result = await SecureStoragePlugin.get({ key });
+        return result.value;
+      } else {
+        console.warn(`Key "${key}" not found in secure storage.`);
+        return null;
+      }
+    } catch (error) {
+      console.error(`Error getting ${key}:`, error);
+      return null;
+    }
+  };
+
+  const secureRemove = async (key) => {
+    try {
+      const keysResult = await SecureStoragePlugin.keys();
+      const keys = keysResult.value || [];
+
+      if (keys.includes(key)) await SecureStoragePlugin.remove({ key });
+    } catch (error) {
+      console.error(`Error removing ${key}:`, error);
+    }
   };
 
   const keyboardListeners = () => {
@@ -103,6 +162,10 @@ export const CoreProvider = ({ children }) => {
     Keyboard.addListener("keyboardWillHide", () => {
       setKeyboardVisible(false);
     });
+  };
+
+  const hash = async (str) => {
+    return SHA256(str).toString();
   };
 
   const configureStatusBar = async (theme) => {
@@ -200,12 +263,17 @@ export const CoreProvider = ({ children }) => {
     Browser,
     navigate,
     location,
-    Preferences,
+    secureSet,
+    secureGet,
+    secureRemove,
+    SecureStoragePlugin,
     baseUrl,
     InAppBrowser,
     DefaultWebViewOptions,
     theme,
     toggleTheme,
+    hash,
+    getRelativeDayLabel,
   };
 
   return <CoreContext.Provider value={value}>{children}</CoreContext.Provider>;

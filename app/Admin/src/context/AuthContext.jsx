@@ -1,76 +1,47 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useCoreContext } from "./CoreContext";
-import { SocialLogin } from "@capgo/capacitor-social-login";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const { makeRequest, navigate, Preferences } = useCoreContext();
-  const [user, setUser] = useState(null);
-  const [isSeller, setIsSeller] = useState(false);
+  const { makeRequest, navigate, secureRemove, secureSet, secureGet } =
+    useCoreContext();
+  const [admin, setAdmin] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const [businessName, setBusinessName] = useState("");
-  const [vendor, setVendor] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
 
-  const checkVendorStatus = async (user) => {
-    if (!user || !user.isSeller) {
-      return;
-    }
-    try {
-      const data = await makeRequest({
-        url: `/api/seller/user/${user._id}`,
-        method: "GET",
-      });
-      if (data.success) {
-        setBusinessName(data.vendor.businessName);
-        setVendor(data.vendor);
-      } else {
-        toast.error("Failed to verify vendor status");
-      }
-    } catch (error) {
-      toast.error("Failed to verify vendor status");
-      setIsVendor(false);
-    }
-  };
-
-  const fetchUser = async () => {
-    const token = (await Preferences.get({ key: "authToken" })).value;
+  const fetchAdmin = async () => {
+    const token = await secureGet("authToken");
     if (!token) return;
-    let user = null;
 
     try {
       const data = await makeRequest({
         method: "GET",
-        url: "/api/user/is-auth",
+        url: "/api/admin/is-auth",
       });
 
       if (data.success) {
-        setUser(data.user);
-        setIsSeller(data.user.isSeller || data.role === "vendor");
-        await Preferences.set({
-          key: "user",
-          value: JSON.stringify(data.user),
-        });
-        user = data.user;
+        setAdmin(data.admin);
+        await secureSet("admin", JSON.stringify(data.admin));
       }
     } catch {
-      setUser(null);
+      setAdmin(null);
     }
-    return user;
   };
 
   const logout = async () => {
     try {
       const data = await makeRequest({
-        url: "/api/user/logout",
+        url: "/api/admin/logout",
         method: "GET",
       });
       if (data.success) {
         toast.success(data.message);
-        await Preferences.remove({ key: "user" });
-        await Preferences.remove({ key: "authToken" });
-        setUser(null);
+        await secureRemove("authToken");
+        await secureRemove("authTokenExpiry");
+        await secureRemove("admin");
+        setAdmin(null);
         navigate("/");
       } else {
         toast.error(data.message);
@@ -81,10 +52,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateUser = async (updater) => {
-    setUser((prevUser) => {
+    setAdmin((prevUser) => {
       const updatedUser =
         typeof updater === "function" ? updater(prevUser) : updater;
-      Preferences.set({ key: "user", value: JSON.stringify(updatedUser) });
+      secureSet("admin", JSON.stringify(updatedUser));
       return updatedUser;
     });
   };
@@ -92,21 +63,17 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const loadInitialUser = async () => {
       try {
-        const tokenExpiry = (await Preferences.get({ key: "authTokenExpiry" }))
-          .value;
-
+        const tokenExpiry = await secureGet("authTokenExpiry");
+        console.log("Token expiry:", tokenExpiry);
         if (!tokenExpiry || Date.now() >= Number(tokenExpiry)) {
-          await Preferences.remove({ key: "authToken" });
-          await Preferences.remove({ key: "authTokenExpiry" });
-          await Preferences.remove({ key: "user" });
+          await secureRemove("authToken");
+          await secureRemove("authTokenExpiry");
+          await secureRemove("admin");
         }
-        const storedUser = await Preferences.get({ key: "user" });
-        if (storedUser.value) {
-          const parsedUser = JSON.parse(storedUser.value);
-          setUser(parsedUser);
+        const storedUser = await secureGet("authToken");
+        if (storedUser) {
+          setLoggedIn(true);
         }
-        let fetchedUser = await fetchUser();
-        if (fetchedUser) await checkVendorStatus(fetchedUser);
       } catch (err) {
         // Optional: log or toast error
       } finally {
@@ -117,17 +84,14 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const value = {
-    user,
-    setUser,
-    isSeller,
-    setIsSeller,
+    admin,
+    setAdmin,
     logout,
-    fetchUser,
+    fetchAdmin,
     authLoading,
     updateUser,
-    SocialLogin,
-    businessName,
-    vendor,
+    loggedIn,
+    setLoggedIn,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
 import { useCoreContext } from "../context/CoreContext";
@@ -7,15 +7,16 @@ import { useEffect } from "react";
 import { assets } from "../assets/assets";
 
 const Login = () => {
-  const { setUser, setIsSeller, SocialLogin } = useAuthContext();
-  const { makeRequest, navigate, Preferences, location } = useCoreContext();
+  const { setLoggedIn } = useAuthContext();
+  const { makeRequest, navigate, secureSet, location } = useCoreContext();
 
-  const [state, setState] = React.useState("login");
-  const [name, setName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [passwordErrors, setPasswordErrors] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
+  const [state, setState] = useState("login");
+  const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordErrors, setPasswordErrors] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const onSubmitHandler = async (event) => {
     try {
@@ -26,11 +27,18 @@ const Login = () => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const strongPasswordRegex =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()[\]{}|\\/<>"'=+~`_\-.,;:])[A-Za-z\d@$!%*?&#^()[\]{}|\\/<>"'=+~`_\-.,;:]{8,}$/;
+      const phoneRegex =
+        /^(?:\+?234|0)(701|702|703|704|705|706|707|708|709|802|803|804|805|806|807|808|809|810|811|812|813|814|815|816|817|818|819|901|902|903|904|905|906|907|908|909|911|912|913|915|916)\d{7}$/;
 
       if (!emailRegex.test(email)) {
         toast.error("Invalid email format.");
         return;
       }
+      if (state === "register" && !phoneRegex.test(number)) {
+        toast.error("Please enter a valid Nigerian phone number.");
+        return;
+      }
+
       if (!strongPasswordRegex.test(password)) {
         const errors = [];
         if (!/[a-z]/.test(password))
@@ -50,7 +58,7 @@ const Login = () => {
         return;
       }
 
-      const payload = { name, email: email.toLowerCase(), password };
+      const payload = { name, email: email.toLowerCase(), password, number };
 
       const data = await makeRequest({
         method: "POST",
@@ -88,7 +96,7 @@ const Login = () => {
       if (data.success) {
         setShowUserLogin(false);
         toast.success(data.message);
-        if (location.pathname !== "/seller") navigate("/");
+        navigate("/");
       } else {
         toast.error(data.message);
       }
@@ -98,17 +106,10 @@ const Login = () => {
   };
 
   const handleLoginSuccess = async (data) => {
-    await Preferences.set({ key: "authToken", value: data.token });
-    await Preferences.set({
-      key: "authTokenExpiry",
-      value: String(Date.now() + 30 * 86400000),
-    });
-    await Preferences.set({
-      key: "user",
-      value: JSON.stringify(data.user),
-    });
-    setUser(data.user);
-    setIsSeller(data.user.isSeller || false);
+    await secureSet("authToken", data.token);
+    await secureSet("authTokenExpiry", String(Date.now() + 30 * 86400000));
+    await secureSet("admin", JSON.stringify(data.admin));
+    setLoggedIn(true);
     navigate("/");
   };
 
@@ -157,6 +158,23 @@ const Login = () => {
           />
         </div>
 
+        {state === "register" && (
+          <div className="w-full">
+            <label className="text-sm font-medium text-gray-700">
+              Phone Number
+            </label>
+            <input
+              onChange={(e) => setNumber(e.target.value)}
+              value={number}
+              disabled={loading}
+              placeholder="Phone Number"
+              className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm dark:text-text dark:bg-gray-200"
+              type="tel"
+              required
+            />
+          </div>
+        )}
+
         {state !== "forgotPassword" && (
           <div className="w-full">
             <label className="text-sm font-medium text-gray-700">
@@ -188,14 +206,14 @@ const Login = () => {
           </div>
         )}
 
-        {state === "login" && (
+        {/* {state === "login" && (
           <p
             className="text-sm text-right text-primary hover:underline cursor-pointer -mt-3"
             onClick={() => setState("forgotPassword")}
           >
             Forgot Password?
           </p>
-        )}
+        )} */}
 
         <p className="text-sm text-center text-gray-600 dark:text-gray-400">
           {state === "register"

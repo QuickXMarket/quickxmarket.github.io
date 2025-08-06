@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 QuickXMarket.jks
+./android/app/google-services.json
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

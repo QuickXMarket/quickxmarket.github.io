@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
-import SellerLogin from "./pages/SellerLogin";
-import Layout from "./pages/Layout";
 import AddProduct from "./pages/AddProduct";
 import ProductList from "./pages/ProductList";
 import Orders from "./pages/Orders";
@@ -14,14 +12,20 @@ import { SplashScreen } from "@capacitor/splash-screen";
 import Wallet from "./pages/Wallet";
 import { useAuthContext } from "./context/AuthContext";
 import { useCoreContext } from "./context/CoreContext";
+import Passkey from "./pages/Passkey";
+import BottomNavbar from "./components/BottomNavbar";
+import Dashboard from "./pages/Dashboard";
+import Navbar from "./components/Navbar";
+import UserList from "./pages/UsersList";
+import ChatList from "./pages/ChatList";
 
 const App = () => {
-  const { isSeller, user, authLoading } = useAuthContext();
+  const { loggedIn, admin, authLoading } = useAuthContext();
   const { keyboardVisible, location, navigate } = useCoreContext();
   const isContactPath = location.pathname.includes("contact");
 
-  const showBottomNav =
-    ["/", "/shops", "/dispatch", "/wishlist", "/account"].includes(
+  const showNavbars =
+    ["/", "/users", "/orders", "/wallet", "/account"].includes(
       location.pathname
     ) && !keyboardVisible;
 
@@ -45,38 +49,34 @@ const App = () => {
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-background ">
+      {showNavbars && admin && loggedIn && <Navbar />}
       <Toaster />
       <div
         className={`${
           isContactPath ? "px-2 md:px-16 lg:px-24 xl:px-32 h-screen" : ""
         }`}
       >
-        <Routes>
-          <Route
-            path="/"
-            element={
-              authLoading ? (
-                <Loading />
-              ) : !user ? (
-                <Login />
-              ) : isSeller ? (
-                <Layout />
-              ) : (
-                <SellerLogin />
-              )
-            }
-          >
-            <Route index element={isSeller ? <Orders /> : null} />
-            <Route path="product-list" element={<ProductList />} />
-            <Route path="add-product" element={<AddProduct />} />
-            <Route path="wallet" element={<Wallet />} />
-            <Route path="/account" element={<Account />} />
-          </Route>
-
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/loader" element={<Loading />} />
-        </Routes>
+        {authLoading ? (
+          <Loading />
+        ) : !loggedIn ? (
+          <Login />
+        ) : !admin ? (
+          <Passkey />
+        ) : (
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/users" element={<UserList />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/wallet" element={<Wallet />} />
+            <Route path="/chatList" element={<ChatList />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/loader" element={<Loading />} />
+            <Route path="/passkey" element={<Passkey />} />
+          </Routes>
+        )}
       </div>
+
+      {showNavbars && admin && loggedIn && <BottomNavbar />}
     </div>
   );
 };

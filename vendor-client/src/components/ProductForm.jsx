@@ -66,7 +66,7 @@ const ProductForm = ({
           disabled={isSubmitting}
         >
           <div
-            className="relative bg-white rounded-xl max-h-[95vh] w-full sm:w-[90%] md:w-[600px] overflow-y-auto no-scrollbar p-4 sm:p-8"
+            className="relative bg-white rounded-xl max-h-[80vh] w-full sm:w-[90%] md:w-[600px] overflow-y-auto no-scrollbar p-4 sm:p-8"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
