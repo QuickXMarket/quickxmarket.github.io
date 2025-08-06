@@ -1,4 +1,11 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
 import { Capacitor, CapacitorHttp } from "@capacitor/core";
 import { App as CapacitorApp } from "@capacitor/app";
 import { Keyboard } from "@capacitor/keyboard";
@@ -253,28 +260,31 @@ export const CoreProvider = ({ children }) => {
     return () => media.removeEventListener("change", handleChange);
   }, []);
 
-  const value = {
-    currency,
-    makeRequest,
-    fileToBase64,
-    fuse,
-    setFuse,
-    keyboardVisible,
-    Browser,
-    navigate,
-    location,
-    secureSet,
-    secureGet,
-    secureRemove,
-    SecureStoragePlugin,
-    baseUrl,
-    InAppBrowser,
-    DefaultWebViewOptions,
-    theme,
-    toggleTheme,
-    hash,
-    getRelativeDayLabel,
-  };
+  const value = useMemo(
+    () => ({
+      currency,
+      makeRequest,
+      fileToBase64,
+      fuse,
+      setFuse,
+      keyboardVisible,
+      Browser,
+      navigate,
+      location,
+      secureSet,
+      secureGet,
+      secureRemove,
+      SecureStoragePlugin,
+      baseUrl,
+      InAppBrowser,
+      DefaultWebViewOptions,
+      theme,
+      toggleTheme,
+      hash,
+      getRelativeDayLabel,
+    }),
+    [fuse, keyboardVisible, navigate, location, theme]
+  );
 
   return <CoreContext.Provider value={value}>{children}</CoreContext.Provider>;
 };

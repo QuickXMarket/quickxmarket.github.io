@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
 import toast from "react-hot-toast";
 import { useCoreContext } from "./CoreContext";
 
@@ -64,7 +71,7 @@ export const AuthProvider = ({ children }) => {
     const loadInitialUser = async () => {
       try {
         const tokenExpiry = await secureGet("authTokenExpiry");
-        
+
         if (!tokenExpiry || Date.now() >= Number(tokenExpiry)) {
           await secureRemove("authToken");
           await secureRemove("authTokenExpiry");
@@ -83,16 +90,19 @@ export const AuthProvider = ({ children }) => {
     loadInitialUser();
   }, []);
 
-  const value = {
-    admin,
-    setAdmin,
-    logout,
-    fetchAdmin,
-    authLoading,
-    updateUser,
-    loggedIn,
-    setLoggedIn,
-  };
+  const value = useMemo(
+    () => ({
+      admin,
+      setAdmin,
+      logout,
+      fetchAdmin,
+      authLoading,
+      updateUser,
+      loggedIn,
+      setLoggedIn,
+    }),
+    [admin, authLoading, loggedIn]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
