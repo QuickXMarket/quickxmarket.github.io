@@ -10,9 +10,16 @@ import { assets } from "../assets/assets";
 import ChatTopBar from "../components/ChatTopBar";
 
 export default function ChatLayout({}) {
-  const { fileToBase64, theme } = useCoreContext();
-  const { messages, sendMessage, isTyping, setIsTyping, typingUsers } =
-    useChatContext();
+  const { fileToBase64, theme, getRelativeDayLabel } = useCoreContext();
+
+  const {
+    messages,
+    sendMessage,
+    isTyping,
+    setIsTyping,
+    typingUsers,
+    retrieveMessages,
+  } = useChatContext();
   const { user } = useAuthContext();
   const [groupedMessages, setGroupedMessages] = useState([]);
   const messagesEndRef = useRef(null);
@@ -24,10 +31,12 @@ export default function ChatLayout({}) {
   const groupMessagesByDate = (messages) => {
     return messages.reduce((acc, msg) => {
       const date = new Date(msg.timestamp).toLocaleDateString();
-      if (!acc[date]) {
-        acc[date] = [];
+      const formattedDate = getRelativeDayLabel(date);
+      
+      if (!acc[formattedDate]) {
+        acc[formattedDate] = [];
       }
-      acc[date].push(msg);
+      acc[formattedDate].push(msg);
       return acc;
     }, {});
   };
@@ -56,6 +65,10 @@ export default function ChatLayout({}) {
     }
     setGroupedMessages(groupMessagesByDate(messages));
   }, [messages]);
+
+  useEffect(() => {
+    retrieveMessages();
+  }, []);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();

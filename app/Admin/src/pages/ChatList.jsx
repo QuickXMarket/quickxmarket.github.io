@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import ChatTopBar from "../components/ChatTopBar";
 import { useChatContext } from "../context/ChatContext";
@@ -6,9 +6,30 @@ import { assets } from "../assets/assets";
 import { useCoreContext } from "../context/CoreContext";
 
 const ChatList = () => {
-  const { chatList } = useChatContext();
-  const { getRelativeDayLabel } = useCoreContext();
-  const [loading, setLoading] = useState(true);
+  const { chatList, setChatId } = useChatContext();
+  const { getRelativeDayLabel, navigate } = useCoreContext();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredChats, setFilteredChats] = useState(chatList);
+
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredChats(chatList);
+    } else {
+      const lowerCaseQuery = searchQuery.toLowerCase();
+      const filtered = chatList.filter(
+        (chat) =>
+          chat.user.name.toLowerCase().includes(lowerCaseQuery) ||
+          chat.user.email.toLowerCase().includes(lowerCaseQuery) ||
+          chat._id.toLowerCase().includes(lowerCaseQuery)
+      );
+      setFilteredChats(filtered);
+    }
+  }, [searchQuery]);
+
+  useEffect(() => {
+    setFilteredChats(chatList);
+  }, [chatList]);
+
   return (
     <div className="flex flex-col h-full w-full bg-background">
       <ChatTopBar />
@@ -21,15 +42,21 @@ const ChatList = () => {
             </div>
             <input
               placeholder="Search users"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="form-input flex-1 bg-card text-text placeholder:text-gray-500 focus:outline-none focus:ring-0 border-none px-4 rounded-r-lg text-base"
             />
           </div>
         </label>
 
-        {chatList.map((chat, idx) => (
+        {filteredChats.map((chat, idx) => (
           <div
             key={idx}
             className="flex items-center justify-between bg-card px-4 min-h-[72px] py-2 rounded-lg mb-2"
+            onClick={() => {
+              setChatId(chat._id);
+              navigate("/contact/");
+            }}
           >
             <div className="flex items-center gap-4 min-w-0">
               {" "}

@@ -101,7 +101,7 @@ const ProductForm = ({
                         disabled={isSubmitting}
                       />
                       <img
-                        className="max-w-24 cursor-pointer"
+                        className="max-w-24 m-h-24 cursor-pointer"
                         src={
                           formDetails.files[index]
                             ? typeof formDetails.files[index] === "string"

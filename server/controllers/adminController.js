@@ -173,18 +173,19 @@ export const getChatList = async (req, res) => {
         path: "userId",
         select: "name email isOnline",
       })
-      .select("lastUpdated userId")
+      .select("lastUpdated userId messages")
       .lean()
       .sort({ lastUpdated: -1 });
 
     const formattedChats = chats.map((chat) => ({
-      chatId: chat._id,
+      _id: chat._id,
       lastUpdated: chat.lastUpdated,
       user: {
         name: chat.userId?.name || "Unknown",
         email: chat.userId?.email || "Unknown",
         isOnline: chat.userId?.isOnline || false,
       },
+      messages: chat.messages,
     }));
 
     return res.status(200).json({ success: true, formattedChats });
@@ -204,10 +205,29 @@ export const getAllUsers = async (req, res) => {
     if (!admin) {
       return res.status(403).json({ error: "Unauthorized" });
     }
-    const users = await User.find({}).select("name email _id").lean();
+    const users = await User.find({}).select("name email _id createdAt").lean();
+   
     return res.status(200).json({ success: true, data: users });
   } catch (error) {
     console.error("Error in getUsers API:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const getAllOrders = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({ error: "Missing userId" });
+    }
+    const admin = await Admin.findById(userId);
+    if (!admin) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+    const orders = await Order.find({}).lean();
+    return res.status(200).json({ success: true, data: orders });
+  } catch (error) {
+    console.error("Error in getOrders API:", error);
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };

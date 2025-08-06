@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
     const loadInitialUser = async () => {
       try {
         const tokenExpiry = await secureGet("authTokenExpiry");
-        console.log("Token expiry:", tokenExpiry);
+        
         if (!tokenExpiry || Date.now() >= Number(tokenExpiry)) {
           await secureRemove("authToken");
           await secureRemove("authTokenExpiry");

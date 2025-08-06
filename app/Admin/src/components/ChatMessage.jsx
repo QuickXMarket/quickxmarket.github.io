@@ -35,7 +35,7 @@ const ChatMessage = ({ message, currentUser }) => {
     <div className={`flex mb-2 ${isSender ? "justify-end" : "justify-start"}`}>
       <div
         className={`max-w-[85%] rounded-2xl shadow p-2 ${
-          isSender ? "bg-primary rounded-tr-none" : "bg-white rounded-tl-none"
+          isSender ? "bg-primary rounded-tr-none" : "bg-card rounded-tl-none"
         }`}
       >
         {!isSender && (

@@ -1,41 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import { assets } from "../assets/assets";
-
-const users = [
-  {
-    name: "Alice Smith",
-    email: "alice.smith@email.com",
-    avatar:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuByqT97r43T3js-GosoW-5iQbvpy-D3Gg4yQfnccBQbRCOl0wvP-_3-dKRXqehGAnSW36rIQSAxZQKoS_WDA5KX-jIHb9Wnly7-HruAtYSvl2lZ0GWfBWEzMMCsuif825TlCYMpAkRU7AGxx4oGnJH-4TSopyvT_yTqucwmLUUcacQtjH1z1fIg_dh8BwQXMvuNRihl8rppcT8BJGH6Ir_vM8CD1bsPjK1d5hIp7p8aWodN8QVEcpDX2sHE3Bnqv5YA3Ak26meYc55m",
-  },
-  {
-    name: "Bob Johnson",
-    email: "bob.johnson@email.com",
-    avatar:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAw0D78fdID5wZkCZYZy3j0UDq6WY-0ORxqY5IakELtrvc6195o3IefXLXv3CFFJkZt-dxWkAt22tX6RRqeKNJfNW3zMW98RlPSb9fkjCEdvyMpZ-4yyRp8NnDs_a_jzray5Yw5ceuFH9yxx0D0nCfAK6DSJpnylKFqlIr6kiDzQW7WS8ggmuwVsJTLPB86Dvaa-M2DHwJwLDQt3YQAsSDXvelbFxU_JYyMebtt2zgHl2-ZyYRQMK18sOZ6PS1kFbcIAdACZLSILDT0",
-  },
-  {
-    name: "Charlie Brown",
-    email: "charlie.brown@email.com",
-    avatar:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCiwPu21UkrxgH5slNMOLO-a-dy3VOJ2GikTOaKd84pG04zBPV92aUmHSzR0x3NuIZzCweb4nUQZ6RFNmDYwhypBuI6hNgt3I3vNlJ9wQ3ZcZRTYDc26O5knZ7Wewey7gFpgqzXxHPHJmKP-codSgtsCL6A5Tk7hW9NsIdB-ODBiYxBp1VtExngbKc7seCds64ZmzgKl6CgdQb_jg3WktOvogMO5BJHmCYvEtbaiQyLWevgZ9EyZJ6KZsmSCv-usw46pOJaFQcqxzyr",
-  },
-  {
-    name: "Diana Evans",
-    email: "diana.evans@email.com",
-    avatar:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCmR66FvskrIoqR4hedJvwrj1f3yKFbyoUSGhtjdHI19ZZmWiGjT8yh9CrUfjKgs-H1olPyR0V3QTwBWHSXj087udarFHzC952RZ6j2QdmCkQ-viOdg-zz0Q8dB45KobbAcyuwpz6_YqZduihIXCDRvFyIFz9afcJ_MbUMO37Og5bKXj1lSSPnTgA3uZs3IBGn8Nt6-yt8DaRfRrhMOmm0SFX5O8OCS3Dg2EzoE6ZW5k4V47tVlanSY7sTs4SRJRk3dRIkEMWNSK7e9",
-  },
-  {
-    name: "Edward Green",
-    email: "edward.green@email.com",
-    avatar:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCKF9YsoHHdB9lMHYQRgFYGh2MIn5pztHol0nofPcr7I9BPwBM1bOSSo5m7PMW3wl-yJbKRsdTlzdH1fwpdFCNdoDJUbR6Io7gfOcba5boDP4Pq_RCUv4_JAXNZygkvqlVqpnK0zdwyNm6kGrTxn73ao6Y2qFaRHULPQvekTVP22PUt8-f8L2EXkEJB5DSDO28-oo7D4j7LrJ6TSYZIzLw7Tdzok79B9HDHfTLift9bIY9AQrt5boOXqeo9BQw7-pGWU7i5zgFa2Psw",
-  },
-];
+import { useAdminContext } from "../context/AdminContext";
 
 const UserList = () => {
+  const { users } = useAdminContext();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState(users);
+
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredUsers(users);
+    } else {
+      const lowerCaseQuery = searchQuery.toLowerCase();
+      const filtered = users.filter(
+        (user) =>
+          user.name.toLowerCase().includes(lowerCaseQuery) ||
+          user.email.toLowerCase().includes(lowerCaseQuery) ||
+          user._id.toLowerCase().includes(lowerCaseQuery)
+      );
+      setFilteredUsers(filtered);
+    }
+  }, [searchQuery]);
+
+  useEffect(() => {
+    setFilteredUsers(users);
+  }, [users]);
   return (
     <div className="px-4 pt-3 pb-6">
       {/* Search Input */}
@@ -46,13 +36,15 @@ const UserList = () => {
           </div>
           <input
             placeholder="Search users"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="form-input flex-1 bg-card text-text placeholder:text-gray-500 focus:outline-none focus:ring-0 border-none px-4 rounded-r-lg text-base"
           />
         </div>
       </label>
 
       {/* User Items */}
-      {users.map((user, idx) => (
+      {filteredUsers.map((user, idx) => (
         <div
           key={idx}
           className="flex items-center gap-4 bg-card px-4 min-h-[72px] py-2 rounded-lg mb-2"

@@ -1,6 +1,7 @@
 import express from "express";
 import authUser from "../middlewares/authUser.js";
 import {
+  getAllOrders,
   getAllUsers,
   getChatList,
   getDashboardStats,
@@ -21,6 +22,7 @@ adminRouter.get("/is-auth", authUser, isAuth);
 adminRouter.get("/logout", authUser, logout);
 adminRouter.get("/chats", authUser, getChatList);
 adminRouter.get("/users", authUser, getAllUsers);
-adminRouter.get("/dashboard", authUser, getDashboardStats);
+adminRouter.get("/orders", authUser, getAllOrders);
+// adminRouter.get("/dashboard", authUser, getDashboardStats);
 
 export default adminRouter;
