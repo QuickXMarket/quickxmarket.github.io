@@ -141,7 +141,7 @@ const Layout = () => {
       </div>
       <div className="flex">
         {/* Sidebar for md and up */}
-        <div className="md:w-64 w-0 hidden md:flex border-r h-[92vh] text-base border-gray-300 pt-4 flex-col justify-between">
+        <div className="md:w-64  hidden md:flex border-r h-[92vh] text-base border-gray-300 pt-4 flex-col justify-between">
           <div>
             {sidebarLinks.map((item) => (
               <NavLink
@@ -173,7 +173,7 @@ const Layout = () => {
         </div>
 
         {/* Main content */}
-        <div className="flex-1 pb-16 md:pb-0">
+        <div className="flex-1 w-full pb-16 md:pb-0">
           <Outlet context={{ vendor }} />
           {showVendorDetails && (
             <BusinessDetails

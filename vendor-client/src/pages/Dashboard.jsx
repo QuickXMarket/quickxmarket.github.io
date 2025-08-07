@@ -23,7 +23,7 @@ const Dashboard = () => {
   const { getRelativeDayLabel, currency } = useCoreContext();
 
   return (
-    <div className="px-4 md:px-8 pt-6 pb-4 text-text no-scrollbar flex-1 h-[92vh] overflow-y-scroll  w-full max-w-screen-xl mx-auto">
+    <div className="px-4 md:px-8 pt-6 pb-4 text-text no-scrollbar flex-1 h-[92vh] overflow-y-scroll  w-full ">
       {/* Welcome Message */}
       <h1 className="text-2xl md:text-3xl font-bold mb-6">
         Welcome back, {businessName || "Vendor"}!
@@ -55,7 +55,7 @@ const Dashboard = () => {
 
       {/* Graphs */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div className="bg-card p-5 rounded-xl shadow-sm">
+        <div className="bg-card p-5 rounded-xl shadow-sm w-[100%]">
           <h2 className="text-lg font-semibold mb-4">Orders (Last 7 Days)</h2>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={orderGraphData || []}>
@@ -72,7 +72,7 @@ const Dashboard = () => {
             </LineChart>
           </ResponsiveContainer>
         </div>
-        <div className="bg-card p-5 rounded-xl shadow-sm">
+        <div className="bg-card p-5 rounded-xl shadow-sm w-[100%]">
           <h2 className="text-lg font-semibold mb-4">Revenue (Last 7 Days)</h2>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={revenueGraphData || []}>
@@ -100,10 +100,10 @@ const Dashboard = () => {
         {recentActivities.slice(0, 6).map((activity, idx) => (
           <div
             key={idx}
-            className="flex items-center justify-between p-4 rounded-lg bg-card hover:bg-card-hover transition cursor-pointer"
+            className="flex items-center justify-between p-4 rounded-lg bg-card hover:bg-card-hover transition w-[100%] flex-wrap"
           >
-            <div className="flex items-center gap-4 w-full">
-              <div className="flex items-center justify-center rounded-lg shrink-0 size-12 bg-[var(--color-gray-200)] text-text">
+            <div className="flex items-center gap-4 flex-1">
+              <div className="flex items-center justify-center rounded-lg shrink-0 size-12 bg-gray-200 text-text ">
                 {activity.type === "product" && (
                   <ShoppingBasket className="w-6 h-6" />
                 )}
@@ -121,7 +121,7 @@ const Dashboard = () => {
                 </p>
               </div>
             </div>
-            <div className="shrink-0 text-sm text-gray-400">
+            <div className="shrink-0 text-sm text-gray-400 text-right w-full md:w-auto">
               {getRelativeDayLabel(activity.createdAt)}
             </div>
           </div>
