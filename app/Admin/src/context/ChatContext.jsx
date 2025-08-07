@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useRef, useState, useMemo } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from "react";
 import { useCoreContext } from "./CoreContext";
 import { useAuthContext } from "./AuthContext";
 import { io } from "socket.io-client";
@@ -72,25 +79,34 @@ export const ChatProvider = ({ children }) => {
 
   useEffect(() => {
     if (baseUrl) socket.current = io(baseUrl);
-    if (admin && chatId) {
-      socket.current.emit("join-room", chatId);
+    if (admin && chatId && socket.current) {
+      if (chatId) socket.current.emit("join-room", chatId);
 
-      socket.current.on("receive-message", (newMessage) => {
-        if (newMessage.message.senderId === admin._id) return;
-        setMessages((prev) => [...prev, newMessage.message]);
-      });
-      socket.current.on("typing", ({ userId, name }) => {
-        if (userId === admin._id) return;
-        setTypingUsers((prev) => ({ ...prev, [userId]: name }));
-      });
+      const onMessage = (newMessage) => {
+        if (
+          chatId &&
+          newMessage.message.senderId !== admin._id &&
+          newMessage.roomId === chatId
+        )
+          setMessages((prev) => [...prev, newMessage.message]);
+      };
+      const onTyping = ({ userId, name, roomId }) => {
+        if (chatId && userId !== admin._id && roomId === chatId)
+          setTypingUsers((prev) => ({ ...prev, [userId]: name }));
+      };
 
-      socket.current.on("stop-typing", ({ userId }) => {
-        setTypingUsers((prev) => {
-          const updated = { ...prev };
-          delete updated[userId];
-          return updated;
-        });
-      });
+      const onStopTyping = ({ userId, roomId }) => {
+        if (chatId && roomId === chatId)
+          setTypingUsers((prev) => {
+            const updated = { ...prev };
+            delete updated[userId];
+            return updated;
+          });
+      };
+
+      socket.current.on("receive-message", onMessage);
+      socket.current.on("typing", onTyping);
+      socket.current.on("stop-typing", onStopTyping);
 
       retrieveMessages();
 
