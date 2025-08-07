@@ -4,7 +4,6 @@ import {
   useState,
   useEffect,
   useMemo,
-  useCallback,
 } from "react";
 import { Capacitor, CapacitorHttp } from "@capacitor/core";
 import { App as CapacitorApp } from "@capacitor/app";

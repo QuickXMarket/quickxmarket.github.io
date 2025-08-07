@@ -42,12 +42,12 @@ app.set("trust proxy", 1);
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
-// app.use(
-//   rateLimit({
-//     windowMs: 15 * 60 * 1000,
-//     max: 100,
-//   })
-// );
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 200,
+  })
+);
 
 app.get("/", (req, res) => res.send("API is Working"));
 app.get("/health", (req, res) => {

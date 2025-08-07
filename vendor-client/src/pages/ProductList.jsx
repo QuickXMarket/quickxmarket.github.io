@@ -7,11 +7,12 @@ import ConfirmationModal from "../components/ConfirmationModal";
 import { useOutletContext } from "react-router-dom";
 import PlusIcon from "../assets/plus.svg?react";
 import ProductForm from "../components/ProductForm";
+import { useVendorContext } from "../context/VendorContext";
 
 const ProductList = () => {
   const { currency, axios } = useCoreContext();
   const { vendor } = useOutletContext();
-  const [products, setProducts] = useState([]);
+  const { products, fetchProducts } = useVendorContext();
   const [openMenuId, setOpenMenuId] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [deleteProduct, setDeleteProduct] = useState(null);
@@ -33,19 +34,6 @@ const ProductList = () => {
       });
       if (data.success) {
         fetchProducts();
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  const fetchProducts = async () => {
-    try {
-      const { data } = await axios.get("/api/product/list/vendor");
-      if (data.success) {
-        setProducts(data.products);
       } else {
         toast.error(data.message);
       }
@@ -104,10 +92,6 @@ const ProductList = () => {
     setShowFormModal(true);
     setOpenMenuId(null);
   };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
   useEffect(() => {
     if (deleteProduct) setShowConfirmModal(true);
@@ -315,7 +299,6 @@ const ProductList = () => {
           onClose={handleFormClose}
           setFormDetails={setFormDetails}
           showModal={showFormModal}
-          fetchProducts={fetchProducts}
         />
       </div>
     </div>

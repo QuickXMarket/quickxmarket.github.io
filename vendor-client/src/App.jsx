@@ -16,6 +16,8 @@ import ChatLayout from "./pages/ChatLayout";
 import { useChatContext } from "./context/ChatContext";
 import Home from "./pages/Home";
 import TermsandConditions from "./pages/TermsandConditions";
+import { useVendorContext } from "./context/VendorContext";
+import Dashboard from "./pages/Dashboard";
 
 const App = () => {
   const { navigate, location } = useCoreContext();
@@ -24,6 +26,7 @@ const App = () => {
   const { showUserLogin, isSeller, showSellerLogin, user, loading } =
     useAuthContext();
   const { showChatModal, setShowChatModal } = useChatContext();
+  const { loading: vendorLoading } = useVendorContext();
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-white">
@@ -47,13 +50,18 @@ const App = () => {
               ) : !user ? (
                 <Login />
               ) : isSeller ? (
-                <Layout />
+                vendorLoading ? (
+                  <Loading />
+                ) : (
+                  <Layout />
+                )
               ) : (
                 <SellerLogin />
               )
             }
           >
-            <Route index element={isSeller ? <Orders /> : null} />
+            <Route index element={isSeller ? <Dashboard /> : null} />
+            <Route path="orders" element={<Orders />} />
             <Route path="product-list" element={<ProductList />} />
             <Route path="wallet" element={<Wallet />} />
           </Route>

@@ -3,6 +3,7 @@ import { assets, categories } from "../assets/assets";
 import toast from "react-hot-toast";
 import { useCoreContext } from "../context/CoreContext";
 import { useOutletContext } from "react-router-dom";
+import { useVendorContext } from "../context/VendorContext";
 
 const ProductForm = ({
   showModal,
@@ -10,9 +11,9 @@ const ProductForm = ({
   formDetails,
   setFormDetails,
   formState,
-  fetchProducts,
 }) => {
   const { axios } = useCoreContext();
+  const { fetchProducts } = useVendorContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { vendor } = useOutletContext();
 

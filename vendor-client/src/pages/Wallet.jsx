@@ -3,38 +3,16 @@ import toast from "react-hot-toast";
 import { useOutletContext } from "react-router-dom";
 import { useCoreContext } from "../context/CoreContext";
 import { useAuthContext } from "../context/AuthContext";
+import { useVendorContext } from "../context/VendorContext";
 
 const Wallet = () => {
   const { axios } = useCoreContext();
   const { user } = useAuthContext();
-  const { vendor } = useOutletContext();
-
-  const [wallet, setWallet] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { wallet, setWallet, loading } = useVendorContext();
   const [showModal, setShowModal] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const containerRef = useRef();
-
-  const fetchWallet = async () => {
-    try {
-      const { data } = await axios.get(`/api/wallet/vendor`);
-      console.log();
-      if (data.success) {
-        setWallet(data.wallet);
-      } else {
-        toast.error("Failed to fetch wallet");
-      }
-    } catch (err) {
-      toast.error("Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (user && user._id) fetchWallet();
-  }, [user, axios]);
 
   const handleWithdraw = async () => {
     if (!withdrawAmount || withdrawAmount <= 0) {

@@ -4,43 +4,17 @@ import toast from "react-hot-toast";
 import { useOutletContext } from "react-router-dom";
 import { useCoreContext } from "../context/CoreContext";
 import OrderCard from "../components/OrderCard";
+import { useVendorContext } from "../context/VendorContext";
 
 const Orders = () => {
   const { currency, axios } = useCoreContext();
-  const [orders, setOrders] = useState([]);
+  const { orders, fetchOrders } = useVendorContext();
   const [activeTab, setActiveTab] = useState("ongoing");
   const containerRef = useRef();
   const [ongoingOrders, setOngoingOrders] = useState([]);
   const [completedOrders, setCompletedOrders] = useState([]);
   const { vendor } = useOutletContext();
   const [activeIndex, setActiveIndex] = useState(null);
-
-  const fetchOrders = async () => {
-    try {
-      const { data } = await axios.get(`/api/order/seller/${vendor._id}`);
-      if (data.success) {
-        setOrders(data.orders);
-        const Orders = data.orders;
-        const ongoing = Orders.filter(
-          (order) =>
-            order.status !== "Order Delivered" ||
-            order.status === "Order Cancelled"
-        );
-
-        const completed = Orders.filter(
-          (order) =>
-            order.status === "Order Delivered" ||
-            order.status === "Order Cancelled"
-        );
-        setOngoingOrders(ongoing);
-        setCompletedOrders(completed);
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
 
   const handleOrderStatusUpdate = async (orderId, status) => {
     try {
@@ -61,10 +35,6 @@ const Orders = () => {
       setActiveIndex(null);
     }
   };
-
-  useEffect(() => {
-    if (vendor && vendor._id) fetchOrders();
-  }, [vendor]);
 
   const toggleAccordion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);

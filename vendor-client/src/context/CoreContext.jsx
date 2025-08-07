@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -37,6 +37,28 @@ export const CoreContextProvider = ({ children }) => {
     }
   };
 
+  const getRelativeDayLabel = (timestamp) => {
+    const now = new Date();
+    const inputDate = new Date(timestamp);
+
+    const diffMs = now - inputDate;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHrs = Math.floor(diffMin / 60);
+    const diffDays = Math.floor(diffHrs / 24);
+
+    if (diffDays === 0) {
+      if (diffHrs >= 1) return `${diffHrs} hour${diffHrs > 1 ? "s" : ""} ago`;
+      if (diffMin >= 1) return `${diffMin} minute${diffMin > 1 ? "s" : ""} ago`;
+      return `${diffSec} second${diffSec !== 1 ? "s" : ""} ago`;
+    }
+
+    if (diffDays === 1) return "Yesterday";
+    if (diffDays <= 7) return `${diffDays} days ago`;
+
+    return inputDate.toLocaleDateString();
+  };
+
   useEffect(() => {
     const loadInitialData = async () => {
       try {
@@ -49,14 +71,18 @@ export const CoreContextProvider = ({ children }) => {
     loadInitialData();
   }, []);
 
-  const value = {
-    navigate,
-    location,
-    currency,
-    axios,
-    fuse,
-    baseURL,
-  };
+  const value = useMemo(
+    () => ({
+      navigate,
+      location,
+      currency,
+      axios,
+      fuse,
+      baseURL,
+      getRelativeDayLabel,
+    }),
+    [navigate, location, currency, fuse, baseURL, getRelativeDayLabel]
+  );
 
   return <CoreContext.Provider value={value}>{children}</CoreContext.Provider>;
 };

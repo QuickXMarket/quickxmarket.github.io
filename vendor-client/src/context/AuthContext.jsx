@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import toast from "react-hot-toast";
 import { useCoreContext } from "./CoreContext";
 
@@ -9,41 +9,19 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isSeller, setIsSeller] = useState(false);
   const [showUserLogin, setShowUserLogin] = useState(false);
-  const [showSellerLogin, setShowSellerLogin] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [businessName, setBusinessName] = useState("");
-  const [vendor, setVendor] = useState("");
 
   // Fetch Seller Status
   const fetchUser = async () => {
-    let user = null;
     try {
       const { data } = await axios.get("api/user/is-auth");
       if (data.success) {
         setUser(data.user);
-        user = data.user;
         setIsSeller(data.user.isSeller || data.role === "vendor");
       }
     } catch (error) {
       console.log(error);
       setUser(null);
-    } finally {
-      return user;
-    }
-  };
-
-  const checkVendorStatus = async (user) => {
-    try {
-      const { data } = await axios.get(`/api/seller/user/${user._id}`);
-      if (data.success) {
-        setBusinessName(data.vendor.businessName);
-        
-        setVendor(data.vendor);
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error("Failed to verify vendor status");
     }
   };
 
@@ -66,8 +44,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        const fetchedUser = await fetchUser();
-        if (fetchedUser) await checkVendorStatus(fetchedUser);
+        await fetchUser();
       } catch (err) {
         // Optional: log or toast error
       } finally {
@@ -77,22 +54,19 @@ export const AuthContextProvider = ({ children }) => {
     loadInitialData();
   }, []);
 
-  const value = {
-    user,
-    setUser,
-    setIsSeller,
-    isSeller,
-    showUserLogin,
-    setShowUserLogin,
-    showSellerLogin,
-    setShowSellerLogin,
-    logout,
-    loading,
-    vendor,
-    businessName,
-    checkVendorStatus,
-    setVendor,
-  };
+  const value = useMemo(
+    () => ({
+      user,
+      setUser,
+      setIsSeller,
+      isSeller,
+      showUserLogin,
+      setShowUserLogin,
+      logout,
+      loading,
+    }),
+    [user, isSeller, showUserLogin, loading]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

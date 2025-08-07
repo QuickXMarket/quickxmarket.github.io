@@ -7,10 +7,11 @@ import { useAuthContext } from "../context/AuthContext";
 import { useCoreContext } from "../context/CoreContext";
 import BusinessDetails from "../components/BusinessDetails";
 import UserProfileModal from "../components/UserProfileModal";
+import { useVendorContext } from "../context/VendorContext";
 
 const Layout = () => {
-  const { user, businessName, vendor, setShowUserLogin, logout, setVendor } =
-    useAuthContext();
+  const { user, setShowUserLogin, logout } = useAuthContext();
+  const { businessName, vendor, handleOpenToggle } = useVendorContext();
   const [open, setOpen] = useState(false);
   const { navigate, location, axios } = useCoreContext();
   const [showSellerLogin, setShowSellerLogin] = useState(false);
@@ -18,7 +19,8 @@ const Layout = () => {
   const [showUserDetails, setShowUserDetails] = useState(false);
 
   const sidebarLinks = [
-    { name: "Orders", path: "/dashboard", icon: assets.order_icon },
+    { name: "Dashboard", path: "/dashboard", icon: assets.dashboard_icon },
+    { name: "Orders", path: "/dashboard/orders", icon: assets.order_icon },
     {
       name: "Product List",
       path: "/dashboard/product-list",
@@ -26,25 +28,6 @@ const Layout = () => {
     },
     { name: "Wallet", path: "/dashboard/wallet", icon: assets.wallet_outline },
   ];
-
-  const handleOpenToggle = async () => {
-    if (!vendor || !user) {
-      toast.error("Please login to toggle your status.");
-      return;
-    }
-    try {
-      const { data } = await axios.patch("/api/seller/toggle-status");
-      if (data.success) {
-        toast.success(`You are now ${!vendor.isOpen ? "open" : "closed"}`);
-        setVendor((prev) => ({ ...prev, isOpen: !prev.isOpen }));
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      console.error("Error toggling vendor status:", error);
-      toast.error("Failed to toggle vendor status.");
-    }
-  };
 
   if (showSellerLogin) {
     return <SellerLogin setShowUserLogin={setShowSellerLogin} />;

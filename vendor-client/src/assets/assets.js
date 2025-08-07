@@ -15,6 +15,7 @@ import double_check from "./double-check.svg";
 import check from "./check.svg";
 import clock_history from "./clock-history.svg";
 import menu_icon from "./menu_icon.svg";
+import dashboard_icon from "./dashboard_icon.svg";
 import leaf_icon from "./leaf_icon.svg";
 import coin_icon from "./coin_icon.svg";
 import box_icon from "./box_icon.svg";
@@ -42,6 +43,7 @@ export const assets = {
   add_icon,
   refresh_icon,
   product_list_icon,
+  dashboard_icon,
   order_icon,
   upload_area,
   check,

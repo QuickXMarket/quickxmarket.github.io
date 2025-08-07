@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from "react";
 import { useCoreContext } from "./CoreContext";
 import { useAuthContext } from "./AuthContext";
 import { io } from "socket.io-client";
@@ -103,7 +110,7 @@ export const ChatProvider = ({ children }) => {
       formData.append("message", content);
       formData.append("chatId", user.chatId);
       if (media) {
-        formData.append("attachment", media); 
+        formData.append("attachment", media);
       }
 
       const { data } = await axios.post("/api/chat/send", formData, {
@@ -145,16 +152,27 @@ export const ChatProvider = ({ children }) => {
     }
   };
 
-  const value = {
-    messages,
-    sendMessage,
-    retrieveMessages,
-    typingUsers,
-    isTyping,
-    setIsTyping,
-    showChatModal,
-    setShowChatModal,
-  };
+  const value = useMemo(
+    () => ({
+      messages,
+      sendMessage,
+      retrieveMessages,
+      typingUsers,
+      isTyping,
+      setIsTyping,
+      showChatModal,
+      setShowChatModal,
+    }),
+    [
+      messages,
+      sendMessage,
+      retrieveMessages,
+      typingUsers,
+      isTyping,
+      showChatModal,
+      setShowChatModal,
+    ]
+  );
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 };
