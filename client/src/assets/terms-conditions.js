@@ -1,6 +1,6 @@
 export const customerTermsData = {
   title: "QuickXMarket – Customer Terms and Conditions",
-  effectiveDate: "[Insert Date]",
+  effectiveDate: "8th August 2025",
   intro:
     "These Terms and Conditions govern your access to and use of the QuickXMarket platform. By creating an account or placing an order, you agree to be bound by these Terms.",
   sections: [
@@ -110,14 +110,18 @@ export const customerTermsData = {
     },
     {
       heading: "15. Contact Us",
-      content: ["For support or inquiries, contact:", "📧 ", "📞 "],
+      content: [
+        "For support or inquiries, contact:",
+        "📧: support@quickxmarket.com.ng",
+        "📞 ",
+      ],
     },
   ],
 };
 
 export const riderTermsData = {
-  title: "QuickXMarket – Delivery Rider Terms and Conditions",
-  effectiveDate: "[Insert Date]",
+  title: "QuickXMarket - Delivery Rider Terms and Conditions",
+  effectiveDate: "8th August 2025",
   intro:
     "These Terms and Conditions govern your engagement as a delivery rider with QuickXMarket. By signing up and operating as a rider on our platform, you agree to comply with the following terms.",
   sections: [
@@ -230,7 +234,7 @@ export const riderTermsData = {
     },
     {
       heading: "14. Contact and Support",
-      content: ["📧", "📞"],
+      content: ["📧: support@quickxmarket.com.ng", "📞"],
     },
   ],
 };

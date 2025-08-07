@@ -1,6 +1,6 @@
 export const vendorTermsData = {
   title: "QuickXMarket – Vendor Terms and Conditions",
-  effectiveDate: "[Insert Date]",
+  effectiveDate: "8th August 2025",
   intro:
     "These Terms and Conditions govern the relationship between QuickXMarket and you in connection with your use of our platform to list and sell products/services for on-demand delivery within the university community. By registering as a vendor, you agree to be bound by these Terms.",
   sections: [
@@ -114,7 +114,7 @@ export const vendorTermsData = {
     },
     {
       heading: "15. Contact Information",
-      content: ["📧 ", "📞 "],
+      content: ["📧: support@quickxmarket.com.ng", "📞 "],
     },
   ],
 };
