@@ -5,7 +5,7 @@ import { useCoreContext } from "../context/CoreContext";
 
 const Passkey = () => {
   const { setAdmin, setLoggedIn } = useAuthContext();
-  const { secureSet, secureGet, navigate, hash } = useCoreContext();
+  const { secureSet, secureGet, tryBiometrics, hash } = useCoreContext();
   const [passkey, setPasskey] = useState("");
   const [confirmPasskey, setConfirmPasskey] = useState("");
   const [state, setState] = useState("enter");
@@ -82,6 +82,8 @@ const Passkey = () => {
       if (!storedHash) {
         setState("set");
         return;
+      } else {
+        tryBiometrics(passKeyConfirmed);
       }
       setPasskey("");
     };

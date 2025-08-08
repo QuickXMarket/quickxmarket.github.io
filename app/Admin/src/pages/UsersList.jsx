@@ -89,7 +89,7 @@ const UserList = () => {
                 ? `/userDetails/${item._id}`
                 : activeTab === "Vendors"
                 ? `/vendorDetails/${item._id}`
-                : ``
+                : `/riderDetails/${item._id}`
             );
           }}
           className="flex items-center gap-4 bg-card px-4 min-h-[72px] py-2 rounded-lg mb-2"

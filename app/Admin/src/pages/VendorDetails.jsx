@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { assets } from "../assets/assets";
 import { useAdminContext } from "../context/AdminContext";
+import Loading from "../components/Loading";
 import toast from "react-hot-toast";
 
 const VendorDetails = () => {
   const { vendorId } = useParams();
-  const { riders, vendors, orders, getOrderStatus } = useAdminContext();
+  const { vendors, orders, getOrderStatus } = useAdminContext();
 
   const [vendor, setVendor] = useState(null);
 
@@ -30,7 +31,7 @@ const VendorDetails = () => {
 
     currentVendor.orders = vendorOrders;
     setVendor(currentVendor);
-  }, [vendorId, vendors]);
+  }, [vendorId, vendors, orders]);
 
   return (
     <div>
@@ -49,9 +50,12 @@ const VendorDetails = () => {
             {vendor.businessName}
           </h1>
 
-          <p className="text-text text-base font-normal leading-normal pb-3 pt-1 px-4">
+          <Link
+            to={`tel:${vendor.number}`}
+            className="text-primary text-base font-normal leading-normal pb-3 pt-1 px-4"
+          >
             {vendor.number}
-          </p>
+          </Link>
 
           <p className="text-text text-base font-normal leading-normal pb-3 pt-1 px-4">
             {vendor.address}
@@ -59,7 +63,7 @@ const VendorDetails = () => {
 
           <div class="p-4 grid grid-cols-[30%_1fr] gap-x-6">
             <div class="col-span-2 grid grid-cols-subgrid border-t border-t-gray-700 py-5">
-              <p class="text-gray-500 text-sm font-normal leading-normal">
+              <p class="text-gray-600 text-sm font-normal leading-normal">
                 Business Hours
               </p>
               <p class="text-text text-sm font-normal leading-normal">
@@ -71,7 +75,7 @@ const VendorDetails = () => {
                 User ID
               </p>
               <Link
-                to={`/userDetails${vendor.userId}`}
+                to={`/userDetails/${vendor.userId}`}
                 class=" text-sm font-normal leading-normal text-primary"
               >
                 {vendor.userId}
@@ -98,45 +102,49 @@ const VendorDetails = () => {
           </h2>
 
           {/* Orders List */}
-          {vendor.orders.map((order, indx) => (
-            <div
-              key={indx}
-              className="flex items-center gap-4 bg-gray-50 px-4 min-h-[72px] py-2 justify-between"
-            >
-              <div className="flex flex-col justify-center">
-                <p className="text-text text-base font-medium leading-normal line-clamp-1">
-                  Status:{" "}
-                  <span
-                    className={
-                      order.status === "Delivered"
-                        ? "text-primary"
-                        : order.status === "Cancelled"
-                        ? "text-red"
-                        : "text-text"
-                    }
-                  >
-                    {order.status}
-                  </span>
-                </p>
-                <p className="text-gray-600 text-sm font-normal leading-normal line-clamp-2 ">
-                  Order ID:{" "}
-                  <Link
-                    to={`/orders/details/${order._id}`}
-                    className="text-primary"
-                  >
-                    {order._id}
-                  </Link>
-                </p>
-              </div>
-              <div className="shrink-0">
-                <p className="text-text text-base font-normal leading-normal">
-                  {new Date(order.createdAt).toLocaleDateString()}
-                </p>
-              </div>
-            </div>
-          ))}
+          {vendor.orders.map(
+            (order, indx) =>
+              order && (
+                <div
+                  key={indx}
+                  className="flex items-center gap-4 bg-gray-50 px-4 min-h-[72px] py-2 justify-between"
+                >
+                  <div className="flex flex-col justify-center">
+                    <p className="text-text text-base font-medium leading-normal line-clamp-1">
+                      Status:{" "}
+                      <span
+                        className={
+                          order.status === "Delivered"
+                            ? "text-primary"
+                            : order.status === "Cancelled"
+                            ? "text-red"
+                            : "text-text"
+                        }
+                      >
+                        {order.status}
+                      </span>
+                    </p>
+                    <p className="text-gray-600 text-sm font-normal leading-normal line-clamp-2 ">
+                      Order ID:{" "}
+                      <Link
+                        to={`/orders/details/${order._id}`}
+                        className="text-primary"
+                      >
+                        {order._id}
+                      </Link>
+                    </p>
+                  </div>
+                  <div className="shrink-0">
+                    <p className="text-text text-base font-normal leading-normal">
+                      {new Date(order.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              )
+          )}
         </div>
       )}
+      {!vendor && <Loading />}
     </div>
   );
 };

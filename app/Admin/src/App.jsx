@@ -18,6 +18,7 @@ import ChatList from "./pages/ChatList";
 import OrderDetails from "./pages/OrderDetails";
 import UserDetails from "./pages/UserDetails";
 import VendorDetails from "./pages/vendorDetails";
+import RiderDetails from "./pages/RiderDetails";
 
 const App = () => {
   const { loggedIn, admin, authLoading } = useAuthContext();
@@ -30,7 +31,8 @@ const App = () => {
     ) ||
     matchPath("/orders/details/:orderId", location.pathname) ||
     matchPath("/userDetails/:userId", location.pathname) ||
-    matchPath("/vendorDetails/:vendorId", location.pathname);
+    matchPath("/vendorDetails/:vendorId", location.pathname) ||
+    matchPath("/riderDetails/:riderId", location.pathname);
 
   useEffect(() => {
     const hideSplashScreen = async () => {
@@ -74,6 +76,7 @@ const App = () => {
               path="/vendorDetails/:vendorId"
               element={<VendorDetails />}
             />
+            <Route path="/riderDetails/:riderId" element={<RiderDetails />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/orders/details/:orderId" element={<OrderDetails />} />
             <Route path="/wallet" element={<Wallet />} />

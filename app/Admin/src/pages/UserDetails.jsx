@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router";
 import { assets } from "../assets/assets";
 import { useAdminContext } from "../context/AdminContext";
 import toast from "react-hot-toast";
+import Loading from "../components/Loading";
 
 const UserDetails = () => {
   const { userId } = useParams();
@@ -153,6 +154,7 @@ const UserDetails = () => {
           ))}
         </div>
       )}
+      {!user && <Loading />}
     </>
   );
 };

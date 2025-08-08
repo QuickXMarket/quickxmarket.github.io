@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useMemo,
-} from "react";
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { Capacitor, CapacitorHttp } from "@capacitor/core";
 import { App as CapacitorApp } from "@capacitor/app";
 import { Keyboard } from "@capacitor/keyboard";
@@ -16,6 +10,7 @@ import { Preferences } from "@capacitor/preferences";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { useLocation, useNavigate } from "react-router";
 import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
+import { NativeBiometric } from "capacitor-native-biometric";
 import toast from "react-hot-toast";
 import SHA256 from "crypto-js/sha256";
 
@@ -29,7 +24,7 @@ export const CoreProvider = ({ children }) => {
   const location = useLocation();
   const [theme, setTheme] = useState(null);
 
-  const baseUrl = "http://192.168.0.100:4000";
+  const baseUrl = "https://quickxmarket-server.onrender.com";
 
   const makeRequest = async ({ method, url, data }) => {
     try {
@@ -194,6 +189,39 @@ export const CoreProvider = ({ children }) => {
     }
   };
 
+  const authenticateWithBiometrics = async (onVerified) => {
+    try {
+      const result = await NativeBiometric.verifyIdentity({
+        reason: "Authenticate to access admin panel",
+        title: "Biometric Login",
+        subtitle: "Use fingerprint or face unlock",
+        description: "We use this to verify your identity",
+      })
+        .then(() => onVerified())
+        .catch((error) => {
+          console.log(error);
+           toast.error("Biometric authentication failed");
+        });
+    } catch (err) {
+      toast.error("Biometric authentication error");
+      console.error(err);
+    }
+  };
+
+  const tryBiometrics = async (onVerified) => {
+    try {
+      const { isAvailable } = await NativeBiometric.isAvailable();
+      if (isAvailable) {
+        await authenticateWithBiometrics(onVerified);
+      } else {
+        toast.error("Biometric authentication not available");
+      }
+    } catch (err) {
+      toast.error("Error checking biometric availability");
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     let removeListener;
 
@@ -246,7 +274,7 @@ export const CoreProvider = ({ children }) => {
       setupDeepLinkListener();
       keyboardListeners();
       // paystackAppResume();
-      await fetchAddresses();
+      // await fetchAddresses();
     };
 
     const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -281,6 +309,7 @@ export const CoreProvider = ({ children }) => {
       toggleTheme,
       hash,
       getRelativeDayLabel,
+      tryBiometrics,
     }),
     [fuse, keyboardVisible, navigate, location, theme]
   );

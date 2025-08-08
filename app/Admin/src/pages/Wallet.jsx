@@ -37,7 +37,7 @@ const VendorWallet = () => {
       <div className="bg-card rounded-2xl shadow-md px-6 py-4 mb-6 flex flex-col gap-4">
         <div>
           <p className="text-gray-500 text-sm">Total Balance</p>
-          <h2 className="text-2xl font-bold text-gray-800">₦{"500000"}</h2>
+          <h2 className="text-2xl font-bold text-gray-800">₦{"0"}</h2>
         </div>
       </div>
 
