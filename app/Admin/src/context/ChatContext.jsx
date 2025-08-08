@@ -127,6 +127,7 @@ export const ChatProvider = ({ children }) => {
         url: "/api/chat/send",
         method: "POST",
         data: {
+          
           message: content,
           attachment: { base64: media },
           chatId,

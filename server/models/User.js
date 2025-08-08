@@ -39,13 +39,6 @@ const userSchema = new mongoose.Schema(
       },
     },
 
-    products: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "product",
-      },
-    ],
-
     fcmToken: {
       type: String,
       default: null,

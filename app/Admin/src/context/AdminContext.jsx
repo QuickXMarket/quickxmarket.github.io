@@ -18,6 +18,8 @@ export const AdminProvider = ({ children }) => {
   const { admin } = useAuthContext();
   const [orders, setOrders] = useState([]);
   const [users, setUsers] = useState([]);
+  const [vendors, setVendors] = useState([]);
+  const [riders, setRiders] = useState([]);
   const [dataLoading, setDataLoading] = useState(true);
   const [stats, setStats] = useState({});
   const [recentActivities, setRecentActivities] = useState([]);
@@ -50,8 +52,10 @@ export const AdminProvider = ({ children }) => {
         method: "GET",
       });
       if (data.success) {
-        setUsers(data.data);
-        return data.data;
+        setUsers(data.users);
+        setVendors(data.vendors);
+        setRiders(data.riders);
+        return data.users;
       } else {
         toast.error(data.message || "Failed to fetch users");
         console.error("Failed to fetch users:", data);
@@ -152,6 +156,24 @@ export const AdminProvider = ({ children }) => {
     }
   };
 
+  const getOrderStatus = (order) => {
+    const statusFlow = [
+      "Order Placed",
+      "Order Confirmed",
+      "Order Assigned",
+      "Order Picked",
+      "Order Delivered",
+    ];
+
+    const lowestStatus = order.items.reduce((minStatus, item) => {
+      const itemStatusIndex = statusFlow.indexOf(item.status);
+      const currentMinIndex = statusFlow.indexOf(minStatus);
+      return itemStatusIndex < currentMinIndex ? item.status : minStatus;
+    }, "Order Delivered");
+
+    return lowestStatus.split(" ");
+  };
+
   useEffect(() => {
     if (!admin) return;
     const loadInitialData = async () => {
@@ -174,6 +196,8 @@ export const AdminProvider = ({ children }) => {
     admin,
     orders,
     users,
+    riders,
+    vendors,
     fetchOrders,
     setOrders,
     setUsers,
@@ -182,6 +206,7 @@ export const AdminProvider = ({ children }) => {
     getDashBoardStats,
     stats,
     recentActivities,
+    getOrderStatus,
   };
 
   return (

@@ -61,7 +61,7 @@ const faqData = {
     {
       question: "How do I contact support?",
       answer:
-        "You can reach our Vendor Support team via:\n\n- In-app chat\n- Email: \n- Hotline:",
+        "You can reach our Vendor Support team via:\n\n- In-app chat\n- Email: support@quickxmarket.com.g \n- Hotline:",
     },
   ],
 };

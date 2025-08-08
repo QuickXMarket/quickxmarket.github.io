@@ -4,6 +4,7 @@ import { useAuthContext } from "../context/AuthContext";
 import { useCoreContext } from "../context/CoreContext";
 import { useRef } from "react";
 import { useEffect } from "react";
+import { NavLink } from "react-router-dom";
 
 const Login = () => {
   const { setShowUserLogin, setUser, setIsSeller, checkVendorStatus } =

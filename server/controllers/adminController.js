@@ -1,7 +1,9 @@
 import Admin from "../models/Admin.js";
 import User from "../models/User.js";
 import Order from "../models/Order.js";
+import Rider from "../models/Rider.js";
 import Wallet from "../models/Wallet.js";
+import Vendor from "../models/Vendor.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { isEmailDomainValid } from "../utils/emailValidation.js";
@@ -205,9 +207,17 @@ export const getAllUsers = async (req, res) => {
     if (!admin) {
       return res.status(403).json({ error: "Unauthorized" });
     }
-    const users = await User.find({}).select("name email _id createdAt").lean();
-   
-    return res.status(200).json({ success: true, data: users });
+    const users = await User.find({})
+      .select("name email _id createdAt isSeller isRider chatId")
+      .lean();
+    const vendors = await Vendor.find({})
+      .select(
+        "userId profilePhoto businessName address number products orders _id createdAt openingTime closingTime"
+      )
+      .lean();
+    const riders = await Rider.find({}).lean();
+
+    return res.status(200).json({ success: true, users, vendors, riders });
   } catch (error) {
     console.error("Error in getUsers API:", error);
     return res.status(500).json({ success: false, message: "Server error" });
@@ -224,7 +234,14 @@ export const getAllOrders = async (req, res) => {
     if (!admin) {
       return res.status(403).json({ error: "Unauthorized" });
     }
-    const orders = await Order.find({}).lean();
+    const orders = await Order.find({})
+      .populate("items.product")
+      .populate({
+        path: "address",
+        select: "firstName lastName email phone address",
+      })
+      .lean();
+
     return res.status(200).json({ success: true, data: orders });
   } catch (error) {
     console.error("Error in getOrders API:", error);

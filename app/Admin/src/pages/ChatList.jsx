@@ -6,7 +6,7 @@ import { assets } from "../assets/assets";
 import { useCoreContext } from "../context/CoreContext";
 
 const ChatList = () => {
-  const { chatList, setChatId } = useChatContext();
+  const { chatList } = useChatContext();
   const { getRelativeDayLabel, navigate } = useCoreContext();
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredChats, setFilteredChats] = useState(chatList);
@@ -53,10 +53,7 @@ const ChatList = () => {
           <div
             key={idx}
             className="flex items-center justify-between bg-card px-4 min-h-[72px] py-2 rounded-lg mb-2"
-            onClick={() => {
-              setChatId(chat._id);
-              navigate("/contact/");
-            }}
+            onClick={() => navigate(`/contact/${chat._id}`)}
           >
             <div className="flex items-center gap-4 min-w-0">
               {" "}

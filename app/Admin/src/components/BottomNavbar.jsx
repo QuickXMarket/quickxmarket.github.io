@@ -5,13 +5,14 @@ import WishlistIcon from "../assets/heart-fill.svg?react";
 import AccountIcon from "../assets/person-circle.svg?react";
 import ShopIcon from "../assets/shop.svg?react";
 import TruckIcon from "../assets/delivery-van.svg?react";
+import { Package, Users, Wallet } from "lucide-react";
 import { useCoreContext } from "../context/CoreContext";
 
 const navItems = [
   { name: "Dashboard", path: "/", icon: HomeIcon },
-  { name: "Users", path: "/users", icon: ShopIcon },
-  { name: "Orders", path: "/orders", icon: TruckIcon },
-  { name: "Wallet", path: "/wallet", icon: WishlistIcon },
+  { name: "Users", path: "/users", icon: Users },
+  { name: "Orders", path: "/orders", icon: Package },
+  { name: "Wallet", path: "/wallet", icon: Wallet },
   { name: "Account", path: "/account", icon: AccountIcon },
 ];
 
@@ -23,6 +24,7 @@ const BottomNavbar = () => {
       {/* <ShopIcon /> */}
       {navItems.map((item) => {
         const isActive = location.pathname === item.path;
+        
         return (
           <button
             key={item.name}

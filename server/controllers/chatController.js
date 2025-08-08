@@ -3,6 +3,7 @@ import Chat from "../models/Chat.js";
 import User from "../models/User.js";
 import { sendPushNotification } from "../utils/fcmService.js";
 import { sendNewMessageNotification } from "./mailController.js";
+import Admin from "../models/Admin.js";
 
 async function uploadBase64Image(base64String, folder, publicId) {
   try {
@@ -29,6 +30,28 @@ export const sendNewMessage = async (req, res) => {
       });
     }
 
+    let chat = null;
+    
+    if (chatId) chat = await Chat.findById(chatId);
+    if (!message && !req.file && !req.body.attachment?.base64) {
+      return res.json({
+        success: false,
+        message: "Message content or attachment is required.",
+      });
+    }
+
+    let sender = await User.findById(userId);
+    if (!sender) {
+      sender = await Admin.findById(userId);
+    }
+
+    if (!sender) {
+      return res.json({
+        success: false,
+        message: "Sender not found.",
+      });
+    }
+
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path, {
         resource_type: "image",
@@ -43,10 +66,6 @@ export const sendNewMessage = async (req, res) => {
         `${Date.now()}-${userId}`
       );
     }
-
-    let chat = null;
-    if (chatId) chat = await Chat.findById(chatId);
-    const sender = await User.findById(userId);
 
     const newMessage = {
       senderId: userId,

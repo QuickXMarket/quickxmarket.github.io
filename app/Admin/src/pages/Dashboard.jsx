@@ -58,7 +58,7 @@ const Dashboard = () => {
           className="flex flex-wrap items-center gap-4 px-4 py-2 min-h-[72px] justify-between rounded-md bg-card hover:bg-card-hover transition-colors cursor-pointer"
         >
           <div className="flex items-center gap-4 min-w-0 flex-1">
-            <div className="flex items-center justify-center rounded-lg shrink-0 size-12 bg-[var(--color-gray-200)] text-text">
+            <div className="flex items-center justify-center rounded-lg shrink-0 size-12 bg-gray-200 text-text">
               {activity.type === "user" && <User className="w-6 h-6" />}
               {activity.type === "order" && <Package className="w-6 h-6" />}
               {activity.type === "transaction" && (

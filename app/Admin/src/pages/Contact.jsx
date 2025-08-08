@@ -5,7 +5,7 @@ import ChatMessage from "../components/ChatMessage";
 import { useCoreContext } from "../context/CoreContext";
 import { useChatContext } from "../context/ChatContext";
 import { useAuthContext } from "../context/AuthContext";
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
 import { assets } from "../assets/assets";
 import ChatTopBar from "../components/ChatTopBar";
 
@@ -19,8 +19,10 @@ export default function ChatLayout({}) {
     setIsTyping,
     typingUsers,
     retrieveMessages,
+    setChatId,
   } = useChatContext();
-  const { user } = useAuthContext();
+  const { admin } = useAuthContext();
+  const { chatId } = useParams();
   const [groupedMessages, setGroupedMessages] = useState([]);
   const messagesEndRef = useRef(null);
   const [newMessage, setNewMessage] = useState("");
@@ -32,7 +34,7 @@ export default function ChatLayout({}) {
     return messages.reduce((acc, msg) => {
       const date = new Date(msg.timestamp).toLocaleDateString();
       const formattedDate = getRelativeDayLabel(date);
-      
+
       if (!acc[formattedDate]) {
         acc[formattedDate] = [];
       }
@@ -69,6 +71,10 @@ export default function ChatLayout({}) {
   useEffect(() => {
     retrieveMessages();
   }, []);
+
+  useEffect(() => {
+    setChatId(chatId);
+  }, [chatId]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -121,7 +127,7 @@ export default function ChatLayout({}) {
                     <ChatMessage
                       key={msg.id}
                       message={msg}
-                      currentUser={user?._id}
+                      currentUser={admin?._id}
                     />
                   ))}
                 </div>
