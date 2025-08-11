@@ -32,7 +32,14 @@ const Navbar = () => {
 
         <div className="hidden sm:flex items-center gap-8">
           <NavLink to="/">Home</NavLink>
-          <NavLink to="/dispatch">Dispatch Delivery</NavLink>
+          <NavLink
+            to="/dispatch"
+            className={
+              "border border-gray-300 px-3 py-1 rounded-full text-xs cursor-pointer opacity-80"
+            }
+          >
+            Dispatch Delivery
+          </NavLink>
           {/* <NavLink to="/">Contact</NavLink> */}
 
           <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">

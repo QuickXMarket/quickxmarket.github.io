@@ -4,16 +4,24 @@ import { Link } from "react-router-dom";
 
 const MainBanner = () => {
   const slidesData = [
+    // {
+    //   large: assets.first_banner_image,
+    //   small: assets.first_banner_image,
+    //   text: "Fast dispatch delivery at your fingertips",
+    //   color: "#2f855a",
+    //   buttonText: "Book a Dispatch",
+    //   buttonLink: "/dispatch",
+    // },
     {
-      large: assets.first_banner_image,
-      small: assets.first_banner_image,
+      large: assets.second_banner_image,
+      small: assets.second_banner_image,
       color: "white",
       buttonText: "Explore Products",
       buttonLink: "/products",
     },
     {
-      large: assets.second_banner_image,
-      small: assets.second_banner_image,
+      large: assets.third_banner_image,
+      small: assets.third_banner_image,
       color: "#2f855a",
       buttonText: "Shop Now",
       buttonLink: "/shops",
@@ -125,7 +133,7 @@ const MainBanner = () => {
                 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4"
                 style={{ color: slide.color }}
               >
-                Experience the art of easy shopping!
+                {slide.text || "Experience the art of easy shopping!"}
               </h2>
               <Link
                 to={slide.buttonLink}

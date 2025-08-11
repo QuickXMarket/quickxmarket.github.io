@@ -30,8 +30,10 @@ import shoes_image from "./shoes_image.jpg";
 import cosmetics_image from "./cosmetics_image.jpg";
 import food_image from "./food_image.jpg";
 import hair_accessories_image from "./hair_accessories_image.jpg";
-import first_banner_image from "./1st_banner_image.jpg";
+import first_banner_image from "./1st_banner_image.png";
 import second_banner_image from "./2nd_banner_image.jpg";
+import third_banner_image from "./3rd_banner_image.jpg";
+import dispatch_banner from "./dispatch-banner-sm.png";
 import QuickXMarket_Logo_Transparent from "./QuickXMarket_Logo_Transparent.png";
 import Favicon_rounded from "./Favicon2-rounded.png";
 import home_outline from "./house_outline.svg";
@@ -73,6 +75,7 @@ export const assets = {
   Favicon_rounded,
   first_banner_image,
   second_banner_image,
+  third_banner_image,
   wallet_icon,
   wallet_outline,
   home_outline,
@@ -82,6 +85,7 @@ export const assets = {
   Slideshow_2,
   Slideshow_3,
   Slideshow_4,
+  dispatch_banner
 };
 
 export const categories = [
