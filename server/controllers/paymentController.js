@@ -36,7 +36,7 @@ export const placeOrderPaystack = async (req, res) => {
     let totalAmount = 0;
     for (const item of items) {
       const product = await Product.findById(item.product);
-      totalAmount += item.quantity * product.offerPrice;
+      totalAmount += item.quantity * product.option.offerPrice;
     }
 
     const deliveryFee = await calculateTotalDeliveryFee(
@@ -54,7 +54,9 @@ export const placeOrderPaystack = async (req, res) => {
         product: item.product,
         quantity: item.quantity,
         status: "Order Placed",
+        option: item.option._id,
       })),
+
       amount: totalAmount,
       deliveryFee,
       serviceFee,
@@ -252,7 +254,6 @@ export const verifyPaystackTransaction = async (req, res) => {
     const metadata = data.metadata || {};
 
     const { userId } = metadata;
-    console.log(metadata.dispatchData);
 
     if (metadata.orderData) {
       const orderData = metadata.orderData;

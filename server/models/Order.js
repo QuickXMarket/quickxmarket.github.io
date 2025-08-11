@@ -12,6 +12,7 @@ const orderSchema = new mongoose.Schema(
       {
         product: { type: String, required: true, ref: "product" },
         quantity: { type: Number, required: true },
+        option: { type: mongoose.Schema.Types.ObjectId, required: true },
         status: {
           type: String,
           enum: [

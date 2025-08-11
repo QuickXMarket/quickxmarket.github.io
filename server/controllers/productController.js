@@ -9,6 +9,11 @@ async function uploadBase64Image(base64String, folder, publicId) {
       resource_type: "image",
       folder,
       public_id: publicId,
+      transformation: [
+        { width: 1200, height: 1200, crop: "limit" },
+        { quality: "auto" },
+        { fetch_format: "auto" },
+      ],
     });
     return result.secure_url;
   } catch (error) {
@@ -45,6 +50,11 @@ export const addProduct = async (req, res) => {
             public_id: `${productData.name
               .replace(/\s+/g, "_")
               .toLowerCase()}_${index + 1}`,
+            transformation: [
+              { width: 1200, height: 1200, crop: "limit" },
+              { quality: "auto" },
+              { fetch_format: "auto" },
+            ],
           });
           return result.secure_url;
         })

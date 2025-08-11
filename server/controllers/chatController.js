@@ -31,7 +31,7 @@ export const sendNewMessage = async (req, res) => {
     }
 
     let chat = null;
-    
+
     if (chatId) chat = await Chat.findById(chatId);
     if (!message && !req.file && !req.body.attachment?.base64) {
       return res.json({

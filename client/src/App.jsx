@@ -63,7 +63,7 @@ const App = () => {
         className={`${
           isContactPath
             ? "flex flex-col h-screen"
-            : "px-6 md:px-16 lg:px-24 xl:px-32"
+            : "px-2 sm:px-8 md:px-16 lg:px-24 xl:px-32"
         }`}
       >
         <Routes>

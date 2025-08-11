@@ -40,7 +40,6 @@ export const ProductContextProvider = ({ children }) => {
     } else {
       cartData[productId][optionId] = 1;
     }
-
     setCartItems(cartData);
     toast.success("Added to Cart");
   };

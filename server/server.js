@@ -4,6 +4,7 @@ import app from "./app.js"; // move your entire app setup into app.js
 import { toggleOnlineStatus } from "./controllers/userController.js";
 import { notifyParticipants } from "./controllers/chatController.js";
 import { startVendorToggleCron } from "./cron/toggleVendorStatus.js";
+import { getBalance } from "./controllers/paystackController.js";
 
 const server = createServer(app);
 
@@ -53,6 +54,7 @@ server.listen(process.env.PORT || 4000, () => {
 });
 
 startVendorToggleCron();
+getBalance();
 
 export default server;
 export { io };

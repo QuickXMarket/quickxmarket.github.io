@@ -27,11 +27,20 @@ const Cart = () => {
 
   const getCart = () => {
     let tempArray = [];
-    for (const key in cartItems) {
-      const product = products.find((item) => item._id === key);
-      product.quantity = cartItems[key];
-      tempArray.push(product);
+    for (const productId in cartItems) {
+      for (const optionId in cartItems[productId]) {
+        const product = products.find((item) => item._id === productId);
+        if (product) {
+          product.quantity = cartItems[productId][optionId];
+          const option = product.options.find(
+            (option) => option._id === optionId
+          );
+          product.option = option;
+          tempArray.push(product);
+        }
+      }
     }
+
     setCartArray(tempArray);
   };
 
@@ -135,6 +144,7 @@ const Cart = () => {
           product: item._id,
           quantity: item.quantity,
           vendorId: item.vendorId,
+          option: item.option,
         })),
         address: selectedAddress._id,
         email: user.email,
@@ -198,14 +208,16 @@ const Cart = () => {
                     <p>Qty:</p>
                     <select
                       onChange={(e) =>
-                        updateCartItem(product._id, Number(e.target.value))
+                        updateCartItem(
+                          product._id,
+                          product.option._id,
+                          Number(e.target.value)
+                        )
                       }
-                      value={cartItems[product._id]}
+                      value={product.quantity}
                       className="outline-none"
                     >
-                      {Array(
-                        cartItems[product._id] > 9 ? cartItems[product._id] : 9
-                      )
+                      {Array(product.quantity > 9 ? product.quantity : 9)
                         .fill("")
                         .map((_, index) => (
                           <option key={index} value={index + 1}>
@@ -219,10 +231,10 @@ const Cart = () => {
             </div>
             <p className="text-center">
               {currency}
-              {product.offerPrice * product.quantity}
+              {product.option.offerPrice * product.quantity}
             </p>
             <button
-              onClick={() => removeFromCart(product._id)}
+              onClick={() => removeFromCart(product._id, product.option._id)}
               className="cursor-pointer mx-auto"
             >
               <img
