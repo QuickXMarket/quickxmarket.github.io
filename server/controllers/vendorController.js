@@ -76,16 +76,28 @@ export const sendRegisterRequest = async (req, res) => {
     if (!vendorRequest) return res.json({ success: false });
 
     const user = await User.findById(userId).select("email");
-
-    const admins = await Admin.find().select("fcmToken");
+    const admins = await Admin.find().select("fcmToken notification");
     const adminFcmTokens = [];
 
-    for (const admin of admins) {
-      if (admin) {
-        const { fcmToken } = admin;
-        if (fcmToken) adminFcmTokens.push(fcmToken);
-      }
-    }
+    await Promise.all(
+      admins.map(async (admin) => {
+        if (!admin) return;
+
+        if (admin.fcmToken) {
+          adminFcmTokens.push(admin.fcmToken);
+        }
+
+        admin.notification.push({
+          title: "New Vendor Registration Request",
+          message: "A new vendor has applied. Review the request.",
+          type: "vendorRequest",
+          data: { id: vendorRequest._id },
+        });
+
+        await admin.save();
+      })
+    );
+
     for (const token of adminFcmTokens) {
       try {
         await sendPushNotification(
@@ -102,7 +114,7 @@ export const sendRegisterRequest = async (req, res) => {
         );
       }
     }
-    
+
     return res.json({ success: true, message: "Resquest has been sent" });
   } catch (error) {
     console.error(error.message);

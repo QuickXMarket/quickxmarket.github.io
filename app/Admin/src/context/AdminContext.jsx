@@ -13,8 +13,7 @@ import { useAuthContext } from "./AuthContext";
 const AdminContext = createContext();
 
 export const AdminProvider = ({ children }) => {
-  const { makeRequest, navigate, secureRemove, secureSet, secureGet } =
-    useCoreContext();
+  const { makeRequest } = useCoreContext();
   const { admin } = useAuthContext();
   const [orders, setOrders] = useState([]);
   const [users, setUsers] = useState([]);

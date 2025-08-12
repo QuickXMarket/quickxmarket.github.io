@@ -1,5 +1,36 @@
 import mongoose from "mongoose";
 
+const notificationSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 200,
+    },
+    message: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 1000,
+    },
+    type: { type: String, required: true, trim: true, maxlength: 200 },
+    data: {
+      type: mongoose.Schema.Types.Mixed, // allows any object
+      default: {},
+    },
+    read: {
+      type: Boolean,
+      default: false,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  { _id: false }
+);
+
 const adminSchema = new mongoose.Schema(
   {
     name: {
@@ -9,7 +40,6 @@ const adminSchema = new mongoose.Schema(
       minlength: 2,
       maxlength: 100,
     },
-
     email: {
       type: String,
       required: true,
@@ -18,7 +48,6 @@ const adminSchema = new mongoose.Schema(
       trim: true,
       match: /^[^\s@]+@quickxmarket\.com\.ng$/, // Enforce admin domain
     },
-
     password: {
       type: String,
       required: true,
@@ -26,7 +55,6 @@ const adminSchema = new mongoose.Schema(
       maxlength: 1024,
       select: false,
     },
-
     number: {
       type: String,
       required: true,
@@ -37,26 +65,26 @@ const adminSchema = new mongoose.Schema(
         "Invalid Nigerian phone number",
       ],
     },
-
     role: {
       type: String,
       enum: ["admin", "superadmin"],
       default: "admin",
     },
-
     permissions: {
       type: [String],
       default: [],
     },
-
     isOnline: {
       type: Boolean,
       default: false,
     },
-
     lastSeen: {
       type: Date,
       default: Date.now,
+    },
+    notifications: {
+      type: [notificationSchema],
+      default: [],
     },
   },
   {
