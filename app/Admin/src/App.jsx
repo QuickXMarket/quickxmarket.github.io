@@ -57,7 +57,7 @@ const App = () => {
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-background ">
-      {showNavbars && admin && loggedIn && <Navbar />}
+      {!isContactPath && admin && loggedIn && <Navbar />}
       <Toaster />
       <div
         className={`${

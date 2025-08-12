@@ -22,7 +22,13 @@ const vendorRequestSchema = new mongoose.Schema(
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
-    adminRemarks: { type: String }, 
+    adminRemarks: { type: String },
+
+    expireAt: {
+      type: Date,
+      default: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      index: { expires: 0 },
+    },
   },
   { timestamps: true }
 );

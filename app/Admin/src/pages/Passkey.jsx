@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { Fingerprint } from "lucide-react";
 import { useAuthContext } from "../context/AuthContext";
 import { useCoreContext } from "../context/CoreContext";
 
@@ -47,6 +48,8 @@ const Passkey = () => {
     if (state === "confirm") {
       if (passkey !== confirmPasskey) {
         toast.error("Passkeys do not match. Please try again.");
+        setState("set");
+        setPasskey("");
         return;
       }
       const hashedPasskey = await hash(passkey);
@@ -64,6 +67,7 @@ const Passkey = () => {
       passKeyConfirmed();
     } else {
       toast.error("Invalid passkey. Please try again.");
+      setPasskey("");
     }
   };
 
@@ -124,13 +128,14 @@ const Passkey = () => {
         ))}
       </div>
 
-      {/* <button
-        onClick={handleConfirm}
-        className="mt-4 px-6 py-2 bg-primary text-white rounded hover:bg-blue-600 disabled:opacity-50"
-        disabled={passkey.length !== 6}
-      >
-        Confirm
-      </button> */}
+      {state === "enter" && (
+        <button
+          className="mt-4 px-6 py-2  text-white rounded hover:bg-blue-600 disabled:opacity-50"
+          onClick={() => tryBiometrics(passKeyConfirmed)}
+        >
+          <Fingerprint className="w-12 h-12" />
+        </button>
+      )}
     </div>
   );
 };

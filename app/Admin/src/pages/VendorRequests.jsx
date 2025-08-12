@@ -5,7 +5,7 @@ import Loading from "../components/Loading";
 const VendorRequests = () => {
   const [vendorRequests, setVendorRequests] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { makeRequest, getRelativeDayLabel } = useCoreContext();
+  const { makeRequest, getRelativeDayLabel, navigate } = useCoreContext();
 
   const getVendorRequests = async () => {
     try {
@@ -13,7 +13,6 @@ const VendorRequests = () => {
         url: "/api/admin/vendor-requests",
         method: "GET",
       });
-      console.log(data);
       if (data.success) {
         setVendorRequests(data.vendorRequests);
       }
@@ -30,26 +29,28 @@ const VendorRequests = () => {
 
   return (
     <div>
+   
       {!loading ? (
-        vendorRequests.map((request, index) => {
+        vendorRequests.map((request, index) => (
           <div
             key={index}
-            class="flex items-center gap-4 bg-gray-50 px-4 min-h-[72px] py-2"
+            className="flex items-center gap-4 bg-gray-50 px-4 min-h-[72px] py-2"
+            onClick={() => navigate(`/vendor-requests/${request._id}`)}
           >
             <div
-              class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-14"
-              style={`background-image: url(${request.profilePhoto});`}
+              className="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-14"
+              style={{ backgroundImage: `url(${request.profilePhoto})` }}
             ></div>
-            <div class="flex flex-col justify-center">
-              <p class="text-gray-600 text-base font-medium leading-normal line-clamp-1">
+            <div className="flex flex-col justify-center">
+              <p className="text-gray-600 text-base font-medium leading-normal line-clamp-1">
                 {request.businessName}
               </p>
-              <p class="text-text text-sm font-normal leading-normal line-clamp-2">
+              <p className="text-text text-sm font-normal leading-normal line-clamp-2">
                 Submitted {getRelativeDayLabel(request.createdAt)}
               </p>
             </div>
-          </div>;
-        })
+          </div>
+        ))
       ) : (
         <Loading />
       )}

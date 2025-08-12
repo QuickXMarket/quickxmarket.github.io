@@ -32,7 +32,7 @@ const ChatList = () => {
 
   return (
     <div className="flex flex-col h-full w-full bg-background">
-      <ChatTopBar />
+     
       <div className="px-4 pt-3 pb-6">
         {/* Search Input */}
         <label className="flex flex-col min-w-40 h-12 w-full mb-4">

@@ -10,6 +10,7 @@ import {
   loginAdmin,
   logout,
   registerAdmin,
+  vendorRequestResponse,
 } from "../controllers/adminController.js";
 
 const adminRouter = express.Router();
@@ -25,6 +26,7 @@ adminRouter.get("/chats", authUser, getChatList);
 adminRouter.get("/users", authUser, getAllUsers);
 adminRouter.get("/orders", authUser, getAllOrders);
 adminRouter.get("/vendor-requests", authUser, getVendorRequests);
+adminRouter.post("/vendorRequestResponse", authUser, vendorRequestResponse);
 // adminRouter.get("/dashboard", authUser, getDashboardStats);
 
 export default adminRouter;
