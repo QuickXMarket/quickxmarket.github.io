@@ -31,7 +31,7 @@ const faqData = {
     {
       question: "How long does delivery take?",
       answer:
-        "On average, deliveries are completed within 30–60 minutes after your order is confirmed. You’ll receive updates via email or app notifications.",
+        "On average, deliveries are completed within 30–60 minutes after your order is confirmed. You'll receive updates via email or app notifications.",
     },
     {
       question: "Is there a delivery fee?",
@@ -43,9 +43,9 @@ const faqData = {
       answer: "No. We do not offer that service for now. Perhaps one day...",
     },
     {
-      question: "What if I’m not available when the delivery arrives?",
+      question: "What if I'm not available when the delivery arrives?",
       answer:
-        "Our rider will wait for 5 minutes and attempt to call you. If you’re unreachable, the order may be returned, and you’ll be charged a re-delivery or restocking fee.",
+        "Our rider will wait for 5 minutes and attempt to call you. If you're unreachable, the order may be returned, and you'll be charged a re-delivery or restocking fee.",
     },
     {
       question: "Can I cancel or change my order?",
@@ -60,7 +60,7 @@ const faqData = {
     {
       question: "How do I track my order?",
       answer:
-        "You can track your delivery in real-time via the mobile app or website. You’ll see the order status and estimated arrival time.",
+        "You can track your delivery in real-time via the mobile app or website. You'll see the order status and estimated arrival time.",
     },
     {
       question: "Is there a minimum order amount?",
@@ -70,12 +70,12 @@ const faqData = {
     {
       question: "My order is incorrect or missing items. What should I do?",
       answer:
-        "Contact our support team within 30 minutes of receiving the order through the app chat or call the support number. We’ll resolve the issue or offer a credit/refund where appropriate.",
+        "Contact our support team within 30 minutes of receiving the order through the app chat or call the support number. We'll resolve the issue or offer a credit/refund where appropriate.",
     },
     {
       question: "What is a dispatch request on QuickXMarket?",
       answer:
-        "A dispatch request allows you to send items (documents, parcels, or personal packages) from one location on campus to another using QuickXMarket’s delivery riders.",
+        "A dispatch request allows you to send items (documents, parcels, or personal packages) from one location on campus to another using QuickXMarket's delivery riders.",
     },
     {
       question: "How do I contact customer support?",

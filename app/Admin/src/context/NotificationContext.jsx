@@ -9,10 +9,9 @@ const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
   const { makeRequest, navigate } = useCoreContext();
-  const { user } = useAuthContext();
+  const { admin } = useAuthContext();
 
   const setupPushNotifications = () => {
-    // Request permission on mobile
     PushNotifications.requestPermissions().then((result) => {
       if (result.receive === "granted") {
         PushNotifications.register();
@@ -21,14 +20,13 @@ export const NotificationProvider = ({ children }) => {
       }
     });
 
-    // On successful registration, get FCM token
     PushNotifications.addListener("registration", async (token) => {
       try {
         await makeRequest({
           method: "PATCH",
-          url: "/api/user/update-fcm-token",
+          url: "/api/admin/update-fcm-token",
           data: {
-            userId: user?._id,
+            userId: admin?._id,
             fcmToken: token.value,
           },
         });
@@ -48,7 +46,6 @@ export const NotificationProvider = ({ children }) => {
       "pushNotificationReceived",
       async (notification) => {
         const route = notification.data?.route;
-        console.log(notification);
         await LocalNotifications.schedule({
           notifications: [
             {
@@ -63,7 +60,7 @@ export const NotificationProvider = ({ children }) => {
       }
     );
 
-    // Handle user tapping the notification
+    // Handle admin tapping the notification
     PushNotifications.addListener(
       "pushNotificationActionPerformed",
       (notification) => {
@@ -86,9 +83,9 @@ export const NotificationProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (!user) return;
+    if (!admin) return;
     if (Capacitor.isNativePlatform()) setupPushNotifications();
-  }, [user]);
+  }, [admin]);
 
   const value = {
     setupPushNotifications,

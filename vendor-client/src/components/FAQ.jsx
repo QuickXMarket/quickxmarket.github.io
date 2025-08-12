@@ -26,7 +26,7 @@ const faqData = {
     {
       question: "How do I receive orders?",
       answer:
-        "Once registered, you will receive orders via the vendor dashboard or mobile app. You’ll be notified in real-time and can confirm preparation and delivery status.",
+        "Once registered, you will receive orders via the vendor dashboard or mobile app. You'll be notified in real-time and can confirm preparation and delivery status.",
     },
     {
       question: "Who handles the delivery?",

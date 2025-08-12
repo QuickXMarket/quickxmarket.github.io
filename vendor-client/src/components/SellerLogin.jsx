@@ -4,10 +4,12 @@ import { assets } from "../assets/assets";
 import { useCoreContext } from "../context/CoreContext";
 import { useAuthContext } from "../context/AuthContext";
 import { NavLink } from "react-router-dom";
+import { useVendorContext } from "../context/VendorContext";
 
 const SellerLogin = () => {
   const { axios, navigate, fuse, location } = useCoreContext();
-  const { setShowSellerLogin, user, checkVendorStatus } = useAuthContext();
+  const { user } = useAuthContext();
+  const { setShowSellerLogin, checkVendorStatus } = useVendorContext();
 
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [businessName, setBusinessName] = useState("");
@@ -109,32 +111,17 @@ const SellerLogin = () => {
         formData.append("profilePhoto", profilePhoto);
       }
 
-      const { data } = await axios.post("/api/seller/register", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      if (data.success) {
-        // Update user role to vendor
-        try {
-          const updateRoleRes = await axios.patch("/api/user/update-role", {
-            userId: user._id,
-            role: "vendor",
-          });
-          if (updateRoleRes.data.success) {
-            toast.success("Vendor registered successfully and role updated");
-            setShowSellerLogin(false);
-            checkVendorStatus(user);
-            navigate("/dashboard");
-          } else {
-            toast.error(
-              "Vendor registered but failed to update role: " +
-                updateRoleRes.data.message
-            );
-          }
-        } catch (error) {
-          toast.error(
-            "Vendor registered but error updating role: " + error.message
-          );
+      const { data } = await axios.post(
+        "/api/seller/sendRegisterRequest",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
         }
+      );
+      if (data.success) {
+        toast.success("Vendor registration request sent. Awaiting approval.");
+        setShowSellerLogin(false);
+        navigate("/");
       } else {
         toast.error(data.message);
       }

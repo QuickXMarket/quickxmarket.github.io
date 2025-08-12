@@ -16,7 +16,7 @@ export const customerTermsData = {
       content: [
         "You must create an account using accurate personal information.",
         "You are responsible for maintaining the confidentiality of your login details.",
-        "You may not use another person’s account without permission.",
+        "You may not use another person's account without permission.",
       ],
     },
     {
@@ -67,7 +67,7 @@ export const customerTermsData = {
     {
       heading: "9. Promotions and Discounts",
       content: [
-        "Promotions are offered at QuickXMarket’s discretion and may be withdrawn or modified at any time.",
+        "Promotions are offered at QuickXMarket's discretion and may be withdrawn or modified at any time.",
         "Misuse of discount codes or referral bonuses may lead to account suspension.",
       ],
     },
@@ -204,7 +204,7 @@ export const riderTermsData = {
     {
       heading: "10. Suspension and Termination",
       content: [
-        "Dishonest conduct (e.g., marking deliveries as complete when they’re not)",
+        "Dishonest conduct (e.g., marking deliveries as complete when they're not)",
         "Theft, harassment, or misconduct",
         "Repeated lateness or poor reviews",
         "Violating any campus or legal regulations",
@@ -228,7 +228,7 @@ export const riderTermsData = {
       heading: "13. Updates to Terms",
       content: [
         "QuickXMarket may update these terms as necessary.",
-        "You’ll be notified of changes via the app or email.",
+        "You'll be notified of changes via the app or email.",
         "Continued use of the platform implies agreement to the updated terms.",
       ],
     },

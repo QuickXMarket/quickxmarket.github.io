@@ -344,3 +344,34 @@ export const getDashboardStats = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+export const updateUserFcmToken = async (req, res) => {
+  try {
+    const { userId, fcmToken } = req.body;
+
+    if (!userId || !fcmToken) {
+      return res.json({
+        success: false,
+        message: "Missing userId or fcmToken",
+      });
+    }
+
+    const admin = await Admin.findById(userId);
+    if (!admin) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Admin not found" });
+    }
+
+    admin.fcmToken = fcmToken;
+    await admin.save();
+
+    return res.json({
+      success: true,
+      message: "FCM token updated successfully",
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

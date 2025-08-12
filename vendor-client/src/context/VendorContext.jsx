@@ -163,7 +163,7 @@ export const VendorContextProvider = ({ children }) => {
         totalOrders,
         todayOrders: todayOrders.length || 0,
         todayRevenue,
-        totalRevenue,
+        totalRevenue
       };
 
       setStats(retrievedStats);
@@ -232,14 +232,14 @@ export const VendorContextProvider = ({ children }) => {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        const [vendor, products, wallet] = await Promise.all([
-          checkVendorStatus(),
-          fetchProducts(),
-          fetchWallet(),
-        ]);
+        const vendor = await checkVendorStatus();
 
         if (vendor && vendor._id) {
-          await fetchOrders(vendor);
+          await Promise.all(
+            fetchOrders(vendor),
+            fetchProducts(),
+            fetchWallet()
+          );
         }
       } catch (err) {
         // Optional: log or toast error
@@ -247,7 +247,7 @@ export const VendorContextProvider = ({ children }) => {
         setLoading(false);
       }
     };
-    if (user && !vendor) loadInitialData();
+    if (user && user.isSeller && !vendor) loadInitialData();
   }, [user]);
 
   useEffect(() => {

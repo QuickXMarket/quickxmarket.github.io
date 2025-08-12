@@ -101,8 +101,6 @@ const App = () => {
             onClick={() => {
               if (user) {
                 setShowChatModal(true);
-              } else {
-                navigate("/contact");
               }
             }}
             className="bg-primary hover:bg-primary/90 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl"

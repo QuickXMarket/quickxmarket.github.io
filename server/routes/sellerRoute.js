@@ -4,6 +4,7 @@ import {
   editVendor,
   getVendorById,
   getVendorByUserId,
+  sendRegisterRequest,
   toggleVendorStatus,
   vendorList,
 } from "../controllers/vendorController.js";
@@ -13,10 +14,10 @@ import authUser from "../middlewares/authUser.js";
 const sellerRouter = express.Router();
 
 sellerRouter.post(
-  "/register",
+  "/sendRegisterRequest",
   upload.single("profilePhoto"),
   authUser,
-  createVendor
+  sendRegisterRequest
 );
 sellerRouter.get("/user/:userId", authUser, getVendorByUserId);
 sellerRouter.patch(

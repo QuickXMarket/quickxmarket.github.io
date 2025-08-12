@@ -9,6 +9,7 @@ import {
   dispatchRecipientNotification,
   newMessageNotification,
   resetPasswordEmail,
+  vendorRequestConfirmation,
 } from "../utils/mailTemplates.js";
 
 // Ensure admin email is set
@@ -196,5 +197,21 @@ export const sendResetPasswordEmail = async (userEmail, resetLink) => {
     });
   } catch (error) {
     console.error("❌ Error sending reset password email:", error);
+  }
+};
+
+export const sendVendorRequestConfirmation = async (
+  userEmail,
+  businessName
+) => {
+  try {
+    await transporter.sendMail({
+      from: `"QuickXMarket Vendor Onboarding" <${process.env.SMTP_USER}>`,
+      to: userEmail,
+      subject: "Vendor Registration Request Received",
+      html: vendorRequestConfirmation(businessName),
+    });
+  } catch (error) {
+    console.error("❌ Error sending vendor request confirmation email:", error);
   }
 };

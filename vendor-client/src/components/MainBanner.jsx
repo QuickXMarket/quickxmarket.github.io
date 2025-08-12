@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { assets } from "../assets/assets";
 import { Link, NavLink } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
+import { useVendorContext } from "../context/VendorContext";
 
 const MainBanner = () => {
   const slidesData = [
@@ -21,7 +22,8 @@ const MainBanner = () => {
   const startXRef = useRef(null);
   const isDraggingRef = useRef(false);
   const containerRef = useRef(null);
-  const { user, setShowSellerLogin, setShowUserLogin } = useAuthContext();
+  const { user, setShowUserLogin } = useAuthContext();
+  const { setShowSellerLogin } = useVendorContext();
 
   useEffect(() => {
     const interval = setInterval(() => {

@@ -3,6 +3,10 @@ import Vendor from "../models/Vendor.js";
 // Create Vendor document after user fills SellerLogin form
 import { v2 as cloudinary } from "cloudinary";
 import { createWalletLogic } from "./walletController.js";
+import { sendPushNotification } from "../utils/fcmService.js";
+import Admin from "../models/Admin.js";
+import VendorRequest from "../models/VendorRequest.js";
+import User from "../models/User.js";
 
 async function uploadBase64Image(base64String) {
   try {
@@ -14,6 +18,97 @@ async function uploadBase64Image(base64String) {
     throw new Error("Failed to upload base64 image: " + error.message);
   }
 }
+
+export const sendRegisterRequest = async (req, res) => {
+  try {
+    const {
+      userId,
+      businessName,
+      number,
+      address,
+      latitude,
+      longitude,
+      openingTime,
+      closingTime,
+    } = req.body;
+    if (
+      !userId ||
+      !businessName ||
+      !number ||
+      !address ||
+      !latitude ||
+      !longitude
+    ) {
+      return res.json({ success: false, message: "Missing required fields" });
+    }
+    // Check if vendor already exists for this user
+    const existingVendor = await Vendor.findOne({ userId });
+    if (existingVendor) {
+      return res.json({ success: false, message: "Vendor already registered" });
+    }
+
+    let profilePhotoUrl = "";
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        resource_type: "image",
+      });
+      profilePhotoUrl = result.secure_url;
+    } else if (
+      req.body.profilePhoto &&
+      req.body.profilePhoto.startsWith("data:image")
+    ) {
+      // Handle base64 profile photo
+      profilePhotoUrl = await uploadBase64Image(req.body.profilePhoto);
+    }
+
+    const vendorRequest = await VendorRequest.create({
+      userId,
+      profilePhoto: profilePhotoUrl,
+      businessName,
+      number,
+      address,
+      latitude,
+      longitude,
+      openingTime,
+      closingTime,
+    });
+
+    if (!vendorRequest) return res.json({ success: false });
+
+    const user = await User.findById(userId).select("email");
+
+    const admins = await Admin.find().select("fcmToken");
+    const adminFcmTokens = [];
+
+    for (const admin of admins) {
+      if (admin) {
+        const { fcmToken } = admin;
+        if (fcmToken) adminFcmTokens.push(fcmToken);
+      }
+    }
+    for (const token of adminFcmTokens) {
+      try {
+        await sendPushNotification(
+          token,
+          "New Vendor Registration Request",
+          `${vendorRequest.businessName} has requested to join as a vendor. Review their details in the dashboard.`,
+          { route: `/vendor-request/${vendorRequest._id}` }
+        );
+      } catch (error) {
+        console.error(
+          "Error sending notification to token:",
+          token,
+          error.message
+        );
+      }
+    }
+    
+    return res.json({ success: true, message: "Resquest has been sent" });
+  } catch (error) {
+    console.error(error.message);
+    return res.json({ success: false, message: error.message });
+  }
+};
 
 export const createVendor = async (req, res) => {
   try {

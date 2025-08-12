@@ -23,10 +23,9 @@ const App = () => {
   const { navigate, location } = useCoreContext();
   const isContactPath = location.pathname.includes("contact");
 
-  const { showUserLogin, isSeller, showSellerLogin, user, loading } =
-    useAuthContext();
+  const { showUserLogin, isSeller, user, loading } = useAuthContext();
   const { showChatModal, setShowChatModal } = useChatContext();
-  const { loading: vendorLoading } = useVendorContext();
+  const { loading: vendorLoading, showSellerLogin } = useVendorContext();
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-white">

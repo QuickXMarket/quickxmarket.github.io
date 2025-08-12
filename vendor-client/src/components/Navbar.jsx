@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { NavLink } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
+import { useVendorContext } from "../context/VendorContext";
 
 const Navbar = () => {
-  const { user, logout, setShowSellerLogin, setShowUserLogin } =
-    useAuthContext();
+  const { user, logout, setShowUserLogin } = useAuthContext();
+  const { setShowSellerLogin } = useVendorContext();
+
   return (
     <div>
       <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
