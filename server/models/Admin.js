@@ -86,6 +86,12 @@ const adminSchema = new mongoose.Schema(
       type: [notificationSchema],
       default: [],
     },
+    fcmToken: {
+      type: String,
+      default: null,
+      maxlength: 1024,
+      trim: true,
+    },
   },
   {
     timestamps: true,

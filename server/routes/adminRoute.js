@@ -5,6 +5,7 @@ import {
   getAllUsers,
   getChatList,
   getDashboardStats,
+  getVendorRequests,
   isAuth,
   loginAdmin,
   logout,
@@ -23,6 +24,7 @@ adminRouter.get("/logout", authUser, logout);
 adminRouter.get("/chats", authUser, getChatList);
 adminRouter.get("/users", authUser, getAllUsers);
 adminRouter.get("/orders", authUser, getAllOrders);
+adminRouter.get("/vendor-requests", authUser, getVendorRequests);
 // adminRouter.get("/dashboard", authUser, getDashboardStats);
 
 export default adminRouter;

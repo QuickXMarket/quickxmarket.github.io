@@ -19,6 +19,9 @@ import OrderDetails from "./pages/OrderDetails";
 import UserDetails from "./pages/UserDetails";
 import VendorDetails from "./pages/vendorDetails";
 import RiderDetails from "./pages/RiderDetails";
+import Account from "./pages/Account";
+import VendorRequests from "./pages/VendorRequests";
+import VendorRequestDetails from "./pages/VendorRequestDetails";
 
 const App = () => {
   const { loggedIn, admin, authLoading } = useAuthContext();
@@ -80,6 +83,12 @@ const App = () => {
             <Route path="/orders" element={<Orders />} />
             <Route path="/orders/details/:orderId" element={<OrderDetails />} />
             <Route path="/wallet" element={<Wallet />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/vendor-requests" element={<VendorRequests />} />
+            <Route
+              path="/vendor-requests/:requestId"
+              element={<VendorRequestDetails />}
+            />
             <Route path="/chatList" element={<ChatList />} />
             <Route path="/contact/:chatId" element={<Contact />} />
             <Route path="/loader" element={<Loading />} />

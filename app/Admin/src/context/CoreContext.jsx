@@ -24,7 +24,7 @@ export const CoreProvider = ({ children }) => {
   const location = useLocation();
   const [theme, setTheme] = useState(null);
 
-  const baseUrl = "https://quickxmarket-server.onrender.com";
+  const baseUrl = "http://192.168.0.101:4000";
 
   const makeRequest = async ({ method, url, data }) => {
     try {
@@ -200,7 +200,7 @@ export const CoreProvider = ({ children }) => {
         .then(() => onVerified())
         .catch((error) => {
           console.log(error);
-           toast.error("Biometric authentication failed");
+          toast.error("Biometric authentication failed");
         });
     } catch (err) {
       toast.error("Biometric authentication error");

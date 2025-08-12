@@ -8,6 +8,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { isEmailDomainValid } from "../utils/emailValidation.js";
 import Chat from "../models/Chat.js";
+import VendorRequest from "../models/VendorRequest.js";
 
 export const registerAdmin = async (req, res) => {
   try {
@@ -373,5 +374,24 @@ export const updateUserFcmToken = async (req, res) => {
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getVendorRequests = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    const admin = await Admin.findById(userId);
+
+    if (!admin) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+    const vendorRequests = await VendorRequest.find({}).sort({
+      createdAt: -1,
+    });
+    return res.status(200).json({ success: true, vendorRequests });
+  } catch (error) {
+    console.error("Error in getVendorRequests API:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };

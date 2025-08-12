@@ -9,10 +9,11 @@ const VendorRequests = () => {
 
   const getVendorRequests = async () => {
     try {
-      const { data } = await makeRequest({
-        url: "/admin/vendor-requests",
+      const data = await makeRequest({
+        url: "/api/admin/vendor-requests",
         method: "GET",
       });
+      console.log(data);
       if (data.success) {
         setVendorRequests(data.vendorRequests);
       }

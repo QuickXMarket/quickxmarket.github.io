@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
 
 const AccountOption = ({ to, label, onClick, icon }) => {
-  const { user } = useAuthContext();
-  const isLoggedIn = !!user;
+  const { admin } = useAuthContext();
+  const isLoggedIn = !!admin;
 
   const content = (
     <div className="flex items-center justify-between py-4 hover:bg-gray-50 px-1 transition">

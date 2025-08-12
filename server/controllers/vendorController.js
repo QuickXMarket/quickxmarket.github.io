@@ -7,6 +7,7 @@ import { sendPushNotification } from "../utils/fcmService.js";
 import Admin from "../models/Admin.js";
 import VendorRequest from "../models/VendorRequest.js";
 import User from "../models/User.js";
+import { sendVendorRequestConfirmation } from "./mailController.js";
 
 async function uploadBase64Image(base64String) {
   try {
@@ -86,7 +87,9 @@ export const sendRegisterRequest = async (req, res) => {
         if (admin.fcmToken) {
           adminFcmTokens.push(admin.fcmToken);
         }
-
+        if (!Array.isArray(admin.notification)) {
+          admin.notification = [];
+        }
         admin.notification.push({
           title: "New Vendor Registration Request",
           message: "A new vendor has applied. Review the request.",
@@ -114,8 +117,9 @@ export const sendRegisterRequest = async (req, res) => {
         );
       }
     }
+    await sendVendorRequestConfirmation(user.email, businessName);
 
-    return res.json({ success: true, message: "Resquest has been sent" });
+    res.json({ success: true, message: "Resquest has been sent" });
   } catch (error) {
     console.error(error.message);
     return res.json({ success: false, message: error.message });

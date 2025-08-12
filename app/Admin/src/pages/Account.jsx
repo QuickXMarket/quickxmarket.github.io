@@ -7,7 +7,7 @@ import { useAuthContext } from "../context/AuthContext";
 import ProfileIcon from "../assets/person-circle.svg?react";
 
 const Account = () => {
-  const { user, logout } = useAuthContext();
+  const { admin, logout } = useAuthContext();
 
   return (
     <div className="px-6 md:px-16 lg:px-24 xl:px-32">
@@ -16,10 +16,10 @@ const Account = () => {
         <div className="px-4 py-6 sm:px-6 md:px-10 lg:px-16 text-center mb-6">
           <ProfileIcon className="w-20 h-20 rounded-full mx-auto mb-4 object-cover" />
           <h1 className="text-2xl font-semibold">
-            {user ? `Welcome, ${user.name}` : "Welcome, Guest"}
+            {admin ? `Welcome, ${admin.name}` : "Welcome, Guest"}
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            {user
+            {admin
               ? "Manage your account settings"
               : "Sign in to access more features"}
           </p>
@@ -27,10 +27,18 @@ const Account = () => {
 
         {/* Options List */}
         <div className="flex flex-col text-sm divide-y divide-gray-200">
-          {/* Seller Dashboard / Register */}
-
+          <AccountOption
+            to="/vendor-requests"
+            label="Vendor Requests"
+            icon={assets.black_arrow_icon}
+          />
+          <AccountOption
+            to="/rider-requests"
+            label="Rider Requests"
+            icon={assets.black_arrow_icon}
+          />
           {/* Sign Out */}
-          {user ? (
+          {admin ? (
             <button
               onClick={logout}
               className="flex items-center justify-between py-4 text-red-600 hover:bg-red-50 px-1 transition"

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useCoreContext } from "../context/CoreContext";
 import Loading from "../components/Loading";
 
-const VendorRequestDetails = ({ request }) => {
+const VendorRequestDetails = () => {
   const [loading, setLoading] = useState(true);
   const { makeRequest, getRelativeDayLabel } = useCoreContext();
   const [request, setRequest] = useState();
@@ -11,7 +11,7 @@ const VendorRequestDetails = ({ request }) => {
   const getVendorRequests = async () => {
     try {
       const { data } = await makeRequest({
-        url: "/admin/vendor-requests",
+        url: "/api/admin/vendor-requests",
         method: "GET",
       });
       if (data.success) {
