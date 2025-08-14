@@ -51,7 +51,6 @@ const RiderLogin = () => {
 
     try {
       const data = {
-        userId: user._id,
         name: fullName,
         number,
         dob,

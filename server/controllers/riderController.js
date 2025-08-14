@@ -37,7 +37,7 @@ export const createRider = async (req, res) => {
 // Get rider by userId
 export const getRiderByUserId = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { userId } = req.body;
     const rider = await Rider.findOne({ userId });
 
     if (!rider) {
@@ -53,7 +53,7 @@ export const getRiderByUserId = async (req, res) => {
 export const getRiderById = async (req, res) => {
   try {
     const { riderId } = req.params;
-    const rider = await Rider.findById(riderId)
+    const rider = await Rider.findById(riderId);
     if (!rider) {
       return res.json({ success: false, message: "Rider not found" });
     }

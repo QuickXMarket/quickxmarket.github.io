@@ -9,7 +9,7 @@ import {
 const riderRouter = express.Router();
 
 // Route to create vendor document after SellerLogin form submission
-riderRouter.post("/register", createRider);
+riderRouter.post("/register", authUser, createRider);
 
 riderRouter.get("/user/", authUser, getRiderByUserId);
 
