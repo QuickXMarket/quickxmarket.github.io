@@ -2,10 +2,10 @@ import React, { useEffect, useState, useRef } from "react";
 import toast from "react-hot-toast";
 import PullToRefresh from "pulltorefreshjs";
 import { useOutletContext } from "react-router-dom";
-import { useAuthContext } from "../../context/AuthContext";
-import { useCoreContext } from "../../context/CoreContext";
+import { useAuthContext } from "../context/AuthContext";
+import { useCoreContext } from "../context/CoreContext";
 
-const RiderWallet = () => {
+const Wallet = () => {
   const { user } = useAuthContext();
   const { makeRequest } = useCoreContext();
   const { rider } = useOutletContext();
@@ -195,4 +195,4 @@ const RiderWallet = () => {
   );
 };
 
-export default RiderWallet;
+export default Wallet;

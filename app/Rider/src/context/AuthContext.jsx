@@ -8,12 +8,11 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const { makeRequest, navigate, Preferences } = useCoreContext();
   const [user, setUser] = useState(null);
-  const [isSeller, setIsSeller] = useState(false);
   const [isRider, setIsRider] = useState(false);
   const [showUserLogin, setShowUserLogin] = useState(false);
-  const [showSellerLogin, setShowSellerLogin] = useState(false);
   const [showRiderLogin, setShowRiderLogin] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
+  const [rider, setRider] = useState(null);
 
   const fetchUser = async () => {
     const token = (await Preferences.get({ key: "authToken" })).value;
@@ -27,7 +26,6 @@ export const AuthProvider = ({ children }) => {
 
       if (data.success) {
         setUser(data.user);
-        setIsSeller(data.user.isSeller || data.role === "vendor");
         setIsRider(data.user.isRider || false);
         await Preferences.set({
           key: "user",
@@ -36,6 +34,23 @@ export const AuthProvider = ({ children }) => {
       }
     } catch {
       setUser(null);
+    }
+  };
+
+  const verifyRider = async () => {
+    try {
+      const data = await makeRequest({
+        url: `/api/rider/user/`,
+        method: "GET",
+      });
+
+      if (data.success) {
+        setRider(data.rider);
+      } else {
+        toast.error("Not a valid rider account");
+      }
+    } catch (error) {
+      toast.error("Failed to verify rider");
     }
   };
 
@@ -94,17 +109,19 @@ export const AuthProvider = ({ children }) => {
     loadInitialUser();
   }, []);
 
+  useEffect(() => {
+    if (user && user.isRider) {
+      verifyRider();
+    }
+  }, [user]);
+
   const value = {
     user,
     setUser,
-    isSeller,
-    setIsSeller,
     isRider,
     setIsRider,
     showUserLogin,
     setShowUserLogin,
-    showSellerLogin,
-    setShowSellerLogin,
     showRiderLogin,
     setShowRiderLogin,
     logout,

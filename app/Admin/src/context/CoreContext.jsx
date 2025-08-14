@@ -24,7 +24,7 @@ export const CoreProvider = ({ children }) => {
   const location = useLocation();
   const [theme, setTheme] = useState(null);
 
-  const baseUrl = "http://192.168.0.102:4000";
+  const baseUrl = "https://quickxmarket-server.onrender.com";
 
   const makeRequest = async ({ method, url, data }) => {
     try {

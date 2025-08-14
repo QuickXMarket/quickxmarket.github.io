@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import DeliveryCodeModal from "./DeliveryCodeModal";
-import { useCoreContext } from "../../context/CoreContext";
+import { useCoreContext } from "../context/CoreContext";
 
-const RiderOrderCard = ({ order, riderId, fetchOrders }) => {
+const OrderCard = ({ order, riderId, fetchOrders }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { makeRequest } = useCoreContext();
   const [showCodeModal, setShowCodeModal] = useState(false);
@@ -184,4 +184,4 @@ const RiderOrderCard = ({ order, riderId, fetchOrders }) => {
   );
 };
 
-export default RiderOrderCard;
+export default OrderCard;

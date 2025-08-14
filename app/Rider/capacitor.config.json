@@ -1,15 +1,15 @@
 {
-  "appId": "io.ionic.quickxmarket",
-  "appName": "QuickXMarket",
+  "appId": "io.ionic.quickxmarketrider",
+  "appName": "QuickXMarket Rider",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "dist",
   "cordova": {},
   "android": {
-    "scheme": "quickxmarket"
+    "scheme": "quickxmarket-rider"
   },
   "server": {
-    "url": "http://192.168.0.101:5173",
+    "url": "http://192.168.0.103:5173",
     "cleartext": true
   },
   "plugins": {

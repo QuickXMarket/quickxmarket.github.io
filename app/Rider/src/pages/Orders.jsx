@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import RiderOrderCard from "../../components/rider/RiderOrderCard";
+import OrderCard from "../components/OrderCard";
 import { useOutletContext } from "react-router-dom";
 import toast from "react-hot-toast";
 import PullToRefresh from "pulltorefreshjs";
-import { useCoreContext } from "../../context/CoreContext";
-import RiderDispatchCard from "../../components/rider/RiderDispatchCard";
+import { useCoreContext } from "../context/CoreContext";
+import DispatchCard from "../components/DispatchCard";
 
-const RidersOrders = () => {
+const Orders = () => {
   const [activeTab, setActiveTab] = useState("pending");
   const { makeRequest } = useCoreContext();
   const [orders, setOrders] = useState([]);
@@ -152,14 +152,14 @@ const RidersOrders = () => {
           pendingOrders?.length > 0 ? (
             pendingOrders.map((order, index) =>
               order.type === "normal" ? (
-                <RiderOrderCard
+                <OrderCard
                   order={order}
                   riderId={rider._id}
                   fetchOrders={fetchOrders}
                   key={index}
                 />
               ) : (
-                <RiderDispatchCard
+                <DispatchCard
                   dispatch={order}
                   riderId={rider._id}
                   fetchOrders={fetchOrders}
@@ -175,14 +175,14 @@ const RidersOrders = () => {
         ) : ongoingOrders?.length > 0 ? (
           ongoingOrders.map((order, index) =>
             order.type === "normal" ? (
-              <RiderOrderCard
+              <OrderCard
                 order={order}
                 riderId={rider._id}
                 fetchOrders={fetchOrders}
                 key={index}
               />
             ) : (
-              <RiderDispatchCard
+              <DispatchCard
                 dispatch={order}
                 riderId={rider._id}
                 fetchOrders={fetchOrders}
@@ -200,4 +200,4 @@ const RidersOrders = () => {
   );
 };
 
-export default RidersOrders;
+export default Orders;

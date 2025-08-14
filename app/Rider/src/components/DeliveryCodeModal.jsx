@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import toast from "react-hot-toast";
-import { useCoreContext } from "../../context/CoreContext";
+import { useCoreContext } from "../context/CoreContext";
 
 const DeliveryCodeModal = ({
   orderId,

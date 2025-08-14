@@ -1,12 +1,12 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { assets } from "../../assets/assets";
+import { assets } from "../assets/assets";
 import toast from "react-hot-toast";
 import React, { useEffect, useState } from "react";
-import RiderLogin from "../../components/rider/RiderLogin";
-import { useCoreContext } from "../../context/CoreContext";
-import { useAuthContext } from "../../context/AuthContext";
+import RiderLogin from "./RiderLogin";
+import { useCoreContext } from "../context/CoreContext";
+import { useAuthContext } from "../context/AuthContext";
 
-const RiderLayout = () => {
+const Layout = () => {
   const { user } = useAuthContext();
   const { makeRequest, location, keyboardVisible, theme } = useCoreContext();
 
@@ -15,30 +15,7 @@ const RiderLayout = () => {
   const [rider, setRider] = useState("");
 
   useEffect(() => {
-    const verifyRider = async () => {
-      if (!user || !user.isRider) {
-        setShowLogin(true);
-        return;
-      }
-      try {
-        const data = await makeRequest({
-          url: `/api/rider/user/${user._id}`,
-          method: "GET",
-        });
 
-        if (data.success) {
-          setRiderName(data.rider.name || user.name);
-          setRider(data.rider);
-          setShowLogin(false);
-        } else {
-          toast.error("Not a valid rider account");
-          setShowLogin(true);
-        }
-      } catch (error) {
-        toast.error("Failed to verify rider");
-        setShowLogin(true);
-      }
-    };
     verifyRider();
   }, [user, makeRequest]);
 
@@ -122,4 +99,4 @@ const RiderLayout = () => {
   );
 };
 
-export default RiderLayout;
+export default Layout;

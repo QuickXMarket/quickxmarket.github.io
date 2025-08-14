@@ -168,22 +168,17 @@ const Login = () => {
       setWishList(wishListData);
     }
 
-    setIsSeller(data.user.isSeller);
     setIsRider(data.user.isRider || false);
-    if (location.pathname !== "/seller") navigate("/");
+    navigate("/order");
   };
 
   return (
-    <div
-      onClick={() => setShowUserLogin(false)}
-      className="fixed inset-0 z-30 flex items-center justify-center bg-black/60"
-    >
+    <div className="min-h-screen w-full bg-background flex items-center justify-center px-4">
       <form
         onSubmit={(e) =>
           state !== "forgotPassword" ? onSubmitHandler(e) : sendResetEmail(e)
         }
-        onClick={(e) => e.stopPropagation()}
-        className="flex flex-col gap-5 w-[90%] max-w-sm p-8 rounded-2xl shadow-2xl border border-gray-200 bg-background  transition-all"
+        className="flex flex-col gap-5 w-full max-w-sm p-8 rounded-2xl shadow-2xl border border-gray-200 bg-white dark:bg-background transition-all"
       >
         <p className="text-2xl font-semibold text-center text-gray-800 dark:text-white">
           <span className="text-primary">User</span>{" "}
@@ -196,7 +191,7 @@ const Login = () => {
 
         {state === "register" && (
           <div className="w-full">
-            <label className="text-sm font-medium text-gray-700 ">Name</label>
+            <label className="text-sm font-medium text-gray-700">Name</label>
             <input
               onChange={(e) => setName(e.target.value)}
               value={name}
@@ -210,13 +205,13 @@ const Login = () => {
         )}
 
         <div className="w-full">
-          <label className="text-sm font-medium text-gray-700 ">Email</label>
+          <label className="text-sm font-medium text-gray-700">Email</label>
           <input
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             disabled={loading}
             placeholder="Email Address"
-            className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200  dark:text-text"
+            className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
             type="email"
             required
           />
@@ -224,7 +219,7 @@ const Login = () => {
 
         {state !== "forgotPassword" && (
           <div className="w-full">
-            <label className="text-sm font-medium text-gray-700 ">
+            <label className="text-sm font-medium text-gray-700">
               Password
             </label>
             <input
@@ -252,6 +247,7 @@ const Login = () => {
             )}
           </div>
         )}
+
         {state === "login" && (
           <p
             className="text-sm text-right text-primary hover:underline cursor-pointer -mt-3"
@@ -287,6 +283,7 @@ const Login = () => {
             ? "Login"
             : "Send Reset Email"}
         </button>
+
         <div
           ref={googleButtonRef}
           onClick={handleGoogleLogin}

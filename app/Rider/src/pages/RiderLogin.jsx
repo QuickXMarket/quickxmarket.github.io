@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { useAuthContext } from "../../context/AuthContext";
-import { useCoreContext } from "../../context/CoreContext";
+import { useAuthContext } from "../context/AuthContext";
+import { useCoreContext } from "../context/CoreContext";
 
 const RiderLogin = () => {
   const { setShowRiderLogin, user, setIsRider } = useAuthContext();
@@ -92,13 +92,9 @@ const RiderLogin = () => {
   };
 
   return (
-    <div
-      onClick={handleClose}
-      className="fixed inset-0 z-30 flex items-center justify-center bg-black/60"
-    >
+    <div className="min-h-screen w-full bg-background flex items-center justify-center px-4">
       <form
         onSubmit={onSubmitHandler}
-        onClick={(e) => e.stopPropagation()}
         className="flex flex-col gap-5 w-[90%] max-w-sm p-8 rounded-2xl shadow-2xl border border-gray-200 bg-background transition-all"
       >
         <p className="text-xl font-semibold text-center text-gray-800 dark:text-white">

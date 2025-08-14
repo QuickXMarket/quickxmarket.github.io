@@ -1,7 +1,7 @@
 import React from "react";
 import { useOutletContext } from "react-router-dom";
 
-const RiderProfile = () => {
+const Profile = () => {
   const { rider } = useOutletContext();
 
   return (
@@ -83,4 +83,4 @@ const RiderProfile = () => {
   );
 };
 
-export default RiderProfile;
+export default Profile;
