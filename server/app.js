@@ -23,7 +23,10 @@ import { paystackWebhooks } from "./controllers/paymentController.js";
 import chatRouter from "./routes/chatRoute.js";
 import dispatchRouter from "./routes/dispatchRoute.js";
 import adminRouter from "./routes/adminRoute.js";
-import axios from "axios";
+import {
+  incomingWhatsappMSG,
+  whatsappWebhook,
+} from "./bots/Whatsapp/client.js";
 
 await connectDB();
 await connectCloudinary();
@@ -54,6 +57,8 @@ app.get("/", (req, res) => res.send("API is Working"));
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
+app.get("/whatsapp-webhook", whatsappWebhook);
+app.post("/whatsapp-webhook", incomingWhatsappMSG);
 
 app.use("/api/user", userRouter);
 app.use("/api/seller", sellerRouter);
@@ -71,6 +76,5 @@ app.use("/api/sms", smsRouter);
 app.use("/api/wallet", walletRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/chat", chatRouter);
-
 
 export default app;

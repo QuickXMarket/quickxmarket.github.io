@@ -1,0 +1,12 @@
+[
+  {
+    "lan": "en",
+    "utterance": "I want to send a package from %from% to %to%",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Send a parcel from %from% to %to%",
+    "intent": "dispatch"
+  }
+]

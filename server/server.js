@@ -5,6 +5,7 @@ import { toggleOnlineStatus } from "./controllers/userController.js";
 import { notifyParticipants } from "./controllers/chatController.js";
 import { startVendorToggleCron } from "./cron/toggleVendorStatus.js";
 import { getBalance } from "./controllers/paystackController.js";
+import { trainModel } from "./bots/nlp/train.js";
 
 const server = createServer(app);
 
@@ -53,10 +54,9 @@ server.listen(process.env.PORT || 4000, () => {
   );
 });
 
-
-
 startVendorToggleCron();
 getBalance();
+trainModel();
 
 export default server;
 export { io };

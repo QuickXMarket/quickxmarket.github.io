@@ -5,7 +5,7 @@ import { useAuthContext } from "../context/AuthContext";
 import DispatchCard from "../components/DispatchCard";
 import toast from "react-hot-toast";
 
-const Dispatch = () => {
+const Errand = () => {
   const { navigate, axios } = useCoreContext();
   const { user } = useAuthContext();
   const [activeTab, setActiveTab] = useState("ongoing");
@@ -49,7 +49,7 @@ const Dispatch = () => {
   return (
     <div className="mt-16 pb-16">
       <div className="flex flex-col items-end w-max">
-        <p className="text-2xl font-medium uppercase">Dispatch Orders</p>
+        <p className="text-2xl font-medium uppercase">Errands</p>
         <div className="w-16 h-0.5 bg-primary rounded-full"></div>
       </div>
       <div className="py-2 w-full max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto px-4 min-h-[300px]">
@@ -103,7 +103,7 @@ const Dispatch = () => {
       {/* Floating Button */}
       <div className="fixed bottom-22 right-6 sm:right-10 lg:right-14 z-50 ">
         <button
-          onClick={() => navigate("/dispatch-request")}
+          onClick={() => navigate("/errand-request")}
           className="bg-primary hover:bg-primary/90 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl cursor-pointer"
         >
           <PlusIcon className={"w-10 h-10"} />
@@ -113,4 +113,4 @@ const Dispatch = () => {
   );
 };
 
-export default Dispatch;
+export default Errand;

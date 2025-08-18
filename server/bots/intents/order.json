@@ -1,0 +1,7 @@
+[
+  {
+    "lan": "en",
+    "utterance": "I want to order %item% to %to%",
+    "intent": "order"
+  }
+]

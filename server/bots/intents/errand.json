@@ -1,0 +1,7 @@
+[
+  {
+    "lan": "en",
+    "utterance": "Buy %item% from %from% and deliver to %to%",
+    "intent": "errand"
+  }
+]

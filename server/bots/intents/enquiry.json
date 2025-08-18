@@ -1,0 +1,7 @@
+[
+  {
+    "lan": "en",
+    "utterance": "How much would it cost to send a package from %from% to %to%",
+    "intent": "enquiry"
+  }
+]
