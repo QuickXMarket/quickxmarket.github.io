@@ -19,7 +19,7 @@ const InputField = ({ type, placeholder, name, handleChange, address }) => (
 
 const AddAddress = () => {
   const { axios, navigate, fuse } = useCoreContext();
-  const { user } = useAuthContext();
+  const { user, setShowUserLogin } = useAuthContext();
 
   const [address, setAddress] = useState({
     firstName: "",
@@ -124,7 +124,7 @@ const AddAddress = () => {
 
       if (data.success) {
         toast.success(data.message);
-        navigate("/cart");
+        navigate(-1);
       } else {
         toast.error(data.message);
       }
@@ -135,7 +135,8 @@ const AddAddress = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate("/cart");
+      navigate(-1);
+      setShowUserLogin(true);
     }
   }, []);
 
@@ -219,7 +220,7 @@ const AddAddress = () => {
           </form>
         </div>
         <img
-          className="md:mr-16 mb-16 md:mt-0"
+          className="md:mr-16 mb-16 md:mt-0 flex-1"
           src={assets.add_address_iamge}
           alt="Add Address"
         />

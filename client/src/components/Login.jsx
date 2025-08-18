@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 const Login = () => {
-  const { setShowUserLogin, setUser, setIsSeller } = useAuthContext();
+  const { setShowUserLogin, setUser } = useAuthContext();
   const { axios, navigate, location } = useCoreContext();
   const { setCartItems, setWishList, wishList, cartItems } =
     useProductContext();
@@ -147,11 +147,9 @@ const Login = () => {
       setWishList(wishListData);
     }
 
-    setIsSeller(data.user.isSeller);
-
-    if (location.pathname !== "/seller") {
-      navigate("/");
-    }
+    // if (location.pathname !== "/seller") {
+    //   navigate("/");
+    // }
   };
 
   return (

@@ -52,7 +52,7 @@ const Dispatch = () => {
         {/* Top Tabs */}
         <div className="flex justify-between border-b border-gray-300 mb-4 text-sm sm:text-base">
           <button
-            className={`flex-1 text-center py-2 font-medium transition-colors ${
+            className={`flex-1 text-center py-2 font-medium transition-colors cursor-pointer ${
               activeTab === "ongoing"
                 ? "border-b-2 border-primary text-primary"
                 : "text-gray-500"
@@ -62,7 +62,7 @@ const Dispatch = () => {
             Ongoing Orders
           </button>
           <button
-            className={`flex-1 text-center py-2 font-medium transition-colors ${
+            className={`flex-1 text-center py-2 font-medium transition-colors cursor-pointer ${
               activeTab === "completed"
                 ? "border-b-2 border-primary text-primary"
                 : "text-gray-500"
@@ -98,10 +98,10 @@ const Dispatch = () => {
       </div>
 
       {/* Floating Button */}
-      <div className="fixed bottom-22 right-6 sm:right-10 lg:right-14 z-50">
+      <div className="fixed bottom-22 right-6 sm:right-10 lg:right-14 z-50 ">
         <button
           onClick={() => navigate("/dispatch-request")}
-          className="bg-primary hover:bg-primary/90 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl"
+          className="bg-primary hover:bg-primary/90 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl cursor-pointer"
         >
           <PlusIcon className={"w-10 h-10"} />
         </button>

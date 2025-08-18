@@ -96,14 +96,14 @@ const App = () => {
         </Routes>
       </div>
       {!isContactPath && user && (
-        <div className="fixed bottom-6 right-6 sm:right-10 lg:right-14 z-50">
+        <div className="fixed bottom-6 right-6 sm:right-10 lg:right-14 z-50 ">
           <button
             onClick={() => {
               if (user) {
                 setShowChatModal(true);
               }
             }}
-            className="bg-primary hover:bg-primary/90 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl"
+            className="bg-primary hover:bg-primary/90 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl cursor-pointer"
           >
             <ChatDotIcon className={"w-8 h-8"} />
           </button>
