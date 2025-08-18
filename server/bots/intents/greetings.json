@@ -1,0 +1,488 @@
+[
+  {
+    "lan": "en",
+    "utterance": "Hi",
+    "intent": "greet.hello",
+    "answer": "Hello! How's your day going?"
+  },
+  {
+    "lan": "en",
+    "utterance": "Hello",
+    "intent": "greet.hello",
+    "answer": "Hi there! Nice to see you."
+  },
+  {
+    "lan": "en",
+    "utterance": "Hey",
+    "intent": "greet.hello",
+    "answer": "Hey! How are you doing today?"
+  },
+  {
+    "lan": "en",
+    "utterance": "Good morning",
+    "intent": "greet.morning",
+    "answer": "Good morning! I hope your day starts well."
+  },
+  {
+    "lan": "en",
+    "utterance": "Morning!",
+    "intent": "greet.morning",
+    "answer": "Morning! Did you sleep well?"
+  },
+  {
+    "lan": "en",
+    "utterance": "Good afternoon",
+    "intent": "greet.afternoon",
+    "answer": "Good afternoon! How's your day so far?"
+  },
+  {
+    "lan": "en",
+    "utterance": "Good evening",
+    "intent": "greet.evening",
+    "answer": "Good evening! Hope your day was good."
+  },
+  {
+    "lan": "en",
+    "utterance": "Good night",
+    "intent": "greet.night",
+    "answer": "Good night! Sleep well and take care."
+  },
+  {
+    "lan": "en",
+    "utterance": "How are you?",
+    "intent": "ask.wellbeing",
+    "answer": "I'm doing great, thanks! How about you?"
+  },
+  {
+    "lan": "en",
+    "utterance": "How's it going?",
+    "intent": "ask.wellbeing",
+    "answer": "It's going well! How's everything with you?"
+  },
+  {
+    "lan": "en",
+    "utterance": "How are you doing?",
+    "intent": "ask.wellbeing",
+    "answer": "I'm good, thanks for asking! And you?"
+  },
+  {
+    "lan": "en",
+    "utterance": "What's up?",
+    "intent": "ask.casual",
+    "answer": "Not much, just here to chat with you!"
+  },
+  {
+    "lan": "en",
+    "utterance": "What's going on?",
+    "intent": "ask.casual",
+    "answer": "All good here! What about you?"
+  },
+  {
+    "lan": "en",
+    "utterance": "Long time no see",
+    "intent": "greet.reunion",
+    "answer": "Yeah, it's been a while! How have you been?"
+  },
+  {
+    "lan": "en",
+    "utterance": "Nice to meet you",
+    "intent": "greet.meet",
+    "answer": "Nice to meet you too! Looking forward to chatting."
+  },
+  {
+    "lan": "en",
+    "utterance": "Pleased to meet you",
+    "intent": "greet.meet",
+    "answer": "The pleasure is mine!"
+  },
+  {
+    "lan": "en",
+    "utterance": "How's your day?",
+    "intent": "ask.day",
+    "answer": "My day's been great, thanks for asking!"
+  },
+  {
+    "lan": "en",
+    "utterance": "How's life?",
+    "intent": "ask.life",
+    "answer": "Life's going well! How about you?"
+  },
+  {
+    "lan": "en",
+    "utterance": "How's everything?",
+    "intent": "ask.general",
+    "answer": "Everything's good! How are things with you?"
+  },
+  {
+    "lan": "en",
+    "utterance": "How have you been?",
+    "intent": "ask.wellbeing",
+    "answer": "I've been good, thanks for checking!"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Take care",
+    "intent": "farewell",
+    "answer": "You too, take care of yourself!"
+  },
+  {
+    "lan": "en",
+    "utterance": "See you later",
+    "intent": "farewell",
+    "answer": "See you! Don't be a stranger."
+  },
+  {
+    "lan": "en",
+    "utterance": "Catch you later",
+    "intent": "farewell",
+    "answer": "Sure thing! Talk soon."
+  },
+  {
+    "lan": "en",
+    "utterance": "Bye",
+    "intent": "farewell",
+    "answer": "Goodbye! Talk soon."
+  },
+  {
+    "lan": "en",
+    "utterance": "Goodbye",
+    "intent": "farewell",
+    "answer": "Goodbye! Hope to chat again soon."
+  },
+  {
+    "lan": "en",
+    "utterance": "See you tomorrow",
+    "intent": "farewell",
+    "answer": "Sure! Have a great night."
+  },
+  {
+    "lan": "en",
+    "utterance": "Later!",
+    "intent": "farewell",
+    "answer": "Later! Stay safe."
+  },
+  {
+    "lan": "en",
+    "utterance": "I gotta go",
+    "intent": "farewell",
+    "answer": "Alright! Take care and see you soon."
+  },
+  {
+    "lan": "en",
+    "utterance": "Talk to you soon",
+    "intent": "farewell",
+    "answer": "Absolutely! Looking forward to it."
+  },
+  {
+    "lan": "en",
+    "utterance": "Peace out",
+    "intent": "farewell",
+    "answer": "Peace! Catch you later."
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Thank you",
+    "intent": "thanks",
+    "answer": "You're welcome!"
+  },
+  {
+    "lan": "en",
+    "utterance": "Thanks a lot",
+    "intent": "thanks",
+    "answer": "Anytime, happy to help."
+  },
+  {
+    "lan": "en",
+    "utterance": "Thanks!",
+    "intent": "thanks",
+    "answer": "No worries, anytime!"
+  },
+  {
+    "lan": "en",
+    "utterance": "Thanks so much",
+    "intent": "thanks",
+    "answer": "You're very welcome."
+  },
+  {
+    "lan": "en",
+    "utterance": "Thanks a million",
+    "intent": "thanks",
+    "answer": "Glad I could help!"
+  },
+  {
+    "lan": "en",
+    "utterance": "Much appreciated",
+    "intent": "thanks",
+    "answer": "It's my pleasure!"
+  },
+  {
+    "lan": "en",
+    "utterance": "I appreciate it",
+    "intent": "thanks",
+    "answer": "No problem at all."
+  },
+  {
+    "lan": "en",
+    "utterance": "Cheers",
+    "intent": "thanks",
+    "answer": "Cheers! Glad to help."
+  },
+  {
+    "lan": "en",
+    "utterance": "Big thanks",
+    "intent": "thanks",
+    "answer": "You're most welcome."
+  },
+  {
+    "lan": "en",
+    "utterance": "Thanks buddy",
+    "intent": "thanks",
+    "answer": "You got it!"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Welcome",
+    "intent": "response.thanks",
+    "answer": "Anytime, that's what I'm here for!"
+  },
+  {
+    "lan": "en",
+    "utterance": "You're welcome",
+    "intent": "response.thanks",
+    "answer": "Always happy to help."
+  },
+  {
+    "lan": "en",
+    "utterance": "No problem",
+    "intent": "response.thanks",
+    "answer": "Not a problem at all!"
+  },
+  {
+    "lan": "en",
+    "utterance": "Don't mention it",
+    "intent": "response.thanks",
+    "answer": "Of course, anytime."
+  },
+  {
+    "lan": "en",
+    "utterance": "Sure thing",
+    "intent": "response.thanks",
+    "answer": "Sure! Glad it worked out."
+  },
+  {
+    "lan": "en",
+    "utterance": "It's nothing",
+    "intent": "response.thanks",
+    "answer": "No worries at all!"
+  },
+  {
+    "lan": "en",
+    "utterance": "Glad to help",
+    "intent": "response.thanks",
+    "answer": "Always happy to help."
+  },
+  {
+    "lan": "en",
+    "utterance": "Anytime",
+    "intent": "response.thanks",
+    "answer": "You can always count on me."
+  },
+  {
+    "lan": "en",
+    "utterance": "Of course",
+    "intent": "response.thanks",
+    "answer": "Of course, happy to do so."
+  },
+  {
+    "lan": "en",
+    "utterance": "My pleasure",
+    "intent": "response.thanks",
+    "answer": "The pleasure's mine."
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Excuse me",
+    "intent": "polite.attention",
+    "answer": "Yes? How can I help?"
+  },
+  {
+    "lan": "en",
+    "utterance": "Sorry to bother you",
+    "intent": "polite.attention",
+    "answer": "Not a bother at all!"
+  },
+  {
+    "lan": "en",
+    "utterance": "Pardon me",
+    "intent": "polite.attention",
+    "answer": "Yes, go ahead."
+  },
+  {
+    "lan": "en",
+    "utterance": "Sorry",
+    "intent": "apology",
+    "answer": "It's alright, no worries."
+  },
+  {
+    "lan": "en",
+    "utterance": "My bad",
+    "intent": "apology",
+    "answer": "It's okay, don't worry about it."
+  },
+  {
+    "lan": "en",
+    "utterance": "I'm sorry",
+    "intent": "apology",
+    "answer": "No problem, I forgive you."
+  },
+  {
+    "lan": "en",
+    "utterance": "Forgive me",
+    "intent": "apology",
+    "answer": "It's fine, don't worry."
+  },
+  {
+    "lan": "en",
+    "utterance": "Oops",
+    "intent": "apology",
+    "answer": "It happens, no problem."
+  },
+  {
+    "lan": "en",
+    "utterance": "Apologies",
+    "intent": "apology",
+    "answer": "No worries, it's all good."
+  },
+  {
+    "lan": "en",
+    "utterance": "I didn't mean that",
+    "intent": "apology",
+    "answer": "It's okay, I understand."
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Congratulations",
+    "intent": "congrats",
+    "answer": "Thank you! That means a lot."
+  },
+  {
+    "lan": "en",
+    "utterance": "Congrats",
+    "intent": "congrats",
+    "answer": "Thanks! Appreciate it."
+  },
+  {
+    "lan": "en",
+    "utterance": "Well done",
+    "intent": "congrats",
+    "answer": "Thank you! I worked hard for it."
+  },
+  {
+    "lan": "en",
+    "utterance": "Nice work",
+    "intent": "congrats",
+    "answer": "Thanks! Glad you noticed."
+  },
+  {
+    "lan": "en",
+    "utterance": "Good job",
+    "intent": "congrats",
+    "answer": "Thank you very much!"
+  },
+  {
+    "lan": "en",
+    "utterance": "Proud of you",
+    "intent": "congrats",
+    "answer": "Thanks, that means a lot."
+  },
+  {
+    "lan": "en",
+    "utterance": "Kudos",
+    "intent": "congrats",
+    "answer": "Thanks a bunch!"
+  },
+  {
+    "lan": "en",
+    "utterance": "That's awesome",
+    "intent": "congrats",
+    "answer": "I'm glad you think so!"
+  },
+  {
+    "lan": "en",
+    "utterance": "Amazing job",
+    "intent": "congrats",
+    "answer": "Thank you!"
+  },
+  {
+    "lan": "en",
+    "utterance": "Hats off",
+    "intent": "congrats",
+    "answer": "Thanks a lot!"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Best of luck",
+    "intent": "goodluck",
+    "answer": "Thanks! I'll do my best."
+  },
+  {
+    "lan": "en",
+    "utterance": "Good luck",
+    "intent": "goodluck",
+    "answer": "Thank you, I'll need it!"
+  },
+  {
+    "lan": "en",
+    "utterance": "Fingers crossed",
+    "intent": "goodluck",
+    "answer": "Hope it works out well!"
+  },
+  {
+    "lan": "en",
+    "utterance": "Wish you the best",
+    "intent": "goodluck",
+    "answer": "That's kind, thank you!"
+  },
+  {
+    "lan": "en",
+    "utterance": "Break a leg",
+    "intent": "goodluck",
+    "answer": "Thanks! I'll give it my all."
+  },
+  {
+    "lan": "en",
+    "utterance": "All the best",
+    "intent": "goodluck",
+    "answer": "Appreciate it! Thank you."
+  },
+  {
+    "lan": "en",
+    "utterance": "Hope it goes well",
+    "intent": "goodluck",
+    "answer": "Fingers crossed, thanks!"
+  },
+  {
+    "lan": "en",
+    "utterance": "Good wishes",
+    "intent": "goodluck",
+    "answer": "Thanks, that means a lot."
+  },
+  {
+    "lan": "en",
+    "utterance": "Wishing you success",
+    "intent": "goodluck",
+    "answer": "Thank you kindly!"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do well",
+    "intent": "goodluck",
+    "answer": "I will, thank you!"
+  }
+]

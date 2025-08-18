@@ -36,6 +36,7 @@
     "node-nlp": "^5.0.0-alpha.5",
     "nodemailer": "^7.0.3",
     "openai": "^5.12.2",
+    "path": "^0.12.7",
     "socket.io": "^4.8.1",
     "stripe": "^17.7.0"
   },

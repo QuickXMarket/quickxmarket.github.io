@@ -1,5 +1,5 @@
 import axios from "axios";
-import { NLPmanager } from "../nlp/manager.js";
+import { NLPmanager, onMessageReceived } from "../NLP/manager.js";
 
 const VERIFY_TOKEN = "my_verify_token";
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
@@ -26,14 +26,9 @@ export const incomingWhatsappMSG = async (req, res) => {
     const changes = body.entry[0].changes[0].value;
     if (changes.messages && changes.messages[0]) {
       const msg = changes.messages[0];
-      console.log(msg);
-      // const textMessage=
-      const response = await NLPmanager.process("en", msg.text.body);
-      console.log(response);
-      sendMessage(msg.from, response.answer);
-      if (!messageHandler) {
-        messageHandler = msg;
-      }
+      const from = msg.from;
+      const text = msg.text?.body;
+      onMessageReceived(from, text);
     }
     res.sendStatus(200);
   } else {
@@ -41,7 +36,7 @@ export const incomingWhatsappMSG = async (req, res) => {
   }
 };
 
-export const sendMessage = async (to, text) => {
+export const sendWhatsappMessage = async (to, text) => {
   try {
     const url = `https://graph.facebook.com/v20.0/${PHONE_NUMBER_ID}/messages`;
 

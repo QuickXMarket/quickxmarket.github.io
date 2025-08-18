@@ -1,11 +1,12 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
-import app from "./app.js"; // move your entire app setup into app.js
+import app from "./app.js"; 
 import { toggleOnlineStatus } from "./controllers/userController.js";
 import { notifyParticipants } from "./controllers/chatController.js";
 import { startVendorToggleCron } from "./cron/toggleVendorStatus.js";
 import { getBalance } from "./controllers/paystackController.js";
-import { trainModel } from "./bots/nlp/train.js";
+import { trainModel } from "./bots/NLP/train.js";
+import { loadModel } from "./bots/NLP/manager.js";
 
 const server = createServer(app);
 
@@ -56,7 +57,8 @@ server.listen(process.env.PORT || 4000, () => {
 
 startVendorToggleCron();
 getBalance();
-trainModel();
+loadModel();
+// trainModel()
 
 export default server;
 export { io };

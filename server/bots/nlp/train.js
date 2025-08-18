@@ -3,12 +3,16 @@ import dispatchData from "../intents/dispatch.json" with { type: "json" };
 import errandData from "../intents/errand.json" with { type: "json" };
 import enquiryData from "../intents/enquiry.json" with { type: "json" };
 import orderData from "../intents/order.json" with { type: "json" };
+import greetingsData from "../intents/greetings.json" with { type: "json" };
+import confirmationData from "../intents/confirmation.json" with { type: "json" };
 
 const allIntents = [
   ...dispatchData,
   ...errandData,
   ...enquiryData,
   ...orderData,
+  ...greetingsData,
+  ...confirmationData
 ];
 
 export const trainModel = async () => {
@@ -20,6 +24,10 @@ export const trainModel = async () => {
 NLPmanager.addAnswer("en", "errand", "Got it, errand request.");
 NLPmanager.addAnswer("en", "enquiry", "Sure, let me calculate cost.");
 NLPmanager.addAnswer("en", "order", "Order request received.");
+
+for(const {intent, answer} of greetingsData){
+  NLPmanager.addAnswer("en", intent, answer);
+}
   await NLPmanager.train();
-  await NLPmanager.save();
+  await NLPmanager.save("./NLP/model.nlp");
 };
