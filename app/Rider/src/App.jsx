@@ -17,25 +17,26 @@ import { useAuthContext } from "./context/AuthContext";
 import { useCoreContext } from "./context/CoreContext";
 
 const App = () => {
-  const { showUserLogin, isRider, showRiderLogin, user, authLoading } =
-    useAuthContext();
+  const { isRider, user, authLoading } = useAuthContext();
   const { keyboardVisible, location, navigate } = useCoreContext();
 
   const isRiderPath = location.pathname.includes("rider");
   const isContactPath = location.pathname.includes("contact");
 
   const showBottomNav =
-    ["/order", "/wallet", "/profile"].includes(location.pathname) &&
+    ["/", "/wallet", "/profile"].includes(location.pathname) &&
     !keyboardVisible;
 
   useEffect(() => {
     const hideSplashScreen = async () => {
       await SplashScreen.hide();
     };
-    setTimeout(() => {
-      hideSplashScreen();
-    }, 1000);
-  }, []);
+    if (!authLoading) {
+      setTimeout(() => {
+        hideSplashScreen();
+      }, 1000);
+    }
+  }, [authLoading]);
 
   const params = new URLSearchParams(location.search);
   const contactParam = params.get("contact");
@@ -48,8 +49,7 @@ const App = () => {
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-background ">
-      {showUserLogin && <Login />}
-      {showRiderLogin && <RiderLogin />}
+      {!isContactPath && <Navbar />}
       <Toaster />
       <div
         className={
@@ -70,7 +70,7 @@ const App = () => {
           <Routes>
             {/* <Route path="/" element={<Home />} /> */}
 
-            <Route path="/order" element={<Orders />} />
+            <Route path="/" element={<Orders />} />
             <Route path="wallet" element={<Wallet />} />
             <Route path="profile" element={<Profile />} />
             <Route path="/contact" element={<Contact />} />

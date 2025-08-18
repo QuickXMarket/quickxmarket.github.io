@@ -17,7 +17,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div
-      className="bg-white rounded-lg shadow-md overflow-hidden group"
+      className="bg-white rounded-lg shadow-md overflow-hidden group max-w-[150px]"
       onClick={() => {
         navigate(`/products/${product.category.toLowerCase()}/${productId}`);
         scrollTo(0, 0);
@@ -26,7 +26,7 @@ const ProductCard = ({ product }) => {
       <div className="relative">
         <img
           alt={product.name}
-          className="w-full h-36 object-cover"
+          className="w-full h-28 object-cover"
           src={product.image[0]}
         />
         <div className="flex items-center justify-end w-full mt-2 absolute bottom-2">
@@ -44,13 +44,13 @@ const ProductCard = ({ product }) => {
           </div>
         </div>
       </div>
-      <div className="py-4 px-2 flex flex-col flex-grow">
-        <h3 className="text-lg font-medium text-gray-800 mt-1 truncate">
+      <div className="py-2 px-2 flex flex-col flex-grow">
+        <h3 className="text-base font-medium text-gray-800 mt-1 truncate">
           {product.name}
         </h3>
-        <div className="flex items-baseline mt-3 flex-wrap">
+        <div className="flex items-baseline mt- flex-wrap">
           {defaultOption.offerPrice && (
-            <span className="text-lg font-semibold text-gray-900">
+            <span className="text-base font-semibold text-gray-900">
               {currency}
               {defaultOption.offerPrice}
             </span>

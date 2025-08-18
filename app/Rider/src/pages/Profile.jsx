@@ -1,8 +1,8 @@
 import React from "react";
-import { useOutletContext } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
 
 const Profile = () => {
-  const { rider } = useOutletContext();
+  const { rider } = useAuthContext()
 
   return (
     <div className="p-4 max-w-3xl mx-auto space-y-6">

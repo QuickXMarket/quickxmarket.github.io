@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import OrderCard from "../components/OrderCard";
-import { useOutletContext } from "react-router-dom";
 import toast from "react-hot-toast";
 import PullToRefresh from "pulltorefreshjs";
 import { useCoreContext } from "../context/CoreContext";
 import DispatchCard from "../components/DispatchCard";
+import { useAuthContext } from "../context/AuthContext";
 
 const Orders = () => {
   const [activeTab, setActiveTab] = useState("pending");
@@ -12,10 +12,11 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [ongoingOrders, setOngoingOrders] = useState([]);
   const [pendingOrders, setPendingOrders] = useState([]);
-  const { rider } = useOutletContext();
+  const { rider } = useAuthContext();
   const containerRef = useRef();
 
   const fetchOrders = async () => {
+    console.log(rider);
     try {
       const [orderData, dispatchData] = await Promise.all([
         makeRequest({

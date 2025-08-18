@@ -34,6 +34,7 @@ import first_banner_image from "./1st_banner_image.png";
 import second_banner_image from "./2nd_banner_image.jpg";
 import third_banner_image from "./3rd_banner_image.jpg";
 import dispatch_banner from "./dispatch-banner-sm.png";
+import errand_banner from "./errand-banner.png";
 import QuickXMarket_Logo_Transparent from "./QuickXMarket_Logo_Transparent.png";
 import Favicon_rounded from "./Favicon2-rounded.png";
 import home_outline from "./house_outline.svg";
@@ -85,7 +86,8 @@ export const assets = {
   Slideshow_2,
   Slideshow_3,
   Slideshow_4,
-  dispatch_banner
+  dispatch_banner,
+  errand_banner
 };
 
 export const categories = [

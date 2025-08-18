@@ -14,7 +14,6 @@ import AccountIcon from "../assets/person-circle.svg?react";
 const Layout = () => {
   const { businessName, vendor } = useAuthContext();
   const { makeRequest, location, theme, navigate } = useCoreContext();
-  console.log(vendor);
 
   const sidebarLinks = [
     { name: "Orders", path: "/", icon: OrderIcon },

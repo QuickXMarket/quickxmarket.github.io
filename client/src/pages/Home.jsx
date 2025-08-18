@@ -4,17 +4,17 @@ import Categories from "../components/Categories";
 import BestSeller from "../components/BestSeller";
 import BottomBanner from "../components/BottomBanner";
 import NewsLetter from "../components/NewsLetter";
-import DispatchSection from "../components/DispatchSection";
+import Services from "../components/Services";
 
 const Home = () => {
   return (
     <div className="mt-10">
       <MainBanner />
-      <DispatchSection />
+      <Services />
       <Categories />
       <BestSeller />
       <BottomBanner />
-      <NewsLetter />
+      {/* <NewsLetter /> */}
     </div>
   );
 };

@@ -169,7 +169,7 @@ const Login = () => {
     }
 
     setIsRider(data.user.isRider || false);
-    navigate("/order");
+    navigate("/");
   };
 
   return (

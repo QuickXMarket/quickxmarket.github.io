@@ -6,13 +6,12 @@ import AccountIcon from "../assets/person-circle.svg?react";
 import ShopIcon from "../assets/shop.svg?react";
 import TruckIcon from "../assets/delivery-van.svg?react";
 import { useCoreContext } from "../context/CoreContext";
+import { House, Wallet, UserRound } from "lucide-react";
 
 const navItems = [
-  { name: "Home", path: "/", icon: HomeIcon },
-  { name: "Shops", path: "/shops", icon: ShopIcon },
-  { name: "Dispatch", path: "/dispatch", icon: TruckIcon },
-  { name: "Wishlist", path: "/wishlist", icon: WishlistIcon },
-  { name: "Account", path: "/account", icon: AccountIcon },
+  { name: "Home", path: "/", icon: House },
+  { name: "Wallet", path: "/wallet", icon: Wallet },
+  { name: "Profile", path: "/profile", icon: UserRound },
 ];
 
 const BottomNavbar = () => {

@@ -9,8 +9,6 @@ export const AuthProvider = ({ children }) => {
   const { makeRequest, navigate, Preferences } = useCoreContext();
   const [user, setUser] = useState(null);
   const [isRider, setIsRider] = useState(false);
-  const [showUserLogin, setShowUserLogin] = useState(false);
-  const [showRiderLogin, setShowRiderLogin] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
   const [rider, setRider] = useState(null);
 
@@ -120,10 +118,7 @@ export const AuthProvider = ({ children }) => {
     setUser,
     isRider,
     setIsRider,
-    showUserLogin,
-    setShowUserLogin,
-    showRiderLogin,
-    setShowRiderLogin,
+    rider,
     logout,
     fetchUser,
     authLoading,
