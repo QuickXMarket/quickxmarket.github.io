@@ -36,29 +36,76 @@ export const incomingWhatsappMSG = async (req, res) => {
   }
 };
 
-export const sendWhatsappMessage = async (to, text) => {
+export const sendWhatsappMessage = async (to, type, content) => {
   try {
     const url = `https://graph.facebook.com/v20.0/${PHONE_NUMBER_ID}/messages`;
 
-    const response = await axios.post(
-      url,
-      {
-        messaging_product: "whatsapp",
-        to,
-        type: "text",
-        text: { body: text },
+    const payload = {
+      messaging_product: "whatsapp",
+      to,
+      type,
+      [type]: content,
+    };
+
+    const response = await axios.post(url, payload, {
+      headers: {
+        Authorization: `Bearer ${WHATSAPP_TOKEN}`,
+        "Content-Type": "application/json",
       },
-      {
-        headers: {
-          Authorization: `Bearer ${WHATSAPP_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    });
 
     return response.data;
   } catch (err) {
     console.log("❌ Error sending message: " + err.message);
     throw err;
   }
+};
+
+export const buildInteractiveMessage = ({
+  type,
+  headerText,
+  bodyText,
+  footerText,
+  buttonText,
+  options,
+}) => {
+  if (type === "list") {
+    return {
+      type: "list",
+      header: { type: "text", text: headerText || "" },
+      body: { text: bodyText || "" },
+      footer: { text: footerText || "" },
+      action: {
+        button: buttonText || "Select",
+        sections: options.map((section) => ({
+          title: section.title,
+          rows: section.rows.map((row) => ({
+            id: row.id,
+            title: row.title,
+            description: row.description || "",
+          })),
+        })),
+      },
+    };
+  }
+
+  if (type === "buttons") {
+    return {
+      type: "button",
+      header: { type: "text", text: headerText || "" },
+      body: { text: bodyText || "" },
+      footer: { text: footerText || "" },
+      action: {
+        buttons: options.map((btn) => ({
+          type: "reply",
+          reply: {
+            id: btn.id,
+            title: btn.title,
+          },
+        })),
+      },
+    };
+  }
+
+  throw new Error("Unsupported interactive type: " + type);
 };

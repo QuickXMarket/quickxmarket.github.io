@@ -1,12 +1,128 @@
 [
   {
     "lan": "en",
-    "utterance": "I want to send a package from %from% to %to%",
+    "utterance": "I need to send a package",
     "intent": "dispatch"
   },
   {
     "lan": "en",
-    "utterance": "Send a parcel from %from% to %to%",
+    "utterance": "Can you deliver a parcel for me?",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "I want to ship something from %from% to %to%",
+    "intent": "dispatch"
+  },
+  { "lan": "en", "utterance": "Help me send a package", "intent": "dispatch" },
+  {
+    "lan": "en",
+    "utterance": "Dispatch a parcel from %from% to %to%",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Arrange a delivery for me",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "I want this sent from %from% to %to%",
+    "intent": "dispatch"
+  },
+  { "lan": "en", "utterance": "Can I send a parcel?", "intent": "dispatch" },
+  {
+    "lan": "en",
+    "utterance": "I need a delivery from %from% to %to%",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Please send a package for me",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Ship a parcel from %from% to %to%",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "I want a courier to pick up a package",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Send something from %from% to %to%",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "I need to dispatch a parcel",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can you arrange delivery?",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "I want to send this item",
+    "intent": "dispatch"
+  },
+  { "lan": "en", "utterance": "Please ship a package", "intent": "dispatch" },
+  {
+    "lan": "en",
+    "utterance": "Deliver a parcel from %from% to %to%",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "I need to send this from %from% to %to%",
+    "intent": "dispatch"
+  },
+  { "lan": "en", "utterance": "Book a dispatch for me", "intent": "dispatch" },
+  {
+    "lan": "en",
+    "utterance": "Can I request a courier?",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "I want to send a shipment",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Arrange a package delivery from %from% to %to%",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Schedule a parcel pickup",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "I want to send an envelope",
+    "intent": "dispatch"
+  },
+  { "lan": "en", "utterance": "I need courier service", "intent": "dispatch" },
+  {
+    "lan": "en",
+    "utterance": "Pick up a parcel from %from% and deliver to %to%",
+    "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Ship this package for me",
+    "intent": "dispatch"
+  },
+  { "lan": "en", "utterance": "I want delivery service", "intent": "dispatch" },
+  {
+    "lan": "en",
+    "utterance": "Send this item to someone",
     "intent": "dispatch"
   }
 ]

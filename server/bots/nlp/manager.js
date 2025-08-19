@@ -11,7 +11,11 @@ const __dirname = path.dirname(__filename);
 
 const convManager = new ConversationManager();
 
-export const NLPmanager = new NlpManager({ languages: ["en"], forceNER: true });
+export const NLPmanager = new NlpManager({
+  languages: ["en", "pcm"],
+  forceNER: true,
+  autoSave: true,
+});
 
 for (const [intent, steps] of Object.entries(flows)) {
   convManager.registerFlow(intent, steps);
@@ -29,7 +33,8 @@ export const loadModel = async () => {
 };
 
 export const onMessageReceived = async (userId, text) => {
-  const nlpResponse = await NLPmanager.process("en", text);
+  const nlpResponse = await NLPmanager.process(text);
   const reply = await convManager.handleMessage(userId, text, nlpResponse);
-  sendWhatsappMessage(userId, reply);
+  // console.log(nlpResponse, reply);
+  sendWhatsappMessage(userId, "text", { body: reply });
 };

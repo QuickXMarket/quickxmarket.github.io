@@ -1,3 +1,4 @@
+import { sendWhatsappMessage } from "../bots/Whatsapp/client.js";
 import Dispatch from "../models/Dispatch.js";
 import Rider from "../models/Rider.js";
 import { calculateDeliveryFee } from "../utils/deliveryService.js";
@@ -45,12 +46,24 @@ export const createNewDispatch = async (
       }
     }
 
-    await sendDispatchDeliveryCode(dispatch._id, dispatchData.deliveryCode, {
-      email: dispatchData.dropoff.email,
-      phone: dispatchData.dropoff.phone,
-      firstName: dispatchData.dropoff.firstName,
-      address: dispatchData.dropoff.address,
-    });
+    if (dispatchData.dropoff.email) {
+      await sendDispatchDeliveryCode(dispatch._id, dispatchData.deliveryCode, {
+        email: dispatchData.dropoff.email,
+        phone: dispatchData.dropoff.phone,
+        firstName: dispatchData.dropoff.firstName,
+        address: dispatchData.dropoff.address,
+      });
+    } else {
+      const customerMsg = `✅ Your dispatch request has been received. Our riders have been alerted and will soon pick up your package.\n\nTracking ID: ${dispatch._id}`;
+      const recipientMsg = `📦 A delivery is on its way to you!\n\nDelivery Code: ${dispatchData.deliveryCode}\nPlease provide this code to the rider upon receiving your package.`;
+
+      sendWhatsappMessage(dispatchData.dropoff.phone, "text", {
+        body: recipientMsg,
+      });
+      sendWhatsappMessage(dispatchData.pickupAddressDetails.phone, "text", {
+        body: customerMsg,
+      });
+    }
 
     res.json({ received: true });
   } catch (err) {

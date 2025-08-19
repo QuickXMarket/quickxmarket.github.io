@@ -484,5 +484,91 @@
     "utterance": "Do well",
     "intent": "goodluck",
     "answer": "I will, thank you!"
-  }
+  },
+  [
+    {
+      "lan": "en",
+      "utterance": "I'm fine",
+      "intent": "response.wellbeing.positive",
+      "answer": "Glad to hear that! How can I help you today?"
+    },
+    {
+      "lan": "en",
+      "utterance": "Doing well",
+      "intent": "response.wellbeing.positive",
+      "answer": "That's great! What can I do for you today?"
+    },
+    {
+      "lan": "en",
+      "utterance": "I'm good, thanks",
+      "intent": "response.wellbeing.positive",
+      "answer": "Happy to know you're doing well! How may I assist you?"
+    },
+    {
+      "lan": "en",
+      "utterance": "Not bad",
+      "intent": "response.wellbeing.neutral",
+      "answer": "Fair enough! Is there something you'd like help with today?"
+    },
+    {
+      "lan": "en",
+      "utterance": "So-so",
+      "intent": "response.wellbeing.neutral",
+      "answer": "I get that! How can I be of help today?"
+    },
+    {
+      "lan": "en",
+      "utterance": "Could be better",
+      "intent": "response.wellbeing.negative",
+      "answer": "Sorry to hear that. Hope things get better soon! Is there anything I can do for you today?"
+    },
+    {
+      "lan": "en",
+      "utterance": "Not great",
+      "intent": "response.wellbeing.negative",
+      "answer": "I'm sorry you're not feeling great. Maybe I can help — what do you need today?"
+    },
+    {
+      "lan": "en",
+      "utterance": "I've been better",
+      "intent": "response.wellbeing.negative",
+      "answer": "Understandable. I'm here to help however I can. What can I do for you today?"
+    },
+    {
+      "lan": "en",
+      "utterance": "Pretty good, thanks",
+      "intent": "response.day.positive",
+      "answer": "That's nice to hear! So, how can I help you today?"
+    },
+    {
+      "lan": "en",
+      "utterance": "My day's been great",
+      "intent": "response.day.positive",
+      "answer": "Awesome! What brings you here today?"
+    },
+    {
+      "lan": "en",
+      "utterance": "It's been a long day",
+      "intent": "response.day.negative",
+      "answer": "I can imagine! Hopefully I can make things easier. What can I do for you today?"
+    },
+    {
+      "lan": "en",
+      "utterance": "Just relaxing",
+      "intent": "response.casual",
+      "answer": "That sounds nice! How can I help you today?"
+    },
+    {
+      "lan": "en",
+      "utterance": "Nothing much",
+      "intent": "response.casual",
+      "answer": "Got it! Is there something you'd like me to help you with?"
+    },
+    {
+      "lan": "en",
+      "utterance": "All good",
+      "intent": "response.general",
+      "answer": "Perfect! What can I do for you today?"
+    }
+  ]
 ]

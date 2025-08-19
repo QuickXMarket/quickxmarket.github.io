@@ -6,13 +6,19 @@ const dispatchSchema = new mongoose.Schema(
     pickupAddress: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "address",
-      required: true,
       immutable: true,
     },
+    pickupAddressDetails: {
+      name: { type: String },
+      phone: { type: String },
+      address: { type: String },
+      latitude: { type: Number },
+      longitude: { type: Number },
+      
+    },
     dropoff: {
-      firstName: { type: String, required: true },
-      lastName: { type: String, required: true },
-      email: { type: String, required: true },
+      name: { type: String, required: true },
+      email: { type: String },
       phone: { type: String, required: true },
       address: { type: String, required: true },
       latitude: { type: Number, required: true },

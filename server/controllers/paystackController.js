@@ -10,6 +10,7 @@ export const getBalance = async () => {
       },
     });
     if (data.status) {
+      
       console.log(data);
     }
   } catch (error) {

@@ -1,0 +1,152 @@
+[
+  {
+    "lan": "pcm",
+    "utterance": "How far",
+    "intent": "greet.hello",
+    "answer": "I dey well, how you dey?"
+  },
+  {
+    "lan": "pcm",
+    "utterance": "How you dey",
+    "intent": "greet.hello",
+    "answer": "I dey fine, I hope say you dey okay too."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "I hail o",
+    "intent": "greet.hello",
+    "answer": "I hail you back, my person."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "How body",
+    "intent": "ask.wellbeing",
+    "answer": "Body dey alright, I thank God."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "How tins",
+    "intent": "ask.wellbeing",
+    "answer": "Tins dey move well, how your own side?"
+  },
+  {
+    "lan": "pcm",
+    "utterance": "How your side",
+    "intent": "ask.general",
+    "answer": "My side calm, how your side dey?"
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Wetin dey happen",
+    "intent": "ask.casual",
+    "answer": "Nothing serious, I just dey steady."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Wetin dey sup",
+    "intent": "ask.casual",
+    "answer": "All dey okay, no wahala."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "E don tey",
+    "intent": "greet.reunion",
+    "answer": "True talk, e don really tey we see."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "No vex",
+    "intent": "apology",
+    "answer": "No problem, I no dey vex."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "I no mean am",
+    "intent": "apology",
+    "answer": "I understand, e no dey your mind like that."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Abeg",
+    "intent": "polite.attention",
+    "answer": "Yes, how I fit help you?"
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Sorry o",
+    "intent": "apology",
+    "answer": "No wahala, I don take am as nothing."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "You try",
+    "intent": "thanks",
+    "answer": "I appreciate, thank you too."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "You too much",
+    "intent": "thanks",
+    "answer": "Na your support make am possible."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Respect",
+    "intent": "thanks",
+    "answer": "Respect to you too."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "No wahala",
+    "intent": "response.thanks",
+    "answer": "Na small thing, e no hard."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Later",
+    "intent": "farewell",
+    "answer": "Alright, we go talk later."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "I dey go",
+    "intent": "farewell",
+    "answer": "Okay, make you go well."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "We go see",
+    "intent": "farewell",
+    "answer": "Yes, we go surely see again."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Make I dey go",
+    "intent": "farewell",
+    "answer": "Alright then, till next time."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Correct",
+    "intent": "compliment",
+    "answer": "You too correct, I appreciate."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Na so",
+    "intent": "agreement",
+    "answer": "Yes, na so e be."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Ehen",
+    "intent": "acknowledge",
+    "answer": "I dey hear you clearly."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "My guy",
+    "intent": "greet.familiar",
+    "answer": "My guy, I glad to hear from you."
+  }
+]

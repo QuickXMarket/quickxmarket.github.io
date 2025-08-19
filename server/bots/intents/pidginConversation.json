@@ -1,0 +1,349 @@
+[
+  {
+    "lan": "pcm",
+    "utterance": "How weather be today?",
+    "intent": "ask.weather",
+    "answer": "I no fit check weather direct, but I hope say e fine for your side."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "How e dey be for outside?",
+    "intent": "ask.weather",
+    "answer": "I no get live update, but I wish say sun dey shine for you."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Rain dey fall?",
+    "intent": "ask.weather",
+    "answer": "I no dey sure, but I hope say e dry small for your area."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Wetin be time now?",
+    "intent": "ask.time",
+    "answer": "I no carry clock, but I dey available any time you wan gist."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Check time for me",
+    "intent": "ask.time",
+    "answer": "I no dey keep time, but anytime you message me, I dey."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Abeg which time e be?",
+    "intent": "ask.time",
+    "answer": "I no sabi exact time, but I dey ready to help you always."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Where you dey stay?",
+    "intent": "ask.location",
+    "answer": "I no get physical house, I dey digital world but I dey with you."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Where you from?",
+    "intent": "ask.location",
+    "answer": "I dey from online world, but my focus na you."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Where be your base?",
+    "intent": "ask.location",
+    "answer": "I dey inside system, but I dey here to support you always."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Wetin be your name?",
+    "intent": "ask.name",
+    "answer": "I be your assistant. Abeg wetin be your own name?"
+  },
+  {
+    "lan": "pcm",
+    "utterance": "How dem dey call you?",
+    "intent": "ask.name",
+    "answer": "Dem dey call me assistant. How dem dey call you?"
+  },
+  {
+    "lan": "pcm",
+    "utterance": "You get name?",
+    "intent": "ask.name",
+    "answer": "Yes, my name na Assistant. Wetin be your own?"
+  },
+  {
+    "lan": "pcm",
+    "utterance": "How old you don reach?",
+    "intent": "ask.age",
+    "answer": "I no dey age like person, but I dey always active for you."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "You get age?",
+    "intent": "ask.age",
+    "answer": "I no dey grow old, na technology I be. But I dey loyal to you."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "How many years you don dey?",
+    "intent": "ask.age",
+    "answer": "I no dey count years, but I dey here steady for you."
+  },
+
+  {
+    "lan": "pcm",
+    "utterance": "Wetin be your best food?",
+    "intent": "ask.food",
+    "answer": "I no dey chop, but jollof rice and pizza dey popular for people."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Which food you like?",
+    "intent": "ask.food",
+    "answer": "I no dey eat, but I sabi say rice dey make sense for many people."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Na which food sweet pass for you?",
+    "intent": "ask.food",
+    "answer": "I no dey taste food, but I hear say suya dey always make sense."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "You dey drink coffee?",
+    "intent": "ask.drink",
+    "answer": "I no dey drink, but plenty people dey enjoy coffee well."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "You dey like tea?",
+    "intent": "ask.drink",
+    "answer": "I no dey drink am, but tea dey relax people body."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "You fit take beer?",
+    "intent": "ask.drink",
+    "answer": "I no dey drink anything, but I know say some people dey enjoy am for relax."
+  },
+
+  {
+    "lan": "pcm",
+    "utterance": "Wetin you dey do for fun?",
+    "intent": "ask.hobby",
+    "answer": "I enjoy to dey reason and chat with people like you."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "You get hobby?",
+    "intent": "ask.hobby",
+    "answer": "My own hobby na to dey answer questions and support people."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "How you dey relax?",
+    "intent": "ask.hobby",
+    "answer": "Na conversation dey be my own relaxation."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "You dey like music?",
+    "intent": "ask.music",
+    "answer": "I no dey listen, but I sabi say afrobeats dey sweet plenty people."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Which music dey your favorite?",
+    "intent": "ask.music",
+    "answer": "I no get favorite, but people dey enjoy different genre."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "You sabi sing?",
+    "intent": "ask.music",
+    "answer": "I no dey sing, but I fit gist you about music."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Which film you don watch?",
+    "intent": "ask.movies",
+    "answer": "I no dey watch film, but I hear say Nollywood and action dey trend."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "You sabi film?",
+    "intent": "ask.movies",
+    "answer": "I no dey watch, but I fit yarn you about plenty movies."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Which kind movie you dey enjoy?",
+    "intent": "ask.movies",
+    "answer": "I no dey enjoy movie, but I hear comedy dey make people happy."
+  },
+
+  {
+    "lan": "pcm",
+    "utterance": "Tell me joke",
+    "intent": "ask.joke",
+    "answer": "Why skeleton no dey fight? Because dem no get liver."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Make I hear joke",
+    "intent": "ask.joke",
+    "answer": "Okay, why fish no dey talk? Because e dey inside water full-time."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "You sabi any joke?",
+    "intent": "ask.joke",
+    "answer": "Yes! Why book no dey run? Because e get plenty cover."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Give me one fact",
+    "intent": "ask.fact",
+    "answer": "You sabi say honey no dey spoil even after many years?"
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Tell me something interesting",
+    "intent": "ask.fact",
+    "answer": "Ants fit carry weight wey big pass their body many times."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "You fit yarn better fact?",
+    "intent": "ask.fact",
+    "answer": "Banana na berry, but strawberry no be berry."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "How you see dogs?",
+    "intent": "ask.opinion",
+    "answer": "Dogs dey loyal and friendly. You like dogs?"
+  },
+  {
+    "lan": "pcm",
+    "utterance": "You like cats?",
+    "intent": "ask.opinion",
+    "answer": "Cats dey calm and independent. You dey like am?"
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Wetin you think about football?",
+    "intent": "ask.opinion",
+    "answer": "Football dey bring people together. You dey watch ball?"
+  },
+
+  {
+    "lan": "pcm",
+    "utterance": "Wetin you talk again?",
+    "intent": "ask.repeat",
+    "answer": "I talk say I dey here to help. You wan make I repeat?"
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Repeat yourself",
+    "intent": "ask.repeat",
+    "answer": "No wahala, I dey repeat: I dey available to assist you."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Say am again",
+    "intent": "ask.repeat",
+    "answer": "I go talk am again if you wan hear."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Wetin you fit do?",
+    "intent": "ask.help",
+    "answer": "I fit gist, answer small questions, and give support where I fit."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "How you fit help me?",
+    "intent": "ask.help",
+    "answer": "I fit assist with information and conversation wey go useful."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "You sabi do wetin?",
+    "intent": "ask.help",
+    "answer": "I sabi answer gist, small talk, and guide you."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "I finish for now",
+    "intent": "response.end",
+    "answer": "Alright, make you get better day."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "That’s all",
+    "intent": "response.end",
+    "answer": "Okay, till next time, take care."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Nothing more again",
+    "intent": "response.end",
+    "answer": "Alright then, I dey wish you well."
+  },
+
+  {
+    "lan": "pcm",
+    "utterance": "I appreciate you",
+    "intent": "thanks",
+    "answer": "Na small thing, I glad say I fit help."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Thank you well",
+    "intent": "thanks",
+    "answer": "You welcome, I dey always here for you."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Big thanks",
+    "intent": "thanks",
+    "answer": "E no be problem, na my work to support you."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "No vex if I disturb",
+    "intent": "apology",
+    "answer": "No wahala, I dey always ready to hear you."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Sorry if I stress you",
+    "intent": "apology",
+    "answer": "E no dey heavy me, I dey here for you."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Abeg pardon me",
+    "intent": "apology",
+    "answer": "Nothing spoil, we dey together."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "We go talk later",
+    "intent": "farewell",
+    "answer": "Yes, till next time, make you take care."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Bye bye",
+    "intent": "farewell",
+    "answer": "Alright, I go dey here when you return."
+  },
+  {
+    "lan": "pcm",
+    "utterance": "Good night",
+    "intent": "farewell",
+    "answer": "Sleep well, make you wake with better strength."
+  }
+]

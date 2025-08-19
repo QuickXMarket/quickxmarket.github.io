@@ -109,85 +109,103 @@ export const placeOrderPaystack = async (req, res) => {
   }
 };
 
+export const placeDispatchPaystackService = async (data, origin) => {
+  const {
+    userId,
+    pickupAddress,
+    dropoff,
+    deliveryNote,
+    isExpress,
+    email,
+    isNativeApp,
+  } = data;
+
+  const deliveryCode = Math.floor(1000 + Math.random() * 9000).toString();
+
+  let pickupAddressDetails;
+  let isObjectPickup = false;
+
+  // Resolve pickupAddress
+  if (typeof pickupAddress === "string" || pickupAddress instanceof String) {
+    pickupAddressDetails = await Address.findById(pickupAddress);
+  } else if (
+    pickupAddress &&
+    pickupAddress.latitude &&
+    pickupAddress.longitude
+  ) {
+    pickupAddressDetails = pickupAddress;
+    isObjectPickup = true;
+  }
+
+  const deliveryFee =
+    (await calculateDeliveryFee(
+      pickupAddressDetails.latitude,
+      pickupAddressDetails.longitude,
+      dropoff.latitude,
+      dropoff.longitude
+    )) * (isExpress ? 1.5 : 1);
+
+  const serviceFee = await calculateServiceFee(deliveryFee);
+  const totalFee = deliveryFee + serviceFee;
+
+  // Build dispatchData depending on pickupAddress type
+  const dispatchData = {
+    userId,
+    dropoff,
+    deliveryNote,
+    isExpress,
+    deliveryFee,
+    serviceFee,
+    totalFee,
+    paymentType: "online",
+    deliveryCode,
+    ...(isObjectPickup
+      ? { pickupAddressDetails } 
+      : { pickupAddress }),
+  };
+
+  const callback_url = isNativeApp
+    ? "quickxmarket://dispatch"
+    : `${origin}/loader?next=dispatch`;
+
+  const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
+
+  const paystackResponse = await axios.post(
+    "https://api.paystack.co/transaction/initialize",
+    {
+      email: email || `user_${userId}@quickxmarket.com.ng`,
+      amount: totalFee * 100,
+      metadata: { dispatchData, userId },
+      callback_url,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${paystackSecretKey}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!paystackResponse.data.status) {
+    throw new Error("Failed to initialize Paystack transaction");
+  }
+
+  return {
+    success: true,
+    url: paystackResponse.data.data.authorization_url,
+    reference: paystackResponse.data.data.reference,
+  };
+};
+
 export const placeDispatchPaystack = async (req, res) => {
   try {
-    const {
-      userId,
-      pickupAddress,
-      dropoff,
-      deliveryNote,
-      isExpress,
-      email,
-      isNativeApp,
-    } = req.body;
-
-    const { origin } = req.headers;
-
-    const deliveryCode = Math.floor(1000 + Math.random() * 9000).toString();
-    const pickupAddressDetails = await Address.findById(pickupAddress);
-
-    const deliveryFee =
-      (await calculateDeliveryFee(
-        pickupAddressDetails.latitude,
-        pickupAddressDetails.longitude,
-        dropoff.latitude,
-        dropoff.longitude
-      )) * (isExpress ? 1.5 : 1);
-    const serviceFee = await calculateServiceFee(deliveryFee);
-    const totalFee = deliveryFee + serviceFee;
-
-    const dispatchData = {
-      userId,
-      pickupAddress,
-      dropoff,
-      deliveryNote,
-      isExpress,
-      deliveryFee,
-      serviceFee,
-      totalFee,
-      paymentType: "online",
-      deliveryCode,
-    };
-
-    const callback_url = isNativeApp
-      ? "quickxmarket://dispatch"
-      : `${origin}/loader?next=dispatch`;
-
-    const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
-
-    const paystackResponse = await axios.post(
-      "https://api.paystack.co/transaction/initialize",
-      {
-        email,
-        amount: totalFee * 100,
-        metadata: {
-          dispatchData,
-          userId,
-        },
-        callback_url,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${paystackSecretKey}`,
-          "Content-Type": "application/json",
-        },
-      }
+    const result = await placeDispatchPaystackService(
+      req.body,
+      req.headers.origin
     );
-
-    if (paystackResponse.data.status) {
-      return res.json({
-        success: true,
-        url: paystackResponse.data.data.authorization_url,
-        reference: paystackResponse.data.data.reference,
-      });
-    } else {
-      return res.json({
-        success: false,
-        message: "Failed to initialize Paystack transaction",
-      });
-    }
+    res.json(result);
   } catch (err) {
-    return res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 

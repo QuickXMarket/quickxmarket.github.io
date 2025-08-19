@@ -70,7 +70,7 @@ export const CoreProvider = ({ children }) => {
       });
       if (data.success) {
         const fuseIndex = new Fuse(data.data, {
-          keys: ["display_name", "city", "country"],
+          keys: ["display_name", "street", "city", "country"],
           threshold: 0.3,
           includeScore: false,
           ignoreLocation: true,

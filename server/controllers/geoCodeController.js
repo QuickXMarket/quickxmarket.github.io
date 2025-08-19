@@ -80,25 +80,24 @@ async function loadGeoJsonData() {
       }
     });
   }
-  return geocodingData
 
-  // fuse = new Fuse(geocodingData, {
-  //   keys: ["display_name", "city", "country"],
-  //   threshold: 0.3,
-  //   includeScore: false,
-  //   ignoreLocation: true,
-  //   findAllMatches: true,
-  // });
+  fuse = new Fuse(geocodingData, {
+    keys: ["display_name", "street", "city", "country"],
+    threshold: 0.3,
+    includeScore: false,
+    ignoreLocation: true,
+    findAllMatches: true,
+  });
 
-  // isInitialized = true;
-  // console.log("GeoJSON data loaded and Fuse index built.");
-  // return fuse;
+  isInitialized = true;
+  console.log("GeoJSON data loaded and Fuse index built.");
+  return { fuse, geocodingData };
 }
 
 export const fetchAddresses = async (req, res) => {
   try {
-    const geocodingData = await loadGeoJsonData();
-    
+    const geocodingData = await loadGeoJsonData().geocodingData;
+
     res.json({ success: true, data: geocodingData });
   } catch (error) {
     console.error("Error loading GeoJSON data:", error);
