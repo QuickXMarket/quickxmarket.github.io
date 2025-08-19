@@ -8,6 +8,7 @@ import confirmationData from "../intents/confirmation.json" with { type: "json" 
 import conversationData from "../intents/conversation.json" with { type: "json" };
 import pidginGreetingsData from "../intents/pidginGreetings.json" with { type: "json" };
 import pidginConversationData from "../intents/pidginConversation.json" with { type: "json" };
+import { NlpManager } from "node-nlp";
 
 const allIntents = [
   ...dispatchData,
@@ -36,6 +37,7 @@ export const trainModel = async () => {
 NLPmanager.addAnswer("en", "errand", "Got it, errand request.");
 NLPmanager.addAnswer("en", "enquiry", "Sure, let me calculate cost.");
 NLPmanager.addAnswer("en", "order", "Order request received.");
+NLPmanager.addRegexEntity('code', 'en', /\b[a-f0-9]{24}\b/);
 
   await NLPmanager.train();
   await NLPmanager.save("./bots/NLP/model.nlp"); 

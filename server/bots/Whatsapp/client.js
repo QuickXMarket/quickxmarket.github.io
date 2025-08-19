@@ -56,8 +56,7 @@ export const sendWhatsappMessage = async (to, type, content) => {
 
     return response.data;
   } catch (err) {
-    console.log("❌ Error sending message: " + err.message);
-    throw err;
+    console.error("❌ Error sending message: " + err.message);
   }
 };
 
@@ -107,5 +106,5 @@ export const buildInteractiveMessage = ({
     };
   }
 
-  throw new Error("Unsupported interactive type: " + type);
+  console.error("Unsupported interactive type: " + type);
 };

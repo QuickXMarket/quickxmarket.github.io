@@ -1,6 +1,8 @@
 import { validate } from "node-cron";
 import {
   completeDispatchRequest,
+  getAllDispatches,
+  getDispatchDetails,
   getDispatchTotal,
 } from "../controllers/dispatch.js";
 import { addressHandler } from "./flowHandlers.js";
@@ -49,8 +51,8 @@ export const flows = {
       question: async (data) => await getDispatchTotal(data),
       validate: (input, intent) =>
         ["confirm.yes", "confirm.no"].includes(intent),
-      handler: async (message, data, stepName, intent, userId) =>
-        await completeDispatchRequest(data, intent, userId),
+      handler: async (message, data, stepName, response, userId) =>
+        await completeDispatchRequest(data, response, userId),
     },
     {
       name: "paystackLink",
@@ -58,6 +60,40 @@ export const flows = {
     },
   ],
 
+  dispatchList: [
+    {
+      name: "fetchDispatches",
+      question: "Send any message to load your dispatch orders.",
+      handler: async (message, data, step, response, userId) =>
+        await getAllDispatches(userId),
+    },
+    {
+      name: "fetchedDispatches",
+      question: async (data) => data.fetchDispatches,
+      handler: async (message, data, step, response, userId) =>
+        await getDispatchDetails(userId, message),
+    },
+    {
+      name: "dispatchDetails",
+      question: async (data) => data.fetchedDispatches,
+    },
+  ],
+  getDispatch: [
+    {
+      name: "fetchDispatchDetails",
+      question: async (data, response, userId) => {
+        const dispatchCode = response.entities?.find(
+          (e) => e.entity === "code"
+        )?.sourceText;
+        if (dispatchCode) {
+          const replyResponse = await getDispatchDetails(userId, dispatchCode);
+          return replyResponse.selected;
+        } else {
+          return "I didn't detect a dispatch code. Could you please send your request again with the dispatch ID?";
+        }
+      },
+    },
+  ],
   errand: [
     { name: "item", question: "What item do you want us to buy?" },
     {

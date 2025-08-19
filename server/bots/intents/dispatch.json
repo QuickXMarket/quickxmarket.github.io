@@ -124,5 +124,270 @@
     "lan": "en",
     "utterance": "Send this item to someone",
     "intent": "dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Show me all my dispatches",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "List all my deliveries",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "What packages have I sent?",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "Give me my delivery history",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "Show my past dispatch orders",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "I want to see all my shipments",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "Display my sent parcels",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "Retrieve all dispatch requests I made",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "List my courier orders",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can you show my dispatch history?",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "All my parcels please",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "I want to see my deliveries",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "Show my past shipments",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "Give me a list of my packages",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "What have I sent so far?",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "Show my recent deliveries",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "List all shipments I've made",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "Display my dispatch orders",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "Retrieve my packages history",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "I need a summary of my deliveries",
+    "intent": "dispatchList"
+  },
+  {
+    "lan": "en",
+    "utterance": "Show me my dispatch with code %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "I want details for my shipment %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Retrieve the delivery with ID %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Get info about dispatch %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Details for my parcel %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Details for my dispatch %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can you show dispatch %code%?",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Check the delivery with code %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "I need info on shipment %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Display dispatch %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Show the details of my parcel %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Find dispatch order %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Give me the status of shipment %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Retrieve my delivery %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "I want info on delivery code %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Check details for my parcel %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Show status for dispatch %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Get dispatch information for %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "I want to track my shipment %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Provide details for delivery %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Retrieve parcel information %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Track parcel with code %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Show me shipment identified by %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Find my package using code %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Check status of delivery %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Look up dispatch order %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "I need the tracking info for %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Pull details for my shipment %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Give me information about delivery %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Check my dispatch with ID %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Retrieve shipment record %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Get the current status for parcel %code%",
+    "intent": "getDispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "Show dispatch details for tracking code %code%",
+    "intent": "getDispatch"
   }
 ]

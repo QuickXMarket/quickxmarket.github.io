@@ -27,22 +27,21 @@ export class ConversationManager {
   }
 
   _completeFlow(session) {
-    const botReply = `✅ ${
-      session.currentIntent
-    } request completed: ${JSON.stringify(session.data)}`;
-    session.history.push({ from: "bot", text: botReply });
+    // const botReply = `✅ ${
+    //   session.currentIntent
+    // } request completed: ${JSON.stringify(session.data)}`;
+    // session.history.push({ from: "bot", text: botReply });
 
     session.currentIntent = null;
     session.pendingStep = null;
     session.data = {};
 
-    return botReply;
+    // return botReply;
   }
 
   async handleMessage(userId, message, nlpResponse) {
     const session = this.getSession(userId);
     session.history.push({ from: "user", text: message });
-
     if (nlpResponse.intent === "edit_step") {
       const rawField = nlpResponse.entities?.field?.[0]?.value?.toLowerCase();
 
@@ -91,7 +90,7 @@ export class ConversationManager {
           message,
           session.data,
           step.name,
-          nlpResponse.intent,
+          nlpResponse,
           userId
         );
         if (result?.retry) {
@@ -127,7 +126,12 @@ export class ConversationManager {
     if (nlpResponse.intent && this.flows[nlpResponse.intent]) {
       session.currentIntent = nlpResponse.intent;
       session.pendingStep = this.flows[nlpResponse.intent][0].name;
-      const botReply = this.flows[nlpResponse.intent][0].question;
+      const firstStep = this.flows[nlpResponse.intent][0];
+
+      const botReply =
+        typeof firstStep.question === "function"
+          ? await firstStep.question(session.data, nlpResponse, userId)
+          : firstStep.question;
       session.history.push({ from: "bot", text: botReply });
       return botReply;
     }
