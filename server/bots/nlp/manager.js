@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import { ConversationManager } from "../utils/ConversationManager.js";
 import { sendWhatsappMessage } from "../Whatsapp/client.js";
 import { flows } from "../utils/flows.js";
+import { sendTelegramMessage } from "../Telegram/client.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,9 +32,13 @@ export const loadModel = async () => {
   }
 };
 
-export const onMessageReceived = async (userId, text) => {
+export const onMessageReceived = async (from, text, platform) => {
   const nlpResponse = await NLPmanager.process(text);
-  const reply = await convManager.handleMessage(userId, text, nlpResponse);
+  const reply = await convManager.handleMessage(from, text, nlpResponse);
   // console.log(nlpResponse, reply);
-  sendWhatsappMessage(userId, "text", { body: reply });
+  if (platform === "whatsapp") {
+    await sendWhatsappMessage(from, "text", { body: reply });
+  } else if (platform === "telegram") {
+    await sendTelegramMessage(from, reply);
+  }
 };

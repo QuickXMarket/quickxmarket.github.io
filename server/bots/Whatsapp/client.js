@@ -28,7 +28,7 @@ export const incomingWhatsappMSG = async (req, res) => {
       const msg = changes.messages[0];
       const from = msg.from;
       const text = msg.text?.body;
-      onMessageReceived(from, text);
+      onMessageReceived(from, text, "whatsapp");
     }
     res.sendStatus(200);
   } else {

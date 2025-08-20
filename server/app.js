@@ -27,6 +27,7 @@ import {
   incomingWhatsappMSG,
   whatsappWebhook,
 } from "./bots/Whatsapp/client.js";
+import { telegramWebhook } from "./bots/Telegram/client.js";
 
 await connectDB();
 await connectCloudinary();
@@ -59,6 +60,8 @@ app.get("/health", (req, res) => {
 });
 app.get("/whatsapp-webhook", whatsappWebhook);
 app.post("/whatsapp-webhook", incomingWhatsappMSG);
+
+app.post("/telegram-webhook", telegramWebhook);
 
 app.use("/api/user", userRouter);
 app.use("/api/seller", sellerRouter);
