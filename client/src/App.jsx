@@ -30,6 +30,8 @@ import CustomerTerms from "./pages/CustomerTerms";
 import RiderTerms from "./pages/RiderTerms";
 import Errand from "./pages/Errand";
 import ErrandRequest from "./pages/ErrandRequest";
+import DispatchDetails from "./pages/DispatchDetails";
+import ErrandDetails from "./pages/ErrandDetails";
 
 const App = () => {
   const { navigate, location } = useCoreContext();
@@ -85,7 +87,9 @@ const App = () => {
           <Route path="/shops/:vendorId" element={<ShopProducts />} />
           <Route path="/dispatch" element={<Dispatch />} />
           <Route path="/dispatch-request" element={<DispatchRequest />} />
+          <Route path="/dispatch/:id" element={<DispatchDetails />} />
           <Route path="/errand" element={<Errand />} />
+          <Route path="/errand/:id" element={<ErrandDetails />} />
           <Route path="/errand-request" element={<ErrandRequest />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/faq" element={<FAQ />} />

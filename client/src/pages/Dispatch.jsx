@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import PlusIcon from "../assets/plus.svg?react";
 import { useCoreContext } from "../context/CoreContext";
 import { useAuthContext } from "../context/AuthContext";
-import DispatchCard from "../components/DispatchCard";
+import OrderCard from "../components/orderCard";
 import toast from "react-hot-toast";
 
 const Dispatch = () => {
@@ -82,7 +82,7 @@ const Dispatch = () => {
           {activeTab === "completed" ? (
             completedOrders?.length > 0 ? (
               completedOrders.map((order, index) => (
-                <DispatchCard dispatch={order} key={index} />
+                <OrderCard order={order} orderType={"Dispatch"} key={index} />
               ))
             ) : (
               <div className="text-gray-500 text-center">
@@ -91,7 +91,7 @@ const Dispatch = () => {
             )
           ) : ongoingOrders?.length > 0 ? (
             ongoingOrders.map((order, index) => (
-              <DispatchCard dispatch={order} key={index} />
+              <OrderCard order={order} orderType={"Dispatch"} key={index} />
             ))
           ) : (
             <div className="text-gray-500 text-center">

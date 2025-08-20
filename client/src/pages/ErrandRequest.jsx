@@ -359,6 +359,16 @@ const ErrandRequest = () => {
           + Add Another Errand
         </button>
       </section>
+      <label className="flex items-center gap-2 mt-2">
+        <input
+          type="checkbox"
+          name="deliverySpeed"
+          checked={isExpress}
+          onChange={() => setIsExpress(!isExpress)}
+          className="accent-primary w-4 h-4"
+        />
+        <span>Express Delivery</span>
+      </label>
 
       {/* ORDER SUMMARY */}
       <section className="border-t pt-4">

@@ -8,6 +8,7 @@ import {
 import { createNewOrder } from "./orderController.js";
 import { createNewDispatch } from "./dispatchController.js";
 import Product from "../models/Product.js";
+import { createNewErrand } from "./errandController.js";
 
 export const placeOrderPaystack = async (req, res) => {
   try {
@@ -237,6 +238,7 @@ export const placeErrandPaystackService = async (data, origin) => {
     totalFee,
     paymentType: "online",
     deliveryCode,
+    errands,
     ...(isObjectDropOff ? { dropOffDetails } : { dropOff }),
   };
 
@@ -285,6 +287,18 @@ export const placeDispatchPaystack = async (req, res) => {
   }
 };
 
+export const placeErrandPaystack = async (req, res) => {
+  try {
+    const result = await placeErrandPaystackService(
+      req.body,
+      req.headers.origin
+    );
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 // Paystack Webhooks to Verify Payments Action : /paystack-webhook
 export const paystackWebhooks = async (req, res) => {
   try {
@@ -318,7 +332,7 @@ export const paystackWebhooks = async (req, res) => {
       await createNewDispatch(res, userId, reference, dispatchData);
     } else if (metadata.errandData) {
       const errandData = metadata.errandData;
-      await createNewDispatch(res, userId, reference, errandData);
+      await createNewErrand(res, userId, reference, errandData);
     } else {
       res.status(200).json({ received: true });
     }

@@ -82,3 +82,17 @@ export const getErrandDeliveryFee = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const getUserErrand = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const orders = await Errand.find({
+      userId,
+    })
+      .populate("dropOff")
+      .sort({ createdAt: -1 });
+    res.json({ success: true, orders });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
