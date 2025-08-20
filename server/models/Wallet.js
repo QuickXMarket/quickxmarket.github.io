@@ -28,7 +28,7 @@ const transactionSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-    immutable: true, 
+    immutable: true,
   },
 });
 
@@ -40,7 +40,7 @@ const walletSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
       required: true,
-      immutable: true, 
+      immutable: true,
     },
     walletType: {
       type: String,
@@ -63,6 +63,10 @@ const walletSchema = new mongoose.Schema(
         },
         message: "Exceeded maximum transaction history limit.",
       },
+    },
+
+    pin: {
+      type: String,
     },
   },
   {

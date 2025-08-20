@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import PullToRefresh from "pulltorefreshjs";
 import { useAuthContext } from "../context/AuthContext";
 import { useCoreContext } from "../context/CoreContext";
+import PinModal from "../components/PinModal";
 
 const Wallet = () => {
   const { user } = useAuthContext();
@@ -14,6 +15,8 @@ const Wallet = () => {
   const [withdrawAmount, setWithdrawAmount] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const containerRef = useRef();
+  const [showPinModal, setShowPinModal] = useState(false);
+  const [pinState, setPinState] = useState("set");
 
   const fetchWallet = async () => {
     try {
@@ -24,6 +27,9 @@ const Wallet = () => {
 
       if (res.success) {
         setWallet(res.wallet);
+        if (!res.pinSet) {
+          setShowPinModal(true);
+        }
       } else {
         toast.error("Failed to fetch wallet");
       }
@@ -189,6 +195,12 @@ const Wallet = () => {
           </div>
         </div>
       )}
+      <PinModal
+        isOpen={showPinModal}
+        onClose={() => setShowPinModal(false)}
+        onSubmit={() => console.log("done")}
+        state={pinState}
+      />
     </div>
   );
 };

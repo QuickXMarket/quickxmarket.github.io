@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
 import { useCoreContext } from "../context/CoreContext";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 
 const RiderLogin = () => {
   const { setShowRiderLogin, user, setIsRider } = useAuthContext();
@@ -11,6 +12,7 @@ const RiderLogin = () => {
   const [number, setNumber] = useState("");
   const [dob, setDob] = useState("");
   const [vehicle, setVehicle] = useState("bicycle");
+  const [ninImage, setNinImage] = useState(null);
 
   const handleClose = () => {
     setShowRiderLogin(false);
@@ -26,6 +28,20 @@ const RiderLogin = () => {
       return age - 1;
     }
     return age;
+  };
+
+  const pickNinImage = async () => {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.DataUrl,
+        source: CameraSource.Prompt,
+      });
+      setNinImage(image.dataUrl);
+    } catch (error) {
+      console.error("Image pick cancelled", error);
+    }
   };
 
   const onSubmitHandler = async (event) => {
@@ -49,39 +65,28 @@ const RiderLogin = () => {
       return;
     }
 
+    if (!ninImage) {
+      toast.error("Please upload your NIN card/slip.");
+      return;
+    }
+
     try {
       const data = {
         name: fullName,
         number,
         dob,
         vehicle,
+        ninImage,
       };
 
       const response = await makeRequest({
         method: "POST",
-        url: "/api/rider/register",
+        url: "/api/rider/sendRegisterRequest",
         data,
       });
 
       if (response.success) {
-        const updateRes = await makeRequest({
-          method: "PATCH",
-          url: "/api/user/update-role",
-          data: {
-            userId: user._id,
-            role: "rider",
-          },
-        });
-
-        if (updateRes.success) {
-          toast.success("Rider registered successfully");
-          setIsRider(true);
-          setShowRiderLogin(false);
-          navigate("/rider");
-        } else {
-          console.error(updateRes);
-          toast.error(updateRes.message || "Failed to update user role.");
-        }
+        toast.success("Rider registration request sent. Awaiting approval.");
       } else {
         toast.error(response.message);
       }
@@ -142,6 +147,29 @@ const RiderLogin = () => {
             required
             className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
           />
+        </div>
+
+        {/* NIN Card/Slip Upload */}
+        <div className="w-full">
+          <label className="text-sm font-medium text-gray-700">
+            National Identification Number (NIN) Card/Slip
+          </label>
+          <div
+            onClick={pickNinImage}
+            className="mt-1 w-full flex items-center justify-center px-3 py-6 border-2 border-dashed border-gray-300 rounded-md cursor-pointer hover:border-primary transition-all bg-gray-50"
+          >
+            {ninImage ? (
+              <img
+                src={ninImage}
+                alt="NIN Preview"
+                className="h-32 object-contain"
+              />
+            ) : (
+              <p className="text-sm text-gray-500">
+                Tap to upload NIN card/slip
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Vehicle Type */}

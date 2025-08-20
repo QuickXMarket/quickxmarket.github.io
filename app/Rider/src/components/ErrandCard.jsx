@@ -34,7 +34,7 @@ const ErrandCard = ({ errand, riderId, fetchOrders }) => {
         const data = await makeRequest({
           url: `/api/errand/accept`,
           method: "POST",
-          data: { orderId: errand._id, riderId },
+          data: { errandId: errand._id, riderId },
         });
         if (data.success) {
           toast.success("Order accepted successfully");
@@ -164,7 +164,7 @@ const ErrandCard = ({ errand, riderId, fetchOrders }) => {
                       {errand.phone}
                     </a>
                   )}
-                  {errand.note && (
+                  {errand.deliveryNote && (
                     <p className="text-gray-700 mt-2">
                       <span className="font-medium text-gray-600">Note:</span>{" "}
                       {errand.deliveryNote}

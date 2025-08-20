@@ -182,6 +182,7 @@ export const assignRiderToDispatch = async (req, res) => {
     res.json({ success: true, message: "Rider added to order successfully" });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
+    console.log(error.message);
   }
 };
 

@@ -49,7 +49,7 @@ const App = () => {
 
   return (
     <div className="text-default min-h-screen text-gray-700 bg-background ">
-      {!isContactPath && <Navbar />}
+      {!isContactPath && user && isRider && <Navbar />}
       <Toaster />
       <div
         className={
@@ -79,7 +79,7 @@ const App = () => {
           </Routes>
         )}
       </div>
-      {showBottomNav && <BottomNavbar />}
+      {showBottomNav && user && isRider && <BottomNavbar />}
     </div>
   );
 };

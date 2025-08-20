@@ -10,6 +10,7 @@ import { isEmailDomainValid } from "../utils/emailValidation.js";
 import Chat from "../models/Chat.js";
 import VendorRequest from "../models/VendorRequest.js";
 import { sendVendorRequestResponseNotif } from "./mailController.js";
+import RiderRequest from "../models/RiderRequest.js";
 
 export const registerAdmin = async (req, res) => {
   try {
@@ -456,6 +457,86 @@ export const vendorRequestResponse = async (req, res) => {
     });
   } catch (error) {
     console.error("Error responding to vendor request:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+export const getRiderRequests = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    const admin = await Admin.findById(userId);
+
+    if (!admin) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+    const riderRequests = await RiderRequest.find({}).sort({
+      createdAt: -1,
+    });
+    return res.status(200).json({ success: true, riderRequests });
+  } catch (error) {
+    console.error("Error in getRiderrRequests API:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const riderRequestResponse = async (req, res) => {
+  try {
+    const { userId, approved, requestId, remarks } = req.body;
+
+    const admin = await Admin.findById(userId);
+    if (!admin) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+
+    const request = await RiderRequest.findById(requestId);
+    if (!request) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Request Not Found" });
+    }
+
+    let rider;
+
+    if (approved) {
+      request.requestStatus = "approved";
+
+      rider = await Rider.create({
+        userId: request.userId,
+        name: request.name,
+        number: request.number,
+        dob: request.dob,
+        vehicleType: request.vehicleType,
+      });
+    } else {
+      request.requestStatus = "rejected";
+    }
+
+    request.adminRemarks = remarks;
+    await request.save();
+
+    if (approved) await RiderRequest.findByIdAndDelete(requestId);
+    const user = await User.findById(request.userId).select("email");
+    await sendVendorRequestResponseNotif(
+      user.email,
+      request.businessName,
+      approved,
+      remarks
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: `Rider request ${
+        approved ? "approved" : "rejected"
+      } successfully`,
+      rider: approved ? rider : null,
+    });
+  } catch (error) {
+    console.error("Error responding to rider request:", error);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",

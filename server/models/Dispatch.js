@@ -14,10 +14,11 @@ const dispatchSchema = new mongoose.Schema(
       address: { type: String },
       latitude: { type: Number },
       longitude: { type: Number },
-      
     },
     dropoff: {
-      name: { type: String, required: true },
+      name: { type: String },
+      firstName: { type: String },
+      lastName: { type: String },
       email: { type: String },
       phone: { type: String, required: true },
       address: { type: String, required: true },

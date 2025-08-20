@@ -5,6 +5,7 @@ import PullToRefresh from "pulltorefreshjs";
 import { useCoreContext } from "../context/CoreContext";
 import DispatchCard from "../components/DispatchCard";
 import { useAuthContext } from "../context/AuthContext";
+import ErrandCard from "../components/ErrandCard";
 
 const Orders = () => {
   const [activeTab, setActiveTab] = useState("pending");
@@ -82,8 +83,19 @@ const Orders = () => {
         createdAt: new Date(dispatch.createdAt),
       }));
 
+      // Process errand orders
+      const processedErrands = errandData.orders.map((errand) => ({
+        ...errand,
+        type: "errand",
+        createdAt: new Date(errand.createdAt),
+      }));
+
       // Combine both types
-      const allOrders = [...processOrders, ...processedDispatches];
+      const allOrders = [
+        ...processOrders,
+        ...processedDispatches,
+        ...processedErrands,
+      ];
 
       allOrders.sort((a, b) => {
         if (a.isExpress && !b.isExpress) return -1;
@@ -160,9 +172,16 @@ const Orders = () => {
                   fetchOrders={fetchOrders}
                   key={index}
                 />
-              ) : (
+              ) : order.type === "dispatch" ? (
                 <DispatchCard
                   dispatch={order}
+                  riderId={rider._id}
+                  fetchOrders={fetchOrders}
+                  key={index}
+                />
+              ) : (
+                <ErrandCard
+                  errand={order}
                   riderId={rider._id}
                   fetchOrders={fetchOrders}
                   key={index}
@@ -183,9 +202,16 @@ const Orders = () => {
                 fetchOrders={fetchOrders}
                 key={index}
               />
-            ) : (
+            ) : order.type === "dispatch" ? (
               <DispatchCard
                 dispatch={order}
+                riderId={rider._id}
+                fetchOrders={fetchOrders}
+                key={index}
+              />
+            ) : (
+              <ErrandCard
+                errand={order}
                 riderId={rider._id}
                 fetchOrders={fetchOrders}
                 key={index}

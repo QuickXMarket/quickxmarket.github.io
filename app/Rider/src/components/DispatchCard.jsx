@@ -34,7 +34,7 @@ const DispatchCard = ({ dispatch, riderId, fetchOrders }) => {
         const data = await makeRequest({
           url: `/api/dispatch/accept`,
           method: "POST",
-          data: { orderId: dispatch._id, riderId },
+          data: { dispatchId: dispatch._id, riderId },
         });
         if (data.success) {
           toast.success("Order accepted successfully");
