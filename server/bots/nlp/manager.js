@@ -33,12 +33,19 @@ export const loadModel = async () => {
 };
 
 export const onMessageReceived = async (from, text, platform) => {
-  const nlpResponse = await NLPmanager.process(text);
-  const reply = await convManager.handleMessage(from, text, nlpResponse);
-  // console.log(nlpResponse, reply);
+  let reply;
+
+  if (platform === "telegram" && text.trim() === "/start") {
+    reply = "Welcome! I'm your assistant bot. How can I help you today?";
+  } else {
+    const nlpResponse = await NLPmanager.process(text);
+    reply = await convManager.handleMessage(from, text, nlpResponse);
+  }
+
   if (platform === "whatsapp") {
     await sendWhatsappMessage(from, "text", { body: reply });
   } else if (platform === "telegram") {
     await sendTelegramMessage(from, reply);
   }
 };
+
