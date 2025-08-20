@@ -16,9 +16,8 @@ const Orders = () => {
   const containerRef = useRef();
 
   const fetchOrders = async () => {
-    console.log(rider);
     try {
-      const [orderData, dispatchData] = await Promise.all([
+      const [orderData, dispatchData, errandData] = await Promise.all([
         makeRequest({
           url: `/api/order/rider/${rider._id}`,
           method: "GET",
@@ -27,10 +26,13 @@ const Orders = () => {
           url: `/api/dispatch/rider/${rider._id}`,
           method: "GET",
         }),
+        makeRequest({
+          url: `/api/errand/rider/${rider._id}`,
+          method: "GET",
+        }),
       ]);
 
       if (!orderData.success || !dispatchData.success) {
-        console.log("error");
         toast.error(orderData.message || dispatchData.message);
 
         return;
@@ -83,7 +85,6 @@ const Orders = () => {
       // Combine both types
       const allOrders = [...processOrders, ...processedDispatches];
 
-      // Sort so express orders come first, but each group is still chronological
       allOrders.sort((a, b) => {
         if (a.isExpress && !b.isExpress) return -1;
         if (!a.isExpress && b.isExpress) return 1;

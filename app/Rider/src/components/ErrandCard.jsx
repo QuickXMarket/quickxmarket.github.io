@@ -3,14 +3,14 @@ import toast from "react-hot-toast";
 import DeliveryCodeModal from "./DeliveryCodeModal";
 import { useCoreContext } from "../context/CoreContext";
 
-const DispatchCard = ({ dispatch, riderId, fetchOrders }) => {
+const ErrandCard = ({ errand, riderId, fetchOrders }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { makeRequest } = useCoreContext();
   const [showCodeModal, setShowCodeModal] = useState(false);
 
   const toggleAccordion = () => setIsOpen(!isOpen);
 
-  const dispatchStatusActions = [
+  const errandStatusActions = [
     {
       status: "Order Placed",
       buttonText: "Accept Order",
@@ -30,11 +30,11 @@ const DispatchCard = ({ dispatch, riderId, fetchOrders }) => {
 
   const handleBtnClick = async () => {
     try {
-      if (dispatch.status === "Order Placed" && !dispatch.riderId) {
+      if (errand.status === "Order Placed" && !errand.riderId) {
         const data = await makeRequest({
-          url: `/api/dispatch/accept`,
+          url: `/api/errand/accept`,
           method: "POST",
-          data: { orderId: dispatch._id, riderId },
+          data: { orderId: errand._id, riderId },
         });
         if (data.success) {
           toast.success("Order accepted successfully");
@@ -52,7 +52,7 @@ const DispatchCard = ({ dispatch, riderId, fetchOrders }) => {
             return;
           }
           const data = await makeRequest({
-            url: "/api/dispatch/update-status",
+            url: "/api/errand/update-status",
             method: "PATCH",
             data: {
               orderId: order._id,
@@ -77,17 +77,17 @@ const DispatchCard = ({ dispatch, riderId, fetchOrders }) => {
         onClick={toggleAccordion}
         className="cursor-pointer bg-gray-50 px-4 py-3 active:bg-gray-100 transition-all"
       >
-        {/* Dispatch ID & Status */}
+        {/* Errand ID & Status */}
         <div className="flex justify-between items-center">
           <span className="text-sm text-gray-700 font-medium">
-            Dispatch ID: {dispatch._id}
+            Errand ID: {errand._id}
           </span>
           <span
             className={`text-xs font-semibold ${
-              dispatch.isExpress ? "text-primary" : "text-gray-400"
+              errand.isExpress ? "text-primary" : "text-gray-400"
             }`}
           >
-            {dispatch.isExpress ? "Express" : "Standard"}
+            {errand.isExpress ? "Express" : "Standard"}
           </span>
         </div>
 
@@ -95,36 +95,36 @@ const DispatchCard = ({ dispatch, riderId, fetchOrders }) => {
         <div className="mt-2 flex justify-between items-center gap-4 text-sm">
           <div className="flex-1">
             <p className="font-semibold text-gray-800">
-              {dispatch.pickupAddress
-                ? ` ${dispatch.pickupAddress.firstName} 
-              ${dispatch.pickupAddress.lastName}`
-                : `${dispatch.pickupAddressDetails.name}`}
+              {errand.dropOff
+                ? ` ${errand.dropOff.firstName} 
+              ${errand.dropOff.lastName}`
+                : `${errand.dropOffDetails.name}`}
             </p>
             <p className="text-xs text-gray-500">
-              {dispatch.pickupAddress
-                ? ` ${dispatch.pickupAddress.address}`
-                : `${dispatch.pickupAddressDetails.address}`}
+              {errand.dropOff
+                ? ` ${errand.dropOff.address}`
+                : `${errand.dropOffDetails.address}`}
             </p>
           </div>
           <a
             href={`tel:${
-              dispatch.pickupAddress
-                ? dispatch.pickupAddress.phone
-                : dispatch.pickupAddressDetails.phone
+              errand.dropOff
+                ? errand.dropOff.phone
+                : errand.dropOffDetails.phone
             }`}
             className="text-sm text-primary font-medium whitespace-nowrap"
             onClick={(e) => e.stopPropagation()}
           >
-            {dispatch.pickupAddress
-              ? ` ${dispatch.pickupAddress.phone}`
-              : `${dispatch.pickupAddressDetails.phone}`}
+            {errand.dropOff
+              ? ` ${errand.dropOff.phone}`
+              : `${errand.dropOffDetails.phone}`}
           </a>
         </div>
 
         {/* Status & Button */}
         <div className="flex justify-between items-center mt-2">
           <span className="text-xs text-green-600 font-semibold">
-            Status: {dispatch.status}
+            Status: {errand.status}
           </span>
           <button
             className="bg-primary text-white text-sm px-3 py-1 rounded hover:bg-primary/90"
@@ -134,7 +134,7 @@ const DispatchCard = ({ dispatch, riderId, fetchOrders }) => {
             }}
           >
             {}
-            {dispatchStatusActions.find((a) => a.status === dispatch.status)
+            {errandStatusActions.find((a) => a.status === errand.status)
               ?.buttonText || "Update Status"}
           </button>
         </div>
@@ -143,51 +143,50 @@ const DispatchCard = ({ dispatch, riderId, fetchOrders }) => {
       {/* Accordion Body */}
       {isOpen && (
         <div className="bg-background px-4 py-3 space-y-4 border-t border-gray-200 text-sm text-gray-700">
-          {/* Dropoff Details */}
-          <h3 className="mb-1">Dropoff Details</h3>
-          <div className=" flex justify-between items-center gap-4 text-sm">
-            <div className="flex-1">
-              <p className="font-semibold text-gray-800">
-                {dispatch.dropoff.firstName
-                  ? ` ${dispatch.dropoff.firstName} 
-              ${dispatch.dropoff.lastName}`
-                  : `${dispatch.dropoff.name}`}
-              </p>
-              <p className="text-xs text-gray-500">
-                {dispatch.dropoff.address}
-              </p>
-            </div>
-            {dispatch.dropoff.phone && (
-              <a
-                href={`tel:${dispatch.dropoff.phone}`}
-                className="text-sm text-primary font-medium whitespace-nowrap"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {dispatch.dropoff.phone}
-              </a>
-            )}
-          </div>
-
-          {/* Delivery Note */}
-          {dispatch.deliveryNote && (
-            <div className="bg-gray-50 p-3 rounded-md border border-gray-200">
-              <p className="font-medium text-gray-600 mb-1">Delivery Note</p>
-              <p className="text-gray-700">{dispatch.deliveryNote}</p>
+          {/* Errands Details */}
+          <h3 className="mb-1">Errands Details</h3>
+          {/* Errands List (replaces Delivery Note) */}
+          {errand.errands && errand.errands.length > 0 && (
+            <div className="space-y-3">
+              {errand.errands.map((errand, idx) => (
+                <div
+                  key={idx}
+                  className="bg-gray-50 p-3 rounded-md border border-gray-200"
+                >
+                  <p className="font-semibold text-gray-800">{errand.name}</p>
+                  <p className="text-xs text-gray-500">{errand.address}</p>
+                  {errand.phone && (
+                    <a
+                      href={`tel:${errand.phone}`}
+                      className="text-sm text-primary font-medium block mt-1"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {errand.phone}
+                    </a>
+                  )}
+                  {errand.note && (
+                    <p className="text-gray-700 mt-2">
+                      <span className="font-medium text-gray-600">Note:</span>{" "}
+                      {errand.deliveryNote}
+                    </p>
+                  )}
+                </div>
+              ))}
             </div>
           )}
         </div>
       )}
       {showCodeModal && (
         <DeliveryCodeModal
-          orderId={dispatch._id}
+          orderId={errand._id}
           onClose={() => setShowCodeModal(false)}
           fetchOrders={fetchOrders}
           riderId={riderId}
-          type={"dispatch"}
+          type={"errand"}
         />
       )}
     </div>
   );
 };
 
-export default DispatchCard;
+export default ErrandCard;

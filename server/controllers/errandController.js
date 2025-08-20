@@ -39,7 +39,7 @@ export const createNewErrand = async (res, userId, reference, errandData) => {
     }
 
     if (errandData.dropOff.email) {
-      await sendDispatchDeliveryCode(errand._id, errandData.errands, {
+      await sendErrandDeliveryCode(errand._id, errandData.errands, {
         email: errandData.dropOff.email,
         phone: errandData.dropOff.phone,
         firstName: errandData.dropOff.firstName,
@@ -94,5 +94,113 @@ export const getUserErrand = async (req, res) => {
     res.json({ success: true, orders });
   } catch (error) {
     res.json({ success: false, message: error.message });
+  }
+};
+
+export const getRiderErrand = async (req, res) => {
+  try {
+    const { riderId } = req.params;
+
+    const orders = await Errand.find({
+      isPaid: true,
+      $or: [{ riderId: null }, { riderId }],
+      "items.status": { $nin: ["Order Delivered"] },
+    })
+      .populate("dropOff")
+      .sort({ createdAt: -1 });
+
+    res.json({ success: true, orders });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export const updateErrandStatus = async (req, res) => {
+  try {
+    const { errandId, status } = req.body;
+
+    const errand = await Errand.findById(errandId);
+    if (!errand) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
+    }
+
+    // Update item statuses conditionally
+    errand.status = status;
+
+    await errand.save();
+    res.json({
+      success: true,
+      message: "Errand status updated successfully",
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const assignRiderToErrand = async (req, res) => {
+  try {
+    const { errandId, riderId } = req.body;
+
+    const errand = await Errand.findById(errandId);
+    if (!errand) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
+    }
+
+    const rider = await Rider.findById(riderId);
+    if (!rider) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Rider not found" });
+    }
+
+    if (errand.riderId) {
+      return res.json({
+        success: false,
+        message: "Order already assigned to a rider",
+      });
+    }
+
+    errand.status = "Order Assigned";
+    errand.riderId = riderId;
+    await errand.save();
+
+    rider.orders.push(errandId);
+    await rider.save();
+    res.json({ success: true, message: "Rider added to order successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const confirmDelivery = async (req, res) => {
+  try {
+    const { errandId, code, riderId } = req.body;
+
+    const errand = await Errand.findById(errandId);
+    if (!errand) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
+    }
+    if (errand.riderId.toString() !== riderId) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Unauthorized rider" });
+    }
+
+    if (errand.deliveryCode !== code) {
+      return res.json({ success: false, message: "Invalid delivery code" });
+    }
+
+    errand.status = "Order Delivered";
+
+    await errand.save();
+    res.json({ success: true, message: "Delivery confirmed successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };
