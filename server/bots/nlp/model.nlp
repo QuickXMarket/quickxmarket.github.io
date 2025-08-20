@@ -5,10 +5,10 @@
       "pcm"
     ],
     "forceNER": true,
-    "autoSave": true,
     "tag": "nlp",
     "threshold": 0.5,
     "autoLoad": true,
+    "autoSave": true,
     "modelFileName": "model.nlp",
     "executeActionsBeforeAnswers": false,
     "calculateSentiment": true

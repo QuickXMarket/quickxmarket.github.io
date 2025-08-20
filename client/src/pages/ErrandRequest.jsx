@@ -3,14 +3,14 @@ import { useCoreContext } from "../context/CoreContext";
 import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
 
-const InputField = ({ type, placeholder, name, handleChange, address }) => (
+const InputField = ({ type, placeholder, name, handleChange, value }) => (
   <input
     className="w-full px-2 py-2.5 border border-gray-500/30 rounded outline-none text-gray-500 focus:border-primary transition"
     type={type}
     placeholder={placeholder}
     onChange={handleChange}
     name={name}
-    value={address[name]}
+    value={value}
     required
   />
 );
@@ -21,48 +21,50 @@ const ErrandRequest = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showAddress, setShowAddress] = useState(false);
   const [addresses, setAddresses] = useState([]);
-  const [address, setAddress] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    address: "",
-    phone: "",
-    latitude: null,
-    longitude: null,
-  });
-  const [suggestions, setSuggestions] = useState([]);
-  const [deliveryNote, setDeliveryNote] = useState("");
+
+  // Multiple errands
+  const [errands, setErrands] = useState([
+    {
+      name: "",
+      address: "",
+      phone: "",
+      latitude: null,
+      longitude: null,
+      deliveryNote: "",
+      suggestions: [],
+      loading: false,
+    },
+  ]);
+
   const [isExpress, setIsExpress] = useState(false);
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [serviceFee, setServiceFee] = useState(0);
 
-  const [loading, setLoading] = useState(false);
   const abortControllerRef = useRef(null);
 
-  const handleChange = (e) => {
+  const handleChange = (e, index) => {
     const { name, value } = e.target;
-
-    setAddress((prevAddress) => ({
-      ...prevAddress,
-      [name]: value,
-    }));
+    setErrands((prev) => {
+      const newErrands = [...prev];
+      newErrands[index][name] = value;
+      return newErrands;
+    });
 
     if (name === "address") {
-      fetchSuggestions(value);
+      fetchSuggestions(value, index);
     }
   };
 
-  const fetchSuggestions = async (query) => {
+  const fetchSuggestions = async (query, index) => {
     if (!query) {
-      setSuggestions([]);
-      setLoading(false);
+      setErrands((prev) => {
+        const newErrands = [...prev];
+        newErrands[index].suggestions = [];
+        newErrands[index].loading = false;
+        return newErrands;
+      });
       return;
     }
-    setAddress((prevAddress) => ({
-      ...prevAddress,
-      longitude: null,
-      latitude: null,
-    }));
 
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
@@ -70,53 +72,59 @@ const ErrandRequest = () => {
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
-    setLoading(true);
+    setErrands((prev) => {
+      const newErrands = [...prev];
+      newErrands[index].loading = true;
+      return newErrands;
+    });
+
     try {
       const results = fuse.search(query).slice(0, 5);
       const suggestionsData = results.map((result) => result.item);
-      setSuggestions(suggestionsData);
+
+      setErrands((prev) => {
+        const newErrands = [...prev];
+        newErrands[index].suggestions = suggestionsData;
+        newErrands[index].loading = false;
+        return newErrands;
+      });
     } catch (error) {
       console.error("Error fetching suggestions:", error);
       toast.error("Failed to fetch address suggestions");
-    } finally {
-      setLoading(false);
     }
   };
 
-  const fetchDeliveryFee = async (
-    latitude1,
-    longitude1,
-    latitude2,
-    longitude2
-  ) => {
-    try {
-      const { data } = await axios.post("/api/dispatch/delivery-fee", {
-        latitude1,
-        longitude1,
-        latitude2,
-        longitude2,
-      });
-      if (data.success) {
-        setDeliveryFee(data.deliveryFee);
-      } else {
-        setDeliveryFee(0);
-        toast.error("Failed to fetch delivery fee");
-      }
-    } catch (error) {
-      setDeliveryFee(0);
-      toast.error(error.message);
-    }
+  const onSuggestionClick = (suggestion, index) => {
+    setErrands((prev) => {
+      const newErrands = [...prev];
+      newErrands[index].address = `${suggestion.display_name} ${
+        suggestion.street || ""
+      }`;
+      newErrands[index].longitude = parseFloat(suggestion.lon);
+      newErrands[index].latitude = parseFloat(suggestion.lat);
+      newErrands[index].suggestions = [];
+      return newErrands;
+    });
   };
 
-  const onSuggestionClick = (suggestion) => {
-    setAddress((prevAddress) => ({
-      ...prevAddress,
-      address: `${suggestion.display_name} ${suggestion.street || ""}`,
-      longitude: parseFloat(suggestion.lon),
-      latitude: parseFloat(suggestion.lat),
-    }));
+  const addErrand = () => {
+    setErrands((prev) => [
+      ...prev,
+      {
+        name: "",
+        address: "",
+        phone: "",
+        latitude: null,
+        longitude: null,
+        deliveryNote: "",
+        suggestions: [],
+        loading: false,
+      },
+    ]);
+  };
 
-    setSuggestions([]);
+  const removeErrand = (index) => {
+    setErrands((prev) => prev.filter((_, i) => i !== index));
   };
 
   const getUserAddress = async () => {
@@ -138,58 +146,43 @@ const ErrandRequest = () => {
   const submitDispatchRequest = async (e) => {
     e.preventDefault();
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(address.email)) {
-      toast.error("Invalid email format.");
-      return;
-    }
-
-    const phoneRegex =
-      /^(?:\+?234|0)(701|702|703|704|705|706|707|708|709|802|803|804|805|806|807|808|809|810|811|812|813|814|815|816|817|818|819|901|902|903|904|905|906|907|908|909|911|912|913|915|916)\d{7}$/;
-
-    if (loading) {
-      toast.error("Address is still loading, please wait.");
-      return;
-    }
-
-    if (!phoneRegex.test(address.phone)) {
-      toast.error("Please enter a valid Nigerian phone number.");
-      return;
-    }
-
-    if (address.latitude === null || address.longitude === null) {
-      toast.error("Please select a valid address from suggestions.");
-      return;
-    }
     if (!selectedAddress) {
       toast.error("Please select a pick-up address.");
       return;
     }
 
-    setLoading(true);
+    setErrands((prev) =>
+      prev.map((errand) => {
+        if (!errand.latitude || !errand.longitude) {
+          toast.error("Please select a valid address from suggestions.");
+        }
+        return errand;
+      })
+    );
+
     const { data } = await axios.post("/api/payment/paystack-dispatch", {
       pickupAddress: selectedAddress._id,
-      dropoff: address,
-      deliveryNote,
+      errands, // sending multiple errands
       isExpress,
       email: selectedAddress.email,
     });
 
     if (data.success) {
-      setAddress({
-        firstName: "",
-        lastName: "",
-        email: "",
-        address: "",
-        phone: "",
-        latitude: null,
-        longitude: null,
-      });
+      setErrands([
+        {
+          name: "",
+          address: "",
+          phone: "",
+          latitude: null,
+          longitude: null,
+          deliveryNote: "",
+          suggestions: [],
+          loading: false,
+        },
+      ]);
       setIsExpress(false);
       setServiceFee(0);
-      setDeliveryNote("");
       setDeliveryFee(0);
-      setLoading(false);
       window.location.replace(data.url);
     } else {
       toast.error(data.message);
@@ -216,22 +209,6 @@ const ErrandRequest = () => {
     const roundedServiceFee = Math.ceil(serviceFee / 10) * 10;
     setServiceFee(roundedServiceFee);
   }, [deliveryFee, isExpress]);
-
-  useEffect(() => {
-    if (
-      selectedAddress?.latitude != null &&
-      selectedAddress?.longitude != null &&
-      address.latitude != null &&
-      address.longitude != null
-    ) {
-      fetchDeliveryFee(
-        selectedAddress.latitude,
-        selectedAddress.longitude,
-        address.latitude,
-        address.longitude
-      );
-    }
-  }, [selectedAddress, address.latitude, address.longitude]);
 
   return (
     <div className="max-w-md mx-auto p-4 space-y-6 text-sm">
@@ -276,76 +253,84 @@ const ErrandRequest = () => {
         </div>
       </section>
 
-      {/* DROP-OFF LOCATION */}
+      {/* ERRANDS */}
       <section>
-        <h2 className="font-semibold text-base mb-2">
-          Errand Location Details
-        </h2>
-        <form className="space-y-3">
-          <InputField
-            handleChange={handleChange}
-            address={address}
-            name="name"
-            type="text"
-            placeholder="Business Name"
-          />
+        <h2 className="font-semibold text-base mb-2">Errand Details</h2>
 
-          <div className="relative">
-            <input
-              className="w-full px-2 py-2.5 border border-gray-500/30 rounded outline-none text-gray-500 focus:border-primary transition"
-              type="text"
-              placeholder="Address"
-              onChange={handleChange}
-              name="address"
-              value={address.address}
-              required
-            />
-            {suggestions.length > 0 && (
-              <ul className="absolute z-50 bg-white border border-gray-300 rounded w-full max-h-40 overflow-auto mt-1">
-                {suggestions.map((suggestion) => (
-                  <li
-                    key={suggestion.place_id}
-                    onClick={() => onSuggestionClick(suggestion)}
-                    className="p-2 cursor-pointer hover:bg-gray-200"
-                  >
-                    {suggestion.display_name}
-                  </li>
-                ))}
-              </ul>
+        {errands.map((errand, index) => (
+          <div key={index} className="border p-3 rounded mb-3 relative">
+            {errands.length > 1 && (
+              <div className="flex w-100 justify-end pb-2 pr-2">
+                <button
+                  type="button"
+                  onClick={() => removeErrand(index)}
+                  className="cursor-pointer text-red-500 text-xs"
+                >
+                  Remove
+                </button>
+              </div>
             )}
+            <InputField
+              handleChange={(e) => handleChange(e, index)}
+              value={errand.name}
+              name="name"
+              type="text"
+              placeholder="Business Name"
+            />
+
+            <div className="relative mt-2">
+              <input
+                className="w-full px-2 py-2.5 border border-gray-500/30 rounded outline-none text-gray-500 focus:border-primary transition"
+                type="text"
+                placeholder="Address"
+                onChange={(e) => handleChange(e, index)}
+                name="address"
+                value={errand.address}
+                required
+              />
+              {errand.suggestions.length > 0 && (
+                <ul className="absolute z-50 bg-white border border-gray-300 rounded w-full max-h-40 overflow-auto mt-1">
+                  {errand.suggestions.map((suggestion) => (
+                    <li
+                      key={suggestion.place_id}
+                      onClick={() => onSuggestionClick(suggestion, index)}
+                      className="p-2 cursor-pointer hover:bg-gray-200"
+                    >
+                      {suggestion.display_name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <InputField
+              handleChange={(e) => handleChange(e, index)}
+              value={errand.phone}
+              name="phone"
+              type="text"
+              placeholder="Phone (Optional)"
+            />
+
+            <textarea
+              rows={3}
+              className="w-full px-3 py-2 mt-2 border border-gray-500/30 rounded text-gray-700 outline-none focus:border-primary transition"
+              placeholder="Describe the item or delivery..."
+              value={errand.deliveryNote}
+              name="deliveryNote"
+              onChange={(e) => handleChange(e, index)}
+            />
+
+            {/* Remove button */}
           </div>
+        ))}
 
-          <InputField
-            handleChange={handleChange}
-            address={address}
-            name="phone"
-            type="text"
-            placeholder="Phone (Optional)"
-          />
-        </form>
-      </section>
-
-      {/* DELIVERY DETAILS */}
-      <section>
-        <h2 className="font-semibold text-base mb-2">Delivery Details</h2>
-        <textarea
-          rows={3}
-          className="w-full px-3 py-2 border border-gray-500/30 rounded text-gray-700 outline-none focus:border-primary transition"
-          placeholder="Describe the item or delivery..."
-          value={deliveryNote}
-          onChange={(e) => setDeliveryNote(e.target.value)}
-        />
-
-        <label className="flex items-center gap-2 mt-2">
-          <input
-            type="checkbox"
-            name="deliverySpeed"
-            checked={isExpress}
-            onChange={() => setIsExpress(!isExpress)}
-            className="accent-primary w-4 h-4"
-          />
-          <span>Express Delivery</span>
-        </label>
+        <button
+          type="button"
+          onClick={addErrand}
+          className="mt-2 text-primary text-sm underline"
+        >
+          + Add Another Errand
+        </button>
       </section>
 
       {/* ORDER SUMMARY */}
@@ -353,7 +338,7 @@ const ErrandRequest = () => {
         <h2 className="font-semibold text-base mb-2">Order Summary</h2>
         <div className="space-y-1 text-gray-600">
           <div className="flex justify-between">
-            <span>Delivery Fee</span>
+            <span>Errand Fee</span>
             <span>₦{deliveryFee * (isExpress ? 1.5 : 1)}</span>
           </div>
           <div className="flex justify-between">
@@ -367,10 +352,9 @@ const ErrandRequest = () => {
         </div>
       </section>
 
-      {/* SUBMIT BUTTON */}
+      {/* SUBMIT */}
       <button
-        // onClick={submitDispatchRequest}
-        disabled={loading}
+        onClick={submitDispatchRequest}
         className="w-full py-3 mt-4 bg-primary hover:bg-primary-dull text-white rounded uppercase transition"
       >
         Submit Dispatch Request

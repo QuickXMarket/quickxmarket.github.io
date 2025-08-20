@@ -14,7 +14,6 @@ const convManager = new ConversationManager();
 export const NLPmanager = new NlpManager({
   languages: ["en", "pcm"],
   forceNER: true,
-  autoSave: true,
 });
 
 for (const [intent, steps] of Object.entries(flows)) {

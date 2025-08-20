@@ -1,5 +1,5 @@
 import axios from "axios";
-import { NLPmanager, onMessageReceived } from "../NLP/manager.js";
+import { NLPmanager, onMessageReceived } from "../nlp/manager.js";
 
 const VERIFY_TOKEN = "my_verify_token";
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
