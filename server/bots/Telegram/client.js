@@ -1,4 +1,3 @@
-import express from "express";
 import axios from "axios";
 import { onMessageReceived } from "../nlp/manager.js";
 
@@ -33,5 +32,3 @@ export const sendTelegramMessage = async (to, text) => {
     console.error("❌ Error sending Telegram message:", err.message);
   }
 };
-
-export default router;
