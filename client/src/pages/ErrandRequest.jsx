@@ -55,6 +55,24 @@ const ErrandRequest = () => {
     }
   };
 
+  const fetchDeliveryFee = async (dropoff, errands) => {
+    try {
+      const { data } = await axios.post("/api/errand/delivery-fee", {
+        dropoff,
+        errands,
+      });
+      if (data.success) {
+        setDeliveryFee(data.deliveryFee);
+      } else {
+        setDeliveryFee(0);
+        toast.error("Failed to fetch delivery fee");
+      }
+    } catch (error) {
+      setDeliveryFee(0);
+      toast.error(error.message);
+    }
+  };
+
   const fetchSuggestions = async (query, index) => {
     if (!query) {
       setErrands((prev) => {
@@ -162,7 +180,7 @@ const ErrandRequest = () => {
 
     const { data } = await axios.post("/api/payment/paystack-dispatch", {
       pickupAddress: selectedAddress._id,
-      errands, // sending multiple errands
+      errands,
       isExpress,
       email: selectedAddress.email,
     });
@@ -209,6 +227,12 @@ const ErrandRequest = () => {
     const roundedServiceFee = Math.ceil(serviceFee / 10) * 10;
     setServiceFee(roundedServiceFee);
   }, [deliveryFee, isExpress]);
+
+  useEffect(() => {
+    if(errands.every(errand=>errand.latitude &&errand.longitude) && selectedAddress){
+      fetchDeliveryFee(selectedAddress, errands)
+    }
+  }, [errands, selectedAddress]);
 
   return (
     <div className="max-w-md mx-auto p-4 space-y-6 text-sm">

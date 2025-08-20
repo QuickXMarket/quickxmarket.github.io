@@ -59,7 +59,7 @@ server.listen(process.env.PORT || 4000, () => {
 startVendorToggleCron();
 loadGeoJsonData();
 loadModel();
-loadFuseConversation()
+// loadFuseConversation()
 // trainModel()
 
 export default server;

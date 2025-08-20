@@ -139,6 +139,8 @@ export class ConversationManager {
     }
 
     // Case 3: Fallback
-    return nlpResponse.answer || queryConversation(message);
+    return (
+      nlpResponse.answer || "Sorry, I didn't understand that. Can you rephrase?"
+    );
   }
 }
