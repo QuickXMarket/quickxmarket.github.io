@@ -103,7 +103,7 @@ export const createNewOrder = async (res, userId, reference, orderData) => {
           token,
           "New Delivery Request",
           "A new order has been placed. Check your rider dashboard.",
-          { route: `/rider/` }
+          { route: `/` }
         );
       } catch (error) {
         console.error(

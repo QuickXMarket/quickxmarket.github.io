@@ -148,7 +148,6 @@ export const placeDispatchPaystackService = async (data, origin) => {
   const serviceFee = await calculateServiceFee(deliveryFee);
   const totalFee = deliveryFee + serviceFee;
 
-  // Build dispatchData depending on pickupAddress type
   const dispatchData = {
     userId,
     dropoff,
@@ -159,9 +158,7 @@ export const placeDispatchPaystackService = async (data, origin) => {
     totalFee,
     paymentType: "online",
     deliveryCode,
-    ...(isObjectPickup
-      ? { pickupAddressDetails } 
-      : { pickupAddress }),
+    ...(isObjectPickup ? { pickupAddressDetails } : { pickupAddress }),
   };
 
   const callback_url = isNativeApp
@@ -176,6 +173,85 @@ export const placeDispatchPaystackService = async (data, origin) => {
       email: email || `user_${userId}@quickxmarket.com.ng`,
       amount: totalFee * 100,
       metadata: { dispatchData, userId },
+      callback_url,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${paystackSecretKey}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!paystackResponse.data.status) {
+    throw new Error("Failed to initialize Paystack transaction");
+  }
+
+  return {
+    success: true,
+    url: paystackResponse.data.data.authorization_url,
+    reference: paystackResponse.data.data.reference,
+  };
+};
+
+export const placeErrandPaystackService = async (data, origin) => {
+  const { userId, dropOff, errands, isExpress, email, isNativeApp } = data;
+
+  const deliveryCode = Math.floor(1000 + Math.random() * 9000).toString();
+
+  let dropOffDetails;
+  let isObjectDropOff = false;
+
+  // Resolve dropOff
+  if (typeof dropOff === "string" || dropOff instanceof String) {
+    dropOffDetails = await Address.findById(dropOff);
+  } else if (dropOff && dropOff.latitude && dropOff.longitude) {
+    dropOffDetails = dropOff;
+    isObjectDropOff = true;
+  }
+
+  let totalDeliveryFee = 0;
+  for (let i = 0; i < errands.length; i++) {
+    const start = errands[i];
+    const end = i < errands.length - 1 ? errands[i + 1] : dropOff;
+
+    const deliveryFee = await calculateDeliveryFee(
+      start.latitude,
+      start.longitude,
+      end.latitude,
+      end.longitude
+    );
+
+    totalDeliveryFee += deliveryFee;
+  }
+  totalDeliveryFee *= isExpress ? 1.5 : 1;
+
+  const serviceFee = await calculateServiceFee(totalDeliveryFee);
+  const totalFee = totalDeliveryFee + serviceFee;
+
+  const errandData = {
+    userId,
+    isExpress,
+    deliveryFee: totalDeliveryFee,
+    serviceFee,
+    totalFee,
+    paymentType: "online",
+    deliveryCode,
+    ...(isObjectDropOff ? { dropOffDetails } : { dropOff }),
+  };
+
+  const callback_url = isNativeApp
+    ? "quickxmarket://errand"
+    : `${origin}/loader?next=errand`;
+
+  const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY;
+
+  const paystackResponse = await axios.post(
+    "https://api.paystack.co/transaction/initialize",
+    {
+      email: email || `user_${userId}@quickxmarket.com.ng`,
+      amount: totalFee * 100,
+      metadata: { errandData, userId },
       callback_url,
     },
     {
@@ -240,6 +316,9 @@ export const paystackWebhooks = async (req, res) => {
     } else if (metadata.dispatchData) {
       const dispatchData = metadata.dispatchData;
       await createNewDispatch(res, userId, reference, dispatchData);
+    } else if (metadata.errandData) {
+      const errandData = metadata.errandData;
+      await createNewDispatch(res, userId, reference, errandData);
     } else {
       res.status(200).json({ received: true });
     }

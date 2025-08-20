@@ -55,14 +55,14 @@ const ErrandRequest = () => {
     }
   };
 
-  const fetchDeliveryFee = async (dropoff, errands) => {
+  const fetchDeliveryFee = async (dropOff, errands) => {
     try {
       const { data } = await axios.post("/api/errand/delivery-fee", {
-        dropoff,
+        dropOff,
         errands,
       });
       if (data.success) {
-        setDeliveryFee(data.deliveryFee);
+        setDeliveryFee(data.totalDeliveryFee);
       } else {
         setDeliveryFee(0);
         toast.error("Failed to fetch delivery fee");
@@ -178,8 +178,8 @@ const ErrandRequest = () => {
       })
     );
 
-    const { data } = await axios.post("/api/payment/paystack-dispatch", {
-      pickupAddress: selectedAddress._id,
+    const { data } = await axios.post("/api/payment/paystack-errand", {
+      dropOff: selectedAddress._id,
       errands,
       isExpress,
       email: selectedAddress.email,
@@ -229,8 +229,11 @@ const ErrandRequest = () => {
   }, [deliveryFee, isExpress]);
 
   useEffect(() => {
-    if(errands.every(errand=>errand.latitude &&errand.longitude) && selectedAddress){
-      fetchDeliveryFee(selectedAddress, errands)
+    if (
+      errands.every((errand) => errand.latitude && errand.longitude) &&
+      selectedAddress
+    ) {
+      fetchDeliveryFee(selectedAddress, errands);
     }
   }, [errands, selectedAddress]);
 

@@ -35,7 +35,7 @@ function getCentroid(coords) {
 }
 
 async function loadGeoJsonData() {
-  if (isInitialized && fuse) return fuse;
+  if (isInitialized && fuse) return { fuse, geocodingData };
 
   geocodingData = [];
   for (const file of geojsonFiles) {
@@ -80,7 +80,6 @@ async function loadGeoJsonData() {
       }
     });
   }
-
   fuse = new Fuse(geocodingData, {
     keys: ["display_name", "street", "city", "country"],
     threshold: 0.3,
@@ -96,7 +95,7 @@ async function loadGeoJsonData() {
 
 export const fetchAddresses = async (req, res) => {
   try {
-    const geocodingData = await loadGeoJsonData().geocodingData;
+    const { geocodingData } = await loadGeoJsonData();
 
     res.json({ success: true, data: geocodingData });
   } catch (error) {

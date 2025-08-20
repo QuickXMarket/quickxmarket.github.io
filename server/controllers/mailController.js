@@ -11,6 +11,7 @@ import {
   resetPasswordEmail,
   vendorRequestConfirmation,
   vendorRequestResponseNotification,
+  userErrandOrderConfirmation,
 } from "../utils/mailTemplates.js";
 
 // Ensure admin email is set
@@ -216,6 +217,7 @@ export const sendVendorRequestConfirmation = async (
     console.error("❌ Error sending vendor request confirmation email:", error);
   }
 };
+
 export const sendVendorRequestResponseNotif = async (
   userEmail,
   businessName,
@@ -231,5 +233,21 @@ export const sendVendorRequestResponseNotif = async (
     });
   } catch (error) {
     console.error("❌ Error sending vendor request response email:", error);
+  }
+};
+
+export const sendErrandConfirmation = async (errandId, errands, dropOff) => {
+  try {
+    await transporter.sendMail({
+      from: `"QuickXMarket" <${process.env.SMTP_USER}>`,
+      to: dropOff.email,
+      subject: `Your Errand Request Has Been Received! - Order #${errandId}`,
+      html: userErrandOrderConfirmation(errands, errandId, dropOff),
+    });
+  } catch (error) {
+    console.error(
+      `❌ Failed to send errand confirmation email for Order #${errandId} to ${dropOff.email}:`,
+      error
+    );
   }
 };

@@ -34,7 +34,7 @@ export const createNewDispatch = async (
           "New Dispatch Request",
           "A new dispatch request has been submitted.",
           {
-            route: "/rider/dispatches",
+            route: "/",
           }
         );
       } catch (error) {
