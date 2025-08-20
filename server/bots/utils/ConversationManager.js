@@ -1,3 +1,5 @@
+import { queryConversation } from "../nlp/train.js";
+
 export class ConversationManager {
   constructor(timeoutMs = 10 * 60 * 1000) {
     this.sessions = new Map();
@@ -137,8 +139,6 @@ export class ConversationManager {
     }
 
     // Case 3: Fallback
-    return (
-      nlpResponse.answer || "Sorry, I didn't understand that. Can you rephrase?"
-    );
+    return nlpResponse.answer || queryConversation(message);
   }
 }

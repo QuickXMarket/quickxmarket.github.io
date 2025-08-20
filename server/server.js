@@ -5,7 +5,7 @@ import { toggleOnlineStatus } from "./controllers/userController.js";
 import { notifyParticipants } from "./controllers/chatController.js";
 import { startVendorToggleCron } from "./cron/toggleVendorStatus.js";
 import { getBalance } from "./controllers/paystackController.js";
-import { trainModel } from "./bots/nlp/train.js";
+import { loadFuseConversation, trainModel } from "./bots/nlp/train.js";
 import { loadModel } from "./bots/nlp/manager.js";
 import { loadGeoJsonData } from "./controllers/geoCodeController.js";
 
@@ -59,6 +59,7 @@ server.listen(process.env.PORT || 4000, () => {
 startVendorToggleCron();
 loadGeoJsonData();
 loadModel();
+loadFuseConversation()
 // trainModel()
 
 export default server;

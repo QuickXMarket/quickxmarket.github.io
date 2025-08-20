@@ -9,13 +9,16 @@ import conversationData from "../intents/conversation.json" with { type: "json" 
 import pidginGreetingsData from "../intents/pidginGreetings.json" with { type: "json" };
 import pidginConversationData from "../intents/pidginConversation.json" with { type: "json" };
 import fs from "fs";
-import csv from "csv-parser";   
+import csv from "csv-parser";
+import Fuse from "fuse.js";
+
+let fuse = null; 
 
 const allIntents = [
   ...dispatchData,
-  ...errandData,
+  // ...errandData,
   ...enquiryData,
-  ...orderData,
+  // ...orderData,
   ...greetingsData,
   ...confirmationData,
   ...conversationData,
@@ -52,12 +55,23 @@ const loadConversationCSV = async (filePath) => {
   });
 };
 
-export const trainModel = async () => {
+export const loadFuseConversation = async () => {
   const csvIntents = await loadConversationCSV("./bots/intents/Conversation.csv");
+
+  fuse = new Fuse(csvIntents, {
+    keys: ["utterance"],
+    threshold: 0.4, 
+    includeScore: true,
+  });
+
+  console.log("Fuse.js conversation retriever ready!");
+  return fuse;
+};
+
+export const trainModel = async () => {
 
   const combinedIntents = [
     ...allIntents,
-    // ...csvIntents
   ];
 
   for (const { lan, utterance, intent, answer } of combinedIntents) {
@@ -74,10 +88,23 @@ export const trainModel = async () => {
   NLPmanager.addAnswer("en", "enquiry", "Sure, let me calculate cost.");
   NLPmanager.addAnswer("en", "order", "Order request received.");
 
-  NLPmanager.addRegexEntity('code', 'en', /\b[a-f0-9]{24}\b/);
+  NLPmanager.addRegexEntity("code", "en", /\b[a-f0-9]{24}\b/);
 
   console.log("Training model, please wait...");
   await NLPmanager.train();
   await NLPmanager.save("./bots/nlp/model.nlp");
   console.log("Model trained and saved!");
+};
+
+export const queryConversation = (input) => {
+  if (!fuse) {
+    throw new Error("Fuse not initialized. Call loadFuseConversation() first.");
+  }
+
+  const results = fuse.search(input);
+  if (results.length > 0) {
+  return results.length ? results[0].item.answer :  "Sorry, I didn't understand that. Can you rephrase?";
+
+  }
+  return null;
 };
