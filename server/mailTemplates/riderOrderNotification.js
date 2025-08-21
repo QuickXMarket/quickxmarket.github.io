@@ -1,0 +1,73 @@
+const riderOrderNotification = (products, orderId, customerAddress = {}) => {
+  let total = 0;
+  const websiteDomain = process.env.WEBSITE_URL;
+
+  const productHTML = products
+    .map((product) => {
+      const { name, quantity, totalPrice, imageUrl, productLink } = product;
+      total += totalPrice;
+
+      return `
+      <div style="display: flex; align-items: center; margin-bottom: 15px;">
+        <img src="${imageUrl}" alt="${name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px; margin-right: 15px;" />
+        <div>
+          <a href="${productLink}" style="font-weight: bold; color: #007bff; text-decoration: none;">${name}</a>
+          <div style="font-size: 14px; color: #555;">Quantity: ${quantity}</div>
+          <div style="font-size: 14px; color: #555;">Total: ₦${totalPrice.toLocaleString()}</div>
+        </div>
+      </div>
+    `;
+    })
+    .join("");
+
+  return `
+    <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+      <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+    
+        <!-- Logo -->
+        <div style="text-align: center; margin-bottom: 20px;">
+          <img src="https://res.cloudinary.com/quickxmarket/image/upload/v1751029252/QuickXMarket_Logo_Transparent_ym6zl9.png" alt="QuickXMarket Logo" style="max-height: 60px;" />
+        </div>
+    
+        <!-- Header -->
+        <h2 style="color: #333;">New Delivery Request</h2>
+        <p style="color: #666; font-size: 15px;">
+          Hello Rider,<br /><br />
+          A new order <strong>(ID: #${orderId})</strong> has been placed and is ready for delivery. Below are the details of the items and customer.
+        </p>
+    
+        <!-- Customer Info -->
+        <div style="margin: 20px 0; font-size: 14px; color: #444;">
+          <strong>Customer:</strong> ${customerAddress.firstName || ""} ${
+    customerAddress.lastName || ""
+  }<br />
+          <strong>Phone:</strong> ${
+            customerAddress.phone
+              ? `<a href="tel:${customerAddress.phone}" style="color: #444; text-decoration: none;">${customerAddress.phone}</a>`
+              : "N/A"
+          }<br />
+          <strong>Address:</strong> ${
+            customerAddress.address || "No Address Provided"
+          }
+        </div>
+    
+        <!-- Product List -->
+        <div style="margin-top: 20px;">
+          ${productHTML}
+        </div>
+    
+        <!-- Total -->
+        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+        <div style="text-align: right; font-size: 16px; font-weight: bold; color: #333;">
+          Total Order Value: ₦${total.toLocaleString()}
+        </div>
+    
+        <!-- Footer -->
+        <p style="color: #999; font-size: 13px; margin-top: 20px;">
+          Please open your rider dashboard to accept or view the order.
+        </p>
+    
+      </div>
+    </div>
+    `;
+};
