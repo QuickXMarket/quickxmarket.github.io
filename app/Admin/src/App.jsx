@@ -23,6 +23,7 @@ import Account from "./pages/Account";
 import VendorRequests from "./pages/VendorRequests";
 import VendorRequestDetails from "./pages/VendorRequestDetails";
 import RiderRequests from "./pages/RiderRequests";
+import RiderRequestDetails from "./pages/RiderRequestDetails";
 
 const App = () => {
   const { loggedIn, admin, authLoading } = useAuthContext();

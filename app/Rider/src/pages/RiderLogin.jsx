@@ -15,6 +15,8 @@ const RiderLogin = () => {
   const [vehicle, setVehicle] = useState("Bicycle");
   const [ninImage, setNinImage] = useState(null);
   const [uploadPreview, setUploadPreview] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const validateAge = (dob) => {
     const birthDate = new Date(dob);
@@ -84,6 +86,7 @@ const RiderLogin = () => {
     }
 
     try {
+      setLoading(true);
       const data = {
         name: fullName,
         number,
@@ -106,134 +109,155 @@ const RiderLogin = () => {
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen w-full bg-background flex items-center justify-center px-4">
-      <form
-        onSubmit={onSubmitHandler}
-        className="flex flex-col gap-5 w-[90%] max-w-sm p-8 rounded-2xl shadow-2xl border border-gray-200 bg-background transition-all"
-      >
-        <p className="text-xl font-semibold text-center text-gray-800 dark:text-white">
-          Rider Registration
-        </p>
-        {/* Profile Upload */}
-        <label
-          htmlFor="profilePhoto"
-          className="relative w-24 h-24 mx-auto cursor-pointer group"
+      {!submitted ? (
+        <form
+          onSubmit={onSubmitHandler}
+          className="flex flex-col gap-5 w-[90%] max-w-sm p-8 rounded-2xl shadow-2xl border border-gray-200 bg-background transition-all"
         >
-          <input
-            type="file"
-            id="profilePhoto"
-            accept="image/*"
-            onChange={onFileChange}
-            hidden
-          />
-          <img
-            src={uploadPreview || assets.upload_area}
-            alt="Upload"
-            className="rounded-full object-cover w-full h-full border border-gray-300 shadow-inner group-hover:brightness-90"
-          />
-          <div className="absolute inset-0 flex items-center justify-center text-xs text-white bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-            Change
-          </div>
-        </label>
-
-        {/* Full Name */}
-        <div className="w-full">
-          <label className="text-sm font-medium text-gray-700 ">
-            Full Name
-          </label>
-          <input
-            type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            placeholder="Enter your name"
-            required
-            className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
-          />
-        </div>
-
-        {/* Phone Number */}
-        <div className="w-full">
-          <label className="text-sm font-medium text-gray-700 ">
-            Phone Number
-          </label>
-          <input
-            type="tel"
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
-            placeholder="Enter phone number"
-            required
-            className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
-          />
-        </div>
-
-        {/* Date of Birth */}
-        <div className="w-full">
-          <label className="text-sm font-medium text-gray-700 ">
-            Date of Birth
-          </label>
-          <input
-            type="date"
-            value={dob}
-            onChange={(e) => setDob(e.target.value)}
-            required
-            className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
-          />
-        </div>
-
-        {/* NIN Card/Slip Upload */}
-        <div className="w-full">
-          <label className="text-sm font-medium text-gray-700">
-            National Identification Number (NIN) Card/Slip
-          </label>
-          <div
-            onClick={pickNinImage}
-            className="mt-1 w-full flex items-center justify-center px-3 py-6 border-2 border-dashed border-gray-300 rounded-md cursor-pointer hover:border-primary transition-all bg-gray-50"
+          <p className="text-xl font-semibold text-center text-gray-800 dark:text-white">
+            Rider Registration
+          </p>
+          {/* Profile Upload */}
+          <label
+            htmlFor="profilePhoto"
+            className="relative w-24 h-24 mx-auto cursor-pointer group"
           >
-            {ninImage ? (
-              <img
-                src={ninImage}
-                alt="NIN Preview"
-                className="h-32 object-contain"
-              />
-            ) : (
-              <p className="text-sm text-gray-500">
-                Tap to upload NIN card/slip
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Vehicle Type */}
-        <div className="w-full">
-          <label className="text-sm font-medium text-gray-700 ">
-            Vehicle Type
+            <input
+              type="file"
+              id="profilePhoto"
+              disabled={loading}
+              accept="image/*"
+              onChange={onFileChange}
+              hidden
+            />
+            <img
+              src={uploadPreview || assets.upload_area}
+              alt="Upload"
+              className="rounded-full object-cover w-full h-full border border-gray-300 shadow-inner group-hover:brightness-90"
+            />
+            <div className="absolute inset-0 flex items-center justify-center text-xs text-white bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+              Change
+            </div>
           </label>
-          <select
-            value={vehicle}
-            onChange={(e) => setVehicle(e.target.value)}
-            required
-            className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
-          >
-            <option value="" disabled>
-              Select vehicle type
-            </option>
-            <option value="Bicycle">Bicycle</option>
-            <option value="Motorcycle">Motorcycle</option>
-          </select>
-        </div>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className="w-full py-2 text-sm font-medium text-white bg-primary rounded-md hover:bg-primary-dull transition-all"
-        >
-          Register as Rider
-        </button>
-      </form>
+          {/* Full Name */}
+          <div className="w-full">
+            <label className="text-sm font-medium text-gray-700 ">
+              Full Name
+            </label>
+            <input
+              type="text"
+              value={fullName}
+              disabled={loading}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder="Enter your name"
+              required
+              className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
+            />
+          </div>
+
+          {/* Phone Number */}
+          <div className="w-full">
+            <label className="text-sm font-medium text-gray-700 ">
+              Phone Number
+            </label>
+            <input
+              type="tel"
+              value={number}
+              disabled={loading}
+              onChange={(e) => setNumber(e.target.value)}
+              placeholder="Enter phone number"
+              required
+              className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
+            />
+          </div>
+
+          {/* Date of Birth */}
+          <div className="w-full">
+            <label className="text-sm font-medium text-gray-700 ">
+              Date of Birth
+            </label>
+            <input
+              type="date"
+              value={dob}
+              disabled={loading}
+              onChange={(e) => setDob(e.target.value)}
+              required
+              className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
+            />
+          </div>
+
+          {/* NIN Card/Slip Upload */}
+          <div className="w-full">
+            <label className="text-sm font-medium text-gray-700">
+              National Identification Number (NIN) Card/Slip
+            </label>
+            <div
+              onClick={pickNinImage}
+              disabled={loading}
+              className="mt-1 w-full flex items-center justify-center px-3 py-6 border-2 border-dashed border-gray-300 rounded-md cursor-pointer hover:border-primary transition-all bg-gray-50"
+            >
+              {ninImage ? (
+                <img
+                  src={ninImage}
+                  alt="NIN Preview"
+                  className="h-32 object-contain"
+                />
+              ) : (
+                <p className="text-sm text-gray-500">
+                  Tap to upload NIN card/slip
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Vehicle Type */}
+          <div className="w-full">
+            <label className="text-sm font-medium text-gray-700 ">
+              Vehicle Type
+            </label>
+            <select
+              value={vehicle}
+              disabled={loading}
+              onChange={(e) => setVehicle(e.target.value)}
+              required
+              className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200 dark:text-text"
+            >
+              <option value="" disabled>
+                Select vehicle type
+              </option>
+              <option value="Bicycle">Bicycle</option>
+              <option value="Motorcycle">Motorcycle</option>
+            </select>
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-2 text-sm font-medium text-white bg-primary rounded-md hover:bg-primary-dull transition-all"
+          >
+            {`${loading ? "Registering as Rider..." : "Register as Rider"}`}
+          </button>
+        </form>
+      ) : (
+        <div className="flex flex-col items-center justify-center w-[90%] max-w-sm p-8 rounded-2xl shadow-2xl border border-gray-200 bg-white dark:bg-background text-center space-y-4">
+          <h2 className="text-2xl font-bold text-primary">
+            Registration Submitted!
+          </h2>
+          <p className="text-gray-700 dark:text-gray-300">
+            Your rider registration request has been successfully submitted. Our
+            team will review your application and get back to you soon.
+          </p>
+        </div>
+      )}
     </div>
   );
 };

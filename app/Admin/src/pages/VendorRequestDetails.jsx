@@ -11,6 +11,7 @@ const VendorRequestDetails = () => {
   const [remarks, setRemarks] = useState("");
   const [responding, setResposning] = useState(false);
   const { requestId } = useParams();
+  const [response, setResponse] = useState("");
 
   const getVendorRequests = async () => {
     try {
@@ -38,6 +39,7 @@ const VendorRequestDetails = () => {
 
   const handleRequestResponse = async (approved) => {
     setResposning(true);
+    setResponse(approved);
     try {
       const data = await makeRequest({
         url: "/api/admin/vendorRequestResponse",
@@ -49,7 +51,7 @@ const VendorRequestDetails = () => {
         navigate("/vendor-requests");
       }
     } catch (error) {
-      toast.error("");
+      toast.error("Failed to process vendor request. Please try again.");
     } finally {
       setResposning(false);
     }
@@ -112,14 +114,18 @@ const VendorRequestDetails = () => {
                 onClick={() => handleRequestResponse(true)}
                 className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-slate-50 text-base font-bold leading-normal tracking-[0.015em] grow"
               >
-                <span className="truncate">Accept</span>
+                <span className="truncate">
+                  {`${responding && response ? "Accepting..." : "Accept"}`}
+                </span>
               </button>
               <button
                 disabled={responding}
                 onClick={() => handleRequestResponse(false)}
                 className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-red-500 text-text text-base font-bold leading-normal tracking-[0.015em] grow"
               >
-                <span className="truncate">Reject</span>
+                <span className="truncate">
+                  {`${responding && !response ? "Rejecting..." : "Reject"}`}
+                </span>
               </button>
             </div>
           </div>

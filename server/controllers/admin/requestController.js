@@ -8,6 +8,7 @@ import VendorRequest from "../../models/VendorRequest.js";
 import { sendVendorRequestResponseNotif } from "../../mailTemplates/vendorRequest.js";
 import { sendRiderRequestResponseNotif } from "../../mailTemplates/riderRequest.js";
 import { decrypt } from "../../utils/encryptText.js";
+import { updateUserRoleFn } from "../userController.js";
 
 export const getVendorRequests = async (req, res) => {
   try {
@@ -62,6 +63,7 @@ export const vendorRequestResponse = async (req, res) => {
         openingTime: request.openingTime,
         closingTime: request.closingTime,
       });
+      await updateUserRoleFn(request.userId, "vendor");
       const walletResult = await createWalletLogic(request.userId, "vendor");
       if (!walletResult.success) {
         console.warn("Wallet not created:", walletResult.message);
@@ -164,7 +166,9 @@ export const riderRequestResponse = async (req, res) => {
         number: request.number,
         dob: request.dob,
         vehicleType: request.vehicleType,
+        ninImageHash: request.ninImageHash,
       });
+      await updateUserRoleFn(request.userId, "rider");
       const walletResult = await createWalletLogic(request.userId, "rider");
       if (!walletResult.success) {
         console.warn("Wallet not created:", walletResult.message);

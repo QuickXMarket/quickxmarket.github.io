@@ -15,7 +15,7 @@ const riderSchema = new mongoose.Schema(
     dob: { type: Date, required: true },
     vehicleType: {
       type: String,
-      enum: ["bicycle", "motorcycle"],
+      enum: ["Bicycle", "Motorcycle"],
       required: true,
     },
     ninImageHash: {

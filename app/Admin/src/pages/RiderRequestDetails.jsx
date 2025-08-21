@@ -11,8 +11,9 @@ const RiderRequestDetails = () => {
   const [request, setRequest] = useState();
   const [remarks, setRemarks] = useState("");
   const [responding, setResposning] = useState(false);
-  const [showNinImage, setShowNinImage] = useState(false); // 🔹 new state
+  const [showNinImage, setShowNinImage] = useState(false);
   const { requestId } = useParams();
+  const [response, setResponse] = useState("");
 
   const getRiderRequests = async () => {
     try {
@@ -40,6 +41,7 @@ const RiderRequestDetails = () => {
 
   const handleRequestResponse = async (approved) => {
     setResposning(true);
+    setResponse(approved);
     try {
       const data = await makeRequest({
         url: "/api/admin/riderRequestResponse",
@@ -51,7 +53,8 @@ const RiderRequestDetails = () => {
         navigate("/rider-requests");
       }
     } catch (error) {
-      toast.error("");
+      toast.error("Failed to process rider request. Please try again.");
+      console.error(error);
     } finally {
       setResposning(false);
     }
@@ -63,33 +66,40 @@ const RiderRequestDetails = () => {
         <div>
           <div className="@container">
             <div className="@[480px]:px-4 @[480px]:py-3">
-              <div
-                className="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32"
-                style={{
-                  backgroundImage: `url(${
-                    request.profilePhoto || assets.profile_icon
-                  })`,
-                }}
-              ></div>
+              <div class="flex gap-4 flex-col items-center">
+                <div
+                  className="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32"
+                  style={{
+                    backgroundImage: `url(${
+                      request.profilePhoto || assets.profile_icon
+                    })`,
+                  }}
+                ></div>
+                <h1 className="text-text text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 text-left pb-3 pt-5">
+                  {request.name}
+                </h1>
+              </div>
             </div>
           </div>
-          <h1 className="text-text text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 text-left pb-3 pt-5">
-            {request.name}
-          </h1>
+
           <p className="text-text text-base font-normal leading-normal pb-3 pt-1 px-4">
-            {request.number}
+            <span className="font-semibold">Phone: </span> {request.number}
           </p>
+
           <p className="text-text text-base font-normal leading-normal pb-3 pt-1 px-4">
+            <span className="font-semibold">Vehicle Type: </span>{" "}
             {request.vehicleType}
           </p>
+
           <p className="text-text text-base font-normal leading-normal pb-3 pt-1 px-4">
-            {request.dob}
+            <span className="font-semibold">Date of Birth: </span>{" "}
+            {new Date(request.dob).toLocaleDateString()}
           </p>
 
           <div className="px-4 py-3">
             <button
               onClick={() => setShowNinImage(!showNinImage)}
-              className="text-primary text-sm font-medium underline"
+              className="text-primary text-sm font-medium underline "
             >
               {showNinImage ? "Hide NIN Image" : "Show NIN Image"}
             </button>
@@ -133,14 +143,18 @@ const RiderRequestDetails = () => {
                 onClick={() => handleRequestResponse(true)}
                 className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-slate-50 text-base font-bold leading-normal tracking-[0.015em] grow"
               >
-                <span className="truncate">Accept</span>
+                <span className="truncate">
+                  {`${responding && response ? "Accepting..." : "Accept"}`}
+                </span>
               </button>
               <button
                 disabled={responding}
                 onClick={() => handleRequestResponse(false)}
                 className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-red-500 text-text text-base font-bold leading-normal tracking-[0.015em] grow"
               >
-                <span className="truncate">Reject</span>
+                <span className="truncate">
+                  {`${responding && !response ? "Rejecting..." : "Reject"}`}
+                </span>
               </button>
             </div>
           </div>

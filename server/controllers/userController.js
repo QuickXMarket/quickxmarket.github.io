@@ -205,40 +205,49 @@ export const logout = async (req, res) => {
   }
 };
 
-// Update User Role : /api/user/update-role
+export const updateUserRoleFn = async (userId, role) => {
+  if (!userId || !role) {
+    throw new Error("Missing userId or role");
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  if (role === "vendor" && !user.isSeller) {
+    user.isSeller = true;
+  } else if (role === "rider" && !user.isRider) {
+    user.isRider = true;
+  }
+
+  await user.save();
+
+  return {
+    email: user.email,
+    name: user.name,
+    isSeller: user.isSeller,
+    isRider: user.isRider,
+    _id: user._id,
+  };
+};
+
 export const updateUserRole = async (req, res) => {
   try {
     const { userId, role } = req.body;
-    if (!userId || !role) {
-      return res.json({ success: false, message: "Missing userId or role" });
-    }
-    const user = await User.findById(userId);
-    if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
-    }
-    if (role === "vendor" && !user.isSeller) {
-      user.isSeller = true;
-    } else if (role === "rider" && !user.isRider) {
-      user.isRider = true;
-    }
 
-    await user.save();
+    const updatedUser = await updateUserRoleFn(userId, role);
+
     return res.json({
       success: true,
       message: "User role updated successfully",
-      user: {
-        email: user.email,
-        name: user.name,
-        isSeller: user.isSeller,
-        isRider: user.isRider,
-        _id: user._id,
-      },
+      user: updatedUser,
     });
   } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ success: false, message: error.message });
+    console.error("Error updating user role:", error.message);
+    res
+      .status(error.message === "User not found" ? 404 : 400)
+      .json({ success: false, message: error.message });
   }
 };
 

@@ -27,7 +27,7 @@ adminRouter.get("/orders", authUser, getAllOrders);
 adminRouter.get("/vendor-requests", authUser, getVendorRequests);
 adminRouter.post("/vendorRequestResponse", authUser, vendorRequestResponse);
 adminRouter.get("/rider-requests", authUser, getRiderRequests);
-adminRouter.post("riderRequestResponse", authUser, riderRequestResponse);
+adminRouter.post("/riderRequestResponse", authUser, riderRequestResponse);
 // adminRouter.get("/dashboard", authUser, getDashboardStats);
 
 export default adminRouter;
