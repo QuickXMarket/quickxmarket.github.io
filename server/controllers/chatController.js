@@ -1,8 +1,8 @@
 import { v2 as cloudinary } from "cloudinary";
 import Chat from "../models/Chat.js";
 import User from "../models/User.js";
+import  sendNewMessageNotification  from "../mailTemplates/newMessageNotification.js";
 import { sendPushNotification } from "../utils/fcmService.js";
-import { sendNewMessageNotification } from "./mailController.js";
 import Admin from "../models/Admin.js";
 
 async function uploadBase64Image(base64String, folder, publicId) {

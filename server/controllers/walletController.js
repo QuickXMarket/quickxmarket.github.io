@@ -6,35 +6,9 @@ export const createWallet = async (req, res) => {
   try {
     const { userId, walletType } = req.body;
 
-    if (!userId || !walletType) {
-      return res.json({
-        success: false,
-        message: "User ID and wallet type are required",
-      });
-    }
+    const result = await createWalletLogic(userId, walletType);
 
-    const existingWallet = await Wallet.findOne({ userId, walletType });
-    if (existingWallet) {
-      return res.json({
-        success: false,
-        message: `Wallet already exists for this ${walletType}`,
-      });
-    }
-
-    const wallet = await Wallet.create({
-      userId,
-      walletType,
-      balance: 0,
-      transactions: [],
-    });
-
-    return res.json({
-      success: true,
-      wallet: {
-        balance: wallet.balance,
-        transactions: wallet.transactions,
-      },
-    });
+    return res.json(result);
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ success: false, message: error.message });

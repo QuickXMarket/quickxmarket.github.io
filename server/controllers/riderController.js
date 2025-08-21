@@ -3,6 +3,7 @@ import Rider from "../models/Rider.js";
 import { createWalletLogic } from "./walletController.js";
 import { encrypt } from "../utils/encryptText.js";
 import RiderRequest from "../models/RiderRequest.js";
+import { sendRiderRequestConfirmation } from "../mailTemplates/riderRequest.js";
 
 async function uploadBase64Image(base64String, folder, publicId) {
   try {
@@ -65,10 +66,10 @@ export const sendRegisterRequest = async (req, res) => {
           admin.notification = [];
         }
         admin.notification.push({
-          title: "New Vendor Registration Request",
-          message: "A new vendor has applied. Review the request.",
-          type: "vendorRequest",
-          data: { id: vendorRequest._id },
+          title: "New Rider Registration Request",
+          message: "A new rider has applied. Review the request.",
+          type: "riderRequest",
+          data: { id: riderRequest._id },
         });
 
         await admin.save();
@@ -79,9 +80,9 @@ export const sendRegisterRequest = async (req, res) => {
       try {
         await sendPushNotification(
           token,
-          "New Vendor Registration Request",
-          `${vendorRequest.businessName} has requested to join as a vendor. Review their details in the dashboard.`,
-          { route: `/vendor-request/${vendorRequest._id}` }
+          "New Rider Registration Request",
+          `${riderRequest.name} has requested to join as a rider. Review their details in the dashboard.`,
+          { route: `/rider-request/${riderRequest._id}` }
         );
       } catch (error) {
         console.error(
@@ -91,6 +92,7 @@ export const sendRegisterRequest = async (req, res) => {
         );
       }
     }
+    await sendRiderRequestConfirmation(user.email, name);
 
     res.json({ success: true, message: "Resquest has been sent" });
   } catch (error) {

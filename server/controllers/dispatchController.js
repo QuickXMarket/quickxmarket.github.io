@@ -1,9 +1,9 @@
 import { sendWhatsappMessage } from "../bots/Whatsapp/client.js";
+import { sendDispatchDeliveryCode } from "../mailTemplates/dispatchNotification.js";
 import Dispatch from "../models/Dispatch.js";
 import Rider from "../models/Rider.js";
 import { calculateDeliveryFee } from "../utils/deliveryService.js";
 import { sendPushNotification } from "../utils/fcmService.js";
-import { sendDispatchDeliveryCode } from "./mailController.js";
 
 export const createNewDispatch = async (
   res,

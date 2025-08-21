@@ -1,3 +1,4 @@
+import { sendErrandConfirmation } from "../mailTemplates/errandNotification.js";
 import Errand from "../models/Errand.js";
 import Rider from "../models/Rider.js";
 import { calculateDeliveryFee } from "../utils/deliveryService.js";
@@ -39,7 +40,7 @@ export const createNewErrand = async (res, userId, reference, errandData) => {
     }
 
     if (errandData.dropOff.email) {
-      await sendErrandDeliveryCode(errand._id, errandData.errands, {
+      await sendErrandConfirmation(errand._id, errandData.errands, {
         email: errandData.dropOff.email,
         phone: errandData.dropOff.phone,
         firstName: errandData.dropOff.firstName,

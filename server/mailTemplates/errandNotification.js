@@ -1,3 +1,5 @@
+import { transporter } from "../controllers/mailController";
+
 const userErrandOrderConfirmation = (errands, orderId, customer = {}) => {
   const websiteDomain = process.env.WEBSITE_URL;
 
@@ -55,4 +57,20 @@ const userErrandOrderConfirmation = (errands, orderId, customer = {}) => {
     </div>
   </div>
   `;
+};
+
+export const sendErrandConfirmation = async (errandId, errands, dropOff) => {
+  try {
+    await transporter.sendMail({
+      from: `"QuickXMarket" <${process.env.SMTP_USER}>`,
+      to: dropOff.email,
+      subject: `Your Errand Request Has Been Received! - Order #${errandId}`,
+      html: userErrandOrderConfirmation(errands, errandId, dropOff),
+    });
+  } catch (error) {
+    console.error(
+      `❌ Failed to send errand confirmation email for Order #${errandId} to ${dropOff.email}:`,
+      error
+    );
+  }
 };

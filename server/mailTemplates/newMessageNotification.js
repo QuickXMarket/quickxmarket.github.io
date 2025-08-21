@@ -1,3 +1,5 @@
+import { transporter } from "../controllers/mailController";
+
 const newMessageNotification = ({ senderName, messageText, mediaUrl }) => {
   const websiteDomain = process.env.WEBSITE_URL;
   const chatLink = `https://${websiteDomain}?contact=true`;
@@ -51,3 +53,23 @@ const newMessageNotification = ({ senderName, messageText, mediaUrl }) => {
   </div>
   `;
 };
+
+const sendNewMessageNotification = async ({
+  recipientEmail,
+  senderName,
+  messageText,
+  mediaUrl,
+}) => {
+  try {
+    await transporter.sendMail({
+      from: `"QuickXMarket" <${process.env.SMTP_USER}>`,
+      to: recipientEmail,
+      subject: `New Message from ${senderName}`,
+      html: newMessageNotification({ senderName, messageText, mediaUrl }),
+    });
+  } catch (error) {
+    console.error("❌ Error sending new message notification email:", error);
+  }
+};
+
+export default sendNewMessageNotification();

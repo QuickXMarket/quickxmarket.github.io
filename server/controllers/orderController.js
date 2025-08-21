@@ -3,7 +3,7 @@ import Rider from "../models/Rider.js";
 import Vendor from "../models/Vendor.js";
 import User from "../models/User.js";
 import { calculateTotalDeliveryFee } from "../utils/deliveryService.js";
-import { sendOrderNotification } from "./mailController.js";
+import sendOrderNotification from "../mailTemplates/orderNotification.js";
 import { sendPushNotification } from "../utils/fcmService.js";
 
 export const createNewOrder = async (res, userId, reference, orderData) => {
@@ -113,7 +113,7 @@ export const createNewOrder = async (res, userId, reference, orderData) => {
         );
       }
     }
-    
+
     return res.status(200).json({ received: true });
   } catch (err) {
     console.error(" Error creating new order:", err);

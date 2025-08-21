@@ -1,3 +1,5 @@
+import { transporter } from "../controllers/mailController";
+
 const resetPasswordEmail = (resetLink) => {
   return `
   <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
@@ -37,3 +39,18 @@ const resetPasswordEmail = (resetLink) => {
   </div>
   `;
 };
+
+const sendResetPasswordEmail = async (userEmail, resetLink) => {
+  try {
+    await transporter.sendMail({
+      from: `"QuickXMarket Support" <${process.env.SMTP_USER}>`,
+      to: userEmail,
+      subject: "Reset Your QuickXMarket Password",
+      html: resetPasswordEmail(resetLink),
+    });
+  } catch (error) {
+    console.error("❌ Error sending reset password email:", error);
+  }
+};
+
+export default sendResetPasswordEmail();

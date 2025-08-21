@@ -7,7 +7,7 @@ import { sendPushNotification } from "../utils/fcmService.js";
 import Admin from "../models/Admin.js";
 import VendorRequest from "../models/VendorRequest.js";
 import User from "../models/User.js";
-import { sendVendorRequestConfirmation } from "./mailController.js";
+import { sendVendorRequestConfirmation } from "../mailTemplates/vendorRequest.js";
 
 async function uploadBase64Image(base64String) {
   try {

@@ -1,3 +1,5 @@
+import { transporter } from "../controllers/mailController";
+
 const dispatchRecipientNotification = (
   dispatchId,
   deliveryCode,
@@ -44,3 +46,17 @@ const dispatchRecipientNotification = (
   </div>
   `;
 };
+
+export const sendDispatchDeliveryCode = async (dispatchId, deliveryCode, dropoff) => {
+  try {
+    await transporter.sendMail({
+      from: `"QuickXMarket" <${process.env.SMTP_USER}>`,
+      to: dropoff.email,
+      subject: `Dispatch Delivery Code - Dispatch #${dispatchId}`,
+      html: dispatchRecipientNotification(dispatchId, deliveryCode, dropoff),
+    });
+  } catch (error) {
+    console.error("❌ Error sending dispatch delivery code email:", error);
+  }
+};
+

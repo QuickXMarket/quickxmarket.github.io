@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 
-const PinModal = ({ isOpen, onClose, onSubmit, state }) => {
+const PinModal = ({ isOpen, onClose, state, setState }) => {
   const [pin, setPin] = useState("");
+  const [confirmPin, setConfirmPin] = useState("");
 
-  const handleKeyPress = (value) => {
+  const handleKeyPress = async (value) => {
     if (value === "backspace") {
       setPin((prev) => prev.slice(0, -1));
     } else if (value === "enter") {
       if (pin.length === 4) {
-        onSubmit(pin);
+        await handlePinSubmit(pin);
         setPin("");
       }
     } else {
@@ -18,7 +19,46 @@ const PinModal = ({ isOpen, onClose, onSubmit, state }) => {
     }
   };
 
-  const handlePinSubmit = async () => {};
+  const handlePinSubmit = async (pin) => {
+    let data;
+    if (state === "set" || state === "edit") {
+      setConfirmPin(pin);
+      setState((state) => (state === "set" ? "confirm" : "new"));
+      setPin("");
+      return;
+    }
+    if (state === "confirm" || state === "new") data.newPin = pin;
+    if (state === "confirm") data.confirmPin = confirmPin;
+    if (state === "new") data.currentPin = confirmPin;
+    if (state === "enter") data.pin = pin;
+    data.walletType = "rider";
+
+    const route =
+      state === "confirm"
+        ? "createWalletPin"
+        : state === "new"
+        ? "editWalletPin"
+        : "confirmWalletPin";
+
+    try {
+      const res = await makeRequest({
+        url: `/api/wallet/${route}`,
+        method: "POST",
+        data,
+      });
+
+      if (res.success) {
+        if (state !== "enter") toast.success(res.message);
+        onClose();
+      } else {
+        toast.error(res.message || "Action failed");
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   if (!isOpen) return null;
 

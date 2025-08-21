@@ -76,7 +76,6 @@ const Wallet = () => {
           amount: withdrawAmount,
           description: "Withdrawal",
           walletType: "rider",
-          userId: user._id,
         },
       });
 
@@ -198,8 +197,8 @@ const Wallet = () => {
       <PinModal
         isOpen={showPinModal}
         onClose={() => setShowPinModal(false)}
-        onSubmit={() => console.log("done")}
         state={pinState}
+        setState={setPinState}
       />
     </div>
   );

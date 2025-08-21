@@ -1,7 +1,7 @@
 import { v2 as cloudinary } from "cloudinary";
 import Product from "../models/Product.js";
 import Vendor from "../models/Vendor.js";
-import { sendVendorProductUploadConfirmation } from "./mailController.js";
+import sendVendorProductUploadConfirmation from "../mailTemplates/vendorProductUploadConfirmation.js";
 
 async function uploadBase64Image(base64String, folder, publicId) {
   try {
