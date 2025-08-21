@@ -21,7 +21,7 @@ export const CoreProvider = ({ children }) => {
   const location = useLocation();
   const [theme, setTheme] = useState(null);
 
-  const baseUrl = "http://192.168.0.101:4000";
+  const baseUrl = "http://192.168.0.102:4000";
 
   const makeRequest = async ({ method, url, data }) => {
     try {
@@ -174,9 +174,8 @@ export const CoreProvider = ({ children }) => {
     };
   }, [location]);
 
-  const toggleTheme = async () => {
-    const isDark = document.body.classList.toggle("dark");
-    await Preferences.set({ key: "theme", value: isDark ? "dark" : "light" });
+  const toggleTheme = async (theme) => {
+    await Preferences.set({ key: "theme", value: theme });
     await applySavedTheme();
   };
 

@@ -9,6 +9,7 @@ const riderRequestSchema = new mongoose.Schema(
       unique: true,
       immutable: true,
     },
+    profilePhoto: { type: String, required: true },
     name: { type: String, required: true },
     number: { type: String, required: true },
     dob: { type: Date, required: true },
@@ -24,8 +25,8 @@ const riderRequestSchema = new mongoose.Schema(
     },
     adminRemarks: { type: String },
     ninImageHash: {
-      iv: { type: String, required: true }, 
-      content: { type: String, required: true }, 
+      iv: { type: String, required: true },
+      content: { type: String, required: true },
     },
 
     expireAt: {

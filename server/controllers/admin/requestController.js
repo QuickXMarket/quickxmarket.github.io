@@ -159,6 +159,7 @@ export const riderRequestResponse = async (req, res) => {
 
       rider = await Rider.create({
         userId: request.userId,
+        profilePhoto: request.profilePhoto,
         name: request.name,
         number: request.number,
         dob: request.dob,

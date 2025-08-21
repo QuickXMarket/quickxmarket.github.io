@@ -2,22 +2,19 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
 import { useCoreContext } from "../context/CoreContext";
+import { assets } from "../assets/assets";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 
 const RiderLogin = () => {
-  const { setShowRiderLogin, user, setIsRider } = useAuthContext();
-  const { navigate, makeRequest, location } = useCoreContext();
+  const { makeRequest, fileToBase64 } = useCoreContext();
 
   const [fullName, setFullName] = useState("");
+  const [profilePhoto, setProfilePhoto] = useState(null);
   const [number, setNumber] = useState("");
   const [dob, setDob] = useState("");
-  const [vehicle, setVehicle] = useState("bicycle");
+  const [vehicle, setVehicle] = useState("Bicycle");
   const [ninImage, setNinImage] = useState(null);
-
-  const handleClose = () => {
-    setShowRiderLogin(false);
-    if (location.pathname === "/rider") navigate("/");
-  };
+  const [uploadPreview, setUploadPreview] = useState(null);
 
   const validateAge = (dob) => {
     const birthDate = new Date(dob);
@@ -28,6 +25,12 @@ const RiderLogin = () => {
       return age - 1;
     }
     return age;
+  };
+
+  const onFileChange = (e) => {
+    const file = e.target.files[0];
+    setProfilePhoto(file);
+    setUploadPreview(URL.createObjectURL(file));
   };
 
   const pickNinImage = async () => {
@@ -70,6 +73,16 @@ const RiderLogin = () => {
       return;
     }
 
+    if (!profilePhoto) {
+      toast.error("");
+      return;
+    }
+
+    let profilePhotoBase64 = null;
+    if (profilePhoto) {
+      profilePhotoBase64 = await fileToBase64(profilePhoto);
+    }
+
     try {
       const data = {
         name: fullName,
@@ -77,6 +90,7 @@ const RiderLogin = () => {
         dob,
         vehicle,
         ninImage,
+        profilePhoto: profilePhotoBase64,
       };
 
       const response = await makeRequest({
@@ -104,6 +118,27 @@ const RiderLogin = () => {
         <p className="text-xl font-semibold text-center text-gray-800 dark:text-white">
           Rider Registration
         </p>
+        {/* Profile Upload */}
+        <label
+          htmlFor="profilePhoto"
+          className="relative w-24 h-24 mx-auto cursor-pointer group"
+        >
+          <input
+            type="file"
+            id="profilePhoto"
+            accept="image/*"
+            onChange={onFileChange}
+            hidden
+          />
+          <img
+            src={uploadPreview || assets.upload_area}
+            alt="Upload"
+            className="rounded-full object-cover w-full h-full border border-gray-300 shadow-inner group-hover:brightness-90"
+          />
+          <div className="absolute inset-0 flex items-center justify-center text-xs text-white bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+            Change
+          </div>
+        </label>
 
         {/* Full Name */}
         <div className="w-full">

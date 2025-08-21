@@ -1,9 +1,10 @@
-import { decodeBase64, encodeBase64 } from "bcryptjs";
 import Rider from "../models/Rider.js";
-import { createWalletLogic } from "./walletController.js";
+import { v2 as cloudinary } from "cloudinary";
 import { encrypt } from "../utils/encryptText.js";
 import RiderRequest from "../models/RiderRequest.js";
 import { sendRiderRequestConfirmation } from "../mailTemplates/riderRequest.js";
+import User from "../models/User.js";
+import Admin from "../models/Admin.js";
 
 async function uploadBase64Image(base64String, folder, publicId) {
   try {
@@ -25,9 +26,18 @@ async function uploadBase64Image(base64String, folder, publicId) {
 
 export const sendRegisterRequest = async (req, res) => {
   try {
-    const { userId, name, number, dob, vehicle, ninImage } = req.body;
+    const { userId, name, number, dob, vehicle, ninImage, profilePhoto } =
+      req.body;
 
-    if ((!userId || !name || !number || !dob || !vehicle, ninImage)) {
+    if (
+      !userId ||
+      !name ||
+      !number ||
+      !dob ||
+      !vehicle ||
+      !ninImage ||
+      !(profilePhoto && profilePhoto.startsWith("data:image"))
+    ) {
       return res.json({ success: false, message: "Missing required fields" });
     }
 
@@ -35,15 +45,24 @@ export const sendRegisterRequest = async (req, res) => {
     if (existingRider) {
       return res.json({ success: false, message: "Rider already registered" });
     }
+    const safeName = name.trim().replace(/\s+/g, "_");
+
     const ninImageUrl = await uploadBase64Image(
       ninImage,
-      Riders_NINImages,
-      name
+      "Riders_NINImages",
+      safeName
+    );
+
+    const profilePhotoUrl = await await uploadBase64Image(
+      profilePhoto,
+      "Riders_ProfilePhoto",
+      safeName
     );
     const ninImageHash = encrypt(ninImageUrl);
 
     const riderRequest = await RiderRequest.create({
       userId,
+      profilePhoto: profilePhotoUrl,
       name,
       number,
       dob,

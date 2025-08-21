@@ -63,8 +63,16 @@ const PinModal = ({ isOpen, onClose, state, setState }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50">
-      <div className="bg-background w-full max-w-md rounded-t-2xl shadow-lg p-6 flex flex-col items-center pb-16">
+    <div
+      className="fixed inset-0 bg-black/50 flex items-end justify-center z-50"
+      onClick={() => {
+        if (state === "edit" || state === "enter") onClose();
+      }}
+    >
+      <div
+        className="bg-background w-full max-w-md rounded-t-2xl shadow-lg p-6 flex flex-col items-center pb-16"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Title */}
         <h2 className="text-lg font-semibold mb-4">
           {state === "enter"
@@ -125,14 +133,15 @@ const PinModal = ({ isOpen, onClose, state, setState }) => {
         </div>
 
         {/* Cancel Button */}
-        {state === "edit" && (
-          <button
-            onClick={onClose}
-            className="text-sm text-gray-500 mt-2 underline"
-          >
-            Cancel
-          </button>
-        )}
+        {state === "edit" ||
+          (state === "enter" && (
+            <button
+              onClick={onClose}
+              className="text-sm text-gray-500 mt-2 underline"
+            >
+              Cancel
+            </button>
+          ))}
       </div>
     </div>
   );

@@ -20,12 +20,10 @@ const App = () => {
   const { isRider, user, authLoading } = useAuthContext();
   const { keyboardVisible, location, navigate } = useCoreContext();
 
-  const isRiderPath = location.pathname.includes("rider");
+  const isRiderPath = ["/", "/wallet", "/profile"].includes(location.pathname);
   const isContactPath = location.pathname.includes("contact");
 
-  const showBottomNav =
-    ["/", "/wallet", "/profile"].includes(location.pathname) &&
-    !keyboardVisible;
+  const showBottomNav = isRiderPath && !keyboardVisible;
 
   useEffect(() => {
     const hideSplashScreen = async () => {
@@ -57,6 +55,8 @@ const App = () => {
             ? ""
             : isContactPath
             ? "px-2 md:px-16 lg:px-24 xl:px-32 h-screen"
+            : user && isRider
+            ? "px-6 md:px-16 lg:px-24 xl:px-32"
             : ""
         }
       >
