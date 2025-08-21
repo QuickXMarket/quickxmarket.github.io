@@ -17,6 +17,10 @@ const riderSchema = new mongoose.Schema(
       enum: ["bicycle", "motorcycle"],
       required: true,
     },
+    ninImageHash: {
+      iv: { type: String, required: true },
+      content: { type: String, required: true },
+    },
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "order" }],
   },
   { timestamps: true }

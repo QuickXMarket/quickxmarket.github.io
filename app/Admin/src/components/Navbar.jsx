@@ -13,6 +13,8 @@ const Navbar = () => {
     { pattern: /^\/chatList$/, title: "Customer Support" },
     { pattern: /^\/vendor-requests$/, title: "Vendor Requests" },
     { pattern: /^\/vendor-requests\/[^\/]+\/?$/, title: "Vendor Request" },
+    { pattern: /^\/rider-requests$/, title: "Rider Requests" },
+    { pattern: /^\/rider-requests\/[^\/]+\/?$/, title: "Rider Request" },
   ];
 
   // Find matching heading

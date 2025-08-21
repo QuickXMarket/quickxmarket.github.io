@@ -15,7 +15,6 @@ const Layout = () => {
   const [rider, setRider] = useState("");
 
   useEffect(() => {
-
     verifyRider();
   }, [user, makeRequest]);
 

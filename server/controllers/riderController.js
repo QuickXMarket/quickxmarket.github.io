@@ -47,7 +47,7 @@ export const sendRegisterRequest = async (req, res) => {
       name,
       number,
       dob,
-      vehicle,
+      vehicleType: vehicle,
       ninImageHash,
     });
 
@@ -104,7 +104,7 @@ export const sendRegisterRequest = async (req, res) => {
 export const getRiderByUserId = async (req, res) => {
   try {
     const { userId } = req.body;
-    const rider = await Rider.findOne({ userId });
+    const rider = await Rider.findOne({ userId }).select("-ninImageHash");
 
     if (!rider) {
       return res.json({ success: false, message: "Rider not found" });
@@ -119,7 +119,8 @@ export const getRiderByUserId = async (req, res) => {
 export const getRiderById = async (req, res) => {
   try {
     const { riderId } = req.params;
-    const rider = await Rider.findById(riderId);
+    const rider = await Rider.findById(riderId).select("-ninImageHash");
+
     if (!rider) {
       return res.json({ success: false, message: "Rider not found" });
     }

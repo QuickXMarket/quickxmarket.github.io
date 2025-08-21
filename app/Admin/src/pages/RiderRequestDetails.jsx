@@ -3,50 +3,52 @@ import { useCoreContext } from "../context/CoreContext";
 import Loading from "../components/Loading";
 import { useParams } from "react-router";
 import toast from "react-hot-toast";
+import { assets } from "../assets/assets";
 
-const VendorRequestDetails = () => {
+const RiderRequestDetails = () => {
   const [loading, setLoading] = useState(true);
-  const { makeRequest, getRelativeDayLabel, navigate } = useCoreContext();
+  const { makeRequest, navigate } = useCoreContext();
   const [request, setRequest] = useState();
   const [remarks, setRemarks] = useState("");
   const [responding, setResposning] = useState(false);
+  const [showNinImage, setShowNinImage] = useState(false); // 🔹 new state
   const { requestId } = useParams();
 
-  const getVendorRequests = async () => {
+  const getRiderRequests = async () => {
     try {
       const data = await makeRequest({
-        url: "/api/admin/vendor-requests",
+        url: "/api/admin/rider-requests",
         method: "GET",
       });
       if (data.success) {
-        const vendorRequests = data.vendorRequests;
-        const currentRequest = vendorRequests.find(
+        const riderRequests = data.riderRequests;
+        const currentRequest = riderRequests.find(
           (request) => request._id === requestId
         );
         setRequest(currentRequest);
       }
     } catch (error) {
-      console.error("Error fetching vendor requests:", error);
+      console.error("Error fetching rider requests:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    getVendorRequests();
+    getRiderRequests();
   }, []);
 
   const handleRequestResponse = async (approved) => {
     setResposning(true);
     try {
       const data = await makeRequest({
-        url: "/api/admin/vendorRequestResponse",
+        url: "/api/admin/riderRequestResponse",
         method: "POST",
         data: { approved, requestId, remarks },
       });
       if (data.success) {
         toast.success(data.message);
-        navigate("/vendor-requests");
+        navigate("/rider-requests");
       }
     } catch (error) {
       toast.error("");
@@ -62,33 +64,53 @@ const VendorRequestDetails = () => {
           <div className="@container">
             <div className="@[480px]:px-4 @[480px]:py-3">
               <div
-                className="w-full bg-center bg-no-repeat bg-cover flex flex-col justify-end overflow-hidden bg-gray-50 @[480px]:rounded-lg min-h-[218px]"
+                className="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32"
                 style={{
-                  backgroundImage: `url("${
-                    request.profilePhoto ||
-                    "https://via.placeholder.com/400x200?text=No+Image"
-                  }")`,
+                  backgroundImage: `url(${
+                    request.profilePhoto || assets.profile_icon
+                  })`,
                 }}
               ></div>
             </div>
           </div>
-
           <h1 className="text-text text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 text-left pb-3 pt-5">
-            {request.businessName}
+            {request.name}
           </h1>
           <p className="text-text text-base font-normal leading-normal pb-3 pt-1 px-4">
             {request.number}
           </p>
           <p className="text-text text-base font-normal leading-normal pb-3 pt-1 px-4">
-            {request.address}
+            {request.vehicleType}
           </p>
+          <p className="text-text text-base font-normal leading-normal pb-3 pt-1 px-4">
+            {request.dob}
+          </p>
+
+          <div className="px-4 py-3">
+            <button
+              onClick={() => setShowNinImage(!showNinImage)}
+              className="text-primary text-sm font-medium underline"
+            >
+              {showNinImage ? "Hide NIN Image" : "Show NIN Image"}
+            </button>
+
+            {showNinImage && request.ninImageUrl && (
+              <div className="mt-3">
+                <img
+                  src={request.ninImageUrl}
+                  alt="Rider NIN"
+                  className="w-full max-w-md rounded-lg border"
+                />
+              </div>
+            )}
+          </div>
 
           <h3 className="text-text text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">
             User ID
           </h3>
           <p
             onClick={() => navigate(`/userDetails/${request.userId}`)}
-            className="text-primary text-base font-normal leading-normal pb-3 pt-1 px-4"
+            className="text-primary text-base font-normal leading-normal pb-3 pt-1 px-4 cursor-pointer"
           >
             {request.userId}
           </p>
@@ -104,7 +126,6 @@ const VendorRequestDetails = () => {
               ></textarea>
             </label>
           </div>
-
           <div className="flex justify-center">
             <div className="flex flex-1 gap-3 flex-wrap px-4 py-3 max-w-[480px] justify-center">
               <button
@@ -131,4 +152,4 @@ const VendorRequestDetails = () => {
   );
 };
 
-export default VendorRequestDetails;
+export default RiderRequestDetails;

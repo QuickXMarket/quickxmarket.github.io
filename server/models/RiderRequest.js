@@ -23,6 +23,10 @@ const riderRequestSchema = new mongoose.Schema(
       default: "pending",
     },
     adminRemarks: { type: String },
+    ninImageHash: {
+      iv: { type: String, required: true }, 
+      content: { type: String, required: true }, 
+    },
 
     expireAt: {
       type: Date,

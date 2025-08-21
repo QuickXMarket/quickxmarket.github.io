@@ -151,10 +151,10 @@ const Login = () => {
       key: "authTokenExpiry",
       value: String(Date.now() + 30 * 86400000),
     });
-     await Preferences.set({
-       key: "user",
-       value: JSON.stringify(data.user),
-     });
+    await Preferences.set({
+      key: "user",
+      value: JSON.stringify(data.user),
+    });
 
     setUser(data.user);
     setShowUserLogin(false);
@@ -183,6 +183,8 @@ const Login = () => {
       className="fixed inset-0 z-30 flex items-center justify-center bg-black/60"
     >
       <form
+        action="/auth"
+        method="post"
         onSubmit={(e) =>
           state !== "forgotPassword" ? onSubmitHandler(e) : sendResetEmail(e)
         }
@@ -222,6 +224,8 @@ const Login = () => {
             placeholder="Email Address"
             className="mt-1 w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-200  dark:text-text"
             type="email"
+            name="email"
+            autoComplete="email"
             required
           />
         </div>
@@ -244,7 +248,10 @@ const Login = () => {
                   : "focus:ring-primary"
               } focus:border-transparent dark:bg-gray-200 dark:text-text`}
               type="password"
-              autoComplete="current-password"
+              name="password"
+              autoComplete={
+                state === "register" ? "new-password" : "current-password"
+              }
               required
             />
             {passwordErrors.length > 0 && (

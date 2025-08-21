@@ -22,6 +22,7 @@ import RiderDetails from "./pages/RiderDetails";
 import Account from "./pages/Account";
 import VendorRequests from "./pages/VendorRequests";
 import VendorRequestDetails from "./pages/VendorRequestDetails";
+import RiderRequests from "./pages/RiderRequests";
 
 const App = () => {
   const { loggedIn, admin, authLoading } = useAuthContext();
@@ -88,6 +89,11 @@ const App = () => {
             <Route
               path="/vendor-requests/:requestId"
               element={<VendorRequestDetails />}
+            />
+            <Route path="/rider-requests" element={<RiderRequests />} />
+            <Route
+              path="/rider-requests/:requestId"
+              element={<RiderRequestDetails />}
             />
             <Route path="/chatList" element={<ChatList />} />
             <Route path="/contact/:chatId" element={<Contact />} />

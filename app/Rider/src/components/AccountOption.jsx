@@ -13,7 +13,7 @@ const AccountOption = ({ to, label, onClick, icon }) => {
     </div>
   );
 
-  return isLoggedIn ? (
+  return isLoggedIn && to ? (
     <Link to={to} className="block">
       {content}
     </Link>

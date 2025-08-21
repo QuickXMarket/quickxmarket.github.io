@@ -128,6 +128,7 @@ export const withdrawalRequest = async (req, res) => {
     const hasPending = wallet.transactions.some(
       (tx) => tx.type === "withdrawal" && tx.status === "pending"
     );
+    
     if (hasPending) {
       return res.json({
         success: false,

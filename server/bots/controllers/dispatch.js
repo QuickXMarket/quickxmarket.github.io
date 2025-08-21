@@ -83,7 +83,11 @@ export const getAllDispatches = async (userId) => {
 };
 
 export const getDispatchDetails = async (userId, dispatchId) => {
-  const order = await Dispatch.findById(dispatchId).populate("riderId");
+  const order = await Dispatch.findById(dispatchId).populate({
+    path: "riderId",
+    select: "-ninImageHash", 
+  });
+
   if (!order) {
     return { selected: "No dispatch found with that ID." };
   }

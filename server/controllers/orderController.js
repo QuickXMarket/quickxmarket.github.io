@@ -147,6 +147,10 @@ export const getUserOrders = async (req, res) => {
       userId,
     })
       .populate("items.product address")
+      .populate({
+        path: "riderId",
+        select: "name number vehicleType",
+      })
       .sort({ createdAt: -1 });
     res.json({ success: true, orders });
   } catch (error) {

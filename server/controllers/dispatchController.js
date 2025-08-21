@@ -95,11 +95,14 @@ export const getDeliveryFee = async (req, res) => {
 export const getUserDispatch = async (req, res) => {
   try {
     const { userId } = req.body;
-    const orders = await Dispatch.find({
-      userId,
-    })
+    const orders = await Dispatch.find({ userId })
       .populate("pickupAddress")
+      .populate({
+        path: "riderId",
+        select: "name number vehicleType",
+      })
       .sort({ createdAt: -1 });
+
     res.json({ success: true, orders });
   } catch (error) {
     res.json({ success: false, message: error.message });

@@ -7,6 +7,7 @@ import RiderRequest from "../../models/RiderRequest.js";
 import VendorRequest from "../../models/VendorRequest.js";
 import { sendVendorRequestResponseNotif } from "../../mailTemplates/vendorRequest.js";
 import { sendRiderRequestResponseNotif } from "../../mailTemplates/riderRequest.js";
+import { decrypt } from "../../utils/encryptText.js";
 
 export const getVendorRequests = async (req, res) => {
   try {
@@ -107,10 +108,28 @@ export const getRiderRequests = async (req, res) => {
     if (!admin) {
       return res.status(403).json({ error: "Unauthorized" });
     }
-    const riderRequests = await RiderRequest.find({}).sort({
-      createdAt: -1,
+    const riderRequests = await RiderRequest.find({}).sort({ createdAt: -1 });
+
+    const requestsWithDecrypted = riderRequests.map((rider) => {
+      let ninImageUrl = null;
+
+      try {
+        if (rider.ninImageHash) {
+          ninImageUrl = decrypt(rider.ninImageHash);
+        }
+      } catch (err) {
+        console.error(`❌ Failed to decrypt NIN for rider ${rider._id}:`, err);
+      }
+
+      return {
+        ...rider.toObject(),
+        ninImageUrl,
+      };
     });
-    return res.status(200).json({ success: true, riderRequests });
+
+    return res
+      .status(200)
+      .json({ success: true, riderRequests: requestsWithDecrypted });
   } catch (error) {
     console.error("Error in getRiderrRequests API:", error);
     return res.status(500).json({ success: false, message: "Server error" });

@@ -87,10 +87,12 @@ export const getErrandDeliveryFee = async (req, res) => {
 export const getUserErrand = async (req, res) => {
   try {
     const { userId } = req.body;
-    const orders = await Errand.find({
-      userId,
-    })
+    const orders = await Errand.find({ userId })
       .populate("dropOff")
+      .populate({
+        path: "riderId",
+        select: "name number vehicleType",
+      })
       .sort({ createdAt: -1 });
     res.json({ success: true, orders });
   } catch (error) {
