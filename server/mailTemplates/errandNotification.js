@@ -1,4 +1,4 @@
-import { transporter } from "../controllers/mailController";
+import { transporter } from "../controllers/mailController.js";
 
 const userErrandOrderConfirmation = (errands, orderId, customer = {}) => {
   const websiteDomain = process.env.WEBSITE_URL;

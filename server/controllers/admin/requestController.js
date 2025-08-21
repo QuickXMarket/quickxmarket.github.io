@@ -3,10 +3,9 @@ import User from "../../models/User.js";
 import Rider from "../../models/Rider.js";
 import { createWalletLogic } from "../walletController.js";
 import Vendor from "../../models/Vendor.js";
-import RiderRequest from "../../models/RiderRequest";
+import RiderRequest from "../../models/RiderRequest.js";
 import VendorRequest from "../../models/VendorRequest.js";
 import { sendVendorRequestResponseNotif } from "../../mailTemplates/vendorRequest.js";
-import RiderRequest from "../../models/RiderRequest.js";
 import { sendRiderRequestResponseNotif } from "../../mailTemplates/riderRequest.js";
 
 export const getVendorRequests = async (req, res) => {

@@ -11,7 +11,7 @@ import {
   logout,
   registerAdmin,
   vendorRequestResponse,
-  geRiderRequests,
+  getRiderRequests,
   riderRequestResponse,
 } from "../controllers/admin/index.js";
 
@@ -26,7 +26,7 @@ adminRouter.get("/users", authUser, getAllUsers);
 adminRouter.get("/orders", authUser, getAllOrders);
 adminRouter.get("/vendor-requests", authUser, getVendorRequests);
 adminRouter.post("/vendorRequestResponse", authUser, vendorRequestResponse);
-adminRouter.get("/rider-requests", authUser, geRiderRequests);
+adminRouter.get("/rider-requests", authUser, getRiderRequests);
 adminRouter.post("riderRequestResponse", authUser, riderRequestResponse);
 // adminRouter.get("/dashboard", authUser, getDashboardStats);
 

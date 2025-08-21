@@ -1,4 +1,4 @@
-import { transporter } from "../controllers/mailController";
+import { transporter } from "../controllers/mailController.js";
 
 const resetPasswordEmail = (resetLink) => {
   return `
@@ -53,4 +53,4 @@ const sendResetPasswordEmail = async (userEmail, resetLink) => {
   }
 };
 
-export default sendResetPasswordEmail();
+export default sendResetPasswordEmail

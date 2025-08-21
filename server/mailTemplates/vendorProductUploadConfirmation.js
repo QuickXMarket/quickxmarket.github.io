@@ -1,4 +1,4 @@
-import { transporter } from "../controllers/mailController";
+import { transporter } from "../controllers/mailController.js";
 
 const vendorProductUploadConfirmation = (product) => {
   const websiteDomain = process.env.WEBSITE_URL;
@@ -49,4 +49,4 @@ const sendVendorProductUploadConfirmation = async (vendorEmail, product) => {
   }
 };
 
-export default sendVendorProductUploadConfirmation();
+export default sendVendorProductUploadConfirmation

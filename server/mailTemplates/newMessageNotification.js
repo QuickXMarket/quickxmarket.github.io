@@ -1,4 +1,4 @@
-import { transporter } from "../controllers/mailController";
+import { transporter } from "../controllers/mailController.js";
 
 const newMessageNotification = ({ senderName, messageText, mediaUrl }) => {
   const websiteDomain = process.env.WEBSITE_URL;
@@ -72,4 +72,4 @@ const sendNewMessageNotification = async ({
   }
 };
 
-export default sendNewMessageNotification();
+export default sendNewMessageNotification

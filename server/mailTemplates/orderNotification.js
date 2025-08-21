@@ -1,4 +1,4 @@
-import { adminEmail, transporter } from "../controllers/mailController";
+import { adminEmail, transporter } from "../controllers/mailController.js";
 
 const userOrderConfirmation = (products, orderId) => {
   let total = 0;
@@ -306,4 +306,4 @@ const sendOrderNotification = async ({
   }
 };
 
-export default sendOrderNotification();
+export default sendOrderNotification;
