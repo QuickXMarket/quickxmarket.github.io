@@ -10,11 +10,13 @@ import LogOutIcon from "../assets/logout.svg?react";
 import TrashIcon from "../assets/trash.svg?react";
 import ThemeSelector from "../components/ThemeSelector";
 import ChangePasswordModal from "../components/ChangePassword";
+import DeleteAccountModal from "../components/DeleteAccount";
 
 const Account = () => {
   const { user, setUser, logout, rider } = useAuthContext();
   const [themeModal, setThemeModal] = useState(false);
   const [passwordModal, setPasswordModal] = useState(false);
+  const [deleteAccountModal, setDeleteAccountModal] = useState(false);
 
   return (
     <div className="max-w-xl mx-auto">
@@ -69,10 +71,12 @@ const Account = () => {
           Icon={ArrowIcon}
           onClick={() => setShowUserLogin(true)}
         /> */}
-
         <ThemeSelector open={themeModal} onClose={() => setThemeModal(false)} />
         {passwordModal && (
           <ChangePasswordModal onClose={() => setPasswordModal(false)} />
+        )}
+        {deleteAccountModal && (
+          <DeleteAccountModal onClose={() => setDeleteAccountModal(false)} />
         )}
       </div>
     </div>

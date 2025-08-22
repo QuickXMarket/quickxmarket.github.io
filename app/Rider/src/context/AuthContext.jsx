@@ -67,6 +67,7 @@ export const AuthProvider = ({ children }) => {
         await Preferences.remove({ key: "user" });
         await Preferences.remove({ key: "authToken" });
         setUser(null);
+        setRider(null);
         navigate("/");
       } else {
         toast.error(data.message);

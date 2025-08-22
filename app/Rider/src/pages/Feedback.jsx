@@ -141,7 +141,7 @@ const Feedback = () => {
                 : "bg-primary hover:bg-primary-dull"
             }`}
           >
-            {loading ? "Sending..." : "Send Feedback"}
+            {loading ? "Sending Feedback..." : "Send Feedback"}
           </button>
         </div>
       </form>

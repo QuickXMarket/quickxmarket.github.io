@@ -11,6 +11,7 @@ import {
   updateUserFcmToken,
   updateUserRole,
   updateWishList,
+  userAccountDelete,
 } from "../controllers/userController.js";
 import authUser from "../middlewares/authUser.js";
 import {
@@ -24,6 +25,7 @@ userRouter.post("/register", register);
 userRouter.post("/login", login);
 userRouter.post("/google-signin", googleSignIn);
 userRouter.get("/is-auth", authUser, isAuth);
+userRouter.post("/deleteAccount", authUser, userAccountDelete);
 userRouter.patch("/edit-profile", authUser, editProfileDetails);
 userRouter.patch("/edit-email", authUser, editEmail);
 userRouter.patch("/change-password", authUser, changePassword);

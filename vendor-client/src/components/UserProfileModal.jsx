@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { useCoreContext } from "../context/CoreContext";
-import { EditEmailModal, ChangePasswordModal } from "./UserSecurityModals";
+import {
+  EditEmailModal,
+  ChangePasswordModal,
+  DeleteAccountModal,
+} from "./UserSecurityModals";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
 
@@ -46,6 +50,7 @@ const UserProfileModal = ({ data = {}, onClose }) => {
   const { axios } = useCoreContext();
   const [showEditEmail, setShowEditEmail] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [showDeleteAccount, setShowDeleteAccount] = useState(false);
   const { setUser } = useAuthContext();
   const [loading, setLoading] = useState(false);
 
@@ -138,7 +143,6 @@ const UserProfileModal = ({ data = {}, onClose }) => {
               </div>
             </div>
           </div>
-
           <div className="flex  gap-3 pt-6">
             <button
               onClick={() => setShowChangePassword(true)}
@@ -157,11 +161,12 @@ const UserProfileModal = ({ data = {}, onClose }) => {
           {showEditEmail && (
             <EditEmailModal onClose={() => setShowEditEmail(false)} />
           )}
-
           {showChangePassword && (
             <ChangePasswordModal onClose={() => setShowChangePassword(false)} />
           )}
-
+          {showDeleteAccount && (
+            <DeleteAccountModal onClose={() => setShowDeleteAccount(false)} />
+          )}
           <div className="flex justify-end pt-3">
             <button
               onClick={handleSave}

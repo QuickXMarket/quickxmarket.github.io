@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { isEmailDomainValid } from "../utils/emailValidation.js";
 import { OAuth2Client } from "google-auth-library";
+import Rider from "../models/Rider.js";
+import Vendor from "../models/Vendor.js";
 
 // Register User : /api/user/register
 export const register = async (req, res) => {
@@ -218,6 +220,53 @@ export const logout = async (req, res) => {
   }
 };
 
+export const userAccountDelete = async (req, res) => {
+  try {
+    const { userId, password } = req.body;
+    if (!userId || !password) {
+      return res.json({ success: false, message: "Missing details" });
+    }
+
+    const user = await User.findById(userId).select("+password");
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Invalid credentials" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials",
+      });
+    }
+
+    const rider = await Rider.findOne({ userId });
+    const vendor = await Vendor.findOne({ userId });
+
+    if (rider) {
+      rider.deleted = true;
+      await rider.save();
+    }
+    if (vendor) {
+      vendor.deleted = true;
+      await vendor.save();
+    }
+
+    user.deleted = true;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Account scheduled for deletion",
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 export const updateUserRoleFn = async (userId, role) => {
   if (!userId || !role) {
     throw new Error("Missing userId or role");
@@ -267,7 +316,6 @@ export const updateUserRole = async (req, res) => {
 export const editProfileDetails = async (req, res) => {
   try {
     const { userId, name } = req.body;
-    console.log("Editing profile for user:", userId, name);
 
     if (!userId || !name) {
       return res.json({ success: false, message: "Missing userId or name" });
