@@ -253,7 +253,7 @@ export const DeleteAccountModal = ({ onClose }) => {
   };
 
   return (
-    <ModalWrapper title="Change Password" onClose={onClose}>
+    <ModalWrapper title="Delete Account" onClose={onClose}>
       <div className="space-y-4">
         <p className="text-sm text-gray-700">
           Deleting your account is permanent and will result in the loss of all
