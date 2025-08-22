@@ -3,9 +3,11 @@ import { NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useCoreContext } from "../context/CoreContext";
 import ChatDotIcon from "../assets/chat-dots.svg?react";
+import SettingsIcon from "../assets/gear.svg?react";
 
 const Navbar = () => {
-  const { navigate, theme } = useCoreContext();
+  const { navigate, theme, location } = useCoreContext();
+  const isProfilePath = location.pathname === "/profile";
 
   return (
     <div className="">
@@ -21,11 +23,17 @@ const Navbar = () => {
             alt="logo"
           />
         </div>
-
-        <ChatDotIcon
-          className="scale-x-[-1] w-8 w-8 "
-          onClick={() => navigate("/contact")}
-        />
+        {!isProfilePath ? (
+          <ChatDotIcon
+            className="scale-x-[-1] w-8 w-8 "
+            onClick={() => navigate("/contact")}
+          />
+        ) : (
+          <SettingsIcon
+            className="scale-x-[-1] w-8 w-8 "
+            onClick={() => navigate("/contact")}
+          />
+        )}
       </nav>
     </div>
   );
