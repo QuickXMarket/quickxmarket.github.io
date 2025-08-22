@@ -1,4 +1,7 @@
 import Rider from "../models/Rider.js";
+import Order from "../models/Order.js";
+import Errand from "../models/Errand.js";
+import Dispatch from "../models/Dispatch.js";
 import { v2 as cloudinary } from "cloudinary";
 import { encrypt } from "../utils/encryptText.js";
 import RiderRequest from "../models/RiderRequest.js";
@@ -147,5 +150,64 @@ export const getRiderById = async (req, res) => {
   } catch (error) {
     console.error(error.message);
     return res.json({ success: false, message: error.message });
+  }
+};
+
+export const getCompletedOrders = async (req, res) => {
+  try {
+    const { riderId } = req.params;
+    const orders = await Order.find({
+      riderId,
+      items: { $not: { $elemMatch: { status: { $ne: "Order Delivered" } } } },
+    }).sort({ createdAt: -1 });
+
+    const dispatchOrders = await Dispatch.find({
+      riderId,
+      status: "Order Delivered",
+    }).sort({
+      createdAt: -1,
+    });
+
+    const errands = await Errand.find({
+      riderId,
+      status: "Order Delivered",
+    }).sort({
+      createdAt: -1,
+    });
+    return res.json({ success: true, errands, orders, dispatchOrders });
+  } catch (error) {
+    console.error(error.message);
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+export const updateRiderFcmToken = async (req, res) => {
+  try {
+    const { userId, fcmToken } = req.body;
+
+    if (!userId || !fcmToken) {
+      return res.json({
+        success: false,
+        message: "Missing userId or fcmToken",
+      });
+    }
+
+    const rider = await Rider.findOne({ userId });
+    if (!rider) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Rider not found" });
+    }
+
+    rider.fcmToken = fcmToken;
+    await rider.save();
+
+    return res.json({
+      success: true,
+      message: "FCM token updated successfully",
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ success: false, message: error.message });
   }
 };

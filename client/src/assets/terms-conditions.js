@@ -1,5 +1,5 @@
 export const customerTermsData = {
-  title: "QuickXMarket – Customer Terms and Conditions",
+  title: "QuickXMarket - Customer Terms and Conditions",
   effectiveDate: "8th August 2025",
   intro:
     "These Terms and Conditions govern your access to and use of the QuickXMarket platform. By creating an account or placing an order, you agree to be bound by these Terms.",
@@ -53,7 +53,7 @@ export const customerTermsData = {
     {
       heading: "7. Service Availability",
       content: [
-        "QuickXMarket operates Monday to Sunday, 8:00 AM – 9:00 PM.",
+        "QuickXMarket operates Monday to Sunday, 8:00 AM - 9:00 PM.",
         "Service may be unavailable temporarily due to maintenance, weather, or university restrictions.",
       ],
     },
@@ -163,7 +163,7 @@ export const riderTermsData = {
     {
       heading: "5. Delivery Timeframes",
       content: [
-        "Deliveries must be completed within the expected time range (typically 30–45 minutes).",
+        "Deliveries must be completed within the expected time range (typically 30-45 minutes).",
         "You must communicate delays immediately to the support team and/or customer.",
         "Repeated delays without valid reason may result in penalties.",
       ],

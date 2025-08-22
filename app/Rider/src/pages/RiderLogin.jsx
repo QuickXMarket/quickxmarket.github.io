@@ -4,6 +4,7 @@ import { useAuthContext } from "../context/AuthContext";
 import { useCoreContext } from "../context/CoreContext";
 import { assets } from "../assets/assets";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import { NavLink } from "react-router";
 
 const RiderLogin = () => {
   const { makeRequest, fileToBase64 } = useCoreContext();
@@ -76,7 +77,7 @@ const RiderLogin = () => {
     }
 
     if (!profilePhoto) {
-      toast.error("");
+      toast.error("Please upload a profile photo.");
       return;
     }
 
@@ -115,11 +116,11 @@ const RiderLogin = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-background flex items-center justify-center px-4">
+    <div className="min-h-screen w-full bg-background flex items-center justify-center ">
       {!submitted ? (
         <form
           onSubmit={onSubmitHandler}
-          className="flex flex-col gap-5 w-[90%] max-w-sm p-8 rounded-2xl shadow-2xl border border-gray-200 bg-background transition-all"
+          className="flex flex-col gap-5 w-[90%] max-w-sm p-8 rounded-2xl shadow-2xl  bg-background transition-all"
         >
           <p className="text-xl font-semibold text-center text-gray-800 dark:text-white">
             Rider Registration
@@ -135,6 +136,7 @@ const RiderLogin = () => {
               disabled={loading}
               accept="image/*"
               onChange={onFileChange}
+              required
               hidden
             />
             <img
@@ -237,7 +239,20 @@ const RiderLogin = () => {
               <option value="Motorcycle">Motorcycle</option>
             </select>
           </div>
-
+          <label className="flex items-start text-sm gap-2 text-gray-700">
+            <input type="checkbox" required className="mt-1 accent-primary" />
+            <span>
+              I agree to the{" "}
+              <NavLink
+                to="https://quickxmarket.com.ng/rider-terms"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary underline hover:text-primary-dull"
+              >
+                Terms and Conditions
+              </NavLink>
+            </span>
+          </label>
           {/* Submit Button */}
           <button
             type="submit"

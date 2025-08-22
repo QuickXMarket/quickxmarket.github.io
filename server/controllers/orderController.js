@@ -63,7 +63,8 @@ export const createNewOrder = async (res, userId, reference, orderData) => {
 
     for (const rider of riders) {
       if (rider?.userId) {
-        const { email, fcmToken } = rider.userId;
+        const { email } = rider.userId;
+        const { fcmToken } = rider;
         if (email) riderEmails.push(email);
         if (fcmToken) riderFcmTokens.push(fcmToken);
       }

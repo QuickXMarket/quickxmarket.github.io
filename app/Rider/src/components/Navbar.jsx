@@ -31,7 +31,7 @@ const Navbar = () => {
         ) : (
           <SettingsIcon
             className="scale-x-[-1] w-8 w-8 "
-            onClick={() => navigate("/contact")}
+            onClick={() => navigate("/account")}
           />
         )}
       </nav>

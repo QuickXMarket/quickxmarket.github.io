@@ -15,6 +15,8 @@ import Wallet from "./pages/Wallet";
 import Profile from "./pages/Profile";
 import { useAuthContext } from "./context/AuthContext";
 import { useCoreContext } from "./context/CoreContext";
+import FAQ from "./pages/FAQ";
+import Feedback from "./pages/Feedback";
 
 const App = () => {
   const { isRider, user, authLoading } = useAuthContext();
@@ -76,6 +78,8 @@ const App = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/loader" element={<Loading />} />
             <Route path="/account" element={<Account />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/feedback" element={<Feedback />} />
           </Routes>
         )}
       </div>

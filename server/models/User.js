@@ -77,6 +77,15 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
+      index: { expireAfterSeconds: 60 * 60 * 24 * 30 }, 
+    },
   },
   {
     minimize: false,
@@ -84,6 +93,17 @@ const userSchema = new mongoose.Schema(
     strict: true,
   }
 );
+
+userSchema.pre("save", function (next) {
+  if (this.isModified("deleted")) {
+    if (this.deleted) {
+      this.deletedAt = new Date();
+    } else {
+      this.deletedAt = null;
+    }
+  }
+  next();
+});
 
 const User = mongoose.models.user || mongoose.model("user", userSchema);
 export default User;

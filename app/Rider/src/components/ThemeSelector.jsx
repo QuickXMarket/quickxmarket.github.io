@@ -29,7 +29,7 @@ const ThemeSelector = ({ open, onClose }) => {
           onClick={onClose}
         >
           <div
-            className="flex flex-col items-stretch bg-slate-50 rounded-t-xl"
+            className="flex flex-col items-stretch bg-gray-50 rounded-t-xl"
             onClick={(e) => e.stopPropagation()} 
           >
             {/* Drag handle */}
@@ -39,7 +39,7 @@ const ThemeSelector = ({ open, onClose }) => {
 
             {/* Content */}
             <div className="flex-1">
-              <h1 className="text-[#0d141c] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 text-left pb-3 pt-5">
+              <h1 className="text-text text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 text-left pb-3 pt-5">
                 Theme
               </h1>
 
@@ -56,10 +56,10 @@ const ThemeSelector = ({ open, onClose }) => {
                       setTheme("system");
                       onClose();
                     }}
-                    className="h-5 w-5 border-2 border-[#cedbe8] checked:border-[#0d80f2]"
+                    className="h-5 w-5 border-2 border-[#cedbe8] text-primary accent-primary"
                   />
                   <div className="flex grow flex-col">
-                    <p className="text-[#0d141c] text-sm font-medium">
+                    <p className="text-text text-sm font-medium">
                       System Default
                     </p>
                   </div>
@@ -76,10 +76,10 @@ const ThemeSelector = ({ open, onClose }) => {
                       setTheme("light");
                       onClose();
                     }}
-                    className="h-5 w-5 border-2 border-[#cedbe8] checked:border-[#0d80f2]"
+                    className="h-5 w-5 border-2 border-[#cedbe8] text-primary accent-primary"
                   />
                   <div className="flex grow flex-col">
-                    <p className="text-[#0d141c] text-sm font-medium">Light</p>
+                    <p className="text-text text-sm font-medium">Light</p>
                   </div>
                 </label>
 
@@ -94,10 +94,10 @@ const ThemeSelector = ({ open, onClose }) => {
                       setTheme("dark");
                       onClose();
                     }}
-                    className="h-5 w-5 border-2 border-[#cedbe8] checked:border-[#0d80f2]"
+                    className="h-5 w-5 border-2 border-[#cedbe8] text-primary accent-primary"
                   />
                   <div className="flex grow flex-col">
-                    <p className="text-[#0d141c] text-sm font-medium">Dark</p>
+                    <p className="text-text text-sm font-medium">Dark</p>
                   </div>
                 </label>
               </div>

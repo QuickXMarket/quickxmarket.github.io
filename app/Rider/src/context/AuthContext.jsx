@@ -44,11 +44,15 @@ export const AuthProvider = ({ children }) => {
 
       if (data.success) {
         setRider(data.rider);
+        setIsRider(true);
       } else {
         toast.error("Not a valid rider account");
       }
     } catch (error) {
       toast.error("Failed to verify rider");
+      console.log(error);
+    } finally {
+      setAuthLoading(false);
     }
   };
 
@@ -109,6 +113,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (user && user.isRider) {
+      setAuthLoading(true);
       verifyRider();
     }
   }, [user]);
@@ -124,6 +129,7 @@ export const AuthProvider = ({ children }) => {
     authLoading,
     updateUser,
     SocialLogin,
+    verifyRider,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

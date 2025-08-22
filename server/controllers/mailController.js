@@ -25,14 +25,21 @@ export const sendContactEmail = async (req, res) => {
 
     let attachment = null;
     if (req.file) attachment = req.file;
-    else if (
-      req.body.attachment?.base64 &&
-      req.body.attachment?.base64.startsWith("data:")
-    ) {
-      const base64Data = req.body.attachment.base64.split(",")[1];
+    else if (req.body.attachment && req.body.attachment.startsWith("data:")) {
+      const [header, base64Data] = req.body.attachment.split(",");
       const buffer = Buffer.from(base64Data, "base64");
+
+      const mimeMatch = header.match(/data:(.*);base64/);
+      const mimeType = mimeMatch ? mimeMatch[1] : "application/octet-stream";
+
+      let extension = "";
+      if (mimeType === "image/png") extension = "png";
+      else if (mimeType === "image/jpeg") extension = "jpg";
+      else if (mimeType === "application/pdf") extension = "pdf";
+      else extension = "bin";
+
       attachment = {
-        originalname: req.body.attachment.name,
+        originalname: `attachment.${extension}`,
         buffer,
       };
     }

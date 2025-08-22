@@ -68,10 +68,16 @@ export const googleSignIn = async (req, res) => {
     });
 
     const payload = ticket.getPayload();
-
     const { sub: googleId, email, name, picture } = payload;
 
     let user = await User.findOne({ email });
+
+    if (user && user.deleted) {
+      return res.status(403).json({
+        success: false,
+        message: "This account has been deleted.",
+      });
+    }
 
     if (!user) {
       const hashedPassword = await bcrypt.hash(googleId, 10);
@@ -87,10 +93,10 @@ export const googleSignIn = async (req, res) => {
     });
 
     res.cookie("token", JWTtoken, {
-      httpOnly: true, // Prevent JavaScript to access cookie
-      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", // CSRF protection
-      maxAge: 30 * 24 * 60 * 60 * 1000, // Cookie expiration time
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
     return res.json({
@@ -134,6 +140,13 @@ export const login = async (req, res) => {
       return res.status(401).json({
         success: false,
         message: "Invalid credentials",
+      });
+    }
+
+    if (user.deleted) {
+      return res.status(403).json({
+        success: false,
+        message: "This account has been deleted.",
       });
     }
 

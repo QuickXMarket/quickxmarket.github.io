@@ -26,9 +26,8 @@ export const NotificationProvider = ({ children }) => {
       try {
         await makeRequest({
           method: "PATCH",
-          url: "/api/user/update-fcm-token",
+          url: "/api/rider/update-fcm-token",
           data: {
-            userId: user?._id,
             fcmToken: token.value,
           },
         });

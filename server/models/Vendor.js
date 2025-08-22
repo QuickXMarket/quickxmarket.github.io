@@ -20,9 +20,38 @@ const vendorSchema = new mongoose.Schema(
     closingTime: { type: String },
     products: [{ type: mongoose.Schema.Types.ObjectId, ref: "product" }],
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "order" }],
+    chatId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "chat",
+    },
+    fcmToken: {
+      type: String,
+      default: null,
+      maxlength: 1024,
+      trim: true,
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
+      index: { expireAfterSeconds: 60 * 60 * 24 * 30 },
+    },
   },
   { timestamps: true }
 );
+vendorSchema.pre("save", function (next) {
+  if (this.isModified("deleted")) {
+    if (this.deleted) {
+      this.deletedAt = new Date();
+    } else {
+      this.deletedAt = null;
+    }
+  }
+  next();
+});
 
 const Vendor = mongoose.models.vendor || mongoose.model("vendor", vendorSchema);
 

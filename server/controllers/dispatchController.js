@@ -22,10 +22,8 @@ export const createNewDispatch = async (
     });
 
     // Notify Riders
-    const riders = await Rider.find().populate("userId");
-    const riderFcmTokens = riders
-      .map((r) => r.userId?.fcmToken)
-      .filter(Boolean);
+    const riders = await Rider.find();
+    const riderFcmTokens = riders.map((r) => r.fcmToken).filter(Boolean);
 
     for (const token of riderFcmTokens) {
       try {

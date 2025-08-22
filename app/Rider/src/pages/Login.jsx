@@ -1,18 +1,14 @@
 import React from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
-import { useProductContext } from "../context/ProductContext";
 import { useCoreContext } from "../context/CoreContext";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { assets } from "../assets/assets";
 
 const Login = () => {
-  const { setShowUserLogin, setUser, setIsSeller, setIsRider, SocialLogin } =
-    useAuthContext();
+  const { setUser, setIsRider, SocialLogin } = useAuthContext();
   const { makeRequest, navigate, Preferences, location } = useCoreContext();
-  const { setCartItems, wishList, setWishList, cartItems } =
-    useProductContext();
 
   const [state, setState] = React.useState("login");
   const [name, setName] = React.useState("");
@@ -91,7 +87,6 @@ const Login = () => {
         },
       });
       if (data.success) {
-        setShowUserLogin(false);
         toast.success(data.message);
         if (location.pathname !== "/seller") navigate("/");
       } else {
@@ -153,20 +148,6 @@ const Login = () => {
     });
 
     setUser(data.user);
-    setShowUserLogin(false);
-    if (cartItems && Object.keys(cartItems).length > 0) {
-      setCartItems({
-        ...data.user.cartItems,
-        ...cartItems,
-      });
-    }
-
-    if (wishList && wishList.length > 0) {
-      const wishListData = Array.from(
-        new Set([...data.user.wishList, ...wishList])
-      );
-      setWishList(wishListData);
-    }
 
     setIsRider(data.user.isRider || false);
     navigate("/");
