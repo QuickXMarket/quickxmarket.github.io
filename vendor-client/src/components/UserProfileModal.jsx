@@ -152,7 +152,7 @@ const UserProfileModal = ({ data = {}, onClose }) => {
             </button>
 
             <button
-              onClick={() => toast("Delete Account clicked")}
+              onClick={() => setShowDeleteAccount(true)}
               className="w-full text-sm font-medium border border-red-600 text-red-600 rounded py-2 hover:bg-red-100"
             >
               Delete Account
