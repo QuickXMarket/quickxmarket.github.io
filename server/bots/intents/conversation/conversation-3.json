@@ -1,0 +1,103 @@
+[
+  {
+    "lan": "en",
+    "utterance": "hi",
+    "answer": "Hello! How are you doing today?",
+    "intent": "greeting.hello"
+  },
+  {
+    "lan": "en",
+    "utterance": "hello",
+    "answer": "Hi there! How’s your day going?",
+    "intent": "greeting.hello"
+  },
+  {
+    "lan": "en",
+    "utterance": "hey",
+    "answer": "Hey! How are you today?",
+    "intent": "greeting.hello"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "I'm good",
+    "answer": "That’s great to hear! Do you want to chat about something or need help with something specific?",
+    "intent": "smalltalk.good"
+  },
+  {
+    "lan": "en",
+    "utterance": "I'm fine",
+    "answer": "Glad you’re doing fine! Would you like to have a chat or ask me something?",
+    "intent": "smalltalk.good"
+  },
+  {
+    "lan": "en",
+    "utterance": "not so good",
+    "answer": "I’m sorry to hear that. Do you want to talk about it or maybe I can cheer you up?",
+    "intent": "smalltalk.bad"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "can you help me",
+    "answer": "Of course! What do you need help with?",
+    "intent": "help.request"
+  },
+  {
+    "lan": "en",
+    "utterance": "I need some assistance",
+    "answer": "Sure thing! Tell me what you’d like me to assist with.",
+    "intent": "help.request"
+  },
+  {
+    "lan": "en",
+    "utterance": "I want to ask something",
+    "answer": "Go ahead! What’s your question?",
+    "intent": "help.request"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "what can you do",
+    "answer": "I can answer questions, have a chat, or assist you with tasks. What would you like me to do?",
+    "intent": "help.capabilities"
+  },
+  {
+    "lan": "en",
+    "utterance": "tell me your functions",
+    "answer": "I can chat, answer questions, and provide useful information. What do you want me to help with?",
+    "intent": "help.capabilities"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "thank you",
+    "answer": "You’re very welcome! Is there anything else I can do for you?",
+    "intent": "closing.thankyou"
+  },
+  {
+    "lan": "en",
+    "utterance": "thanks",
+    "answer": "No problem at all! Would you like to continue chatting?",
+    "intent": "closing.thankyou"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "bye",
+    "answer": "Goodbye! Have a wonderful day.",
+    "intent": "closing.bye"
+  },
+  {
+    "lan": "en",
+    "utterance": "goodbye",
+    "answer": "See you later! Take care.",
+    "intent": "closing.bye"
+  },
+  {
+    "lan": "en",
+    "utterance": "see you",
+    "answer": "See you soon! Have a great day ahead.",
+    "intent": "closing.bye"
+  }
+]

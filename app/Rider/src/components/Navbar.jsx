@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useCoreContext } from "../context/CoreContext";
 import ChatDotIcon from "../assets/chat-dots.svg?react";
+import BellIcon from "../assets/bell.svg?react";
 import SettingsIcon from "../assets/gear.svg?react";
 
 const Navbar = () => {
@@ -24,10 +25,16 @@ const Navbar = () => {
           />
         </div>
         {!isProfilePath ? (
-          <ChatDotIcon
-            className="scale-x-[-1] w-8 w-8 "
-            onClick={() => navigate("/contact")}
-          />
+          <div className="flex space-x-2">
+            <ChatDotIcon
+              className="scale-x-[-1] w-8 w-8 "
+              onClick={() => navigate("/contact")}
+            />
+            <BellIcon
+              className="scale-x-[-1] w-8 w-8 "
+              onClick={() => navigate("/notification")}
+            />
+          </div>
         ) : (
           <SettingsIcon
             className="scale-x-[-1] w-8 w-8 "

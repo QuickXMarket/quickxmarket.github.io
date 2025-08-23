@@ -1,0 +1,194 @@
+[
+  {
+    "lan": "en",
+    "utterance": "What is QuickXMarket?",
+    "answer": "QuickXMarket is an on-campus delivery service designed to help students, faculty, and staff order groceries, food, essentials, and more from local vendors and have them delivered directly to dorms, departments, or pick-up points on campus.",
+    "intent": "campus.info"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can you explain QuickXMarket?",
+    "answer": "QuickXMarket is an on-campus delivery service designed to help students, faculty, and staff order groceries, food, essentials, and more from local vendors and have them delivered directly to dorms, departments, or pick-up points on campus.",
+    "intent": "campus.info"
+  },
+  {
+    "lan": "en",
+    "utterance": "Who can use QuickXMarket?",
+    "answer": "All members of the university community, including students, faculty, and staff, can use QuickXMarket. You only need a valid university email address to sign up.",
+    "intent": "campus.users"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can students and staff use QuickXMarket?",
+    "answer": "Yes, all students, faculty, and staff can use QuickXMarket with a valid university email.",
+    "intent": "campus.users"
+  },
+  {
+    "lan": "en",
+    "utterance": "How do I place an order?",
+    "answer": "You can place an order through our website or mobile app:\n• Select your vendor\n• Choose your items\n• Enter your delivery details\n• Make payment via wallet, card, or transfer",
+    "intent": "campus.ordering"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can you show me how to order from QuickXMarket?",
+    "answer": "You can place an order through our website or mobile app:\n• Select your vendor\n• Choose your items\n• Enter your delivery details\n• Make payment via wallet, card, or transfer",
+    "intent": "campus.ordering"
+  },
+  {
+    "lan": "en",
+    "utterance": "What types of items can I order?",
+    "answer": "QuickXMarket offers delivery for meals, snacks, drinks, groceries, toiletries, stationery, study materials, and medical essentials from campus pharmacies.",
+    "intent": "campus.items"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can I order groceries and food on QuickXMarket?",
+    "answer": "Yes, you can order meals, groceries, snacks, drinks, stationery, and medical essentials from campus vendors.",
+    "intent": "campus.items"
+  },
+  {
+    "lan": "en",
+    "utterance": "What are the delivery hours?",
+    "answer": "Delivery is available from 8:00 AM to 9:00 PM, Monday to Saturday. Availability may vary slightly depending on vendor operating hours.",
+    "intent": "campus.delivery_hours"
+  },
+  {
+    "lan": "en",
+    "utterance": "When does QuickXMarket deliver orders?",
+    "answer": "Delivery is available from 8:00 AM to 9:00 PM, Monday to Saturday. Availability may vary slightly depending on vendor operating hours.",
+    "intent": "campus.delivery_hours"
+  },
+  {
+    "lan": "en",
+    "utterance": "How long does delivery take?",
+    "answer": "On average, deliveries are completed within 30–60 minutes after your order is confirmed. You'll receive updates via email or app notifications.",
+    "intent": "campus.delivery_time"
+  },
+  {
+    "lan": "en",
+    "utterance": "How fast can I get my order?",
+    "answer": "On average, deliveries are completed within 30–60 minutes after your order is confirmed. You'll receive updates via email or app notifications.",
+    "intent": "campus.delivery_time"
+  },
+  {
+    "lan": "en",
+    "utterance": "Is there a delivery fee?",
+    "answer": "Yes. Delivery fees range depending on distance, order size, and demand. The exact fee is shown at checkout.",
+    "intent": "campus.delivery_fee"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do I need to pay extra for delivery?",
+    "answer": "Yes. Delivery fees range depending on distance, order size, and demand. The exact fee is shown at checkout.",
+    "intent": "campus.delivery_fee"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can I schedule an order for later?",
+    "answer": "No. We do not offer that service for now. Perhaps one day...",
+    "intent": "campus.order_schedule"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can I order something for delivery tomorrow?",
+    "answer": "No. We do not offer that service for now. Perhaps one day...",
+    "intent": "campus.order_schedule"
+  },
+  {
+    "lan": "en",
+    "utterance": "What if I'm not available when the delivery arrives?",
+    "answer": "Our rider will wait for 5 minutes and attempt to call you. If you're unreachable, the order may be returned, and you'll be charged a re-delivery or restocking fee.",
+    "intent": "campus.delivery_issue"
+  },
+  {
+    "lan": "en",
+    "utterance": "What happens if I'm not home when the order comes?",
+    "answer": "Our rider will wait for 5 minutes and attempt to call you. If you're unreachable, the order may be returned, and you'll be charged a re-delivery or restocking fee.",
+    "intent": "campus.delivery_issue"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can I cancel or change my order?",
+    "answer": "You can cancel your order before the vendor has accepted it. For dispatch, cancel before a rider is assigned. After that, cancellations are not guaranteed and refunds may not apply.",
+    "intent": "campus.order_cancel"
+  },
+  {
+    "lan": "en",
+    "utterance": "How do I cancel or modify my order?",
+    "answer": "You can cancel your order before the vendor has accepted it. For dispatch, cancel before a rider is assigned. After that, cancellations are not guaranteed and refunds may not apply.",
+    "intent": "campus.order_cancel"
+  },
+  {
+    "lan": "en",
+    "utterance": "What payment methods can I use?",
+    "answer": "We accept debit/credit cards, bank transfers, QuickXMarket wallet, and USSD payment options.",
+    "intent": "campus.payment"
+  },
+  {
+    "lan": "en",
+    "utterance": "How can I pay for my order?",
+    "answer": "Payments can be made using debit/credit cards, bank transfers, QuickXMarket wallet, or USSD options.",
+    "intent": "campus.payment"
+  },
+  {
+    "lan": "en",
+    "utterance": "How do I track my order?",
+    "answer": "You can track your delivery in real-time via the mobile app or website. You'll see the order status and estimated arrival time.",
+    "intent": "campus.order_tracking"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can I see where my order is?",
+    "answer": "You can track your delivery in real-time via the mobile app or website. You'll see the order status and estimated arrival time.",
+    "intent": "campus.order_tracking"
+  },
+  {
+    "lan": "en",
+    "utterance": "Is there a minimum order amount?",
+    "answer": "No, there is no minimum order amount. You have the freedom to order how much you want.",
+    "intent": "campus.order_minimum"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do I need to order a minimum?",
+    "answer": "No, there is no minimum order amount. You can order as little or as much as you want.",
+    "intent": "campus.order_minimum"
+  },
+  {
+    "lan": "en",
+    "utterance": "My order is missing items or incorrect. What do I do?",
+    "answer": "Contact our support team within 30 minutes of receiving the order through the app chat or support number. We'll resolve the issue or offer a credit/refund where appropriate.",
+    "intent": "campus.order_issue_support"
+  },
+  {
+    "lan": "en",
+    "utterance": "I got the wrong order, how can I fix it?",
+    "answer": "Contact our support team within 30 minutes of receiving the order through the app chat or support number. We'll resolve the issue or offer a credit/refund where appropriate.",
+    "intent": "campus.order_issue_support"
+  },
+  {
+    "lan": "en",
+    "utterance": "What is a dispatch request?",
+    "answer": "A dispatch request allows you to send items (documents, parcels, or personal packages) from one location on campus to another using QuickXMarket's delivery riders.",
+    "intent": "campus.dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "How do dispatch requests work?",
+    "answer": "A dispatch request allows you to send items (documents, parcels, or personal packages) from one location on campus to another using QuickXMarket's delivery riders.",
+    "intent": "campus.dispatch"
+  },
+  {
+    "lan": "en",
+    "utterance": "How do I contact customer support?",
+    "answer": "Support is available from 8 AM to 9 PM through in-app chat, email, or phone.",
+    "intent": "campus.support"
+  },
+  {
+    "lan": "en",
+    "utterance": "Who can I reach out to if I have an issue with my order?",
+    "answer": "Support is available from 8 AM to 9 PM through in-app chat, email, or phone.",
+    "intent": "campus.support"
+  }
+]

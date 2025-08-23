@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const faqData = {
-  title: "QuickXMarket – Delivery Rider FAQs",
+  title: "QuickXMarket - Delivery Rider FAQs",
   faqs: [
     {
       question: "What is QuickXMarket?",

@@ -76,6 +76,7 @@ const App = () => {
             <Route path="wallet" element={<Wallet />} />
             <Route path="profile" element={<Profile />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/notification" element={<Notification />} />
             <Route path="/loader" element={<Loading />} />
             <Route path="/account" element={<Account />} />
             <Route path="/faq" element={<FAQ />} />

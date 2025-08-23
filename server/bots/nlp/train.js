@@ -1,13 +1,11 @@
 import { NLPmanager } from "./manager.js";
-import dispatchData from "../intents/dispatch.json" with { type: "json" };
-import errandData from "../intents/errand.json" with { type: "json" };
 import enquiryData from "../intents/enquiry.json" with { type: "json" };
-import orderData from "../intents/order.json" with { type: "json" };
-import greetingsData from "../intents/greetings.json" with { type: "json" };
 import confirmationData from "../intents/confirmation.json" with { type: "json" };
-import conversationData from "../intents/conversation.json" with { type: "json" };
-import pidginGreetingsData from "../intents/pidginGreetings.json" with { type: "json" };
-import pidginConversationData from "../intents/pidginConversation.json" with { type: "json" };
+import fallbackData from "../intents/fallback.json" with { type: "json" };
+import faqData from "../intents/faq/index.js";
+import termsData from "../intents/terms-conditions/index.js";
+import flowsData from "../intents/flows/index.js";
+import conversationData from "../intents/conversation/index.js";
 import fs from "fs";
 import csv from "csv-parser";
 import Fuse from "fuse.js";
@@ -15,15 +13,13 @@ import Fuse from "fuse.js";
 let fuse = null; 
 
 const allIntents = [
-  ...dispatchData,
-  // ...errandData,
+...fallbackData,
   ...enquiryData,
-  // ...orderData,
-  ...greetingsData,
   ...confirmationData,
+  ...faqData,
   ...conversationData,
-  ...pidginConversationData,
-  ...pidginGreetingsData
+  ...termsData,
+  ...flowsData
 ];
 
 const loadConversationCSV = async (filePath) => {

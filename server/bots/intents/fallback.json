@@ -1,0 +1,103 @@
+[
+  {
+    "lan": "en",
+    "utterance": "I don't know",
+    "answer": "That's okay! Want to talk about something else on campus?",
+    "intent": "fallback.idk"
+  },
+  {
+    "lan": "en",
+    "utterance": "whatever",
+    "answer": "No worries! Maybe you'd like to tell me how your day is going?",
+    "intent": "fallback.idk"
+  },
+  {
+    "lan": "en",
+    "utterance": "I'm not sure",
+    "answer": "That's fine! We can switch topics—want to chat about food, classes, or friends?",
+    "intent": "fallback.idk"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "why are you asking",
+    "answer": "Just trying to keep the conversation flowing! But we can talk about something else if you like.",
+    "intent": "fallback.whyask"
+  },
+  {
+    "lan": "en",
+    "utterance": "stop asking questions",
+    "answer": "Got it! I'll just listen. Share anything you want.",
+    "intent": "fallback.whyask"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "none of your business",
+    "answer": "Fair enough! Let's switch topics then—how about campus events?",
+    "intent": "fallback.privacy"
+  },
+  {
+    "lan": "en",
+    "utterance": "I don't want to answer",
+    "answer": "That's totally fine. What would you like to talk about instead?",
+    "intent": "fallback.privacy"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "something random",
+    "answer": "Haha, that's random! Want me to bring us back to campus life?",
+    "intent": "fallback.random"
+  },
+  {
+    "lan": "en",
+    "utterance": "just bored",
+    "answer": "Boredom happens! Do you want me to suggest something fun around campus?",
+    "intent": "fallback.random"
+  },
+  {
+    "lan": "en",
+    "utterance": "blah blah blah",
+    "answer": "Haha, I get it! Should we talk about something interesting instead?",
+    "intent": "fallback.random"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "you're weird",
+    "answer": "I might be a bit quirky 😅 but I'll do my best to keep things fun!",
+    "intent": "fallback.personality"
+  },
+  {
+    "lan": "en",
+    "utterance": "you're boring",
+    "answer": "Oh no! I'll try harder. Want me to share something cool about campus?",
+    "intent": "fallback.personality"
+  },
+  {
+    "lan": "en",
+    "utterance": "you talk too much",
+    "answer": "Haha, true! I'll keep it short from now on.",
+    "intent": "fallback.personality"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "bye",
+    "answer": "Alright, chat with you later. Take care!",
+    "intent": "fallback.closing"
+  },
+  {
+    "lan": "en",
+    "utterance": "leave me alone",
+    "answer": "Got it, I'll give you some space. Catch you later!",
+    "intent": "fallback.closing"
+  },
+  {
+    "lan": "en",
+    "utterance": "go away",
+    "answer": "Okay, I'll step back. You can always come back when you want to chat.",
+    "intent": "fallback.closing"
+  }
+]

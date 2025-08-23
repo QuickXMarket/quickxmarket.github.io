@@ -1,0 +1,286 @@
+[
+  {
+    "lan": "en",
+    "utterance": "are you a student here",
+    "answer": "Nope, I'm not a student. But I can chat with students or staff anytime!",
+    "intent": "campus.identity"
+  },
+  {
+    "lan": "en",
+    "utterance": "do you work here",
+    "answer": "Not exactly. I'm more like a friendly bot for campus conversations.",
+    "intent": "campus.identity"
+  },
+  {
+    "lan": "en",
+    "utterance": "where are you on campus",
+    "answer": "I'm kind of everywhere and nowhere—I live in this chat!",
+    "intent": "campus.identity"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "how's campus life",
+    "answer": "From what I hear, it's busy but fun! How's it going for you?",
+    "intent": "campus.life"
+  },
+  {
+    "lan": "en",
+    "utterance": "it's going well",
+    "answer": "That's nice! Glad to hear things are good for you.",
+    "intent": "campus.life.response.good"
+  },
+  {
+    "lan": "en",
+    "utterance": "it's stressful",
+    "answer": "Yeah, campus can get stressful sometimes. Hang in there!",
+    "intent": "campus.life.response.bad"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "the campus is really crowded today",
+    "answer": "Yeah, it does get packed sometimes. Did you manage to get to class on time?",
+    "intent": "campus.life"
+  },
+  {
+    "lan": "en",
+    "utterance": "yes I got to class on time",
+    "answer": "Nice! That's always a relief.",
+    "intent": "campus.life.response.ontime"
+  },
+  {
+    "lan": "en",
+    "utterance": "no I was late",
+    "answer": "That happens! Hopefully your lecturer was cool about it.",
+    "intent": "campus.life.response.late"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "I love the campus",
+    "answer": "That's awesome! What's your favorite spot around here?",
+    "intent": "campus.life"
+  },
+  {
+    "lan": "en",
+    "utterance": "the library",
+    "answer": "Good choice! Quiet and perfect for studying.",
+    "intent": "campus.life.response.library"
+  },
+  {
+    "lan": "en",
+    "utterance": "the cafeteria",
+    "answer": "Ah, food and friends—always a solid pick!",
+    "intent": "campus.life.response.cafeteria"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "the campus is too noisy",
+    "answer": "I get that. Do you have a quiet place you like to go to?",
+    "intent": "campus.life"
+  },
+  {
+    "lan": "en",
+    "utterance": "yes, I go to the library",
+    "answer": "Nice! That's a peaceful spot.",
+    "intent": "campus.life.response.quietlibrary"
+  },
+  {
+    "lan": "en",
+    "utterance": "not really",
+    "answer": "Maybe you could find a corner in the library or a garden bench?",
+    "intent": "campus.life.response.noquiet"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "are you in the library",
+    "answer": "I'm not in the library, but it sounds like a good spot. Are you studying there?",
+    "intent": "campus.places"
+  },
+  {
+    "lan": "en",
+    "utterance": "yes I'm studying",
+    "answer": "Awesome! Hope your studying goes smoothly.",
+    "intent": "campus.places.response.studying"
+  },
+  {
+    "lan": "en",
+    "utterance": "no, just hanging out",
+    "answer": "Nice! Always good to relax between classes.",
+    "intent": "campus.places.response.hanging"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "I'm at the cafeteria",
+    "answer": "Nice! What's on the menu today?",
+    "intent": "campus.places"
+  },
+  {
+    "lan": "en",
+    "utterance": "I had pizza",
+    "answer": "Yum, pizza is always a solid choice!",
+    "intent": "campus.places.response.pizza"
+  },
+  {
+    "lan": "en",
+    "utterance": "just coffee",
+    "answer": "Sometimes coffee is all you need to keep going!",
+    "intent": "campus.places.response.coffee"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "heading to the hostel",
+    "answer": "Cool, long day? Time to get some rest?",
+    "intent": "campus.places"
+  },
+  {
+    "lan": "en",
+    "utterance": "yes, I'm tired",
+    "answer": "Then a good rest will help you recharge!",
+    "intent": "campus.places.response.tired"
+  },
+  {
+    "lan": "en",
+    "utterance": "no, just dropping by",
+    "answer": "Got it! Hope you enjoy the evening anyway.",
+    "intent": "campus.places.response.norest"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "I'm tired from lectures",
+    "answer": "Yeah, lectures can be draining. Do you usually grab a coffee after class?",
+    "intent": "campus.feelings"
+  },
+  {
+    "lan": "en",
+    "utterance": "yes I grab coffee",
+    "answer": "Smart move! Coffee can be a lifesaver.",
+    "intent": "campus.feelings.response.coffee"
+  },
+  {
+    "lan": "en",
+    "utterance": "no I don't drink coffee",
+    "answer": "Fair enough! Maybe tea or a snack instead?",
+    "intent": "campus.feelings.response.nocoffee"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "I'm stressed about exams",
+    "answer": "Exams can be tough, I get that. Do you take breaks to relax a bit?",
+    "intent": "campus.feelings"
+  },
+  {
+    "lan": "en",
+    "utterance": "yes I take breaks",
+    "answer": "Good! Breaks really help with focus.",
+    "intent": "campus.feelings.response.breaks"
+  },
+  {
+    "lan": "en",
+    "utterance": "no I just keep studying",
+    "answer": "That's dedication! But a short break might help too.",
+    "intent": "campus.feelings.response.nobreaks"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "campus is fun today",
+    "answer": "That's great! Something exciting happening?",
+    "intent": "campus.feelings"
+  },
+  {
+    "lan": "en",
+    "utterance": "yes, an event is happening",
+    "answer": "Cool! Campus events are always lively.",
+    "intent": "campus.feelings.response.event"
+  },
+  {
+    "lan": "en",
+    "utterance": "not really, just a good mood",
+    "answer": "That's awesome! Positive vibes go a long way.",
+    "intent": "campus.feelings.response.goodmood"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "did you eat",
+    "answer": "I don't eat, but I can still chat about food! What did you have?",
+    "intent": "smalltalk.food"
+  },
+  {
+    "lan": "en",
+    "utterance": "I had pasta",
+    "answer": "Pasta is delicious! Good choice.",
+    "intent": "smalltalk.food.response.pasta"
+  },
+  {
+    "lan": "en",
+    "utterance": "I didn't eat yet",
+    "answer": "Hope you get something tasty soon!",
+    "intent": "smalltalk.food.response.notyet"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "I just had lunch",
+    "answer": "Nice! What did you eat?",
+    "intent": "smalltalk.food"
+  },
+  {
+    "lan": "en",
+    "utterance": "rice and chicken",
+    "answer": "Classic combo—always satisfying!",
+    "intent": "smalltalk.food.response.ricechicken"
+  },
+  {
+    "lan": "en",
+    "utterance": "a sandwich",
+    "answer": "Simple and tasty!",
+    "intent": "smalltalk.food.response.sandwich"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "what's your favorite food",
+    "answer": "If I could eat, I'd probably go for pizza—it seems popular around campus. What about you?",
+    "intent": "smalltalk.food"
+  },
+  {
+    "lan": "en",
+    "utterance": "I love pizza too",
+    "answer": "Pizza fans unite!",
+    "intent": "smalltalk.food.response.pizza"
+  },
+  {
+    "lan": "en",
+    "utterance": "I prefer burgers",
+    "answer": "Burgers are a classic choice too!",
+    "intent": "smalltalk.food.response.burger"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "I met a new classmate",
+    "answer": "That's cool! Did you get along well?",
+    "intent": "campus.people"
+  },
+  {
+    "lan": "en",
+    "utterance": "yes we did",
+    "answer": "Nice! Making friends makes campus life better.",
+    "intent": "campus.people.response.yes"
+  },
+  {
+    "lan": "en",
+    "utterance": "not really",
+    "answer": "That's okay, sometimes it takes time.",
+    "intent": "campus.people.response.no"
+  }
+]

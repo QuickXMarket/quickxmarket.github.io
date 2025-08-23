@@ -1,0 +1,285 @@
+[
+  {
+    "lan": "en",
+    "utterance": "How can I register as a rider on QuickXMarket?",
+    "answer": "To become a rider, you need to register on the Rider Portal or App, submit a valid ID, provide your own means of transportation, and attend a short onboarding session.",
+    "intent": "rider.signup"
+  },
+  {
+    "lan": "en",
+    "utterance": "I want to join as a delivery rider, what's the process?",
+    "answer": "You can sign up by registering on the Rider App or Portal, submitting a valid ID, and completing the short onboarding process.",
+    "intent": "rider.signup"
+  },
+  {
+    "lan": "en",
+    "utterance": "What do I need to do to start working as a QuickXMarket rider?",
+    "answer": "To become a rider, you need to register on the Rider Portal or App, submit a valid ID, provide your own means of transportation, and attend a short onboarding session.",
+    "intent": "rider.signup"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can anyone become a QuickXMarket delivery rider?",
+    "answer": "You need to meet the rider requirements: valid ID, transportation, and complete onboarding.",
+    "intent": "rider.signup"
+  },
+  {
+    "lan": "en",
+    "utterance": "How do I sign up to start delivering with QuickXMarket?",
+    "answer": "Register on the Rider Portal or App, submit a valid ID, provide your own transportation, and complete onboarding.",
+    "intent": "rider.signup"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "What kind of orders will I be delivering as a rider?",
+    "answer": "You may deliver food, groceries, personal essentials, and documents or parcels around campus.",
+    "intent": "rider.deliveries"
+  },
+  {
+    "lan": "en",
+    "utterance": "As a rider, do I only deliver food or other items too?",
+    "answer": "Deliveries usually include food, groceries, and sometimes parcels or documents.",
+    "intent": "rider.deliveries"
+  },
+  {
+    "lan": "en",
+    "utterance": "What items will riders be responsible for delivering?",
+    "answer": "You may deliver food, groceries, personal essentials, and documents or parcels around campus.",
+    "intent": "rider.deliveries"
+  },
+  {
+    "lan": "en",
+    "utterance": "Will I deliver anything other than food?",
+    "answer": "Yes, deliveries can include groceries, personal essentials, and parcels.",
+    "intent": "rider.deliveries"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do riders deliver documents as well?",
+    "answer": "Yes, you may occasionally deliver documents along with food and groceries.",
+    "intent": "rider.deliveries"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "How do I get assigned orders as a rider?",
+    "answer": "Deliveries are assigned based on your proximity to pickup, availability, and your delivery rating. You'll get a notification and can accept or reject it in the app.",
+    "intent": "rider.assignment"
+  },
+  {
+    "lan": "en",
+    "utterance": "Who decides which orders I'll deliver?",
+    "answer": "Orders are assigned automatically based on your location, online status, and performance history.",
+    "intent": "rider.assignment"
+  },
+  {
+    "lan": "en",
+    "utterance": "How are delivery tasks distributed to riders?",
+    "answer": "Assignments are based on distance to pickup, online status, and rider ratings.",
+    "intent": "rider.assignment"
+  },
+  {
+    "lan": "en",
+    "utterance": "Will I get to choose my orders?",
+    "answer": "You can accept or decline orders, but frequent declines may affect priority and bonuses.",
+    "intent": "rider.assignment"
+  },
+  {
+    "lan": "en",
+    "utterance": "Are delivery tasks automatic for riders?",
+    "answer": "Yes, the system automatically assigns deliveries based on proximity, availability, and ratings.",
+    "intent": "rider.assignment"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "What are the working hours for riders?",
+    "answer": "You can work flexible hours. The platform operates from 8 AM to 9 PM, Monday to Sunday. You log in and out when you like.",
+    "intent": "rider.hours"
+  },
+  {
+    "lan": "en",
+    "utterance": "When can I log in to start working as a rider?",
+    "answer": "You choose your own hours, as long as you work within 8 AM to 9 PM.",
+    "intent": "rider.hours"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can I work any time I want as a rider?",
+    "answer": "Yes, you can work flexible hours, within platform operation times of 8 AM to 9 PM.",
+    "intent": "rider.hours"
+  },
+  {
+    "lan": "en",
+    "utterance": "Are there fixed shifts for riders?",
+    "answer": "No, riders can log in and out according to their schedule within operating hours.",
+    "intent": "rider.hours"
+  },
+  {
+    "lan": "en",
+    "utterance": "What times does QuickXMarket accept deliveries from riders?",
+    "answer": "Deliveries are handled between 8 AM and 9 PM; riders can work flexibly within this timeframe.",
+    "intent": "rider.hours"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "How much can I make as a QuickXMarket rider?",
+    "answer": "Riders earn per delivery. Earnings depend on distance, order volume, and bonuses. Payouts are made 1 working day after request.",
+    "intent": "rider.earnings"
+  },
+  {
+    "lan": "en",
+    "utterance": "What's the rider pay structure like?",
+    "answer": "Earnings vary depending on distance, time, and order volume, plus bonuses during peak hours.",
+    "intent": "rider.earnings"
+  },
+  {
+    "lan": "en",
+    "utterance": "How do riders get paid?",
+    "answer": "Payments are made 1 working day after request via bank transfer or wallet.",
+    "intent": "rider.earnings"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do riders earn extra for busy hours?",
+    "answer": "Yes, bonuses are available during peak demand or special campaigns.",
+    "intent": "rider.earnings"
+  },
+  {
+    "lan": "en",
+    "utterance": "Is rider pay per delivery or hourly?",
+    "answer": "Riders earn per delivery, with additional bonuses in some cases.",
+    "intent": "rider.earnings"
+  },
+  [
+    {
+      "lan": "en",
+      "utterance": "How can I register as a rider on QuickXMarket?",
+      "answer": "To become a rider, you need to register on the Rider Portal or App, submit a valid ID, provide your own means of transportation, and attend a short onboarding session.",
+      "intent": "rider.signup"
+    },
+    {
+      "lan": "en",
+      "utterance": "I want to join as a delivery rider, what's the process?",
+      "answer": "You can sign up by registering on the Rider App or Portal, submitting a valid ID, and completing the short onboarding process.",
+      "intent": "rider.signup"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "What kind of orders will I be delivering as a rider?",
+      "answer": "You may deliver food, groceries, personal essentials, and documents or parcels around campus.",
+      "intent": "rider.deliveries"
+    },
+    {
+      "lan": "en",
+      "utterance": "As a rider, do I only deliver food or other things too?",
+      "answer": "Deliveries usually include food, groceries, and sometimes parcels or documents.",
+      "intent": "rider.deliveries"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "How do I get assigned orders as a rider?",
+      "answer": "Deliveries are assigned based on your proximity to pickup, availability, and your delivery rating. You'll get a notification and can accept or reject it in the app.",
+      "intent": "rider.assignment"
+    },
+    {
+      "lan": "en",
+      "utterance": "Who decides which orders I'll be delivering?",
+      "answer": "Orders are assigned automatically based on your location, online status, and performance history.",
+      "intent": "rider.assignment"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "What are the working hours for riders?",
+      "answer": "You can work flexible hours. The platform operates from 8 AM to 9 PM, Monday to Sunday. You log in and out when you like.",
+      "intent": "rider.hours"
+    },
+    {
+      "lan": "en",
+      "utterance": "When can I log in to start working as a rider?",
+      "answer": "You choose your own hours, as long as you work within 8 AM to 9 PM.",
+      "intent": "rider.hours"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "How much can I make as a QuickXMarket rider?",
+      "answer": "Riders earn per delivery. Earnings depend on distance, order volume, and bonuses. Payouts are made 1 working day after request.",
+      "intent": "rider.earnings"
+    },
+    {
+      "lan": "en",
+      "utterance": "What's the rider pay structure like?",
+      "answer": "Earnings vary depending on distance, time, and order volume, plus bonuses during peak hours.",
+      "intent": "rider.earnings"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "Do riders get bonuses or incentives?",
+      "answer": "Yes! You can earn bonuses for high ratings, referrals, peak-hour work, or completing many deliveries.",
+      "intent": "rider.bonus"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "What should I wear while riding?",
+      "answer": "Wear clean, comfortable clothing. If given, use QuickXMarket-branded bags or gear for visibility and hygiene.",
+      "intent": "rider.uniform"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "What should I do if I can't finish a delivery?",
+      "answer": "Contact Rider Support immediately via the app or helpline and explain the reason. Never abandon or hand over the order without permission.",
+      "intent": "rider.delivery_issue"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "What if the customer doesn't pick my calls?",
+      "answer": "Wait 5 minutes at the drop-off, try contacting them, then reach out to support. The item may be returned or held at a pickup point.",
+      "intent": "rider.customer_unreachable"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "What if the order is damaged or incomplete?",
+      "answer": "If an item is missing, damaged, or incorrect, notify support immediately and don't tamper with the package.",
+      "intent": "rider.order_issue"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "Do I need a driver's license to be a rider?",
+      "answer": "QuickXMarket doesn't require insurance, but you're responsible for your own safety. Follow traffic rules and provide documentation if asked.",
+      "intent": "rider.license"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "Can I reject deliveries I don't want to take?",
+      "answer": "Yes, you can accept or decline, but rejecting too many may affect bonuses and priority status.",
+      "intent": "rider.acceptance"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "How can I see my ratings and earnings?",
+      "answer": "You can view delivery history, earnings, and customer ratings directly in the Rider App.",
+      "intent": "rider.performance"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "Who do I contact if I have an issue as a rider?",
+      "answer": "For help with orders, payment, or technical issues, contact Rider Support via email, phone, or in-app chat (8 AM – 9 PM).",
+      "intent": "rider.support"
+    }
+  ]
+]

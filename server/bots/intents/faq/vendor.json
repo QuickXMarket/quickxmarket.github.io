@@ -1,0 +1,134 @@
+[
+  {
+    "lan": "en",
+    "utterance": "Who can become a vendor on QuickXMarket?",
+    "answer": "Any registered business or individual seller offering goods suitable for students (e.g., food, snacks, toiletries, academic materials, electronics, etc.) can apply to become a vendor. You must meet our quality, safety, and delivery standards.",
+    "intent": "vendor.eligibility"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can anyone register as a vendor?",
+    "answer": "Any registered business or individual seller offering goods suitable for students can apply, provided they meet our quality, safety, and delivery standards.",
+    "intent": "vendor.eligibility"
+  },
+  {
+    "lan": "en",
+    "utterance": "How do I register as a vendor?",
+    "answer": "You can register through our website or app. The process includes filling out the vendor registration form, submitting your business registration (if available), uploading product menus or catalogs, and agreeing to our vendor terms and conditions.",
+    "intent": "vendor.signup"
+  },
+  {
+    "lan": "en",
+    "utterance": "What is the vendor registration process?",
+    "answer": "Register through our website or app: complete the vendor form, submit your business registration, upload menus or catalogs, and agree to terms and conditions.",
+    "intent": "vendor.signup"
+  },
+  {
+    "lan": "en",
+    "utterance": "Is there a commission or service fee for vendors?",
+    "answer": "Yes. QuickXMarket charges a small commission on each order to cover operational and rider costs. The exact percentage will be shared during onboarding and depends on your category and sales volume.",
+    "intent": "vendor.fees"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do vendors pay a fee for orders?",
+    "answer": "Yes, a small commission is charged per order. The exact rate depends on your category and sales volume.",
+    "intent": "vendor.fees"
+  },
+  {
+    "lan": "en",
+    "utterance": "How do I receive orders as a vendor?",
+    "answer": "Once registered, you will receive orders via the vendor dashboard or mobile app. You'll be notified in real-time and can confirm preparation and delivery status.",
+    "intent": "vendor.orders"
+  },
+  {
+    "lan": "en",
+    "utterance": "How will I know when I have a new order?",
+    "answer": "Orders appear in your vendor dashboard or app in real-time, where you can confirm preparation and track delivery status.",
+    "intent": "vendor.orders"
+  },
+  {
+    "lan": "en",
+    "utterance": "Who handles deliveries for vendors?",
+    "answer": "QuickXMarket provides trained delivery riders who will pick up orders and deliver them directly to students or staff within the campus area or nearby hostels.",
+    "intent": "vendor.delivery"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do I need to deliver orders myself?",
+    "answer": "No. QuickXMarket delivery riders handle all deliveries from your store to the campus or nearby locations.",
+    "intent": "vendor.delivery"
+  },
+  {
+    "lan": "en",
+    "utterance": "What are the delivery time expectations for vendors?",
+    "answer": "Vendors should prepare orders within 10–20 minutes (depending on item type). The delivery team aims to complete deliveries within 30–45 minutes of order placement.",
+    "intent": "vendor.delivery_time"
+  },
+  {
+    "lan": "en",
+    "utterance": "How quickly should I prepare orders?",
+    "answer": "Orders should be prepared within 10–20 minutes depending on item type to meet delivery expectations.",
+    "intent": "vendor.delivery_time"
+  },
+  {
+    "lan": "en",
+    "utterance": "How are payments processed for vendors?",
+    "answer": "Payments are processed after 1 working day to your designated bank account. A transaction breakdown will be provided in your vendor dashboard.",
+    "intent": "vendor.payments"
+  },
+  {
+    "lan": "en",
+    "utterance": "When do vendors get paid?",
+    "answer": "Payments are sent 1 working day after orders to your designated bank account, with a transaction breakdown available in your dashboard.",
+    "intent": "vendor.payments"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can I update my product listings or menu?",
+    "answer": "Yes. Vendors can update menus/catalogs through the dashboard, adjusting pricing, availability, or adding new products anytime.",
+    "intent": "vendor.catalog"
+  },
+  {
+    "lan": "en",
+    "utterance": "How do I change my menu or prices?",
+    "answer": "Access your vendor dashboard to update your menu, pricing, availability, or add new products.",
+    "intent": "vendor.catalog"
+  },
+  {
+    "lan": "en",
+    "utterance": "What happens if I miss or delay an order?",
+    "answer": "Repeated order delays or cancellations may affect your rating and visibility. Prompt communication is encouraged if an item is unavailable or delayed.",
+    "intent": "vendor.order_issue"
+  },
+  {
+    "lan": "en",
+    "utterance": "Will delays affect my vendor rating?",
+    "answer": "Yes, repeated delays or cancellations can impact your rating and visibility on the platform. Always communicate promptly if there are issues.",
+    "intent": "vendor.order_issue"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do I need to offer discounts or promotions?",
+    "answer": "Discounts are optional but encouraged during student events or peak periods. Participation may feature your store in QuickXMarket campaigns.",
+    "intent": "vendor.promotions"
+  },
+  {
+    "lan": "en",
+    "utterance": "Are promotions required for vendors?",
+    "answer": "Promotions are optional, but participating during peak periods can increase visibility and customer engagement.",
+    "intent": "vendor.promotions"
+  },
+  {
+    "lan": "en",
+    "utterance": "How do I contact vendor support?",
+    "answer": "You can reach our Vendor Support team via in-app chat, email (support@quickxmarket.com.g), or hotline.",
+    "intent": "vendor.support"
+  },
+  {
+    "lan": "en",
+    "utterance": "Who do I contact if I have vendor-related issues?",
+    "answer": "Contact Vendor Support through in-app chat, email, or hotline for assistance.",
+    "intent": "vendor.support"
+  }
+]

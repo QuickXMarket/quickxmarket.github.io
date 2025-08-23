@@ -1,0 +1,170 @@
+[
+  {
+    "lan": "en",
+    "utterance": "are you part of the staff",
+    "answer": "Not really, I'm more of a digital companion for everyone here.",
+    "intent": "staff.identity"
+  },
+  {
+    "lan": "en",
+    "utterance": "do you work in the office",
+    "answer": "Nope, but I can still keep you company while you work.",
+    "intent": "staff.identity"
+  },
+  {
+    "lan": "en",
+    "utterance": "are you faculty",
+    "answer": "I'm not faculty, but I enjoy chatting with both staff and students!",
+    "intent": "staff.identity"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "long day at the office",
+    "answer": "Sounds like it's been busy. Do you get a chance to take breaks often?",
+    "intent": "staff.workday"
+  },
+  {
+    "lan": "en",
+    "utterance": "meetings all day",
+    "answer": "Meetings can be draining. Hope you get some quiet time afterwards.",
+    "intent": "staff.workday"
+  },
+  {
+    "lan": "en",
+    "utterance": "I just finished marking papers",
+    "answer": "That must have taken a lot of energy. Do you usually reward yourself after grading?",
+    "intent": "staff.workday"
+  },
+  {
+    "lan": "en",
+    "utterance": "the admin office was hectic today",
+    "answer": "I can imagine! Lots of requests coming in?",
+    "intent": "staff.workday"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "I'm heading home from work",
+    "answer": "Nice! Always good to wind down after a busy day. Got any plans for the evening?",
+    "intent": "staff.routine"
+  },
+  {
+    "lan": "en",
+    "utterance": "on my way to the staff room",
+    "answer": "Good spot for a quick break. Do you usually catch up with colleagues there?",
+    "intent": "staff.routine"
+  },
+  {
+    "lan": "en",
+    "utterance": "I'm preparing for a lecture",
+    "answer": "Sounds important! Hope it goes smoothly.",
+    "intent": "staff.routine"
+  },
+  {
+    "lan": "en",
+    "utterance": "I'm supervising exams",
+    "answer": "That can be intense. Hope the students stay calm and focused!",
+    "intent": "staff.routine"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "I had coffee in the lounge",
+    "answer": "Nice! Coffee always helps get through the day. Do you prefer tea or coffee usually?",
+    "intent": "staff.breaktime"
+  },
+  {
+    "lan": "en",
+    "utterance": "it's lunch break",
+    "answer": "A well-deserved break! What's on your lunch today?",
+    "intent": "staff.breaktime"
+  },
+  {
+    "lan": "en",
+    "utterance": "time for a quick tea",
+    "answer": "Perfect for recharging! Do you like it strong or light?",
+    "intent": "staff.breaktime"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "students kept me busy today",
+    "answer": "I can imagine! Hope you got a moment to rest after all that.",
+    "intent": "staff.interaction"
+  },
+  {
+    "lan": "en",
+    "utterance": "I had a chat with a colleague",
+    "answer": "That's nice. It's always good to connect with coworkers during the day.",
+    "intent": "staff.interaction"
+  },
+  {
+    "lan": "en",
+    "utterance": "lots of parents came to the office",
+    "answer": "Wow, that must've been hectic. Hope it went smoothly!",
+    "intent": "staff.interaction"
+  },
+  {
+    "lan": "en",
+    "utterance": "meetings all day",
+    "answer": "Meetings can be draining. Hope you get some quiet time afterwards. Do you usually take short breaks in between?",
+    "intent": "staff.workday"
+  },
+  {
+    "lan": "en",
+    "utterance": "yes I do",
+    "answer": "Smart move! Even a quick pause helps recharge.",
+    "intent": "staff.response.breaks"
+  },
+  {
+    "lan": "en",
+    "utterance": "no not really",
+    "answer": "That's tough. Even a short walk or tea break can make a difference.",
+    "intent": "staff.response.breaks"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "it's lunch break",
+    "answer": "A well-deserved break! What's on your lunch today?",
+    "intent": "staff.breaktime"
+  },
+  {
+    "lan": "en",
+    "utterance": "I brought food from home",
+    "answer": "Nice! Homemade meals are always better.",
+    "intent": "staff.response.lunch"
+  },
+  {
+    "lan": "en",
+    "utterance": "I bought food at the cafeteria",
+    "answer": "Cafeteria lunches can be a lifesaver on busy days.",
+    "intent": "staff.response.lunch"
+  },
+  {
+    "lan": "en",
+    "utterance": "I skipped lunch",
+    "answer": "Oh no! Hope you at least get some snacks later.",
+    "intent": "staff.response.lunch"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "students kept me busy today",
+    "answer": "I can imagine! Were they asking lots of questions or just full of energy?",
+    "intent": "staff.interaction"
+  },
+  {
+    "lan": "en",
+    "utterance": "lots of questions",
+    "answer": "That shows they're eager to learn. Must've kept you on your toes!",
+    "intent": "staff.response.students"
+  },
+  {
+    "lan": "en",
+    "utterance": "they were too noisy",
+    "answer": "Ah, that can be exhausting. Hopefully they calm down next time.",
+    "intent": "staff.response.students"
+  }
+]

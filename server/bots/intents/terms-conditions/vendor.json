@@ -1,0 +1,219 @@
+[
+  {
+    "lan": "en",
+    "utterance": "Who can register as a QuickXMarket vendor?",
+    "answer": "You must be a legally registered business or individual authorized to sell products or services within or around the university campus.",
+    "intent": "vendor-eligibility.registration"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do vendors have to follow hygiene and regulations?",
+    "answer": "You must be able to fulfill orders reliably, maintain hygiene (for food vendors), and comply with university and local regulations.",
+    "intent": "vendor-eligibility.rules"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "How can I create a vendor account?",
+    "answer": "Vendors must register via the QuickXMarket Vendor Portal.",
+    "intent": "vendor-account.registration"
+  },
+  {
+    "lan": "en",
+    "utterance": "What details are required to sign up as a vendor?",
+    "answer": "All information provided (e.g., business name, address, bank details, menu/product list) must be accurate and up to date.",
+    "intent": "vendor-account.details"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do vendors need to keep their login credentials safe?",
+    "answer": "You are responsible for maintaining the security of your account login credentials.",
+    "intent": "vendor-account.security"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "What are vendors responsible for in product listings?",
+    "answer": "Vendors are responsible for listing accurate product names, descriptions, prices, and availability.",
+    "intent": "vendor-listings.accuracy"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do vendor prices include taxes?",
+    "answer": "Prices listed must be inclusive of all applicable taxes and charges.",
+    "intent": "vendor-listings.pricing"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can QuickXMarket remove my product listing?",
+    "answer": "QuickXMarket reserves the right to hide or remove listings that violate platform policies.",
+    "intent": "vendor-listings.removal"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "How should vendors handle orders?",
+    "answer": "You agree to process and prepare orders promptly once received through the platform.",
+    "intent": "vendor-fulfillment.orders"
+  },
+  {
+    "lan": "en",
+    "utterance": "What if a vendor can’t complete an order?",
+    "answer": "You must notify the platform immediately if you are unable to fulfill an order.",
+    "intent": "vendor-fulfillment.cancellation"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can vendors be suspended for delays?",
+    "answer": "Repeated cancellations or delays may result in suspension or removal from the platform.",
+    "intent": "vendor-fulfillment.suspension"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "What quality standards must vendors follow?",
+    "answer": "Vendors must uphold a high standard of product quality, hygiene, and packaging.",
+    "intent": "vendor-quality.standards"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do food vendors need to follow health laws?",
+    "answer": "Food vendors must comply with health and safety standards.",
+    "intent": "vendor-quality.food"
+  },
+  {
+    "lan": "en",
+    "utterance": "Does QuickXMarket check vendor quality?",
+    "answer": "QuickXMarket reserves the right to conduct periodic quality checks.",
+    "intent": "vendor-quality.checks"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "What commission does QuickXMarket charge vendors?",
+    "answer": "QuickXMarket charges a 5% commission on each completed order.",
+    "intent": "vendor-payouts.commission"
+  },
+  {
+    "lan": "en",
+    "utterance": "When do vendors get their payouts?",
+    "answer": "Payouts to vendors are made 1 working day after request, minus applicable charges and commissions.",
+    "intent": "vendor-payouts.schedule"
+  },
+  {
+    "lan": "en",
+    "utterance": "Who ensures vendor bank details are correct?",
+    "answer": "Vendors are responsible for ensuring that their bank details are up to date.",
+    "intent": "vendor-payouts.bank"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Who handles delivery for vendor orders?",
+    "answer": "Orders will be picked up and delivered by QuickXMarket's delivery team.",
+    "intent": "vendor-delivery.team"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do vendors need to have orders ready on time?",
+    "answer": "Vendors are expected to have orders ready within the specified prep time to ensure timely delivery.",
+    "intent": "vendor-delivery.timeliness"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "How should vendors treat customers and staff?",
+    "answer": "Maintain professionalism with riders, staff, and customers.",
+    "intent": "vendor-responsibilities.professionalism"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do vendors have to cooperate with support?",
+    "answer": "Cooperate with customer service in resolving disputes or complaints.",
+    "intent": "vendor-responsibilities.cooperation"
+  },
+  {
+    "lan": "en",
+    "utterance": "What practices must vendors avoid?",
+    "answer": "Avoid fraudulent practices (e.g., false listings, fake discounts).",
+    "intent": "vendor-responsibilities.fraud"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Can vendors create their own discounts?",
+    "answer": "QuickXMarket may offer platform-wide promotions. Vendors may opt in or create their own store-specific discounts.",
+    "intent": "vendor-promotions.discounts"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do vendors have to honor promotions?",
+    "answer": "All promotions must be honored as displayed during the active period.",
+    "intent": "vendor-promotions.honor"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Can vendors deactivate their accounts?",
+    "answer": "Vendors may request to deactivate their account at any time with prior notice.",
+    "intent": "vendor-termination.request"
+  },
+  {
+    "lan": "en",
+    "utterance": "Why can QuickXMarket suspend a vendor?",
+    "answer": "QuickXMarket reserves the right to suspend or terminate a vendor account for: Breach of these Terms, Poor service ratings or repeated complaints, or Fraudulent or unethical conduct.",
+    "intent": "vendor-termination.reasons"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Who owns the logos and images vendors upload?",
+    "answer": "All logos, images, and content provided by vendors remain their property but may be used by QuickXMarket for marketing and platform display purposes.",
+    "intent": "vendor-intellectual.property"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Is QuickXMarket liable for vendor product quality?",
+    "answer": "QuickXMarket is not liable for vendor-supplied item quality.",
+    "intent": "vendor-liability.quality"
+  },
+  {
+    "lan": "en",
+    "utterance": "Is QuickXMarket responsible for delivery delays?",
+    "answer": "QuickXMarket is not liable for delays due to external factors (e.g., weather, traffic).",
+    "intent": "vendor-liability.delays"
+  },
+  {
+    "lan": "en",
+    "utterance": "Who is responsible for wrong vendor data?",
+    "answer": "QuickXMarket is not liable for losses resulting from incorrect vendor data.",
+    "intent": "vendor-liability.data"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "How can vendors report disputes?",
+    "answer": "Disputes should be reported to QuickXMarket support for internal resolution.",
+    "intent": "vendor-disputes.report"
+  },
+  {
+    "lan": "en",
+    "utterance": "What if a vendor dispute is not resolved internally?",
+    "answer": "If unresolved, disputes may be escalated to arbitration as per the laws of [Insert Jurisdiction].",
+    "intent": "vendor-disputes.arbitration"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Can QuickXMarket change vendor terms?",
+    "answer": "QuickXMarket may update these Terms at any time. Vendors will be notified of major changes.",
+    "intent": "vendor-terms.update"
+  },
+  {
+    "lan": "en",
+    "utterance": "What happens if vendors keep using the app after updates?",
+    "answer": "Continued use of the platform after updates constitutes acceptance of the new terms.",
+    "intent": "vendor-terms.acceptance"
+  }
+]

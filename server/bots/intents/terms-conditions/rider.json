@@ -1,0 +1,449 @@
+[
+  {
+    "lan": "en",
+    "utterance": "As a rider, what is the minimum age requirement?",
+    "answer": "You must be at least 15 years old.",
+    "intent": "rider-eligibility.age"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do riders need an ID to register?",
+    "answer": "You must possess a valid means of identification (e.g., university ID, national ID).",
+    "intent": "rider-eligibility.id"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do I need my own bike or scooter to become a rider?",
+    "answer": "You must have access to a functioning bicycle, scooter, or motorcycle (as approved).",
+    "intent": "rider-eligibility.vehicle"
+  },
+  {
+    "lan": "en",
+    "utterance": "Is there a background check for new riders?",
+    "answer": "You must pass any required onboarding, orientation, and/or background check.",
+    "intent": "rider-eligibility.check"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "How do riders create an account?",
+    "answer": "Riders must create a profile on the QuickXMarket Rider Portal or App.",
+    "intent": "rider-registration.profile"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do riders need to keep bank details updated?",
+    "answer": "You are responsible for keeping your contact details, bank information, and identification documents updated.",
+    "intent": "rider-registration.update"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can a rider share their account with someone else?",
+    "answer": "Your account is personal and must not be shared with others.",
+    "intent": "rider-registration.account"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "What kind of behavior is expected from riders?",
+    "answer": "Be professional and respectful with vendors, customers, and staff.",
+    "intent": "rider-conduct.behavior"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do riders need to follow traffic and campus laws?",
+    "answer": "Follow traffic laws and campus regulations.",
+    "intent": "rider-conduct.traffic"
+  },
+  {
+    "lan": "en",
+    "utterance": "How should riders handle customer deliveries?",
+    "answer": "Handle items with care and ensure safe delivery.",
+    "intent": "rider-conduct.safety"
+  },
+  {
+    "lan": "en",
+    "utterance": "Is there a dress code for QuickXMarket riders?",
+    "answer": "Dress in clean, appropriate attire (preferably in QuickXMarket gear).",
+    "intent": "rider-conduct.attire"
+  },
+  {
+    "lan": "en",
+    "utterance": "Are riders allowed to ask customers for cash?",
+    "answer": "Never request cash payments outside the platform.",
+    "intent": "rider-conduct.cash"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Do riders have to accept every delivery assigned?",
+    "answer": "Riders must accept and complete assigned delivery tasks promptly.",
+    "intent": "rider-fulfillment.acceptance"
+  },
+  {
+    "lan": "en",
+    "utterance": "What happens if a rider cancels too many deliveries?",
+    "answer": "Multiple missed or canceled deliveries without cause may lead to suspension.",
+    "intent": "rider-fulfillment.cancellation"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do riders need to confirm pickups and drop-offs?",
+    "answer": "You must confirm pickup and drop-off in the app for all deliveries.",
+    "intent": "rider-fulfillment.confirmation"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "What is the expected delivery time for riders?",
+    "answer": "Deliveries must be completed within the expected time range (typically 30-45 minutes).",
+    "intent": "rider-delivery.timeframe"
+  },
+  {
+    "lan": "en",
+    "utterance": "What should a rider do if they're running late?",
+    "answer": "You must communicate delays immediately to the support team and/or customer.",
+    "intent": "rider-delivery.delays"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do riders get penalized for late deliveries?",
+    "answer": "Repeated delays without valid reason may result in penalties.",
+    "intent": "rider-delivery.penalty"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "How do riders earn money?",
+    "answer": "Riders earn a base delivery fee plus bonuses (where applicable).",
+    "intent": "rider-earnings.fee"
+  },
+  {
+    "lan": "en",
+    "utterance": "When do riders receive payment?",
+    "answer": "Earnings are paid 1 working day after request via direct bank transfer or wallet.",
+    "intent": "rider-earnings.payment"
+  },
+  {
+    "lan": "en",
+    "utterance": "What if a rider's bank details are wrong?",
+    "answer": "Riders must ensure their bank or wallet details are accurate.",
+    "intent": "rider-earnings.details"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do riders need to pay taxes on earnings?",
+    "answer": "All income earned is subject to applicable taxes and deductions.",
+    "intent": "rider-earnings.taxes"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Who provides equipment for riders?",
+    "answer": "You are responsible for your own transportation, fuel, phone, and safety gear.",
+    "intent": "rider-equipment.responsibility"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do riders have to return delivery bags?",
+    "answer": "QuickXMarket may provide delivery bags or accessories; these must be returned if requested.",
+    "intent": "rider-equipment.bags"
+  },
+  {
+    "lan": "en",
+    "utterance": "Do riders need to maintain their own vehicle?",
+    "answer": "Riders must keep their vehicle in safe working condition.",
+    "intent": "rider-equipment.vehicle"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Do riders get health or accident insurance?",
+    "answer": "Riders are responsible for their own health and accident insurance.",
+    "intent": "rider-insurance.health"
+  },
+  {
+    "lan": "en",
+    "utterance": "Is QuickXMarket responsible for rider accidents?",
+    "answer": "QuickXMarket is not liable for injuries, traffic violations, or personal losses during delivery.",
+    "intent": "rider-insurance.liability"
+  },
+  {
+    "lan": "en",
+    "utterance": "What happens if a rider loses or damages items?",
+    "answer": "You are responsible for lost, damaged, or mishandled items due to negligence.",
+    "intent": "rider-insurance.items"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Can customers rate riders after delivery?",
+    "answer": "Customers and vendors can rate riders after each delivery.",
+    "intent": "rider-ratings.system"
+  },
+  {
+    "lan": "en",
+    "utterance": "What rating must riders maintain?",
+    "answer": "Riders are expected to maintain a good rating (e.g., 4.0 stars and above).",
+    "intent": "rider-ratings.expectation"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can riders be suspended for poor ratings?",
+    "answer": "Poor ratings due to rude behavior, lateness, or mishandling may lead to investigation and suspension.",
+    "intent": "rider-ratings.suspension"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "What rider actions can lead to suspension?",
+    "answer": "Dishonest conduct (e.g., marking deliveries as complete when they're not)",
+    "intent": "rider-suspension.dishonesty"
+  },
+  {
+    "lan": "en",
+    "utterance": "Does theft by a rider lead to termination?",
+    "answer": "Yes, theft, harassment, or misconduct can lead to termination.",
+    "intent": "rider-suspension.theft"
+  },
+  {
+    "lan": "en",
+    "utterance": "What if a rider is always late?",
+    "answer": "Repeated lateness or poor reviews may result in suspension.",
+    "intent": "rider-suspension.lateness"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can breaking campus laws suspend a rider?",
+    "answer": "Yes, violating any campus or legal regulations may lead to suspension or termination.",
+    "intent": "rider-suspension.regulations"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Can riders share customer information?",
+    "answer": "Riders must not share customer information or order details with unauthorized parties.",
+    "intent": "rider-confidentiality.sharing"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can a rider misuse personal data?",
+    "answer": "You agree not to misuse personal or business data accessed during your engagement.",
+    "intent": "rider-confidentiality.misuse"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "How can a rider report a dispute?",
+    "answer": "Any concerns or disputes must be reported to the Rider Support Team.",
+    "intent": "rider-dispute.report"
+  },
+  {
+    "lan": "en",
+    "utterance": "What if a rider's dispute isn't resolved?",
+    "answer": "If unresolved, issues may be addressed via mediation or arbitration under applicable law.",
+    "intent": "rider-dispute.arbitration"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "Can QuickXMarket update rider terms?",
+    "answer": "QuickXMarket may update these terms as necessary.",
+    "intent": "rider-terms.update"
+  },
+  {
+    "lan": "en",
+    "utterance": "How will riders be notified about updated terms?",
+    "answer": "You'll be notified of changes via the app or email.",
+    "intent": "rider-terms.notification"
+  },
+  {
+    "lan": "en",
+    "utterance": "What if a rider continues using the app after terms change?",
+    "answer": "Continued use of the platform implies agreement to the updated terms.",
+    "intent": "rider-terms.agreement"
+  },
+
+  {
+    "lan": "en",
+    "utterance": "How can riders contact support?",
+    "answer": "📧: support@quickxmarket.com.ng ",
+    "intent": "rider-support.contact"
+  },
+  [
+    {
+      "lan": "en",
+      "utterance": "As a rider, what is the minimum age requirement?",
+      "answer": "You must be at least 15 years old.",
+      "intent": "rider-eligibility.age"
+    },
+    {
+      "lan": "en",
+      "utterance": "What age must a rider be to qualify?",
+      "answer": "You must be at least 15 years old.",
+      "intent": "rider-eligibility.age"
+    },
+    {
+      "lan": "en",
+      "utterance": "Is there an age limit for becoming a rider?",
+      "answer": "You must be at least 15 years old.",
+      "intent": "rider-eligibility.age"
+    },
+    {
+      "lan": "en",
+      "utterance": "How old do I need to be to start riding with QuickXMarket?",
+      "answer": "You must be at least 15 years old.",
+      "intent": "rider-eligibility.age"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "Do riders need an ID to register?",
+      "answer": "You must possess a valid means of identification (e.g., university ID, national ID).",
+      "intent": "rider-eligibility.id"
+    },
+    {
+      "lan": "en",
+      "utterance": "What identification is required for riders?",
+      "answer": "You must possess a valid means of identification (e.g., university ID, national ID).",
+      "intent": "rider-eligibility.id"
+    },
+    {
+      "lan": "en",
+      "utterance": "Do I need a university ID to become a rider?",
+      "answer": "You must possess a valid means of identification (e.g., university ID, national ID).",
+      "intent": "rider-eligibility.id"
+    },
+    {
+      "lan": "en",
+      "utterance": "Can I sign up without an ID card?",
+      "answer": "You must possess a valid means of identification (e.g., university ID, national ID).",
+      "intent": "rider-eligibility.id"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "Do I need my own bike or scooter to become a rider?",
+      "answer": "You must have access to a functioning bicycle, scooter, or motorcycle (as approved).",
+      "intent": "rider-eligibility.vehicle"
+    },
+    {
+      "lan": "en",
+      "utterance": "Must riders own a vehicle to deliver?",
+      "answer": "You must have access to a functioning bicycle, scooter, or motorcycle (as approved).",
+      "intent": "rider-eligibility.vehicle"
+    },
+    {
+      "lan": "en",
+      "utterance": "Can I be a rider without my own motorcycle?",
+      "answer": "You must have access to a functioning bicycle, scooter, or motorcycle (as approved).",
+      "intent": "rider-eligibility.vehicle"
+    },
+    {
+      "lan": "en",
+      "utterance": "Is it mandatory to have my own scooter for deliveries?",
+      "answer": "You must have access to a functioning bicycle, scooter, or motorcycle (as approved).",
+      "intent": "rider-eligibility.vehicle"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "Is there a background check for new riders?",
+      "answer": "You must pass any required onboarding, orientation, and/or background check.",
+      "intent": "rider-eligibility.check"
+    },
+    {
+      "lan": "en",
+      "utterance": "Do riders go through onboarding?",
+      "answer": "You must pass any required onboarding, orientation, and/or background check.",
+      "intent": "rider-eligibility.check"
+    },
+    {
+      "lan": "en",
+      "utterance": "Will I need orientation before becoming a rider?",
+      "answer": "You must pass any required onboarding, orientation, and/or background check.",
+      "intent": "rider-eligibility.check"
+    },
+    {
+      "lan": "en",
+      "utterance": "Do riders undergo verification before approval?",
+      "answer": "You must pass any required onboarding, orientation, and/or background check.",
+      "intent": "rider-eligibility.check"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "How do riders create an account?",
+      "answer": "Riders must create a profile on the QuickXMarket Rider Portal or App.",
+      "intent": "rider-registration.profile"
+    },
+    {
+      "lan": "en",
+      "utterance": "Where do I sign up as a rider?",
+      "answer": "Riders must create a profile on the QuickXMarket Rider Portal or App.",
+      "intent": "rider-registration.profile"
+    },
+    {
+      "lan": "en",
+      "utterance": "Do riders register through the app?",
+      "answer": "Riders must create a profile on the QuickXMarket Rider Portal or App.",
+      "intent": "rider-registration.profile"
+    },
+    {
+      "lan": "en",
+      "utterance": "How can I register as a rider on QuickXMarket?",
+      "answer": "Riders must create a profile on the QuickXMarket Rider Portal or App.",
+      "intent": "rider-registration.profile"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "Do riders need to keep bank details updated?",
+      "answer": "You are responsible for keeping your contact details, bank information, and identification documents updated.",
+      "intent": "rider-registration.update"
+    },
+    {
+      "lan": "en",
+      "utterance": "Should riders update their information?",
+      "answer": "You are responsible for keeping your contact details, bank information, and identification documents updated.",
+      "intent": "rider-registration.update"
+    },
+    {
+      "lan": "en",
+      "utterance": "Do I need to keep my bank and ID details current?",
+      "answer": "You are responsible for keeping your contact details, bank information, and identification documents updated.",
+      "intent": "rider-registration.update"
+    },
+    {
+      "lan": "en",
+      "utterance": "Is it mandatory to update rider details regularly?",
+      "answer": "You are responsible for keeping your contact details, bank information, and identification documents updated.",
+      "intent": "rider-registration.update"
+    },
+
+    {
+      "lan": "en",
+      "utterance": "Can a rider share their account with someone else?",
+      "answer": "Your account is personal and must not be shared with others.",
+      "intent": "rider-registration.account"
+    },
+    {
+      "lan": "en",
+      "utterance": "Are rider accounts transferable?",
+      "answer": "Your account is personal and must not be shared with others.",
+      "intent": "rider-registration.account"
+    },
+    {
+      "lan": "en",
+      "utterance": "Can riders use the same account together?",
+      "answer": "Your account is personal and must not be shared with others.",
+      "intent": "rider-registration.account"
+    },
+    {
+      "lan": "en",
+      "utterance": "Can I give my rider account to a friend?",
+      "answer": "Your account is personal and must not be shared with others.",
+      "intent": "rider-registration.account"
+    }
+  ]
+]
