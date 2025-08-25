@@ -116,20 +116,18 @@ export const VendorContextProvider = ({ children }) => {
       const recentProducts = [...products]
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         .slice(0, 50);
-      const userActivities = [];
 
-      for (const product of recentProducts) {
-        recentActivities.push({
-          type: "product",
-          title: "New Product",
-          id: product._id,
-          name: product.name,
-          createdAt: product.createdAt,
-        });
-      }
       const recentOrders = [...orders]
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         .slice(0, 50);
+
+      const userActivities = recentProducts.map((product) => ({
+        type: "product",
+        title: "New Product",
+        id: product._id,
+        name: product.name,
+        createdAt: product.createdAt,
+      }));
 
       const orderActivities = recentOrders.map((order) => ({
         type: "order",
@@ -232,17 +230,17 @@ export const VendorContextProvider = ({ children }) => {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        const vendor = await checkVendorStatus();
+        const vendorData = await checkVendorStatus();
 
-        if (vendor && vendor._id) {
-          await Promise.all(
-            fetchOrders(vendor),
+        if (vendorData && vendorData._id) {
+          await Promise.all([
+            fetchOrders(vendorData),
             fetchProducts(),
-            fetchWallet()
-          );
+            fetchWallet(),
+          ]);
         }
       } catch (err) {
-        // Optional: log or toast error
+        console.error(err);
       } finally {
         setLoading(false);
       }
