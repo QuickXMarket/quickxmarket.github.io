@@ -1,0 +1,76 @@
+[
+  { "lan": "en", "utterance": "Cancel", "intent": "flow.cancel" },
+  { "lan": "en", "utterance": "Stop", "intent": "flow.cancel" },
+  { "lan": "en", "utterance": "End", "intent": "flow.cancel" },
+  { "lan": "en", "utterance": "Cancel order", "intent": "flow.cancel" },
+  { "lan": "en", "utterance": "Stop order", "intent": "flow.cancel" },
+  { "lan": "en", "utterance": "End order", "intent": "flow.cancel" },
+  {
+    "lan": "en",
+    "utterance": "Please cancel my order",
+    "intent": "flow.cancel"
+  },
+  {
+    "lan": "en",
+    "utterance": "I want to cancel my order",
+    "intent": "flow.cancel"
+  },
+  { "lan": "en", "utterance": "Stop this order", "intent": "flow.cancel" },
+  { "lan": "en", "utterance": "End the order", "intent": "flow.cancel" },
+  { "lan": "en", "utterance": "Cancel that order", "intent": "flow.cancel" },
+  {
+    "lan": "en",
+    "utterance": "Please stop the order",
+    "intent": "flow.cancel"
+  },
+  {
+    "lan": "en",
+    "utterance": "I want to stop my order",
+    "intent": "flow.cancel"
+  },
+  {
+    "lan": "en",
+    "utterance": "Let's cancel the order",
+    "intent": "flow.cancel"
+  },
+  {
+    "lan": "en",
+    "utterance": "Can we stop the order?",
+    "intent": "flow.cancel"
+  },
+  { "lan": "en", "utterance": "Stop the order now", "intent": "flow.cancel" },
+  { "lan": "en", "utterance": "End that order", "intent": "flow.cancel" },
+  { "lan": "en", "utterance": "Please end my order", "intent": "flow.cancel" },
+  {
+    "lan": "en",
+    "utterance": "Cancel the order process",
+    "intent": "flow.cancel"
+  },
+  {
+    "lan": "en",
+    "utterance": "I need to cancel my order",
+    "intent": "flow.cancel"
+  },
+  {
+    "lan": "en",
+    "utterance": "Stop the order immediately",
+    "intent": "flow.cancel"
+  },
+  { "lan": "en", "utterance": "Let's stop the order", "intent": "flow.cancel" },
+  {
+    "lan": "en",
+    "utterance": "I don't want this order",
+    "intent": "flow.cancel"
+  },
+  {
+    "lan": "en",
+    "utterance": "Please halt the order",
+    "intent": "flow.cancel"
+  },
+  { "lan": "en", "utterance": "Abort the order", "intent": "flow.cancel" },
+  {
+    "lan": "en",
+    "utterance": "Stop processing my order",
+    "intent": "flow.cancel"
+  }
+]

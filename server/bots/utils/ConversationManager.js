@@ -44,10 +44,18 @@ export class ConversationManager {
   async handleMessage(userId, message, nlpResponse) {
     const session = this.getSession(userId);
     session.history.push({ from: "user", text: message });
+
+    if (nlpResponse.intent === "flow.cancel" && session.currentIntent) {
+      this._completeFlow(session);
+      return this._reply(
+        session,
+        "Alright, we've stopped that for now. What would you like to do next?"
+      );
+    }
+
     if (nlpResponse.intent === "edit_step") {
       const rawField = nlpResponse.entities?.field?.[0]?.value?.toLowerCase();
 
-      // Map entity → step name
       const stepName = FIELD_TO_STEP[rawField];
 
       if (stepName) {
@@ -69,7 +77,7 @@ export class ConversationManager {
       );
     }
 
-    // Case 1: Already in a flow
+    // --- Case 1: Already in a flow ---
     if (session.currentIntent) {
       const flow = this.flows[session.currentIntent];
       if (!flow) {
@@ -124,7 +132,7 @@ export class ConversationManager {
       );
     }
 
-    // Case 2: No active flow → start a new one if intent matches
+    // --- Case 2: No active flow → start a new one if intent matches ---
     if (nlpResponse.intent && this.flows[nlpResponse.intent]) {
       session.currentIntent = nlpResponse.intent;
       session.pendingStep = this.flows[nlpResponse.intent][0].name;
@@ -138,7 +146,7 @@ export class ConversationManager {
       return botReply;
     }
 
-    // Case 3: Fallback
+    // --- Case 3: Fallback ---
     return (
       nlpResponse.answer || "Sorry, I didn't understand that. Can you rephrase?"
     );

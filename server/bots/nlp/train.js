@@ -1,6 +1,8 @@
 import { NLPmanager } from "./manager.js";
 import enquiryData from "../intents/enquiry.json" with { type: "json" };
 import confirmationData from "../intents/confirmation.json" with { type: "json" };
+import cancelData from "../intents/cancel.json" with { type: "json" };
+import editFlowData from "../intents/editFlow.json" with { type: "json" };
 import fallbackData from "../intents/fallback.json" with { type: "json" };
 import faqData from "../intents/faq/index.js";
 import termsData from "../intents/terms-conditions/index.js";
@@ -16,6 +18,8 @@ const allIntents = [
 ...fallbackData,
   ...enquiryData,
   ...confirmationData,
+  ...cancelData,
+  ...editFlowData,
   ...faqData,
   ...conversationData,
   ...termsData,
@@ -70,14 +74,31 @@ export const trainModel = async () => {
     ...allIntents,
   ];
 
-  for (const { lan, utterance, intent, answer } of combinedIntents) {
-    if (utterance && intent) {
-      NLPmanager.addDocument(lan, utterance, intent);
-    }
-    if (answer) {
-      NLPmanager.addAnswer(lan, intent, answer);
+for (const { lan, utterance, intent, answer, entities } of combinedIntents) {
+  if (utterance && intent) {
+    NLPmanager.addDocument(lan, utterance, intent);
+
+    // If entities exist, register them too
+    if (entities) {
+      for (const [entityName, values] of Object.entries(entities)) {
+        for (const value of values) {
+          // Add the entity value as a training example
+          NLPmanager.addNamedEntityText(
+            entityName,       // the entity type (e.g., "field")
+            value,            // the value (e.g., "pickupAddress")
+            [lan],            // languages
+            [value]           // possible text variations
+          );
+        }
+      }
     }
   }
+
+  if (answer) {
+    NLPmanager.addAnswer(lan, intent, answer);
+  }
+}
+
 
   NLPmanager.addAnswer("en", "dispatch", "Okay, dispatch request noted.");
   NLPmanager.addAnswer("en", "errand", "Got it, errand request.");

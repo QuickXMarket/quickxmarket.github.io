@@ -1,0 +1,122 @@
+[
+  {
+    "lan": "en",
+    "utterance": "I want to change the pickup address",
+    "intent": "edit_step",
+    "entities": { "field": ["pickupAddress"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Update the delivery address",
+    "intent": "edit_step",
+    "entities": { "field": ["deliveryAddress"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Change the recipient's name",
+    "intent": "edit_step",
+    "entities": { "field": ["recipientName"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Edit the recipient's phone number",
+    "intent": "edit_step",
+    "entities": { "field": ["recipientPhone"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Can I update my full name?",
+    "intent": "edit_step",
+    "entities": { "field": ["senderName"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Modify the item I want to send",
+    "intent": "edit_step",
+    "entities": { "field": ["deliveryDetails"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "I need to change the delivery type",
+    "intent": "edit_step",
+    "entities": { "field": ["deliveryType"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Update the pickup location",
+    "intent": "edit_step",
+    "entities": { "field": ["pickupAddress"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Correct the recipient phone number",
+    "intent": "edit_step",
+    "entities": { "field": ["recipientPhone"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Change where it should be delivered",
+    "intent": "edit_step",
+    "entities": { "field": ["deliveryAddress"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Edit the item details",
+    "intent": "edit_step",
+    "entities": { "field": ["deliveryDetails"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Modify the delivery option",
+    "intent": "edit_step",
+    "entities": { "field": ["deliveryType"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "I want to change the item I ordered",
+    "intent": "edit_step",
+    "entities": { "field": ["item"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Change the address for delivery",
+    "intent": "edit_step",
+    "entities": { "field": ["deliveryAddress"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Update my name",
+    "intent": "edit_step",
+    "entities": { "field": ["senderName"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Correct my phone number",
+    "intent": "edit_step",
+    "entities": { "field": ["recipientPhone"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Can I modify the pickup address?",
+    "intent": "edit_step",
+    "entities": { "field": ["pickupAddress"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Change delivery details",
+    "intent": "edit_step",
+    "entities": { "field": ["deliveryDetails"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Edit the address",
+    "intent": "edit_step",
+    "entities": { "field": ["deliveryAddress"] }
+  },
+  {
+    "lan": "en",
+    "utterance": "Update the recipient info",
+    "intent": "edit_step",
+    "entities": { "field": ["recipientName"] }
+  }
+]
