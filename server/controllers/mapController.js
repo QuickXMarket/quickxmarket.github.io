@@ -65,10 +65,10 @@ export const getGeocode = async (address) => {
   return response.data;
 };
 
-export const getDistance = async (origins, destinations) => {
+export const getDistance = async (origins, destinations, mode = "driving") => {
   const cacheKey = `distance:${JSON.stringify(origins)}->${JSON.stringify(
     destinations
-  )}`;
+  )}:mode=${mode}`;
 
   if (cache.has(cacheKey)) return cache.get(cacheKey);
 
@@ -76,6 +76,7 @@ export const getDistance = async (origins, destinations) => {
     params: {
       origins: Array.isArray(origins) ? origins : [origins],
       destinations: Array.isArray(destinations) ? destinations : [destinations],
+      mode, 
       key: GOOGLE_API_KEY,
     },
   });

@@ -19,7 +19,7 @@ sellerRouter.post(
   authUser,
   sendRegisterRequest
 );
-sellerRouter.get("/user/:userId", authUser, getVendorByUserId);
+sellerRouter.get("/user", authUser, getVendorByUserId);
 sellerRouter.patch(
   "/edit",
   upload.single("profilePhoto"),

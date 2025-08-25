@@ -30,7 +30,7 @@ export const VendorContextProvider = ({ children }) => {
   const checkVendorStatus = async () => {
     let retrievedVendor = null;
     try {
-      const { data } = await axios.get(`/api/seller/user/${user._id}`);
+      const { data } = await axios.get(`/api/seller/user/`);
       if (data.success) {
         setBusinessName(data.vendor.businessName);
         retrievedVendor = data.vendor;
@@ -163,7 +163,7 @@ export const VendorContextProvider = ({ children }) => {
         totalOrders,
         todayOrders: todayOrders.length || 0,
         todayRevenue,
-        totalRevenue
+        totalRevenue,
       };
 
       setStats(retrievedStats);
@@ -247,6 +247,7 @@ export const VendorContextProvider = ({ children }) => {
         setLoading(false);
       }
     };
+
     if (user && user.isSeller && !vendor) loadInitialData();
   }, [user]);
 
@@ -271,9 +272,26 @@ export const VendorContextProvider = ({ children }) => {
       _id: vendor?._id,
       businessName: vendor?.businessName,
       isOpen: vendor?.isOpen,
-      // Only include needed properties
+      number: vendor?.number,
+      openingTime: vendor?.openingTime,
+      closingTime: vendor?.closingTime,
+      address: vendor?.address,
+      longitude: vendor?.longitude,
+      latitude: vendor?.latitude,
+      profilePhoto: vendor?.profilePhoto,
     }),
-    [vendor?._id, vendor?.businessName, vendor?.isOpen]
+    [
+      vendor?._id,
+      vendor?.businessName,
+      vendor?.isOpen,
+      vendor?.number,
+      vendor?.openingTime,
+      vendor?.closingTime,
+      vendor?.address,
+      vendor?.longitude,
+      vendor?.latitude,
+      vendor?.profilePhoto,
+    ]
   );
 
   const memoizedWallet = useMemo(

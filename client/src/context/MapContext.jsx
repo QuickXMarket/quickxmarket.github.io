@@ -9,7 +9,7 @@ export const MapContextProvider = ({ children }) => {
   const [mapCache, setMapCache] = useState(new Map());
 
   const getAddressSuggestions = async (input) => {
-    if (!input || input.trim() === "") return;
+    if (!input || input.trim().length < 3) return [];
 
     if (mapCache.has(input)) {
       return mapCache.get(input);

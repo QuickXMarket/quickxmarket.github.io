@@ -286,10 +286,11 @@ export const toggleVendorStatus = async (req, res) => {
 // Get vendor by userId
 export const getVendorByUserId = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const vendor = await Vendor.findOne({ userId })
-      .populate("products")
-      .populate("orders");
+    const { userId } = req.body;
+    const vendor = await Vendor.findOne({ userId }).select(
+      "id userId businessName profilePhoto number latitude longitude address closingTime openingTime"
+    );
+
     if (!vendor) {
       return res.json({ success: false, message: "Vendor not found" });
     }

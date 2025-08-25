@@ -3,6 +3,8 @@ import { assets } from "../assets/assets";
 import toast from "react-hot-toast";
 import { useCoreContext } from "../context/CoreContext";
 import { useAuthContext } from "../context/AuthContext";
+import { useMapContext } from "../context/MapContext";
+import { useVendorContext } from "../context/VendorContext";
 
 const DetailRow = ({
   label,
@@ -34,7 +36,7 @@ const DetailRow = ({
                   onClick={() => onSuggestionClick(suggestion)}
                   className="p-2 cursor-pointer hover:bg-gray-200"
                 >
-                  {`${suggestion?.display_name}, ${suggestion?.street || ""}`}
+                  {suggestion.description}
                 </li>
               ))}
             </ul>
@@ -61,8 +63,9 @@ const BusinessDetails = ({ data = {}, onClose }) => {
   const [formData, setFormData] = useState({ ...data });
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { axios, navigate, fuse, location } = useCoreContext();
-  const { setVendor } = useAuthContext();
+  const { axios, navigate } = useCoreContext();
+  const { getAddressSuggestions } = useMapContext();
+  const { setVendor } = useVendorContext();
   const [uploadPreview, setUploadPreview] = useState(null);
   const [isDirty, setIsDirty] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -104,9 +107,8 @@ const BusinessDetails = ({ data = {}, onClose }) => {
 
     setLoading(true);
     try {
-      const results = fuse.search(query).slice(0, 5);
-      const suggestionsData = results.map((result) => result.item);
-      setSuggestions(suggestionsData);
+      const results = await getAddressSuggestions(query);
+      setSuggestions(results);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
       toast.error("Failed to fetch address suggestions");
@@ -122,9 +124,9 @@ const BusinessDetails = ({ data = {}, onClose }) => {
   const onSuggestionClick = (suggestion) => {
     setFormData((prev) => ({
       ...prev,
-      address: `${suggestion.display_name}, ${suggestion.street || ""}`,
-      latitude: parseFloat(suggestion.lat),
-      longitude: parseFloat(suggestion.lon),
+      address: suggestion.description,
+      latitude: parseFloat(suggestion.location.lat),
+      longitude: parseFloat(suggestion.location.lng),
     }));
     setSuggestions([]);
   };

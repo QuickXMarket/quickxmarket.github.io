@@ -62,7 +62,7 @@ export const CoreContextProvider = ({ children }) => {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        await fetchAddresses();
+        // await fetchAddresses();
       } catch (err) {
         // Optional: log or toast error
       }
