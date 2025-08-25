@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useCoreContext } from "../context/CoreContext";
 import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
+import { useMapContext } from "../context/MapContext";
 
 const InputField = ({ type, placeholder, name, handleChange, value }) => (
   <input
@@ -16,8 +17,9 @@ const InputField = ({ type, placeholder, name, handleChange, value }) => (
 );
 
 const ErrandRequest = () => {
-  const { navigate, axios, fuse } = useCoreContext();
+  const { navigate, axios } = useCoreContext();
   const { user } = useAuthContext();
+  const { getAddressSuggestions } = useMapContext();
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showAddress, setShowAddress] = useState(false);
   const [addresses, setAddresses] = useState([]);
@@ -97,12 +99,11 @@ const ErrandRequest = () => {
     });
 
     try {
-      const results = fuse.search(query).slice(0, 5);
-      const suggestionsData = results.map((result) => result.item);
+      const results = await getAddressSuggestions(query);
 
       setErrands((prev) => {
         const newErrands = [...prev];
-        newErrands[index].suggestions = suggestionsData;
+        newErrands[index].suggestions = results;
         newErrands[index].loading = false;
         return newErrands;
       });
@@ -115,11 +116,9 @@ const ErrandRequest = () => {
   const onSuggestionClick = (suggestion, index) => {
     setErrands((prev) => {
       const newErrands = [...prev];
-      newErrands[index].address = `${suggestion.display_name} ${
-        suggestion.street || ""
-      }`;
-      newErrands[index].longitude = parseFloat(suggestion.lon);
-      newErrands[index].latitude = parseFloat(suggestion.lat);
+      newErrands[index].address = suggestion.description;
+      newErrands[index].longitude = parseFloat(suggestion.location.lng);
+      newErrands[index].latitude = parseFloat(suggestion.location.lat);
       newErrands[index].suggestions = [];
       return newErrands;
     });
@@ -323,7 +322,7 @@ const ErrandRequest = () => {
                       onClick={() => onSuggestionClick(suggestion, index)}
                       className="p-2 cursor-pointer hover:bg-gray-200"
                     >
-                      {suggestion.display_name}
+                      {suggestion.description}
                     </li>
                   ))}
                 </ul>
@@ -341,7 +340,7 @@ const ErrandRequest = () => {
             <textarea
               rows={3}
               className="w-full px-3 py-2 mt-2 border border-gray-500/30 rounded text-gray-700 outline-none focus:border-primary transition"
-              placeholder="Describe the item or delivery..."
+              placeholder="Describe the item or errand..."
               value={errand.deliveryNote}
               name="deliveryNote"
               onChange={(e) => handleChange(e, index)}
@@ -392,7 +391,7 @@ const ErrandRequest = () => {
       {/* SUBMIT */}
       <button
         onClick={submitDispatchRequest}
-        className="w-full py-3 mt-4 bg-primary hover:bg-primary-dull text-white rounded uppercase transition"
+        className="w-full py-3 mt-4 bg-primary hover:bg-primary-dull text-white rounded uppercase transition  cursor-pointer"
       >
         Submit Dispatch Request
       </button>

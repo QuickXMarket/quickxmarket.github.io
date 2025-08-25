@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useCoreContext } from "../context/CoreContext";
 import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
+import { useMapContext } from "../context/MapContext";
 
 const InputField = ({ type, placeholder, name, handleChange, address }) => (
   <input
@@ -16,8 +17,9 @@ const InputField = ({ type, placeholder, name, handleChange, address }) => (
 );
 
 const DispatchRequest = () => {
-  const { navigate, axios, fuse } = useCoreContext();
+  const { navigate, axios, } = useCoreContext();
   const { user } = useAuthContext();
+  const { getAddressSuggestions } = useMapContext();
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showAddress, setShowAddress] = useState(false);
   const [addresses, setAddresses] = useState([]);
@@ -72,9 +74,8 @@ const DispatchRequest = () => {
 
     setLoading(true);
     try {
-      const results = fuse.search(query).slice(0, 5);
-      const suggestionsData = results.map((result) => result.item);
-      setSuggestions(suggestionsData);
+      const results = await getAddressSuggestions(query);
+      setSuggestions(results);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
       toast.error("Failed to fetch address suggestions");
@@ -111,9 +112,9 @@ const DispatchRequest = () => {
   const onSuggestionClick = (suggestion) => {
     setAddress((prevAddress) => ({
       ...prevAddress,
-      address: `${suggestion.display_name} ${suggestion.street || ""}`,
-      longitude: parseFloat(suggestion.lon),
-      latitude: parseFloat(suggestion.lat),
+      address: suggestion.description,
+      longitude: parseFloat(suggestion.location.lng),
+      latitude: parseFloat(suggestion.location.lat),
     }));
 
     setSuggestions([]);
@@ -323,7 +324,7 @@ const DispatchRequest = () => {
                     onClick={() => onSuggestionClick(suggestion)}
                     className="p-2 cursor-pointer hover:bg-gray-200"
                   >
-                    {suggestion.display_name}
+                    {suggestion.description}
                   </li>
                 ))}
               </ul>
@@ -386,7 +387,7 @@ const DispatchRequest = () => {
       <button
         onClick={submitDispatchRequest}
         disabled={loading}
-        className="w-full py-3 mt-4 bg-primary hover:bg-primary-dull text-white rounded uppercase transition"
+        className="w-full py-3 mt-4 bg-primary hover:bg-primary-dull text-white rounded uppercase transition cursor-pointer"
       >
         Submit Dispatch Request
       </button>

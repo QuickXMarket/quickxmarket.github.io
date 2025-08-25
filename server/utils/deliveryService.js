@@ -1,3 +1,4 @@
+import { getDistance } from "../controllers/mapController.js";
 import Vendor from "../models/Vendor.js";
 
 // Existing haversineDistance function unchanged
@@ -21,22 +22,32 @@ export const haversineDistance = (lat1, lon1, lat2, lon2) => {
 };
 
 export const calculateDeliveryFee = async (lat1, lon1, lat2, lon2) => {
-  const distance = haversineDistance(lat1, lon1, lat2, lon2);
+  const distanceData = await getDistance(
+    { lat: lat1, lng: lon1 },
+    { lat: lat2, lng: lon2 }
+  );
+  
+  const element = distanceData.rows[0]?.elements[0];
+  if (!element || element.status !== "OK") {
+    throw new Error("Unable to calculate distance");
+  }
+
+  const distanceKm = element.distance.value / 1000;
 
   let deliveryFee = 500;
 
-  if (distance >= 0.6 && distance < 1) deliveryFee = 600;
-  else if (distance >= 1 && distance < 2) deliveryFee = 750;
-  else if (distance >= 2 && distance < 3) deliveryFee = 750;
-  else if (distance >= 3 && distance < 4) deliveryFee = 900;
-  else if (distance >= 4 && distance < 5) deliveryFee = 1000;
-  else if (distance >= 5 && distance < 6) deliveryFee = 1200;
-  else if (distance >= 6 && distance < 7) deliveryFee = 1500;
-  else if (distance >= 7) deliveryFee = 1800;
+  if (distanceKm >= 0.6 && distanceKm < 1) deliveryFee = 600;
+  else if (distanceKm >= 1 && distanceKm < 2) deliveryFee = 750;
+  else if (distanceKm >= 2 && distanceKm < 3) deliveryFee = 750;
+  else if (distanceKm >= 3 && distanceKm < 4) deliveryFee = 900;
+  else if (distanceKm >= 4 && distanceKm < 5) deliveryFee = 1000;
+  else if (distanceKm >= 5 && distanceKm < 6) deliveryFee = 1200;
+  else if (distanceKm >= 6 && distanceKm < 7) deliveryFee = 1500;
+  else if (distanceKm >= 7) deliveryFee = 1800;
+
   return deliveryFee;
 };
 
-// New function to calculate total delivery fee for multiple vendors
 export const calculateTotalDeliveryFee = async (
   customerLat,
   customerLon,

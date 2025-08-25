@@ -3,6 +3,7 @@ import { assets } from "../assets/assets";
 import toast from "react-hot-toast";
 import { useCoreContext } from "../context/CoreContext";
 import { useAuthContext } from "../context/AuthContext";
+import { useMapContext } from "../context/MapContext";
 
 // Input Field Component
 const InputField = ({ type, placeholder, name, handleChange, address }) => (
@@ -20,6 +21,7 @@ const InputField = ({ type, placeholder, name, handleChange, address }) => (
 const AddAddress = () => {
   const { axios, navigate, fuse } = useCoreContext();
   const { user, setShowUserLogin } = useAuthContext();
+  const { getAddressSuggestions } = useMapContext();
 
   const [address, setAddress] = useState({
     firstName: "",
@@ -63,9 +65,8 @@ const AddAddress = () => {
 
     setLoading(true);
     try {
-      const results = fuse.search(query).slice(0, 5);
-      const suggestionsData = results.map((result) => result.item);
-      setSuggestions(suggestionsData);
+      const results = await getAddressSuggestions(query);
+      setSuggestions(results);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
       toast.error("Failed to fetch address suggestions");
@@ -77,11 +78,11 @@ const AddAddress = () => {
   const onSuggestionClick = (suggestion) => {
     setAddress((prevAddress) => ({
       ...prevAddress,
-      address: `${suggestion.display_name}, ${suggestion.street || ""}`,
+      address: suggestion.description,
     }));
 
-    setLatitude(parseFloat(suggestion.lat));
-    setLongitude(parseFloat(suggestion.lon));
+    setLatitude(parseFloat(suggestion.location.lat));
+    setLongitude(parseFloat(suggestion.location.lng));
     setSuggestions([]);
   };
 
@@ -191,7 +192,7 @@ const AddAddress = () => {
                       onClick={() => onSuggestionClick(suggestion)}
                       className="p-2 cursor-pointer hover:bg-gray-200"
                     >
-                      {`${suggestion.display_name}, ${suggestion.street || ""}`}
+                      {suggestion.description}
                     </li>
                   ))}
                 </ul>

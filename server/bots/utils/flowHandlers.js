@@ -1,31 +1,26 @@
-import { searchAddresses } from "../../controllers/geoCodeController.js";
+import { getAutocomplete } from "../../controllers/mapController.js";
 
 export const addressHandler = async (message, data, stepName) => {
   const normalize = (str) => str?.trim().replace(/\s+/g, " ").toLowerCase();
   if (data.lastSuggestions) {
     const match = data.lastSuggestions.find(
-      (s) =>
-        normalize(s.display_name) === normalize(message) ||
-        normalize(`${s.display_name}${s.street ? `, ${s.street}` : ""}`) ===
-          normalize(message)
+      (s) => normalize(s.description) === normalize(message)
     );
 
     if (match) {
       data[`${stepName}_coords`] = {
-        lat: match.lat,
-        lon: match.lon,
+        lat: match.location.lat,
+        lon: match.location.lng,
       };
 
       delete data.lastSuggestions;
       return {
-        selected: `${match.display_name}${
-          match.street ? `, ${match.street}` : ""
-        }`,
+        selected: match.description,
       };
     }
   }
 
-  const suggestions = await searchAddresses(message);
+  const suggestions = await getAutocomplete(message);
   if (!suggestions || suggestions.length === 0) {
     return { retry: true, message: "No address found. Can you try again?" };
   }
@@ -33,7 +28,7 @@ export const addressHandler = async (message, data, stepName) => {
   data.lastSuggestions = suggestions;
 
   const suggestionsDisplayName = suggestions.map((s) => {
-    return `${s.display_name}${s.street ? `, ${s.street}` : ""}`;
+    return s.description;
   });
 
   return {

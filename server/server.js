@@ -57,7 +57,7 @@ server.listen(process.env.PORT || 4000, () => {
 });
 
 startVendorToggleCron();
-loadGeoJsonData();
+// loadGeoJsonData();
 loadModel();
 // loadFuseConversation()
 // trainModel()

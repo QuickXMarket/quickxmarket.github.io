@@ -29,6 +29,7 @@ import {
 } from "./bots/Whatsapp/client.js";
 import { telegramWebhook } from "./bots/Telegram/client.js";
 import errandRouter from "./routes/errandRoute.js";
+import mapRouter from "./routes/mapRoute.js";
 
 await connectDB();
 await connectCloudinary();
@@ -76,6 +77,7 @@ app.use("/api/order", orderRouter);
 app.use("/api/dispatch", dispatchRouter);
 app.use("/api/errand", errandRouter);
 app.use("/api/geocoding", connectGeo);
+app.use("/api/map", mapRouter);
 app.use("/api/mail", mailRouter);
 app.use("/api/sms", smsRouter);
 app.use("/api/wallet", walletRouter);

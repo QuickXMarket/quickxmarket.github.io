@@ -5,11 +5,13 @@ import { useCoreContext } from "../context/CoreContext";
 import { useAuthContext } from "../context/AuthContext";
 import { NavLink } from "react-router-dom";
 import { useVendorContext } from "../context/VendorContext";
+import { useMapContext } from "../context/MapContext";
 
 const SellerLogin = () => {
-  const { axios, navigate, fuse, location } = useCoreContext();
+  const { axios, navigate, location } = useCoreContext();
   const { user } = useAuthContext();
-  const { setShowSellerLogin, checkVendorStatus } = useVendorContext();
+  const { getAddressSuggestions } = useMapContext();
+  const { setShowSellerLogin } = useVendorContext();
 
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [businessName, setBusinessName] = useState("");
@@ -42,9 +44,8 @@ const SellerLogin = () => {
 
     setLoading(true);
     try {
-      const results = fuse.search(query).slice(0, 5);
-      const suggestionsData = results.map((result) => result.item);
-      setSuggestions(suggestionsData);
+      const results = await getAddressSuggestions(query);
+      setSuggestions(results);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
       toast.error("Failed to fetch address suggestions");
@@ -60,9 +61,9 @@ const SellerLogin = () => {
   };
 
   const onSuggestionClick = (suggestion) => {
-    setAddress(`${suggestion.display_name}, ${suggestion.street || ""}`);
-    setLatitude(parseFloat(suggestion.lat));
-    setLongitude(parseFloat(suggestion.lon));
+    setAddress(suggestion.description);
+    setLatitude(parseFloat(suggestion.location.lat));
+    setLongitude(parseFloat(suggestion.location.lng));
     setSuggestions([]);
   };
 
@@ -206,7 +207,7 @@ const SellerLogin = () => {
                   onClick={() => onSuggestionClick(suggestion)}
                   className="p-2 cursor-pointer hover:bg-gray-200"
                 >
-                  {`${suggestion.display_name}, ${suggestion.street || ""}`}
+                  {suggestion.description}
                 </li>
               ))}
             </ul>
